@@ -72,17 +72,17 @@ export const WizardLayout = () => {
           <span className="font-semibold tracking-tight">Twin Matrix</span>
         </div>
         {showIndicator && <StepIndicator current={state.step} total={TOTAL_STEPS} />}
-        {showBack && (
+        {showBack ? (
           <button onClick={() => setState(s => ({ ...s, step: s.step - 1 }))} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             ← Back
           </button>
-        )}
-        {showPageBack && (
+        ) : showPageBack ? (
           <button onClick={() => setActivePage(null)} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             ← Back
           </button>
+        ) : (
+          <div className="w-12" />
         )}
-        {!showIndicator && !showBack && !showPageBack && <div />}
       </header>
 
       <main className="flex-1 overflow-y-auto px-4 py-8 scrollbar-hide">
