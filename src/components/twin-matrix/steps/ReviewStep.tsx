@@ -22,13 +22,13 @@ export const ReviewStep = ({ signature, username, tags, activeModules, onNext }:
   return (
     <div className="animate-fade-in space-y-6 max-w-lg mx-auto">
       <div className="text-center">
-        <h2 className="text-2xl font-bold mb-1">Identity Overview</h2>
-        <p className="text-muted-foreground text-sm">Your minted identity at a glance</p>
+        <h2 className="text-2xl font-bold mb-1">Identity State</h2>
+        <p className="text-muted-foreground text-sm">Your minted state at a glance</p>
       </div>
 
       {/* Primary Identity Labels */}
       <div className="glass-card space-y-4">
-        <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">Primary Axes</h3>
+        <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">Primary Signals</h3>
         <div className="flex flex-wrap gap-2">
           {tags.map(t => (
             <span key={t} className="chip text-sm !bg-foreground/10 !text-foreground/80">
@@ -40,7 +40,7 @@ export const ReviewStep = ({ signature, username, tags, activeModules, onNext }:
 
       {/* Strength Indicators */}
       <div className="glass-card space-y-4">
-        <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">Intensity</h3>
+        <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">Signal Strength</h3>
         {axes.map(axis => (
           <div key={axis.label} className="space-y-1">
             <div className="flex justify-between text-xs">
@@ -62,7 +62,7 @@ export const ReviewStep = ({ signature, username, tags, activeModules, onNext }:
 
       {/* Module Composition */}
       <div className="glass-card space-y-3">
-        <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">Module Composition</h3>
+        <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">Layer Composition</h3>
         <div className="flex gap-1 h-3 rounded-full overflow-hidden">
           <div className="bg-foreground/60 rounded-l-full" style={{ width: `${corePercent}%` }} />
           <div className="bg-foreground/35" style={{ width: `${topicPercent}%` }} />
@@ -78,7 +78,7 @@ export const ReviewStep = ({ signature, username, tags, activeModules, onNext }:
       <p className="text-xs text-center text-muted-foreground/50">@{username}</p>
 
       <button onClick={onNext} className="btn-twin btn-twin-primary btn-glow w-full py-3">
-        Issue Authorization →
+        Grant Scoped Access →
       </button>
     </div>
   );

@@ -100,13 +100,13 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
   return (
     <div className="animate-fade-in space-y-6 max-w-lg mx-auto">
       <div>
-        <h2 className="text-2xl font-bold mb-1">Define Your Motivation</h2>
-        <p className="text-muted-foreground text-sm">Describe in one sentence why you do this.</p>
+        <h2 className="text-2xl font-bold mb-1">Soul Layer</h2>
+        <p className="text-muted-foreground text-sm">Commit your core signal in one sentence.</p>
       </div>
 
       <div className="glass-card space-y-5">
         <div className="space-y-3">
-          <label className="text-sm text-muted-foreground">Your motivation in one sentence</label>
+          <label className="text-sm text-muted-foreground">Your signal in one sentence</label>
           <div className="relative">
             <input
               type="text"
@@ -134,7 +134,7 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
 
         {soul.tags.length > 0 && (
           <div className="space-y-3 animate-fade-in">
-            <label className="text-sm text-muted-foreground">Your tags — tap to remove</label>
+            <label className="text-sm text-muted-foreground">Signal tags — tap to remove</label>
             <div className="flex flex-wrap gap-2">
               {soul.tags.map(t => (
                 <button
@@ -149,11 +149,11 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
             </div>
             <div className="flex gap-2">
               <button onClick={regenerate} className="btn-twin btn-twin-ghost flex-1 py-2 text-xs">
-                Regenerate
+                Re-signal
               </button>
               {canConfirm && (
                 <button onClick={confirmTags} className="btn-twin btn-twin-primary flex-1 py-2 text-xs">
-                  Confirm Tags
+                  Commit Tags
                 </button>
               )}
             </div>
@@ -167,7 +167,7 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
       </div>
 
       <button onClick={onNext} disabled={!canProceed} className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${canProceed ? 'btn-glow' : ''}`}>
-        Mint My Identity
+        Mint Identity State
       </button>
     </div>
   );

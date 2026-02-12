@@ -21,25 +21,25 @@ export const UpdateIdentityPage = ({ username, activeModules, tags }: Props) => 
   return (
     <div className="animate-fade-in space-y-6 max-w-lg mx-auto">
       <div>
-        <h2 className="text-2xl font-bold mb-1">Update Identity</h2>
-        <p className="text-muted-foreground text-sm">Modify your identity settings and modules</p>
+        <h2 className="text-2xl font-bold mb-1">Update State</h2>
+        <p className="text-muted-foreground text-sm">Modify your identity layers and configuration</p>
       </div>
 
       {/* Core Identity */}
       <div className="glass-card space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Core Identity</h3>
+          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Core Layer</h3>
           <button className="text-xs text-muted-foreground/50 hover:text-foreground transition-colors">✏️ Edit</button>
         </div>
         <div className="text-sm text-foreground/80">
           <p>@{username || 'unnamed'}</p>
-          <p className="text-[11px] text-muted-foreground mt-1">Tap edit to modify demographic & physical profile</p>
+          <p className="text-[11px] text-muted-foreground mt-1">Edit to modify biological & social layers</p>
         </div>
       </div>
 
       {/* Module List */}
       <div className="glass-card space-y-3">
-        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Modules</h3>
+        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Signal Layers</h3>
         <div className="space-y-2">
           {ALL_MODULES.map(mod => {
             const isActive = activeModules.includes(mod.id);
@@ -67,7 +67,7 @@ export const UpdateIdentityPage = ({ username, activeModules, tags }: Props) => 
       {/* Soul */}
       <div className="glass-card space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Soul</h3>
+          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Soul Layer</h3>
           <button className="text-xs text-muted-foreground/50 hover:text-foreground transition-colors">✏️ Edit</button>
         </div>
         {tags.length > 0 ? (
@@ -77,12 +77,12 @@ export const UpdateIdentityPage = ({ username, activeModules, tags }: Props) => 
             ))}
           </div>
         ) : (
-          <p className="text-xs text-muted-foreground">No motivation tags defined</p>
+          <p className="text-xs text-muted-foreground">No signal tags committed</p>
         )}
       </div>
 
       <button className="btn-twin btn-twin-primary w-full py-3 btn-glow">
-        Re-mint Identity
+        Re-mint State
       </button>
     </div>
   );

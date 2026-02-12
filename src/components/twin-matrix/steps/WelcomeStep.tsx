@@ -24,10 +24,10 @@ export const WelcomeStep = ({ username, onUpdateUsername, onNext }: Props) => {
           <img src={logo} alt="Twin Matrix" className="w-12 h-12" />
         </div>
         <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
-          Mint Your Identity
+          Own Your Identity State
         </h1>
         <p className="text-muted-foreground text-lg max-w-md mx-auto leading-relaxed">
-          Choose a name. Begin minting.
+          Mint your programmable identity.
         </p>
       </div>
 
@@ -58,7 +58,7 @@ export const WelcomeStep = ({ username, onUpdateUsername, onNext }: Props) => {
         disabled={!isValid}
         className={`btn-twin btn-twin-primary text-base px-10 py-3 disabled:opacity-30 disabled:cursor-not-allowed ${isValid ? 'btn-glow' : ''}`}
       >
-        Start Minting →
+        Begin Minting →
       </button>
       <p className="text-muted-foreground/50 text-xs mt-6">Takes about 2 minutes</p>
     </div>

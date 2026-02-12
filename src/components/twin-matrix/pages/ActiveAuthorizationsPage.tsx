@@ -44,8 +44,8 @@ export const ActiveAuthorizationsPage = () => {
   return (
     <div className="animate-fade-in space-y-6 max-w-lg mx-auto">
       <div>
-        <h2 className="text-2xl font-bold mb-1">Active Authorizations</h2>
-        <p className="text-muted-foreground text-sm">All issued identity credentials</p>
+        <h2 className="text-2xl font-bold mb-1">Issued Tokens</h2>
+        <p className="text-muted-foreground text-sm">All scoped access tokens</p>
       </div>
 
       <div className="space-y-3">
