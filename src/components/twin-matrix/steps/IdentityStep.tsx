@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { ChevronDown } from 'lucide-react';
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
 import type { UserProfile } from '@/types/twin-matrix';
 
 const AGE_OPTIONS = ['18–24', '25–34', '35–44', '45+'];
@@ -32,12 +34,12 @@ const MiniField = ({
 }) => (
   <div className="space-y-1">
     <span className="text-[10px] font-medium text-foreground/60 uppercase tracking-wider">{label}</span>
-    <div className="flex flex-wrap gap-1">
+    <div className="flex flex-wrap gap-2">
       {options.map(o => (
         <button
           key={o}
           onClick={() => onChange(value === o ? '' : o)}
-          className={`chip !text-[10px] !py-0.5 !px-2 ${value === o ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}
+          className={`chip !text-[10px] !py-1 !px-3 ${value === o ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}
         >
           {o}
         </button>
@@ -76,29 +78,43 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
         />
       </div>
 
-      {/* Biological */}
-      <div className="glass-card !p-3 space-y-2">
-        <h3 className="text-[9px] font-semibold text-muted-foreground uppercase tracking-widest">Biological</h3>
-        <div className="grid grid-cols-2 gap-2">
-          <MiniField label="Age" options={AGE_OPTIONS} value={profile.ageBin} onChange={v => update('ageBin', v)} />
-          <MiniField label="Gender" options={GENDER_OPTIONS} value={profile.gender} onChange={v => update('gender', v)} />
-          <MiniField label="Height" options={HEIGHT_OPTIONS} value={profile.heightBin} onChange={v => update('heightBin', v)} />
-          <MiniField label="Weight" options={WEIGHT_OPTIONS} value={profile.weightBin} onChange={v => update('weightBin', v)} />
+      {/* Biological — default open */}
+      <Collapsible defaultOpen>
+        <div className="glass-card !p-3 space-y-2">
+          <CollapsibleTrigger className="flex items-center justify-between w-full">
+            <h3 className="text-[9px] font-semibold text-muted-foreground uppercase tracking-widest">Biological</h3>
+            <ChevronDown className="w-3.5 h-3.5 text-muted-foreground transition-transform duration-200 [[data-state=open]>&]:rotate-180" />
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <div className="grid grid-cols-2 gap-3 pt-1">
+              <MiniField label="Age" options={AGE_OPTIONS} value={profile.ageBin} onChange={v => update('ageBin', v)} />
+              <MiniField label="Gender" options={GENDER_OPTIONS} value={profile.gender} onChange={v => update('gender', v)} />
+              <MiniField label="Height" options={HEIGHT_OPTIONS} value={profile.heightBin} onChange={v => update('heightBin', v)} />
+              <MiniField label="Weight" options={WEIGHT_OPTIONS} value={profile.weightBin} onChange={v => update('weightBin', v)} />
+            </div>
+          </CollapsibleContent>
         </div>
-      </div>
+      </Collapsible>
 
-      {/* Social */}
-      <div className="glass-card !p-3 space-y-2">
-        <h3 className="text-[9px] font-semibold text-muted-foreground uppercase tracking-widest">Social Positioning</h3>
-        <div className="grid grid-cols-2 gap-2">
-          <MiniField label="Education" options={EDUCATION_OPTIONS} value={profile.education} onChange={v => update('education', v)} />
-          <MiniField label="Income" options={INCOME_OPTIONS} value={profile.income} onChange={v => update('income', v)} />
-          <MiniField label="Status" options={MARITAL_OPTIONS} value={profile.maritalStatus} onChange={v => update('maritalStatus', v)} />
-          <MiniField label="Occupation" options={OCCUPATION_OPTIONS} value={profile.occupation} onChange={v => update('occupation', v)} />
-          <MiniField label="Living" options={LIVING_OPTIONS} value={profile.livingType} onChange={v => update('livingType', v)} />
-          <MiniField label="Ethnicity" options={ETHNICITY_OPTIONS} value={profile.ethnicity} onChange={v => update('ethnicity', v)} />
+      {/* Social — default collapsed */}
+      <Collapsible>
+        <div className="glass-card !p-3 space-y-2">
+          <CollapsibleTrigger className="flex items-center justify-between w-full">
+            <h3 className="text-[9px] font-semibold text-muted-foreground uppercase tracking-widest">Social Positioning</h3>
+            <ChevronDown className="w-3.5 h-3.5 text-muted-foreground transition-transform duration-200 [[data-state=open]>&]:rotate-180" />
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <div className="grid grid-cols-2 gap-3 pt-1">
+              <MiniField label="Education" options={EDUCATION_OPTIONS} value={profile.education} onChange={v => update('education', v)} />
+              <MiniField label="Income" options={INCOME_OPTIONS} value={profile.income} onChange={v => update('income', v)} />
+              <MiniField label="Status" options={MARITAL_OPTIONS} value={profile.maritalStatus} onChange={v => update('maritalStatus', v)} />
+              <MiniField label="Occupation" options={OCCUPATION_OPTIONS} value={profile.occupation} onChange={v => update('occupation', v)} />
+              <MiniField label="Living" options={LIVING_OPTIONS} value={profile.livingType} onChange={v => update('livingType', v)} />
+              <MiniField label="Ethnicity" options={ETHNICITY_OPTIONS} value={profile.ethnicity} onChange={v => update('ethnicity', v)} />
+            </div>
+          </CollapsibleContent>
         </div>
-      </div>
+      </Collapsible>
 
       <button onClick={onNext} disabled={!isValid} className={`btn-twin btn-twin-primary w-full py-2.5 disabled:opacity-30 disabled:cursor-not-allowed ${isValid ? 'btn-glow' : ''}`}>
         Continue
