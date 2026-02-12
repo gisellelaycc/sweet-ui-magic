@@ -53,7 +53,7 @@ export const GenerateStep = ({ onComplete }: Props) => {
         </div>
       </div>
 
-      <h2 className="text-xl font-bold mb-2">Minting Your Identity</h2>
+      <h2 className="text-xl font-bold mb-2">Activating Your Twin</h2>
       <p className="text-muted-foreground text-sm mb-6">{phase}</p>
 
       <div className="w-64 h-2 bg-foreground/5 rounded-full overflow-hidden">

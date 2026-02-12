@@ -210,6 +210,14 @@ body::before {
     transform: translateY(-1px);
   }
 
+  .btn-twin-primary.btn-glow {
+    animation: btn-pulse-glow 2s ease-in-out infinite;
+  }
+
+  .btn-twin-primary.btn-glow:disabled {
+    animation: none;
+  }
+
   .btn-twin-ghost {
     background: transparent;
     color: hsl(var(--color-text-secondary));
@@ -225,6 +233,15 @@ body::before {
 }
 
 /* Animations */
+@keyframes btn-pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.15), 0 0 20px rgba(255, 255, 255, 0.05);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(255, 255, 255, 0.35), 0 0 40px rgba(255, 255, 255, 0.12);
+  }
+}
+
 @keyframes fade-in {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }

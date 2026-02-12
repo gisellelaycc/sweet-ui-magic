@@ -11,19 +11,25 @@ const MENU_ITEMS = [
 interface Props {
   open: boolean;
   onClose: () => void;
+  onNavigate: (id: string) => void;
+  hasIdentity: boolean;
 }
 
-export const MainMenu = ({ open, onClose }: Props) => {
+export const MainMenu = ({ open, onClose, onNavigate, hasIdentity }: Props) => {
   const [active, setActive] = useState('identity');
 
   if (!open) return null;
 
+  const handleClick = (id: string) => {
+    setActive(id);
+    onNavigate(id);
+    onClose();
+  };
+
   return (
     <>
-      {/* Backdrop */}
       <div className="fixed inset-0 bg-black/50 z-40" onClick={onClose} />
 
-      {/* Panel */}
       <div className="fixed left-0 top-0 bottom-0 w-72 z-50 glass animate-fade-in flex flex-col">
         <div className="flex items-center justify-between px-5 py-4 border-b border-foreground/5">
           <div className="flex items-center gap-2">
@@ -34,20 +40,26 @@ export const MainMenu = ({ open, onClose }: Props) => {
         </div>
 
         <nav className="flex-1 py-3 px-3 space-y-1">
-          {MENU_ITEMS.map(item => (
-            <button
-              key={item.id}
-              onClick={() => setActive(item.id)}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all ${
-                active === item.id
-                  ? 'bg-foreground/10 text-foreground font-medium'
-                  : 'text-muted-foreground hover:bg-foreground/5 hover:text-foreground'
-              }`}
-            >
-              <span className="text-base">{item.icon}</span>
-              <span>{item.label}</span>
-            </button>
-          ))}
+          {MENU_ITEMS.map(item => {
+            const disabled = !hasIdentity && item.id !== 'settings';
+            return (
+              <button
+                key={item.id}
+                onClick={() => !disabled && handleClick(item.id)}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all ${
+                  disabled
+                    ? 'text-muted-foreground/30 cursor-not-allowed'
+                    : active === item.id
+                      ? 'bg-foreground/10 text-foreground font-medium'
+                      : 'text-muted-foreground hover:bg-foreground/5 hover:text-foreground'
+                }`}
+              >
+                <span className="text-base">{item.icon}</span>
+                <span>{item.label}</span>
+                {disabled && <span className="ml-auto text-[9px] text-muted-foreground/30">locked</span>}
+              </button>
+            );
+          })}
         </nav>
 
         <div className="px-5 py-4 border-t border-foreground/5">

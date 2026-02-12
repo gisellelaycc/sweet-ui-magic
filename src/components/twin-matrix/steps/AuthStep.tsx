@@ -1,70 +1,65 @@
 import { useState } from 'react';
 import type { AuthSetup } from '@/types/twin-matrix';
 
-const SCOPE_OPTIONS = ['Core Identity', 'Topic Modules', 'Motivation Layer', 'Full Identity'];
-const DURATION_OPTIONS = ['24 Hours', '7 Days', '30 Days', '90 Days'];
-const USAGE_OPTIONS = ['Single Use', 'Limited Uses', 'Non-resettable'];
-
 interface Props {
   data: AuthSetup;
   onUpdate: (d: AuthSetup) => void;
   onNext: () => void;
 }
 
-const OptionGroup = ({
-  label,
-  options,
-  value,
-  onChange,
-}: {
-  label: string;
-  options: string[];
-  value: string;
-  onChange: (v: string) => void;
-}) => (
-  <div className="space-y-3">
-    <label className="text-sm font-medium text-foreground">{label}</label>
-    <div className="flex flex-wrap gap-2">
-      {options.map(o => (
-        <button
-          key={o}
-          onClick={() => onChange(o)}
-          className={`chip text-sm ${value === o ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}
-        >
-          {o}
-        </button>
-      ))}
-    </div>
-  </div>
-);
-
 export const AuthStep = ({ data, onUpdate, onNext }: Props) => {
-  const [setup, setSetup] = useState(data);
+  const [confirmed, setConfirmed] = useState(false);
 
-  const update = (key: keyof AuthSetup, val: string) => {
-    const next = { ...setup, [key]: val };
-    setSetup(next);
-    onUpdate(next);
+  const handleConfirm = () => {
+    const setup: AuthSetup = {
+      scope: 'Full Identity',
+      duration: '30 Days',
+      usageLimit: 'Non-resettable',
+    };
+    onUpdate(setup);
+    setConfirmed(true);
   };
-
-  const isValid = setup.scope && setup.duration && setup.usageLimit;
 
   return (
     <div className="animate-fade-in space-y-6 max-w-lg mx-auto">
       <div className="text-center">
-        <h2 className="text-2xl font-bold mb-1">Issue Authorization Credential</h2>
-        <p className="text-muted-foreground text-sm">Configure the scope and constraints of your identity credential.</p>
+        <h2 className="text-2xl font-bold mb-1">Issue Authorization</h2>
+        <p className="text-muted-foreground text-sm">
+          Authorize your twin identity with a single tap.<br />
+          You can manage or revoke this anytime from the menu.
+        </p>
       </div>
 
-      <div className="glass-card space-y-6">
-        <OptionGroup label="Scope" options={SCOPE_OPTIONS} value={setup.scope} onChange={v => update('scope', v)} />
-        <OptionGroup label="Duration" options={DURATION_OPTIONS} value={setup.duration} onChange={v => update('duration', v)} />
-        <OptionGroup label="Usage Limit" options={USAGE_OPTIONS} value={setup.usageLimit} onChange={v => update('usageLimit', v)} />
+      <div className="glass-card space-y-4 text-center">
+        <div className="space-y-3 text-sm">
+          <div className="flex justify-between px-2">
+            <span className="text-muted-foreground">Scope</span>
+            <span className="text-foreground font-medium">Full Identity</span>
+          </div>
+          <div className="flex justify-between px-2">
+            <span className="text-muted-foreground">Duration</span>
+            <span className="text-foreground font-medium">30 Days</span>
+          </div>
+          <div className="flex justify-between px-2">
+            <span className="text-muted-foreground">Usage</span>
+            <span className="text-foreground font-medium">Non-resettable</span>
+          </div>
+        </div>
+
+        <p className="text-[10px] text-muted-foreground/50 pt-2 border-t border-foreground/5">
+          Go to <strong>Active Authorizations</strong> in the menu to revoke or adjust later.
+        </p>
       </div>
 
-      <button onClick={onNext} disabled={!isValid} className="btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed">
-        Confirm & Issue
-      </button>
+      {!confirmed ? (
+        <button onClick={handleConfirm} className="btn-twin btn-twin-primary w-full py-3 btn-glow">
+          Authorize & Issue ✓
+        </button>
+      ) : (
+        <button onClick={onNext} className="btn-twin btn-twin-primary w-full py-3 btn-glow animate-fade-in">
+          Continue →
+        </button>
+      )}
     </div>
   );
 };

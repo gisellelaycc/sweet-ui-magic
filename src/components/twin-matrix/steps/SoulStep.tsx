@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import type { SoulData } from '@/types/twin-matrix';
 
 const MOTIVATION_KEYWORDS: Record<string, string[]> = {
@@ -27,8 +27,14 @@ function extractTags(sentence: string): string[] {
     }
   }
   if (found.size === 0) {
-    // Return some defaults based on sentence length
-    return DEFAULT_TAGS.slice(0, 3);
+    // Pick defaults based on sentence hash
+    const hash = sentence.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+    const start = hash % DEFAULT_TAGS.length;
+    return [
+      DEFAULT_TAGS[start % DEFAULT_TAGS.length],
+      DEFAULT_TAGS[(start + 1) % DEFAULT_TAGS.length],
+      DEFAULT_TAGS[(start + 2) % DEFAULT_TAGS.length],
+    ];
   }
   return Array.from(found).slice(0, 6);
 }
@@ -41,25 +47,47 @@ interface Props {
 
 export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
   const [soul, setSoul] = useState(data);
-  const [generated, setGenerated] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+
+  const generateTags = useCallback((sentence: string) => {
+    const tags = extractTags(sentence);
+    const next = { ...soul, sentence, tags, confirmed: false };
+    setSoul(next);
+    onUpdate(next);
+  }, [soul, onUpdate]);
 
   const updateSentence = (s: string) => {
-    const next = { ...soul, sentence: s, confirmed: false };
+    const next = { ...soul, sentence: s, tags: [], confirmed: false };
     setSoul(next);
     onUpdate(next);
-    setGenerated(false);
+
+    // Auto-generate after pause
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    if (s.trim().length > 5) {
+      debounceRef.current = setTimeout(() => generateTags(s), 800);
+    }
   };
 
-  const generateTags = useCallback(() => {
-    const tags = extractTags(soul.sentence);
-    const next = { ...soul, tags, confirmed: false };
-    setSoul(next);
-    onUpdate(next);
-    setGenerated(true);
-  }, [soul, onUpdate]);
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && soul.sentence.trim().length > 5) {
+      e.preventDefault();
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      generateTags(soul.sentence);
+    }
+  };
 
   const removeTag = (t: string) => {
     const next = { ...soul, tags: soul.tags.filter(x => x !== t), confirmed: false };
+    setSoul(next);
+    onUpdate(next);
+  };
+
+  const regenerate = () => {
+    // Shuffle defaults differently
+    const shuffled = [...DEFAULT_TAGS].sort(() => Math.random() - 0.5).slice(0, 3);
+    const keywordTags = extractTags(soul.sentence);
+    const tags = keywordTags.length > 0 && keywordTags[0] !== DEFAULT_TAGS[0] ? keywordTags : shuffled;
+    const next = { ...soul, tags, confirmed: false };
     setSoul(next);
     onUpdate(next);
   };
@@ -70,9 +98,9 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
     onUpdate(next);
   };
 
-  const canGenerate = soul.sentence.trim().length > 5;
   const canConfirm = soul.tags.length > 0 && !soul.confirmed;
   const canProceed = soul.confirmed && soul.tags.length > 0;
+  const showEnterHint = soul.sentence.trim().length > 5 && soul.tags.length === 0;
 
   return (
     <div className="animate-fade-in space-y-6 max-w-lg mx-auto">
@@ -87,21 +115,22 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
           <textarea
             value={soul.sentence}
             onChange={e => updateSentence(e.target.value)}
+            onKeyDown={handleKeyDown}
             placeholder="e.g. I run to become a better version of myself"
             maxLength={120}
             rows={3}
             className="w-full bg-foreground/5 border border-foreground/10 rounded-xl px-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-foreground/25 transition-colors resize-none"
           />
-          <p className="text-xs text-muted-foreground/50 text-right">{soul.sentence.length}/120</p>
+          <div className="flex justify-between items-center">
+            {showEnterHint && (
+              <span className="text-xs text-foreground/40 animate-fade-in">Press ↵ Enter to extract tags</span>
+            )}
+            {!showEnterHint && <span />}
+            <span className="text-xs text-muted-foreground/50">{soul.sentence.length}/120</span>
+          </div>
         </div>
 
-        {canGenerate && !generated && (
-          <button onClick={generateTags} className="btn-twin btn-twin-ghost w-full py-2.5 text-sm">
-            Extract Motivation Tags
-          </button>
-        )}
-
-        {generated && soul.tags.length > 0 && (
+        {soul.tags.length > 0 && (
           <div className="space-y-3 animate-fade-in">
             <label className="text-sm text-muted-foreground">Extracted Tags — remove any that don't fit</label>
             <div className="flex flex-wrap gap-2">
@@ -117,7 +146,7 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
               ))}
             </div>
             <div className="flex gap-2">
-              <button onClick={generateTags} className="btn-twin btn-twin-ghost flex-1 py-2 text-xs">
+              <button onClick={regenerate} className="btn-twin btn-twin-ghost flex-1 py-2 text-xs">
                 Regenerate
               </button>
               {canConfirm && (
@@ -133,8 +162,8 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
         )}
       </div>
 
-      <button onClick={onNext} disabled={!canProceed} className="btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed">
-        Forge My Identity
+      <button onClick={onNext} disabled={!canProceed} className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${canProceed ? 'btn-glow' : ''}`}>
+        Mint My Identity
       </button>
     </div>
   );

@@ -23,7 +23,7 @@ export const CompleteStep = ({ username, scope, duration }: Props) => {
       <div className="text-6xl mb-6">✨</div>
       <h2 className="text-3xl font-bold mb-2">Identity Issued</h2>
       <p className="text-muted-foreground mb-8 max-w-sm">
-        Your identity credential has been forged and bound to your wallet address.
+        Your identity credential has been minted and bound to your wallet address.
       </p>
 
       <div className="glass-card max-w-sm w-full text-center space-y-4">

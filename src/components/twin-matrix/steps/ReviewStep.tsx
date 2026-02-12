@@ -23,7 +23,7 @@ export const ReviewStep = ({ signature, username, tags, activeModules, onNext }:
     <div className="animate-fade-in space-y-6 max-w-lg mx-auto">
       <div className="text-center">
         <h2 className="text-2xl font-bold mb-1">Identity Overview</h2>
-        <p className="text-muted-foreground text-sm">Your forged identity at a glance</p>
+        <p className="text-muted-foreground text-sm">Your minted identity at a glance</p>
       </div>
 
       {/* Primary Identity Labels */}
@@ -77,7 +77,7 @@ export const ReviewStep = ({ signature, username, tags, activeModules, onNext }:
 
       <p className="text-xs text-center text-muted-foreground/50">@{username}</p>
 
-      <button onClick={onNext} className="btn-twin btn-twin-primary w-full py-3">
+      <button onClick={onNext} className="btn-twin btn-twin-primary btn-glow w-full py-3">
         Issue Authorization →
       </button>
     </div>
