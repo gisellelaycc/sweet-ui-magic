@@ -52,7 +52,7 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
 
   const generateTags = useCallback((sentence: string) => {
     const tags = extractTags(sentence);
-    const next = { ...soul, sentence, tags, confirmed: true };
+    const next = { ...soul, sentence, tags, confirmed: false };
     setSoul(next);
     onUpdate(next);
   }, [soul, onUpdate]);
@@ -147,9 +147,21 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
                 </button>
               ))}
             </div>
-            <button onClick={regenerate} className="btn-twin btn-twin-ghost w-full py-2 text-xs">
-              Regenerate
-            </button>
+            <div className="flex gap-2">
+              <button onClick={regenerate} className="btn-twin btn-twin-ghost flex-1 py-2 text-xs">
+                Regenerate
+              </button>
+              {canConfirm && (
+                <button onClick={confirmTags} className="btn-twin btn-twin-primary flex-1 py-2 text-xs">
+                  Confirm Tags
+                </button>
+              )}
+            </div>
+            {soul.confirmed && (
+              <div className="flex justify-center">
+                <CheckCircle className="w-5 h-5 text-green-400" />
+              </div>
+            )}
           </div>
         )}
       </div>
