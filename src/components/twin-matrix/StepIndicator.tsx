@@ -4,20 +4,17 @@ interface StepIndicatorProps {
 }
 
 export const StepIndicator = ({ current, total }: StepIndicatorProps) => {
+  const progress = ((current) / total) * 100;
+
   return (
-    <div className="flex items-center gap-2">
-      {Array.from({ length: total }, (_, i) => (
-        <div
-          key={i}
-          className={`h-1.5 rounded-full transition-all duration-500 ${
-            i < current
-              ? 'w-6 bg-foreground'
-              : i === current
-              ? 'w-8 bg-foreground'
-              : 'w-4 bg-muted'
-          }`}
-        />
-      ))}
+    <div className="w-24 h-1 rounded-full bg-foreground/10 overflow-hidden relative">
+      <div
+        className="h-full rounded-full transition-all duration-700 ease-out animate-glow-pulse"
+        style={{
+          width: `${progress}%`,
+          background: 'linear-gradient(90deg, hsl(var(--foreground) / 0.4), hsl(var(--foreground) / 0.8))',
+        }}
+      />
     </div>
   );
 };
