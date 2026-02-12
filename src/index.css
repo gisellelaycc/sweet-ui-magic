@@ -278,16 +278,20 @@ body::before {
 }
 
 @keyframes glow-pulse {
-  0%, 100% {
-    box-shadow: 0 0 8px rgba(255,255,255,0.15), 0 0 20px rgba(255,255,255,0.05), inset 0 0 8px rgba(255,255,255,0.02);
-    border-color: rgba(255,255,255,0.2);
+  0% {
+    box-shadow: 0 0 6px rgba(255,255,255,0.06), 0 0 16px rgba(255,255,255,0.03);
+    border-color: rgba(255,255,255,0.18);
   }
   50% {
-    box-shadow: 0 0 20px rgba(255,255,255,0.4), 0 0 48px rgba(255,255,255,0.15), inset 0 0 12px rgba(255,255,255,0.04);
-    border-color: rgba(255,255,255,0.5);
+    box-shadow: 0 0 10px rgba(255,255,255,0.12), 0 0 28px rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.32);
+  }
+  100% {
+    box-shadow: 0 0 6px rgba(255,255,255,0.06), 0 0 16px rgba(255,255,255,0.03);
+    border-color: rgba(255,255,255,0.18);
   }
 }
 
 .animate-glow-pulse {
-  animation: glow-pulse 1.4s ease-in-out infinite;
+  animation: glow-pulse 2s ease-in-out infinite;
 }
