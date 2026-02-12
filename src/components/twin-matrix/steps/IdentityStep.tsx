@@ -56,26 +56,15 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
     onUpdate(next);
   };
 
-  const isValid = profile.username.trim().length > 0;
+  const isValid = true; // username already confirmed on welcome page
 
   return (
-    <div className="animate-fade-in space-y-4 max-w-2xl mx-auto">
-      <div>
+    <div className="animate-fade-in space-y-5 max-w-2xl mx-auto">
+      <div className="text-center">
         <h2 className="text-2xl font-bold mb-0.5">Core Identity</h2>
         <p className="text-muted-foreground text-xs">
-          All fields optional. This shapes your identity direction — nothing is public.
+          Shape your identity direction — all fields optional, nothing is public.
         </p>
-      </div>
-
-      {/* Username */}
-      <div className="glass-card !p-3 space-y-1">
-        <label className="text-[10px] text-muted-foreground uppercase tracking-wider">Username</label>
-        <input
-          value={profile.username}
-          onChange={e => update('username', e.target.value)}
-          placeholder="Choose a name"
-          className="w-full bg-foreground/5 border border-foreground/10 rounded-lg px-3 py-1.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-foreground/25 transition-colors"
-        />
       </div>
 
       {/* Biological — default open */}

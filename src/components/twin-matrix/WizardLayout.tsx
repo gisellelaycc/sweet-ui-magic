@@ -109,7 +109,13 @@ export const WizardLayout = () => {
 
         {!activePage && (
           <>
-            {state.step === 0 && <WelcomeStep onNext={next} />}
+            {state.step === 0 && (
+              <WelcomeStep
+                username={state.profile.username}
+                onUpdateUsername={name => setState(s => ({ ...s, profile: { ...s.profile, username: name } }))}
+                onNext={next}
+              />
+            )}
             {state.step === 1 && (
               <IdentityStep data={state.profile} onUpdate={p => setState(s => ({ ...s, profile: p }))} onNext={next} />
             )}
