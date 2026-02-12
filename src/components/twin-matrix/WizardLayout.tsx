@@ -48,11 +48,6 @@ export const WizardLayout = () => {
   const hasIdentity = state.step >= 9;
 
   const handleMenuNavigate = (id: string) => {
-    if (id === 'settings') {
-      setActivePage('settings');
-      return;
-    }
-    if (!hasIdentity) return;
     setActivePage(id as MenuPage);
   };
 
