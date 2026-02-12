@@ -20,14 +20,10 @@ interface Props {
 }
 
 export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
-  const [expanded, setExpanded] = useState<string | null>(null);
   const [activated, setActivated] = useState<string[]>(activeModules);
 
-  const toggleExpand = (id: string) => {
-    setExpanded(expanded === id ? null : id);
-  };
-
-  const activateModule = (id: string) => {
+  const toggleModule = (id: string, available: boolean) => {
+    if (!available) return;
     const next = activated.includes(id)
       ? activated.filter(m => m !== id)
       : [...activated, id];
@@ -41,61 +37,39 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
     <div className="animate-fade-in space-y-6 max-w-2xl mx-auto">
       <div>
         <h2 className="text-2xl font-bold mb-1">Identity Modules</h2>
-        <p className="text-muted-foreground text-sm">Activate the modules that define your identity dimensions.</p>
+        <p className="text-muted-foreground text-sm">Tap to activate the modules that define your identity.</p>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-2">
         {MODULES.map(mod => {
-          const isExpanded = expanded === mod.id;
           const isActivated = activated.includes(mod.id);
           const isAvailable = mod.active;
 
           return (
             <div
               key={mod.id}
-              className={`glass-card !p-0 overflow-hidden transition-all duration-300 ${
+              onClick={() => toggleModule(mod.id, isAvailable)}
+              className={`glass-card !p-4 flex items-center gap-4 transition-all duration-300 ${
                 isActivated ? 'border-foreground/25 shadow-[0_0_16px_rgba(255,255,255,0.06)]' : ''
               } ${!isAvailable ? 'opacity-40' : 'cursor-pointer'}`}
             >
-              <div
-                className="flex items-center gap-4 p-4"
-                onClick={() => isAvailable && toggleExpand(mod.id)}
-              >
-                <span className="text-2xl">{mod.icon}</span>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold">{mod.label}</span>
-                    {!isAvailable && (
-                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-foreground/5 text-muted-foreground">coming soon</span>
-                    )}
-                  </div>
-                  <p className="text-xs text-muted-foreground">{mod.description}</p>
+              <span className="text-2xl">{mod.icon}</span>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-sm">{mod.label}</span>
+                  {!isAvailable && (
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-foreground/5 text-muted-foreground">soon</span>
+                  )}
                 </div>
-                <div className="flex items-center gap-3">
-                  {/* Status light */}
-                  <div className={`w-2 h-2 rounded-full ${isActivated ? 'bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.5)]' : 'bg-foreground/10'}`} />
-                  <span className="text-xs text-muted-foreground">{isActivated ? 'Active' : 'Inactive'}</span>
-                </div>
+                <p className="text-[11px] text-muted-foreground truncate">{mod.description}</p>
               </div>
-
-              {isExpanded && isAvailable && (
-                <div className="px-4 pb-4 border-t border-foreground/5 pt-3 animate-fade-in">
-                  <button
-                    onClick={(e) => { e.stopPropagation(); activateModule(mod.id); }}
-                    className={`btn-twin w-full py-2.5 text-sm ${
-                      isActivated ? 'btn-twin-ghost' : 'btn-twin-primary'
-                    }`}
-                  >
-                    {isActivated ? 'Deactivate Module' : 'Activate & Start Building'}
-                  </button>
-                </div>
-              )}
+              <div className={`w-2.5 h-2.5 rounded-full shrink-0 transition-all ${isActivated ? 'bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.5)]' : 'bg-foreground/10'}`} />
             </div>
           );
         })}
       </div>
 
-      <button onClick={onNext} disabled={!hasActive} className="btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed">
+      <button onClick={onNext} disabled={!hasActive} className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${hasActive ? 'btn-glow' : ''}`}>
         Continue
       </button>
     </div>
