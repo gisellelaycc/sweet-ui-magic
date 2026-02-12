@@ -27,9 +27,11 @@ export const GenerateStep = ({ onComplete }: Props) => {
   const [progress, setProgress] = useState(0);
   const [gridValues, setGridValues] = useState<number[]>(new Array(256).fill(0));
   const [finalSignature, setFinalSignature] = useState<number[] | null>(null);
-  // Track which cells just changed for pulse animation
   const prevGridRef = useRef<number[]>(new Array(256).fill(0));
   const [changedCells, setChangedCells] = useState<Set<number>>(new Set());
+  // For fade transition between phases
+  const [displayPhase, setDisplayPhase] = useState(0);
+  const [phaseVisible, setPhaseVisible] = useState(true);
 
   useEffect(() => {
     const totalDuration = 6000;
@@ -65,6 +67,17 @@ export const GenerateStep = ({ onComplete }: Props) => {
     };
   }, [onComplete]);
 
+  // Fade out → swap text → fade in when phase changes
+  useEffect(() => {
+    if (activePhase === displayPhase) return;
+    setPhaseVisible(false); // fade out
+    const t = setTimeout(() => {
+      setDisplayPhase(activePhase); // swap text
+      setPhaseVisible(true); // fade in
+    }, 400);
+    return () => clearTimeout(t);
+  }, [activePhase, displayPhase]);
+
   // Update grid visualization per phase
   useEffect(() => {
     if (finalSignature) return;
@@ -98,10 +111,17 @@ export const GenerateStep = ({ onComplete }: Props) => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] text-center animate-fade-in px-4">
-      {/* Current phase title */}
-      <div className="mb-6">
-        <h2 className="text-lg font-semibold mb-0.5">{PHASES[activePhase]?.label}</h2>
-        <p className="text-xs text-muted-foreground">{PHASES[activePhase]?.desc}</p>
+      {/* Phase label - centered above grid with fade animation */}
+      <div
+        className="mb-5 h-12 flex flex-col items-center justify-center"
+        style={{
+          opacity: phaseVisible ? 1 : 0,
+          transform: phaseVisible ? 'translateY(0)' : 'translateY(8px)',
+          transition: 'opacity 0.4s ease, transform 0.4s ease',
+        }}
+      >
+        <h2 className="text-base font-semibold tracking-tight">{PHASES[displayPhase]?.label}</h2>
+        <p className="text-[11px] text-muted-foreground mt-0.5">{PHASES[displayPhase]?.desc}</p>
       </div>
 
       {/* 16x16 Grid - Energy Field */}
@@ -174,37 +194,20 @@ export const GenerateStep = ({ onComplete }: Props) => {
         <div className="w-full h-6 mt-1 pointer-events-none relative z-10" style={{ background: 'linear-gradient(to bottom, transparent, hsl(var(--background)))' }} />
       </div>
 
-      {/* Phase checklist */}
-      <div className="w-72 text-left space-y-1.5 mb-5">
-        {PHASES.map((phase, i) => {
-          const isCompleted = i < activePhase || isDone;
-          const isActive = i === activePhase && !isDone;
-          return (
-            <div
-              key={i}
-              className="flex items-center gap-2.5 transition-all duration-300"
-              style={{ opacity: isCompleted ? 0.45 : isActive ? 1 : 0.2 }}
-            >
-              <div
-                className={`w-2 h-2 rounded-full shrink-0 transition-all duration-500 ${
-                  isCompleted
-                    ? 'bg-[rgba(40,180,160,0.6)]'
-                    : isActive
-                    ? 'bg-foreground/60 animate-glow-pulse'
-                    : 'bg-foreground/10'
-                }`}
-              />
-              <div className="min-w-0">
-                <p className={`text-[11px] font-medium leading-tight ${isActive ? 'text-foreground' : 'text-foreground/60'}`}>
-                  {phase.label}
-                </p>
-                {isActive && (
-                  <p className="text-[9px] text-muted-foreground leading-tight mt-0.5">{phase.desc}</p>
-                )}
-              </div>
-            </div>
-          );
-        })}
+      {/* Phase dots */}
+      <div className="flex gap-2 mb-4">
+        {PHASES.map((_, i) => (
+          <div
+            key={i}
+            className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${
+              i < activePhase || isDone
+                ? 'bg-[rgba(40,180,160,0.6)]'
+                : i === activePhase
+                ? 'bg-foreground/60 animate-glow-pulse'
+                : 'bg-foreground/10'
+            }`}
+          />
+        ))}
       </div>
 
       {/* Progress */}
