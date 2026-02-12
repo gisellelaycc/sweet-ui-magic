@@ -48,7 +48,7 @@ export const CompleteStep = ({ username, signature, agentName }: Props) => {
         Your identity state has been minted and bound to your wallet.
       </p>
 
-      <div className="glass-card max-w-xl w-full text-left space-y-5">
+      <div className="glass-card max-w-lg w-full text-left space-y-5">
         {/* Identity Hash */}
         <div className="space-y-1">
           <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Identity Hash</p>
