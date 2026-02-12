@@ -1,5 +1,5 @@
 interface Props {
-  signature: string[];
+  signature: number[];
   username: string;
   tags: string[];
   activeModules: string[];
@@ -7,12 +7,11 @@ interface Props {
 }
 
 export const ReviewStep = ({ signature, username, tags, activeModules, onNext }: Props) => {
-  // Simulated identity axes from signature
   const axes = [
-    { label: 'Discipline', value: parseInt(signature[0] || '80', 16) / 2.55 },
-    { label: 'Exploration', value: parseInt(signature[1] || '60', 16) / 2.55 },
-    { label: 'Resilience', value: parseInt(signature[2] || '70', 16) / 2.55 },
-    { label: 'Creativity', value: parseInt(signature[3] || '50', 16) / 2.55 },
+    { label: 'Discipline', value: (signature[0] ?? 128) / 2.55 },
+    { label: 'Exploration', value: (signature[1] ?? 128) / 2.55 },
+    { label: 'Resilience', value: (signature[2] ?? 128) / 2.55 },
+    { label: 'Creativity', value: (signature[3] ?? 128) / 2.55 },
   ];
 
   const corePercent = 40;
@@ -26,19 +25,17 @@ export const ReviewStep = ({ signature, username, tags, activeModules, onNext }:
         <p className="text-muted-foreground text-sm">Your minted state at a glance</p>
       </div>
 
-      {/* Primary Identity Labels */}
-      <div className="glass-card space-y-4">
-        <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">Primary Signals</h3>
-        <div className="flex flex-wrap gap-2">
-          {tags.map(t => (
-            <span key={t} className="chip text-sm !bg-foreground/10 !text-foreground/80">
-              #{t}
-            </span>
-          ))}
+      {tags.length > 0 && (
+        <div className="glass-card space-y-4">
+          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">Primary Signals</h3>
+          <div className="flex flex-wrap gap-2">
+            {tags.map(t => (
+              <span key={t} className="chip text-sm !bg-foreground/10 !text-foreground/80">#{t}</span>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Strength Indicators */}
       <div className="glass-card space-y-4">
         <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">Signal Strength</h3>
         {axes.map(axis => (
@@ -52,7 +49,7 @@ export const ReviewStep = ({ signature, username, tags, activeModules, onNext }:
                 className="h-full rounded-full transition-all duration-700"
                 style={{
                   width: `${axis.value}%`,
-                  background: `linear-gradient(90deg, hsl(var(--foreground) / 0.3), hsl(var(--foreground) / 0.7))`,
+                  background: 'linear-gradient(90deg, rgba(40,180,160,0.3), rgba(40,180,160,0.7))',
                 }}
               />
             </div>
@@ -60,7 +57,6 @@ export const ReviewStep = ({ signature, username, tags, activeModules, onNext }:
         ))}
       </div>
 
-      {/* Module Composition */}
       <div className="glass-card space-y-3">
         <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">Layer Composition</h3>
         <div className="flex gap-1 h-3 rounded-full overflow-hidden">
@@ -78,7 +74,7 @@ export const ReviewStep = ({ signature, username, tags, activeModules, onNext }:
       <p className="text-xs text-center text-muted-foreground/50">@{username}</p>
 
       <button onClick={onNext} className="btn-twin btn-twin-primary btn-glow w-full py-3">
-        Grant Scoped Access →
+        Open Agent Studio →
       </button>
     </div>
   );
