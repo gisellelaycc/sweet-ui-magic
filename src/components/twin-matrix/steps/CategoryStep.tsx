@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Pencil } from 'lucide-react';
 import type { IdentityModule } from '@/types/twin-matrix';
 
 const MODULES: IdentityModule[] = [
@@ -103,7 +102,7 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
                             onClick={(e) => { e.stopPropagation(); }}
                             className="btn-twin btn-twin-ghost flex-1 py-2.5 text-sm"
                           >
-                            <Pencil className="w-3.5 h-3.5 inline mr-1.5" />Edit Module
+                            ✏️ Edit Module
                           </button>
                         ) : (
                           <button
