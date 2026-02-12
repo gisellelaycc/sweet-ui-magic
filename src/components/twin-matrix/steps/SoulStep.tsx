@@ -52,7 +52,7 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
 
   const generateTags = useCallback((sentence: string) => {
     const tags = extractTags(sentence);
-    const next = { ...soul, sentence, tags, confirmed: false };
+    const next = { ...soul, sentence, tags, confirmed: true };
     setSoul(next);
     onUpdate(next);
   }, [soul, onUpdate]);
@@ -61,12 +61,6 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
     const next = { ...soul, sentence: s, tags: [], confirmed: false };
     setSoul(next);
     onUpdate(next);
-
-    // Auto-generate after pause
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    if (s.trim().length > 5) {
-      debounceRef.current = setTimeout(() => generateTags(s), 800);
-    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -140,7 +134,7 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
 
         {soul.tags.length > 0 && (
           <div className="space-y-3 animate-fade-in">
-            <label className="text-sm text-muted-foreground">Extracted Tags — remove any that don't fit</label>
+            <label className="text-sm text-muted-foreground">Your tags — tap to remove</label>
             <div className="flex flex-wrap gap-2">
               {soul.tags.map(t => (
                 <button
@@ -153,21 +147,9 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
                 </button>
               ))}
             </div>
-            <div className="flex gap-2">
-              <button onClick={regenerate} className="btn-twin btn-twin-ghost flex-1 py-2 text-xs">
-                Regenerate
-              </button>
-              {canConfirm && (
-                <button onClick={confirmTags} className="btn-twin btn-twin-primary flex-1 py-2 text-xs">
-                  Confirm Tags ✓
-                </button>
-              )}
-            </div>
-            {soul.confirmed && (
-              <div className="flex justify-center">
-                <CheckCircle className="w-5 h-5 text-green-400" />
-              </div>
-            )}
+            <button onClick={regenerate} className="btn-twin btn-twin-ghost w-full py-2 text-xs">
+              Regenerate
+            </button>
           </div>
         )}
       </div>
