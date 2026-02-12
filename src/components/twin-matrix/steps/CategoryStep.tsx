@@ -1,83 +1,102 @@
 import { useState } from 'react';
-import type { SportSetup } from '@/types/twin-matrix';
+import type { IdentityModule } from '@/types/twin-matrix';
 
-const FREQ_OPTIONS = ['每週 1-2 次', '每週 3-4 次', '每週 5+ 次', '偶爾'];
-const DURATION_OPTIONS = ['30 分鐘內', '30-60 分鐘', '60-90 分鐘', '90 分鐘以上'];
-
-const CATEGORIES = [
-  { icon: '🏃', label: '運動', active: true },
-  { icon: '🎵', label: '音樂', active: false },
-  { icon: '🎨', label: '藝術', active: false },
-  { icon: '📚', label: '閱讀', active: false },
-  { icon: '🍳', label: '料理', active: false },
-  { icon: '✈️', label: '旅行', active: false },
+const MODULES: IdentityModule[] = [
+  { id: 'sport', icon: '🏃', label: 'Sport', description: 'Your physical tendencies & competitive style', active: true },
+  { id: 'music', icon: '🎵', label: 'Music', description: 'Rhythm, emotion & listening habits', active: false },
+  { id: 'art', icon: '🎨', label: 'Art', description: 'Aesthetic orientation & creative tendencies', active: false },
+  { id: 'reading', icon: '📚', label: 'Reading', description: 'Knowledge absorption & thinking paths', active: false },
+  { id: 'food', icon: '🍳', label: 'Food', description: 'Lifestyle rhythm & dietary choices', active: false },
+  { id: 'travel', icon: '✈️', label: 'Travel', description: 'Exploration preferences & mobility habits', active: false },
+  { id: 'finance', icon: '💰', label: 'Finance', description: 'Risk tendencies & asset style', active: false },
+  { id: 'gaming', icon: '🎮', label: 'Gaming', description: 'Competitive mindset & strategic tendencies', active: false },
+  { id: 'learning', icon: '🧠', label: 'Learning', description: 'Growth motivation & focus patterns', active: false },
 ];
 
 interface Props {
-  data: SportSetup;
-  onUpdate: (d: SportSetup) => void;
+  activeModules: string[];
+  onUpdate: (modules: string[]) => void;
   onNext: () => void;
 }
 
-export const CategoryStep = ({ data, onUpdate, onNext }: Props) => {
-  const [setup, setSetup] = useState(data);
-  const update = (key: keyof SportSetup, val: string) => {
-    const next = { ...setup, [key]: val };
-    setSetup(next);
+export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
+  const [expanded, setExpanded] = useState<string | null>(null);
+  const [activated, setActivated] = useState<string[]>(activeModules);
+
+  const toggleExpand = (id: string) => {
+    setExpanded(expanded === id ? null : id);
+  };
+
+  const activateModule = (id: string) => {
+    const next = activated.includes(id)
+      ? activated.filter(m => m !== id)
+      : [...activated, id];
+    setActivated(next);
     onUpdate(next);
   };
 
-  const isValid = setup.frequency && setup.duration;
+  const hasActive = activated.length > 0;
 
   return (
-    <div className="animate-fade-in space-y-6 max-w-lg mx-auto">
+    <div className="animate-fade-in space-y-6 max-w-2xl mx-auto">
       <div>
-        <h2 className="text-2xl font-bold mb-1">📱 選擇生活面向</h2>
-        <p className="text-muted-foreground text-sm">選擇你的興趣面向（Demo: 運動）</p>
+        <h2 className="text-2xl font-bold mb-1">Identity Modules</h2>
+        <p className="text-muted-foreground text-sm">Activate the modules that define your identity dimensions.</p>
       </div>
 
-      <div className="flex flex-wrap gap-2">
-        {CATEGORIES.map(c => (
-          <div
-            key={c.label}
-            className={`chip text-sm ${c.active ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : 'opacity-40 cursor-not-allowed'}`}
-          >
-            {c.icon} {c.label}
-            {!c.active && <span className="text-[10px] ml-1">soon</span>}
-          </div>
-        ))}
+      <div className="space-y-3">
+        {MODULES.map(mod => {
+          const isExpanded = expanded === mod.id;
+          const isActivated = activated.includes(mod.id);
+          const isAvailable = mod.active;
+
+          return (
+            <div
+              key={mod.id}
+              className={`glass-card !p-0 overflow-hidden transition-all duration-300 ${
+                isActivated ? 'border-foreground/25 shadow-[0_0_16px_rgba(255,255,255,0.06)]' : ''
+              } ${!isAvailable ? 'opacity-40' : 'cursor-pointer'}`}
+            >
+              <div
+                className="flex items-center gap-4 p-4"
+                onClick={() => isAvailable && toggleExpand(mod.id)}
+              >
+                <span className="text-2xl">{mod.icon}</span>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold">{mod.label}</span>
+                    {!isAvailable && (
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-foreground/5 text-muted-foreground">coming soon</span>
+                    )}
+                  </div>
+                  <p className="text-xs text-muted-foreground">{mod.description}</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  {/* Status light */}
+                  <div className={`w-2 h-2 rounded-full ${isActivated ? 'bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.5)]' : 'bg-foreground/10'}`} />
+                  <span className="text-xs text-muted-foreground">{isActivated ? 'Active' : 'Inactive'}</span>
+                </div>
+              </div>
+
+              {isExpanded && isAvailable && (
+                <div className="px-4 pb-4 border-t border-foreground/5 pt-3 animate-fade-in">
+                  <button
+                    onClick={(e) => { e.stopPropagation(); activateModule(mod.id); }}
+                    className={`btn-twin w-full py-2.5 text-sm ${
+                      isActivated ? 'btn-twin-ghost' : 'btn-twin-primary'
+                    }`}
+                  >
+                    {isActivated ? 'Deactivate Module' : 'Activate & Start Building'}
+                  </button>
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
 
-      <div className="glass-card space-y-5">
-        <h3 className="font-semibold text-base">🎯 運動設定</h3>
-
-        <div className="space-y-2">
-          <label className="text-sm text-muted-foreground">運動頻率</label>
-          <div className="flex flex-wrap gap-2">
-            {FREQ_OPTIONS.map(o => (
-              <button key={o} onClick={() => update('frequency', o)}
-                className={`chip text-sm ${setup.frequency === o ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}>
-                {o}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          <label className="text-sm text-muted-foreground">運動時間</label>
-          <div className="flex flex-wrap gap-2">
-            {DURATION_OPTIONS.map(o => (
-              <button key={o} onClick={() => update('duration', o)}
-                className={`chip text-sm ${setup.duration === o ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}>
-                {o}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <button onClick={onNext} disabled={!isValid} className="btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed">
-        下一步
+      <button onClick={onNext} disabled={!hasActive} className="btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed">
+        Continue
       </button>
     </div>
   );

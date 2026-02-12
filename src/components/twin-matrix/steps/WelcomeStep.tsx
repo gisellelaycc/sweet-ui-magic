@@ -7,15 +7,15 @@ export const WelcomeStep = ({ onNext }: Props) => (
         <span className="text-3xl">◈</span>
       </div>
       <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
-        Twin Matrix
+        Forge Your Identity
       </h1>
       <p className="text-muted-foreground text-lg max-w-md mx-auto leading-relaxed">
-        建立你的數位分身，探索屬於你的 256 維度身份矩陣
+        Mint an authorizable identity state — unique, composable, and fully yours.
       </p>
     </div>
     <button onClick={onNext} className="btn-twin btn-twin-primary text-base px-10 py-3">
-      開始建立 →
+      Start Minting →
     </button>
-    <p className="text-muted-foreground/50 text-xs mt-6">約需 2 分鐘完成</p>
+    <p className="text-muted-foreground/50 text-xs mt-6">Takes about 2 minutes</p>
   </div>
 );
