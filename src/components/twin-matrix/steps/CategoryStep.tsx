@@ -43,7 +43,7 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
     if (!wasActive) {
       setJustActivated(id);
       if (glowTimeout.current) clearTimeout(glowTimeout.current);
-      glowTimeout.current = setTimeout(() => setJustActivated(null), 1200);
+      glowTimeout.current = setTimeout(() => setJustActivated(null), 3000);
     }
   };
 
