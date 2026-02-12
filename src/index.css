@@ -322,3 +322,14 @@ body::before {
     transform: translate(2%, -2%) scale(1.02) rotate(0.2deg);
   }
 }
+
+@keyframes field-breathe {
+  0%, 100% {
+    opacity: 0.08;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.18;
+    transform: scale(1.03);
+  }
+}
