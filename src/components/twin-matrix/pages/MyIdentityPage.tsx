@@ -21,8 +21,8 @@ export const MyIdentityPage = ({ username, tags, activeModules, signature, onNav
   return (
     <div className="animate-fade-in space-y-6 max-w-lg mx-auto">
       <div className="text-center">
-        <h2 className="text-2xl font-bold mb-1">My Identity</h2>
-        <p className="text-muted-foreground text-sm">Your minted identity status</p>
+        <h2 className="text-2xl font-bold mb-1">Identity State</h2>
+        <p className="text-muted-foreground text-sm">Your minted sovereign state</p>
       </div>
 
       {/* Identity Card */}
@@ -33,7 +33,7 @@ export const MyIdentityPage = ({ username, tags, activeModules, signature, onNav
             <p className="text-xs text-green-400">● Active</p>
           </div>
           <div className="text-right">
-            <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Modules</p>
+            <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Layers</p>
             <p className="text-sm font-medium">{activeModules.length} active</p>
           </div>
         </div>
@@ -81,10 +81,10 @@ export const MyIdentityPage = ({ username, tags, activeModules, signature, onNav
       {/* Quick Actions */}
       <div className="flex gap-2">
         <button onClick={() => onNavigate('update')} className="btn-twin btn-twin-ghost flex-1 py-2.5 text-sm">
-          Update Identity
+          Update State
         </button>
         <button onClick={() => onNavigate('auth')} className="btn-twin btn-twin-primary flex-1 py-2.5 text-sm">
-          Issue Authorization
+          Grant Access
         </button>
       </div>
     </div>

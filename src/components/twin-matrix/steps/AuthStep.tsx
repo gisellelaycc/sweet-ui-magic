@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { AuthSetup } from '@/types/twin-matrix';
 
-const SCOPE_OPTIONS = ['Full Identity', 'Sport Only', 'Core + Soul', 'Topic Modules'];
+const SCOPE_OPTIONS = ['Full Identity', 'Sport Only', 'Core + Soul', 'Signal Modules'];
 const DURATION_OPTIONS = ['24 Hours', '7 Days', '30 Days', '90 Days'];
 const USAGE_OPTIONS = ['Non-resettable', 'Resettable', 'Single-use'];
 
@@ -73,28 +73,28 @@ export const AuthStep = ({ data, onUpdate, onNext }: Props) => {
   return (
     <div className="animate-fade-in space-y-6 max-w-lg mx-auto">
       <div className="text-center">
-        <h2 className="text-2xl font-bold mb-1">Issue Authorization</h2>
+        <h2 className="text-2xl font-bold mb-1">Mint Access Token</h2>
         <p className="text-muted-foreground text-sm">
-          Customize and authorize your twin identity.<br />
-          You can manage or revoke this anytime from the menu.
+          Grant scoped access to your identity state.<br />
+          Revoke or adjust anytime from the menu.
         </p>
       </div>
 
       <div className="glass-card space-y-4 text-center">
         <div className="space-y-3 text-sm">
-          {renderField('Scope', 'scope', SCOPE_OPTIONS)}
-          {renderField('Duration', 'duration', DURATION_OPTIONS)}
-          {renderField('Usage', 'usageLimit', USAGE_OPTIONS)}
+          {renderField('Access Scope', 'scope', SCOPE_OPTIONS)}
+          {renderField('Validity Period', 'duration', DURATION_OPTIONS)}
+          {renderField('Usage Quota', 'usageLimit', USAGE_OPTIONS)}
         </div>
 
         <p className="text-[10px] text-muted-foreground/50 pt-2 border-t border-foreground/5">
-          Go to <strong>Active Authorizations</strong> in the menu to revoke or adjust later.
+          Manage active tokens via <strong>Issued Tokens</strong> in the menu.
         </p>
       </div>
 
       {!confirmed ? (
         <button onClick={handleConfirm} className="btn-twin btn-twin-primary w-full py-3 btn-glow">
-          Authorize & Issue ✓
+          Mint & Issue ✓
         </button>
       ) : (
         <button onClick={onNext} className="btn-twin btn-twin-primary w-full py-3 btn-glow animate-fade-in">

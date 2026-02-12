@@ -55,7 +55,7 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
     <div className="animate-fade-in space-y-4 max-w-lg mx-auto">
       <div>
         <h2 className="text-2xl font-bold mb-1">Skill & Style</h2>
-        <p className="text-muted-foreground text-sm">Shape your athletic identity through preference and ranking.</p>
+        <p className="text-muted-foreground text-sm">Commit your athletic signal through preference and ranking.</p>
       </div>
 
       {/* Sport Ranking */}
@@ -127,7 +127,7 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
       </div>
 
       <button onClick={onNext} disabled={!isValid} className="btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed">
-        Continue
+        Commit Layer
       </button>
     </div>
   );

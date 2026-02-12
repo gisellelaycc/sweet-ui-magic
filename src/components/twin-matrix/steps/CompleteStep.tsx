@@ -21,29 +21,29 @@ export const CompleteStep = ({ username, scope, duration }: Props) => {
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] text-center animate-fade-in px-4">
       <div className="text-6xl mb-6">✨</div>
-      <h2 className="text-3xl font-bold mb-2">Identity Issued</h2>
+      <h2 className="text-3xl font-bold mb-2">State Committed</h2>
       <p className="text-muted-foreground mb-8 max-w-sm">
-        Your identity credential has been minted and bound to your wallet address.
+        Your identity state has been minted and bound to your wallet.
       </p>
 
       <div className="glass-card max-w-sm w-full text-center space-y-4">
-        <p className="text-xs text-muted-foreground uppercase tracking-widest">Credential Summary</p>
+        <p className="text-xs text-muted-foreground uppercase tracking-widest">State Summary</p>
         <div className="space-y-2 text-sm">
           <div className="flex justify-between px-2">
             <span className="text-muted-foreground">Identity</span>
             <span className="text-foreground font-medium">@{username}</span>
           </div>
           <div className="flex justify-between px-2">
-            <span className="text-muted-foreground">Scope</span>
+            <span className="text-muted-foreground">Access Scope</span>
             <span className="text-foreground font-medium">{scope}</span>
           </div>
           <div className="flex justify-between px-2">
-            <span className="text-muted-foreground">Duration</span>
+            <span className="text-muted-foreground">Validity Period</span>
             <span className="text-foreground font-medium">{duration}</span>
           </div>
         </div>
         <div className="pt-3 border-t border-foreground/10 space-y-2">
-          <p className="text-xs text-green-400">✓ Bound to wallet</p>
+          <p className="text-xs text-green-400">✓ Bound to sovereign wallet</p>
           <p className="text-[10px] text-muted-foreground font-mono break-all">{walletAddress}</p>
         </div>
       </div>

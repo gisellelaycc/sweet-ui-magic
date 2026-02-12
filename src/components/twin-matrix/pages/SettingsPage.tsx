@@ -16,7 +16,7 @@ export const SettingsPage = () => {
     <div className="animate-fade-in space-y-6 max-w-lg mx-auto">
       <div>
         <h2 className="text-2xl font-bold mb-1">Settings</h2>
-        <p className="text-muted-foreground text-sm">Account & on-chain configuration</p>
+        <p className="text-muted-foreground text-sm">Sovereign configuration & on-chain state</p>
       </div>
 
       {/* Wallet */}

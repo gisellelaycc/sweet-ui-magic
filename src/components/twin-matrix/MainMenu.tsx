@@ -2,10 +2,10 @@ import { useState } from 'react';
 import logo from '@/assets/twin3-logo.svg';
 
 const MENU_ITEMS = [
-  { id: 'identity', icon: '◈', label: 'My Identity' },
-  { id: 'update', icon: '✏️', label: 'Update Identity' },
-  { id: 'auth', icon: '🔐', label: 'Active Authorizations' },
-  { id: 'missions', icon: '🎯', label: 'Missions' },
+  { id: 'identity', icon: '◈', label: 'Identity State' },
+  { id: 'update', icon: '✏️', label: 'Update State' },
+  { id: 'auth', icon: '🔐', label: 'Issued Tokens' },
+  { id: 'missions', icon: '🎯', label: 'Signal Requests' },
   { id: 'settings', icon: '⚙️', label: 'Settings' },
 ];
 

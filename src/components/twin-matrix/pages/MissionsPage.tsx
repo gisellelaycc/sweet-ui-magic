@@ -39,8 +39,8 @@ export const MissionsPage = () => {
   return (
     <div className="animate-fade-in space-y-6 max-w-lg mx-auto">
       <div>
-        <h2 className="text-2xl font-bold mb-1">Missions</h2>
-        <p className="text-muted-foreground text-sm">Recommendations and tasks from brands & agents</p>
+        <h2 className="text-2xl font-bold mb-1">Signal Requests</h2>
+        <p className="text-muted-foreground text-sm">Scoped opportunities from brands & agents</p>
       </div>
 
       <div className="space-y-4">
@@ -85,7 +85,7 @@ export const MissionsPage = () => {
 
             {/* WHY ME */}
             <div className="space-y-2">
-              <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">Why Me</p>
+              <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">Signal Match</p>
               <div className="flex flex-wrap gap-2">
                 {mission.whyMe.map(reason => (
                   <span key={reason} className="text-xs px-3 py-1.5 rounded-full bg-foreground/5 text-foreground/70">{reason}</span>
@@ -95,7 +95,7 @@ export const MissionsPage = () => {
 
             {/* Token bar */}
             <div className="flex items-center justify-between px-4 py-2.5 rounded-xl bg-foreground/[0.03]">
-              <span className="text-xs text-muted-foreground font-mono">Token: {mission.token.module}</span>
+              <span className="text-xs text-muted-foreground font-mono">Scope: {mission.token.module}</span>
               <span className="text-xs text-muted-foreground">{mission.token.remaining} uses · {mission.token.validDays}d</span>
             </div>
 
@@ -128,8 +128,8 @@ export const MissionsPage = () => {
             {/* Usage hint */}
             <p className="text-[10px] text-muted-foreground/40">
               {mission.type === 'passive'
-                ? 'View consumes 1 usage · Dismiss is free'
-                : 'Accept locks 1 usage · Payment releases on task completion'}
+                ? 'View consumes 1 usage quota · Dismiss is free'
+                : 'Accept locks 1 usage quota · Payment releases on completion'}
             </p>
           </div>
         ))}

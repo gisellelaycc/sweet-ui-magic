@@ -62,8 +62,10 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
     <div className="animate-fade-in space-y-5 max-w-2xl mx-auto">
       <div className="text-center">
         <h2 className="text-2xl font-bold mb-0.5">Core Identity</h2>
-        <p className="text-muted-foreground text-xs">
-          Shape your identity direction — all fields optional, nothing is public.
+        <p className="text-muted-foreground text-xs leading-relaxed">
+          All fields optional.<br />
+          Nothing is public.<br />
+          This defines your identity direction.
         </p>
       </div>
 
@@ -71,7 +73,7 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
       <Collapsible defaultOpen>
         <div className="glass-card !p-3 space-y-2">
           <CollapsibleTrigger className="flex items-center justify-between w-full">
-            <h3 className="text-[9px] font-semibold text-muted-foreground uppercase tracking-widest">Biological</h3>
+            <h3 className="text-[9px] font-semibold text-muted-foreground uppercase tracking-widest">Biological Layer</h3>
             <ChevronDown className="w-3.5 h-3.5 text-muted-foreground transition-transform duration-200 [[data-state=open]>&]:rotate-180" />
           </CollapsibleTrigger>
           <CollapsibleContent>
@@ -89,7 +91,7 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
       <Collapsible>
         <div className="glass-card !p-3 space-y-2">
           <CollapsibleTrigger className="flex items-center justify-between w-full">
-            <h3 className="text-[9px] font-semibold text-muted-foreground uppercase tracking-widest">Social Positioning</h3>
+            <h3 className="text-[9px] font-semibold text-muted-foreground uppercase tracking-widest">Social Layer</h3>
             <ChevronDown className="w-3.5 h-3.5 text-muted-foreground transition-transform duration-200 [[data-state=open]>&]:rotate-180" />
           </CollapsibleTrigger>
           <CollapsibleContent>
@@ -106,7 +108,7 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
       </Collapsible>
 
       <button onClick={onNext} disabled={!isValid} className={`btn-twin btn-twin-primary w-full py-2.5 disabled:opacity-30 disabled:cursor-not-allowed ${isValid ? 'btn-glow' : ''}`}>
-        Continue
+        Commit Core Layer
       </button>
     </div>
   );

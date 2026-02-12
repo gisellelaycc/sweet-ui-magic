@@ -76,8 +76,8 @@ export const SportSetupStep = ({ data, onUpdate, onNext }: Props) => {
   return (
     <div className="animate-fade-in space-y-6 max-w-lg mx-auto">
       <div>
-        <h2 className="text-2xl font-bold mb-1">Topic Demographic</h2>
-        <p className="text-muted-foreground text-sm">Define your activity baseline to shape this module.</p>
+        <h2 className="text-2xl font-bold mb-1">Activity Baseline</h2>
+        <p className="text-muted-foreground text-sm">Define your physical signal baseline for this layer.</p>
       </div>
 
       <div className="glass-card space-y-6">
@@ -87,7 +87,7 @@ export const SportSetupStep = ({ data, onUpdate, onNext }: Props) => {
       </div>
 
       <button onClick={onNext} disabled={!isValid} className="btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed">
-        Continue
+        Proceed
       </button>
     </div>
   );

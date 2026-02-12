@@ -2,15 +2,15 @@ import { useState } from 'react';
 import type { IdentityModule } from '@/types/twin-matrix';
 
 const MODULES: IdentityModule[] = [
-  { id: 'sport', icon: '🏃', label: 'Sport', description: 'Your physical tendencies & competitive style', active: true },
-  { id: 'music', icon: '🎵', label: 'Music', description: 'Rhythm, emotion & listening habits', active: true },
-  { id: 'art', icon: '🎨', label: 'Art', description: 'Aesthetic orientation & creative tendencies', active: true },
-  { id: 'reading', icon: '📚', label: 'Reading', description: 'Knowledge absorption & thinking paths', active: true },
-  { id: 'food', icon: '🍳', label: 'Food', description: 'Lifestyle rhythm & dietary choices', active: true },
-  { id: 'travel', icon: '✈️', label: 'Travel', description: 'Exploration preferences & mobility habits', active: true },
-  { id: 'finance', icon: '💰', label: 'Finance', description: 'Risk tendencies & asset style', active: false },
-  { id: 'gaming', icon: '🎮', label: 'Gaming', description: 'Competitive mindset & strategic tendencies', active: false },
-  { id: 'learning', icon: '🧠', label: 'Learning', description: 'Growth motivation & focus patterns', active: false },
+  { id: 'sport', icon: '🏃', label: 'Sport', description: 'Physical signal · competitive state', active: true },
+  { id: 'music', icon: '🎵', label: 'Music', description: 'Rhythm signal · listening state', active: true },
+  { id: 'art', icon: '🎨', label: 'Art', description: 'Aesthetic signal · creative state', active: true },
+  { id: 'reading', icon: '📚', label: 'Reading', description: 'Knowledge signal · absorption state', active: true },
+  { id: 'food', icon: '🍳', label: 'Food', description: 'Lifestyle signal · dietary state', active: true },
+  { id: 'travel', icon: '✈️', label: 'Travel', description: 'Mobility signal · exploration state', active: true },
+  { id: 'finance', icon: '💰', label: 'Finance', description: 'Risk signal · asset state', active: false },
+  { id: 'gaming', icon: '🎮', label: 'Gaming', description: 'Strategic signal · competitive state', active: false },
+  { id: 'learning', icon: '🧠', label: 'Learning', description: 'Growth signal · focus state', active: false },
 ];
 
 // Demo: pretend these modules have already been minted
@@ -43,8 +43,8 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
   return (
     <div className="animate-fade-in space-y-6 max-w-2xl mx-auto">
       <div>
-        <h2 className="text-2xl font-bold mb-1">Identity Modules</h2>
-        <p className="text-muted-foreground text-sm">Tap to explore and activate the modules that define your identity.</p>
+        <h2 className="text-2xl font-bold mb-1">Signal Modules</h2>
+        <p className="text-muted-foreground text-sm">Activate the layers that compose your identity state.</p>
       </div>
 
       <div className="space-y-2">
@@ -92,7 +92,7 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
                     {isMinted && (
                       <div className="flex items-center gap-2 text-xs text-green-400/80">
                         <span>✓</span>
-                        <span>This module has been minted into your identity</span>
+                        <span>This layer has been minted into your identity state</span>
                       </div>
                     )}
                     {isAvailable ? (
@@ -102,19 +102,19 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
                             onClick={(e) => { e.stopPropagation(); }}
                             className="btn-twin btn-twin-ghost flex-1 py-2.5 text-sm"
                           >
-                            ✏️ Edit Module
+                            ✏️ Edit Layer
                           </button>
                         ) : (
                           <button
                             onClick={(e) => { e.stopPropagation(); toggleModule(mod.id); }}
                             className={`btn-twin flex-1 py-2.5 text-sm ${isActivated ? 'btn-twin-ghost' : 'btn-twin-primary'}`}
                           >
-                            {isActivated ? 'Deactivate' : 'Activate & Start Building'}
+                            {isActivated ? 'Deactivate' : 'Activate Layer'}
                           </button>
                         )}
                       </div>
                     ) : (
-                      <p className="text-xs text-muted-foreground/50 text-center py-1">This module is not yet available. Stay tuned.</p>
+                      <p className="text-xs text-muted-foreground/50 text-center py-1">This layer is not yet available.</p>
                     )}
                   </div>
                 </div>
@@ -125,7 +125,7 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
       </div>
 
       <button onClick={onNext} disabled={!hasActive} className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${hasActive ? 'btn-glow' : ''}`}>
-        Continue
+        Proceed to Soul
       </button>
     </div>
   );
