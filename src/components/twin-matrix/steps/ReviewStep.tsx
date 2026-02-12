@@ -39,9 +39,9 @@ export const ReviewStep = ({ signature, username, tags, activeModules, onNext }:
       </div>
 
       {/* Two-column layout: left summary, right matrix */}
-      <div className="flex flex-col lg:flex-row gap-6">
+      <div className="flex flex-col lg:flex-row gap-6 items-start">
         {/* Left: Signal Strength + Layer Composition */}
-        <div className="lg:w-[38%] space-y-5 shrink-0">
+        <div className="lg:w-1/2 space-y-5 shrink-0">
           {tags.length > 0 && (
             <div className="glass-card space-y-4">
               <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">Primary Signals</h3>
@@ -92,7 +92,7 @@ export const ReviewStep = ({ signature, username, tags, activeModules, onNext }:
         </div>
 
         {/* Right: Twin Matrix Grid as energy field */}
-        <div className="lg:w-[62%] flex flex-col items-center justify-center relative">
+        <div className="lg:w-1/2 flex flex-col items-center justify-center relative">
           {/* Radial glow background */}
           <div
             className="absolute inset-0 pointer-events-none"
@@ -126,7 +126,7 @@ export const ReviewStep = ({ signature, username, tags, activeModules, onNext }:
                       return (
                         <div
                           key={col}
-                          className="w-4 h-4 rounded-sm flex items-center justify-center cursor-default relative transition-transform duration-150"
+                          className="w-5 h-5 rounded-sm flex items-center justify-center cursor-default relative transition-transform duration-150"
                           style={{
                             background: val > 0
                               ? `rgba(40, 180, 160, ${0.04 + intensity * 0.5})`
@@ -143,7 +143,7 @@ export const ReviewStep = ({ signature, username, tags, activeModules, onNext }:
                           onMouseEnter={() => setHoveredCell(idx)}
                           onMouseLeave={() => setHoveredCell(null)}
                         >
-                          <span className="text-[5px] font-mono" style={{ color: `rgba(255,255,255, ${0.2 + intensity * 0.5})` }}>
+                          <span className="text-[6px] font-mono" style={{ color: `rgba(255,255,255, ${0.2 + intensity * 0.5})` }}>
                             {val.toString(16).toUpperCase().padStart(2, '0')}
                           </span>
                           {isHovered && (

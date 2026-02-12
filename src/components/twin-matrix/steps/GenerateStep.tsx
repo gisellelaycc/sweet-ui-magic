@@ -85,9 +85,23 @@ export const GenerateStep = ({ onComplete }: Props) => {
         <p className="text-xs text-muted-foreground">{PHASES[activePhase]?.desc}</p>
       </div>
 
-      {/* 16x16 Grid */}
-      <div className="glass-card p-4 mb-6 overflow-hidden">
-        <div className="flex flex-col gap-px">
+      {/* 16x16 Grid - Energy Field */}
+      <div className="relative mb-6 p-4">
+        {/* Radial glow background */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse at center, rgba(40,180,160,0.12) 0%, rgba(40,180,160,0.04) 40%, transparent 70%)',
+          }}
+        />
+        {/* Breathing glow layer */}
+        <div
+          className="absolute inset-0 pointer-events-none animate-[field-breathe_5s_ease-in-out_infinite]"
+          style={{
+            background: 'radial-gradient(ellipse at center, rgba(40,180,160,0.08) 0%, transparent 60%)',
+          }}
+        />
+        <div className="flex flex-col gap-px relative z-10">
           {Array.from({ length: 16 }, (_, row) => (
             <div key={row} className="flex items-center gap-1">
               <span className="text-[8px] text-muted-foreground/40 font-mono w-8 text-right shrink-0">
@@ -102,16 +116,20 @@ export const GenerateStep = ({ onComplete }: Props) => {
                   return (
                     <div
                       key={col}
-                      className="w-5 h-5 rounded-sm flex items-center justify-center transition-all duration-300 relative group"
+                      className="w-5 h-5 rounded-sm flex items-center justify-center transition-all duration-300 relative"
                       style={{
                         background: val > 0
-                          ? `rgba(40, 180, 160, ${0.08 + intensity * 0.45})`
-                          : 'rgba(255, 255, 255, 0.03)',
-                        boxShadow: val > 200 ? `0 0 6px rgba(40, 180, 160, ${intensity * 0.4})` : 'none',
+                          ? `rgba(40, 180, 160, ${0.04 + intensity * 0.5})`
+                          : 'rgba(255, 255, 255, 0.015)',
+                        boxShadow: val > 200
+                          ? `0 0 8px rgba(40, 180, 160, ${intensity * 0.4})`
+                          : val > 120
+                          ? `0 0 3px rgba(40, 180, 160, ${intensity * 0.15})`
+                          : 'none',
                       }}
                     >
                       {showNumber && (
-                        <span className="text-[6px] font-mono text-foreground/60">
+                        <span className="text-[6px] font-mono" style={{ color: `rgba(255,255,255, ${0.2 + intensity * 0.5})` }}>
                           {val.toString(16).toUpperCase().padStart(2, '0')}
                         </span>
                       )}
@@ -122,6 +140,8 @@ export const GenerateStep = ({ onComplete }: Props) => {
             </div>
           ))}
         </div>
+        {/* Bottom fade-out */}
+        <div className="w-full h-6 mt-1 pointer-events-none relative z-10" style={{ background: 'linear-gradient(to bottom, transparent, hsl(var(--background)))' }} />
       </div>
 
       {/* Phase Nodes */}
