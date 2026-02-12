@@ -13,7 +13,7 @@ export const WelcomeStep = ({ onNext }: Props) => (
         Mint an authorizable identity state — unique, composable, and fully yours.
       </p>
     </div>
-    <button onClick={onNext} className="btn-twin btn-twin-primary text-base px-10 py-3">
+    <button onClick={onNext} className="btn-twin btn-twin-primary btn-glow text-base px-10 py-3">
       Start Minting →
     </button>
     <p className="text-muted-foreground/50 text-xs mt-6">Takes about 2 minutes</p>

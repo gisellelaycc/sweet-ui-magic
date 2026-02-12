@@ -36,6 +36,23 @@ export const WizardLayout = () => {
     setState(s => ({ ...s, signature: sig, step: s.step + 1 }));
   }, []);
 
+  const hasIdentity = state.step >= 9;
+
+  const handleMenuNavigate = (id: string) => {
+    if (!hasIdentity) return;
+    switch (id) {
+      case 'identity':
+        setState(s => ({ ...s, step: 7 })); // Review
+        break;
+      case 'update':
+        setState(s => ({ ...s, step: 1 })); // Identity
+        break;
+      case 'auth':
+        setState(s => ({ ...s, step: 8 })); // Auth
+        break;
+    }
+  };
+
   const showIndicator = state.step > 0 && state.step < 9;
 
   return (
@@ -94,7 +111,7 @@ export const WizardLayout = () => {
         )}
       </main>
 
-      <MainMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
+      <MainMenu open={menuOpen} onClose={() => setMenuOpen(false)} onNavigate={handleMenuNavigate} hasIdentity={hasIdentity} />
     </div>
   );
 };
