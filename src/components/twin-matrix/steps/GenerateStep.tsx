@@ -10,8 +10,8 @@ export const GenerateStep = ({ onComplete }: Props) => {
 
   useEffect(() => {
     const phases = [
-      { at: 20, text: 'Forging identity dimensions...' },
-      { at: 50, text: 'Mapping soul axes...' },
+      { at: 20, text: 'Mapping identity dimensions...' },
+      { at: 50, text: 'Binding soul axes...' },
       { at: 75, text: 'Minting signature code...' },
       { at: 95, text: 'Complete!' },
     ];
@@ -53,7 +53,7 @@ export const GenerateStep = ({ onComplete }: Props) => {
         </div>
       </div>
 
-      <h2 className="text-xl font-bold mb-2">Forging Identity</h2>
+      <h2 className="text-xl font-bold mb-2">Minting Your Identity</h2>
       <p className="text-muted-foreground text-sm mb-6">{phase}</p>
 
       <div className="w-64 h-2 bg-foreground/5 rounded-full overflow-hidden">

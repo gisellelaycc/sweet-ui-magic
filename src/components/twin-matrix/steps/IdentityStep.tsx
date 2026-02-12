@@ -19,40 +19,32 @@ interface Props {
   onNext: () => void;
 }
 
-const FieldCard = ({
+const CompactField = ({
   label,
   options,
   value,
   onChange,
-  skippable = true,
 }: {
   label: string;
   options: string[];
   value: string;
   onChange: (v: string) => void;
-  skippable?: boolean;
 }) => (
-  <div className={`flex items-center justify-between gap-4 p-4 rounded-2xl border transition-all duration-300 ${
-    value
-      ? 'bg-foreground/[0.06] border-foreground/20 shadow-[0_0_12px_rgba(255,255,255,0.04)]'
-      : 'bg-foreground/[0.02] border-foreground/[0.06]'
-  }`}>
-    <div className="flex-1 min-w-0">
-      <div className="flex items-center gap-2 mb-2">
-        <span className="text-sm font-medium text-foreground">{label}</span>
-        {skippable && <span className="text-[10px] text-muted-foreground/50 uppercase tracking-wider">optional</span>}
-      </div>
-      <div className="flex flex-wrap gap-1.5">
-        {options.map(o => (
-          <button
-            key={o}
-            onClick={() => onChange(value === o ? '' : o)}
-            className={`chip !text-xs !py-1.5 !px-3 ${value === o ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}
-          >
-            {o}
-          </button>
-        ))}
-      </div>
+  <div className="space-y-1.5">
+    <div className="flex items-center gap-2">
+      <span className="text-xs font-medium text-foreground/80">{label}</span>
+      <span className="text-[9px] text-muted-foreground/40 uppercase tracking-wider">optional</span>
+    </div>
+    <div className="flex flex-wrap gap-1">
+      {options.map(o => (
+        <button
+          key={o}
+          onClick={() => onChange(value === o ? '' : o)}
+          className={`chip !text-[11px] !py-1 !px-2.5 ${value === o ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}
+        >
+          {o}
+        </button>
+      ))}
     </div>
   </div>
 );
@@ -68,7 +60,7 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
   const isValid = profile.username.trim().length > 0;
 
   return (
-    <div className="animate-fade-in space-y-6 max-w-2xl mx-auto">
+    <div className="animate-fade-in space-y-5 max-w-2xl mx-auto">
       <div>
         <h2 className="text-2xl font-bold mb-1">Core Identity</h2>
         <p className="text-muted-foreground text-sm">
@@ -77,34 +69,34 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
       </div>
 
       {/* Username (required) */}
-      <div className="glass-card space-y-2">
-        <label className="text-sm text-muted-foreground">Username</label>
+      <div className="glass-card !p-4 space-y-1.5">
+        <label className="text-xs text-muted-foreground">Username</label>
         <input
           value={profile.username}
           onChange={e => update('username', e.target.value)}
           placeholder="Choose a name"
-          className="w-full bg-foreground/5 border border-foreground/10 rounded-xl px-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-foreground/25 transition-colors"
+          className="w-full bg-foreground/5 border border-foreground/10 rounded-xl px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-foreground/25 transition-colors"
         />
       </div>
 
       {/* Section A: Biological */}
-      <div className="space-y-3">
-        <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">Biological Traits</h3>
-        <FieldCard label="Select your age range" options={AGE_OPTIONS} value={profile.ageBin} onChange={v => update('ageBin', v)} />
-        <FieldCard label="Height" options={HEIGHT_OPTIONS} value={profile.heightBin} onChange={v => update('heightBin', v)} />
-        <FieldCard label="Weight" options={WEIGHT_OPTIONS} value={profile.weightBin} onChange={v => update('weightBin', v)} />
-        <FieldCard label="Gender" options={GENDER_OPTIONS} value={profile.gender} onChange={v => update('gender', v)} />
+      <div className="glass-card !p-4 space-y-3">
+        <h3 className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest">Biological Traits</h3>
+        <CompactField label="Age Range" options={AGE_OPTIONS} value={profile.ageBin} onChange={v => update('ageBin', v)} />
+        <CompactField label="Height" options={HEIGHT_OPTIONS} value={profile.heightBin} onChange={v => update('heightBin', v)} />
+        <CompactField label="Weight" options={WEIGHT_OPTIONS} value={profile.weightBin} onChange={v => update('weightBin', v)} />
+        <CompactField label="Gender" options={GENDER_OPTIONS} value={profile.gender} onChange={v => update('gender', v)} />
       </div>
 
       {/* Section B: Social */}
-      <div className="space-y-3">
-        <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">Social Positioning</h3>
-        <FieldCard label="Education" options={EDUCATION_OPTIONS} value={profile.education} onChange={v => update('education', v)} />
-        <FieldCard label="Annual Income" options={INCOME_OPTIONS} value={profile.income} onChange={v => update('income', v)} />
-        <FieldCard label="Marital Status" options={MARITAL_OPTIONS} value={profile.maritalStatus} onChange={v => update('maritalStatus', v)} />
-        <FieldCard label="Occupation" options={OCCUPATION_OPTIONS} value={profile.occupation} onChange={v => update('occupation', v)} />
-        <FieldCard label="Living Environment" options={LIVING_OPTIONS} value={profile.livingType} onChange={v => update('livingType', v)} />
-        <FieldCard label="Ethnic Background" options={ETHNICITY_OPTIONS} value={profile.ethnicity} onChange={v => update('ethnicity', v)} />
+      <div className="glass-card !p-4 space-y-3">
+        <h3 className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest">Social Positioning</h3>
+        <CompactField label="Education" options={EDUCATION_OPTIONS} value={profile.education} onChange={v => update('education', v)} />
+        <CompactField label="Annual Income" options={INCOME_OPTIONS} value={profile.income} onChange={v => update('income', v)} />
+        <CompactField label="Marital Status" options={MARITAL_OPTIONS} value={profile.maritalStatus} onChange={v => update('maritalStatus', v)} />
+        <CompactField label="Occupation" options={OCCUPATION_OPTIONS} value={profile.occupation} onChange={v => update('occupation', v)} />
+        <CompactField label="Living Environment" options={LIVING_OPTIONS} value={profile.livingType} onChange={v => update('livingType', v)} />
+        <CompactField label="Ethnic Background" options={ETHNICITY_OPTIONS} value={profile.ethnicity} onChange={v => update('ethnicity', v)} />
       </div>
 
       <button onClick={onNext} disabled={!isValid} className="btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed">
