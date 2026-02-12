@@ -1,45 +1,43 @@
 interface Props {
-  signature: string[];
   username: string;
+  scope: string;
+  duration: string;
 }
 
-export const CompleteStep = ({ signature, username }: Props) => {
-  const primaryCode = signature.slice(0, 4).join('-');
+export const CompleteStep = ({ username, scope, duration }: Props) => (
+  <div className="flex flex-col items-center justify-center min-h-[70vh] text-center animate-fade-in px-4">
+    <div className="text-6xl mb-6">✨</div>
+    <h2 className="text-3xl font-bold mb-2">Identity Issued</h2>
+    <p className="text-muted-foreground mb-8 max-w-sm">
+      Your identity credential has been forged and bound to your wallet address.
+    </p>
 
-  return (
-    <div className="flex flex-col items-center justify-center min-h-[70vh] text-center animate-fade-in px-4">
-      <div className="text-6xl mb-6">✨</div>
-      <h2 className="text-3xl font-bold mb-2">完成！</h2>
-      <p className="text-muted-foreground mb-8 max-w-sm">
-        你的 Twin Matrix 身份已成功建立並綁定
-      </p>
-
-      <div className="glass-card max-w-xs w-full text-center space-y-4">
-        <p className="text-xs text-muted-foreground uppercase tracking-widest">Your Twin Matrix ID</p>
-        <p className="text-2xl font-mono font-bold tracking-wider">{primaryCode}</p>
-        <div className="inline-grid grid-cols-4 gap-1 mx-auto">
-          {signature.map((hex, i) => {
-            const val = parseInt(hex, 16);
-            const hue = (val * 1.4) % 360;
-            const lightness = 30 + (val / 255) * 35;
-            return (
-              <div
-                key={i}
-                className="w-6 h-6 rounded"
-                style={{ background: `hsl(${hue} 55% ${lightness}%)` }}
-              />
-            );
-          })}
+    <div className="glass-card max-w-xs w-full text-center space-y-4">
+      <p className="text-xs text-muted-foreground uppercase tracking-widest">Credential Summary</p>
+      <div className="space-y-2 text-sm">
+        <div className="flex justify-between px-2">
+          <span className="text-muted-foreground">Identity</span>
+          <span className="text-foreground font-medium">@{username}</span>
         </div>
-        <p className="text-sm text-muted-foreground">@{username}</p>
+        <div className="flex justify-between px-2">
+          <span className="text-muted-foreground">Scope</span>
+          <span className="text-foreground font-medium">{scope}</span>
+        </div>
+        <div className="flex justify-between px-2">
+          <span className="text-muted-foreground">Duration</span>
+          <span className="text-foreground font-medium">{duration}</span>
+        </div>
       </div>
-
-      <button
-        onClick={() => window.location.reload()}
-        className="btn-twin btn-twin-ghost mt-8 px-8 py-3"
-      >
-        重新開始
-      </button>
+      <div className="pt-3 border-t border-foreground/10">
+        <p className="text-xs text-green-400">✓ Bound to wallet</p>
+      </div>
     </div>
-  );
-};
+
+    <button
+      onClick={() => window.location.reload()}
+      className="btn-twin btn-twin-ghost mt-8 px-8 py-3"
+    >
+      Start Over
+    </button>
+  </div>
+);

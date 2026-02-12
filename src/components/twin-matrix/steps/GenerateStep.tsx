@@ -6,14 +6,14 @@ interface Props {
 
 export const GenerateStep = ({ onComplete }: Props) => {
   const [progress, setProgress] = useState(0);
-  const [phase, setPhase] = useState('分析身份數據...');
+  const [phase, setPhase] = useState('Initializing identity matrix...');
 
   useEffect(() => {
     const phases = [
-      { at: 20, text: '建構 256 維度矩陣...' },
-      { at: 50, text: '計算靈魂主軸...' },
-      { at: 75, text: '生成 Signature Code...' },
-      { at: 95, text: '完成！' },
+      { at: 20, text: 'Forging identity dimensions...' },
+      { at: 50, text: 'Mapping soul axes...' },
+      { at: 75, text: 'Minting signature code...' },
+      { at: 95, text: 'Complete!' },
     ];
 
     const interval = setInterval(() => {
@@ -23,7 +23,6 @@ export const GenerateStep = ({ onComplete }: Props) => {
         if (currentPhase) setPhase(currentPhase.text);
         if (next >= 100) {
           clearInterval(interval);
-          // Generate random signature
           const sig = Array.from({ length: 16 }, () =>
             Math.floor(Math.random() * 256).toString(16).padStart(2, '0').toUpperCase()
           );
@@ -38,7 +37,6 @@ export const GenerateStep = ({ onComplete }: Props) => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] text-center animate-fade-in px-4">
-      {/* Matrix animation */}
       <div className="w-32 h-32 mb-8 relative">
         <div className="absolute inset-0 grid grid-cols-4 grid-rows-4 gap-1">
           {Array.from({ length: 16 }, (_, i) => (
@@ -49,14 +47,13 @@ export const GenerateStep = ({ onComplete }: Props) => {
                 background: progress > (i / 16) * 100
                   ? `hsl(${(i * 22.5) % 360} 60% 50% / ${0.3 + Math.random() * 0.7})`
                   : 'rgba(255,255,255,0.05)',
-                animationDelay: `${i * 0.1}s`,
               }}
             />
           ))}
         </div>
       </div>
 
-      <h2 className="text-xl font-bold mb-2">⚙️ 生成 Twin Matrix</h2>
+      <h2 className="text-xl font-bold mb-2">Forging Identity</h2>
       <p className="text-muted-foreground text-sm mb-6">{phase}</p>
 
       <div className="w-64 h-2 bg-foreground/5 rounded-full overflow-hidden">
