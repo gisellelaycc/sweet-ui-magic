@@ -33,16 +33,10 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
     setInteracted(true);
     const nextSpectrum = { ...soul.spectrum, [key]: value };
     const weights = computeWeights(nextSpectrum);
-    const next: SoulData = { spectrum: nextSpectrum, weights, confirmed: false };
+    const next: SoulData = { spectrum: nextSpectrum, weights, confirmed: true };
     setSoul(next);
     onUpdate(next);
   }, [soul, onUpdate]);
-
-  const confirm = () => {
-    const next = { ...soul, confirmed: true };
-    setSoul(next);
-    onUpdate(next);
-  };
 
   const topWeights = Object.entries(soul.weights)
     .sort(([, a], [, b]) => b - a)
@@ -106,24 +100,13 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
               </div>
             ))}
           </div>
-
-          {!soul.confirmed && (
-            <button onClick={confirm} className="btn-twin btn-twin-primary w-full py-2 text-xs mt-2">
-              Commit Signal
-            </button>
-          )}
-          {soul.confirmed && (
-            <div className="flex justify-center">
-              <span className="text-green-400 text-sm">✓ Signal Committed</span>
-            </div>
-          )}
         </div>
       )}
 
       <button
         onClick={onNext}
-        disabled={!soul.confirmed}
-        className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${soul.confirmed ? 'btn-glow' : ''}`}
+        disabled={!interacted}
+        className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${interacted ? 'btn-glow' : ''}`}
       >
         Mint Identity State
       </button>
