@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import type { WizardState } from '@/types/twin-matrix';
+import logo from '@/assets/twin3-logo.svg';
 import { StepIndicator } from './StepIndicator';
 import { MainMenu } from './MainMenu';
 import { WelcomeStep } from './steps/WelcomeStep';
@@ -61,9 +62,9 @@ export const WizardLayout = () => {
         <div className="flex items-center gap-3">
           <button
             onClick={() => setMenuOpen(true)}
-            className="w-8 h-8 rounded-lg bg-foreground/10 flex items-center justify-center text-sm hover:bg-foreground/15 transition-colors"
+            className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-foreground/10 transition-colors"
           >
-            ◈
+            <img src={logo} alt="Twin Matrix" className="w-6 h-6" />
           </button>
           <span className="font-semibold tracking-tight">Twin Matrix</span>
         </div>
