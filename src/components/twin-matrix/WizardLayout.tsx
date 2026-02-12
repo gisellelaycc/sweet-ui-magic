@@ -73,17 +73,27 @@ export const WizardLayout = () => {
           <span className="font-semibold tracking-tight">Twin Matrix</span>
         </div>
         {showIndicator && <StepIndicator current={state.step} total={TOTAL_STEPS} />}
-        {showBack ? (
-          <button onClick={() => setState(s => ({ ...s, step: s.step - 1 }))} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-            ← Back
-          </button>
-        ) : showPageBack ? (
-          <button onClick={() => setActivePage(null)} className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5">
-            <Home className="w-4 h-4" />
-          </button>
-        ) : (
-          <div className="w-12" />
-        )}
+        <div className="flex items-center gap-3">
+          {showBack && (
+            <button onClick={() => setState(s => ({ ...s, step: s.step - 1 }))} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              ← Back
+            </button>
+          )}
+          {showPageBack && (
+            <button onClick={() => setActivePage(null)} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              ← Back
+            </button>
+          )}
+          {(showBack || showPageBack) && (
+            <button
+              onClick={() => { setActivePage(null); setState(s => ({ ...s, step: 0 })); }}
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <Home className="w-4 h-4" />
+            </button>
+          )}
+          {!showBack && !showPageBack && <div className="w-12" />}
+        </div>
       </header>
 
       <main className="flex-1 overflow-y-auto px-4 py-8 scrollbar-hide">
