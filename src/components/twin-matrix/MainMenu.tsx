@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import logo from '@/assets/twin3-logo.svg';
 
 const MENU_ITEMS = [
   { id: 'identity', icon: '◈', label: 'My Identity' },
@@ -33,7 +34,7 @@ export const MainMenu = ({ open, onClose, onNavigate, hasIdentity }: Props) => {
       <div className="fixed left-0 top-0 bottom-0 w-72 z-50 glass animate-fade-in flex flex-col">
         <div className="flex items-center justify-between px-5 py-4 border-b border-foreground/5">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-foreground/10 flex items-center justify-center text-sm">◈</div>
+            <img src={logo} alt="Twin Matrix" className="w-5 h-5" />
             <span className="font-semibold tracking-tight text-sm">Twin Matrix</span>
           </div>
           <button onClick={onClose} className="text-muted-foreground hover:text-foreground text-lg">×</button>
