@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { ArrowRight } from 'lucide-react';
 import type { SoulData } from '@/types/twin-matrix';
 
 const MOTIVATION_KEYWORDS: Record<string, string[]> = {
@@ -110,29 +111,31 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
       </div>
 
       <div className="glass-card space-y-5">
-        <div className="space-y-2">
+        <div className="space-y-3">
           <label className="text-sm text-muted-foreground">Your motivation in one sentence</label>
-          <textarea
-            value={soul.sentence}
-            onChange={e => updateSentence(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="e.g. I run to become a better version of myself"
-            maxLength={120}
-            rows={3}
-            className="w-full bg-foreground/5 border border-foreground/10 rounded-xl px-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-foreground/25 transition-colors resize-none"
-          />
-          <div className="flex justify-between items-center">
-            {showEnterHint && (
-              <button
-                onClick={() => { if (debounceRef.current) clearTimeout(debounceRef.current); generateTags(soul.sentence); }}
-                className="btn-twin btn-twin-ghost py-1.5 px-4 text-xs animate-fade-in"
-              >
-                Extract Tags ↵
-              </button>
-            )}
-            {!showEnterHint && <span />}
-            <span className="text-xs text-muted-foreground/50">{soul.sentence.length}/120</span>
+          <div className="relative">
+            <input
+              type="text"
+              value={soul.sentence}
+              onChange={e => updateSentence(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="e.g. I run to become a better version of myself"
+              maxLength={120}
+              className="w-full bg-foreground/5 border border-foreground/10 rounded-xl px-4 py-3.5 pr-14 text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/25 transition-colors text-sm"
+            />
+            <button
+              onClick={() => { if (soul.sentence.trim().length > 5) { if (debounceRef.current) clearTimeout(debounceRef.current); generateTags(soul.sentence); } }}
+              disabled={soul.sentence.trim().length <= 5}
+              className={`absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-lg flex items-center justify-center transition-all ${
+                soul.sentence.trim().length > 5
+                  ? 'bg-foreground/15 text-foreground hover:bg-foreground/25 cursor-pointer'
+                  : 'text-muted-foreground/20 cursor-not-allowed'
+              }`}
+            >
+              <ArrowRight className="w-4 h-4" />
+            </button>
           </div>
+          <span className="text-[10px] text-muted-foreground/40 block text-right">{soul.sentence.length}/120</span>
         </div>
 
         {soul.tags.length > 0 && (
