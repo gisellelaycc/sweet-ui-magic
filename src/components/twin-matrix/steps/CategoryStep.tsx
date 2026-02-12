@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import type { IdentityModule } from '@/types/twin-matrix';
 
 const MODULES: IdentityModule[] = [
@@ -25,26 +25,17 @@ interface Props {
 export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
   const [expanded, setExpanded] = useState<string | null>(null);
   const [activated, setActivated] = useState<string[]>(activeModules);
-  const [justActivated, setJustActivated] = useState<string | null>(null);
-  const glowTimeout = useRef<ReturnType<typeof setTimeout>>();
 
   const toggleExpand = (id: string) => {
     setExpanded(expanded === id ? null : id);
   };
 
   const toggleModule = (id: string) => {
-    const wasActive = activated.includes(id);
-    const next = wasActive
+    const next = activated.includes(id)
       ? activated.filter(m => m !== id)
       : [...activated, id];
     setActivated(next);
     onUpdate(next);
-
-    if (!wasActive) {
-      setJustActivated(id);
-      if (glowTimeout.current) clearTimeout(glowTimeout.current);
-      glowTimeout.current = setTimeout(() => setJustActivated(null), 3000);
-    }
   };
 
   const hasActive = activated.length > 0;
@@ -68,8 +59,8 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
               <div
                 onClick={() => toggleExpand(mod.id)}
                 className={`glass-card !p-4 flex items-center gap-4 transition-all duration-500 cursor-pointer ${
-                  isActivated ? 'border-foreground/25 shadow-[0_0_16px_rgba(255,255,255,0.06)]' : ''
-                } ${justActivated === mod.id ? 'animate-glow-pulse' : ''}
+                  isActivated && !isMinted ? 'animate-glow-pulse' : ''
+                } ${isActivated && !isMinted ? 'border-foreground/25' : ''}
                 ${isMinted ? '!border-green-400/20' : ''} ${isExpanded ? '!rounded-b-none' : ''}`}
               >
                 <span className="text-2xl">{mod.icon}</span>
