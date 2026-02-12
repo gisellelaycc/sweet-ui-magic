@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, CheckCircle } from 'lucide-react';
 import type { SoulData } from '@/types/twin-matrix';
 
 const MOTIVATION_KEYWORDS: Record<string, string[]> = {
@@ -164,7 +164,9 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
               )}
             </div>
             {soul.confirmed && (
-              <p className="text-xs text-green-400 text-center">✓ Tags confirmed</p>
+              <div className="flex justify-center">
+                <CheckCircle className="w-5 h-5 text-green-400" />
+              </div>
             )}
           </div>
         )}
