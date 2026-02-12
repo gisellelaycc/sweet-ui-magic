@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { Home } from 'lucide-react';
 import type { WizardState } from '@/types/twin-matrix';
 import logo from '@/assets/twin3-logo.svg';
 import { StepIndicator } from './StepIndicator';
@@ -77,8 +78,8 @@ export const WizardLayout = () => {
             ← Back
           </button>
         ) : showPageBack ? (
-          <button onClick={() => setActivePage(null)} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-            ← Back
+          <button onClick={() => setActivePage(null)} className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5">
+            <Home className="w-4 h-4" />
           </button>
         ) : (
           <div className="w-12" />
