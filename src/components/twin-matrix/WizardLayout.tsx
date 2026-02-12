@@ -13,8 +13,15 @@ import { GenerateStep } from './steps/GenerateStep';
 import { ReviewStep } from './steps/ReviewStep';
 import { AuthStep } from './steps/AuthStep';
 import { CompleteStep } from './steps/CompleteStep';
+import { MyIdentityPage } from './pages/MyIdentityPage';
+import { UpdateIdentityPage } from './pages/UpdateIdentityPage';
+import { ActiveAuthorizationsPage } from './pages/ActiveAuthorizationsPage';
+import { MissionsPage } from './pages/MissionsPage';
+import { SettingsPage } from './pages/SettingsPage';
 
 const TOTAL_STEPS = 8;
+
+type MenuPage = 'identity' | 'update' | 'auth' | 'missions' | 'settings' | null;
 
 const initialState: WizardState = {
   step: 0,
@@ -30,6 +37,7 @@ const initialState: WizardState = {
 export const WizardLayout = () => {
   const [state, setState] = useState<WizardState>(initialState);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activePage, setActivePage] = useState<MenuPage>(null);
 
   const next = () => setState(s => ({ ...s, step: s.step + 1 }));
 
@@ -40,21 +48,21 @@ export const WizardLayout = () => {
   const hasIdentity = state.step >= 9;
 
   const handleMenuNavigate = (id: string) => {
-    if (!hasIdentity) return;
-    switch (id) {
-      case 'identity':
-        setState(s => ({ ...s, step: 7 })); // Review
-        break;
-      case 'update':
-        setState(s => ({ ...s, step: 1 })); // Identity
-        break;
-      case 'auth':
-        setState(s => ({ ...s, step: 8 })); // Auth
-        break;
+    if (id === 'settings') {
+      setActivePage('settings');
+      return;
     }
+    if (!hasIdentity) return;
+    setActivePage(id as MenuPage);
   };
 
-  const showIndicator = state.step > 0 && state.step < 9;
+  const handlePageNavigate = (id: string) => {
+    setActivePage(id as MenuPage);
+  };
+
+  const showIndicator = !activePage && state.step > 0 && state.step < 9;
+  const showBack = !activePage && state.step > 0 && state.step < 6;
+  const showPageBack = activePage !== null;
 
   return (
     <div className="h-full flex flex-col relative z-10">
@@ -69,46 +77,59 @@ export const WizardLayout = () => {
           <span className="font-semibold tracking-tight">Twin Matrix</span>
         </div>
         {showIndicator && <StepIndicator current={state.step} total={TOTAL_STEPS} />}
-        {state.step > 0 && state.step < 6 && (
+        {showBack && (
           <button onClick={() => setState(s => ({ ...s, step: s.step - 1 }))} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             ← Back
           </button>
         )}
-        {(!showIndicator || state.step >= 6) && <div />}
+        {showPageBack && (
+          <button onClick={() => setActivePage(null)} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            ← Back
+          </button>
+        )}
+        {!showIndicator && !showBack && !showPageBack && <div />}
       </header>
 
       <main className="flex-1 overflow-y-auto px-4 py-8 scrollbar-hide">
-        {state.step === 0 && <WelcomeStep onNext={next} />}
-        {state.step === 1 && (
-          <IdentityStep data={state.profile} onUpdate={p => setState(s => ({ ...s, profile: p }))} onNext={next} />
+        {activePage === 'identity' && (
+          <MyIdentityPage username={state.profile.username} tags={state.soul.tags} activeModules={state.activeModules} signature={state.signature} onNavigate={handlePageNavigate} />
         )}
-        {state.step === 2 && (
-          <CategoryStep activeModules={state.activeModules} onUpdate={m => setState(s => ({ ...s, activeModules: m }))} onNext={next} />
+        {activePage === 'update' && (
+          <UpdateIdentityPage username={state.profile.username} activeModules={state.activeModules} tags={state.soul.tags} onNavigate={handlePageNavigate} />
         )}
-        {state.step === 3 && (
-          <SportSetupStep data={state.sportSetup} onUpdate={d => setState(s => ({ ...s, sportSetup: d }))} onNext={next} />
-        )}
-        {state.step === 4 && (
-          <SportTwinStep data={state.sportTwin} onUpdate={d => setState(s => ({ ...s, sportTwin: d }))} onNext={next} />
-        )}
-        {state.step === 5 && (
-          <SoulStep data={state.soul} onUpdate={d => setState(s => ({ ...s, soul: d }))} onNext={next} />
-        )}
-        {state.step === 6 && <GenerateStep onComplete={handleGenerateComplete} />}
-        {state.step === 7 && (
-          <ReviewStep
-            signature={state.signature}
-            username={state.profile.username}
-            tags={state.soul.tags}
-            activeModules={state.activeModules}
-            onNext={next}
-          />
-        )}
-        {state.step === 8 && (
-          <AuthStep data={state.authSetup} onUpdate={d => setState(s => ({ ...s, authSetup: d }))} onNext={next} />
-        )}
-        {state.step === 9 && (
-          <CompleteStep username={state.profile.username} scope={state.authSetup.scope} duration={state.authSetup.duration} />
+        {activePage === 'auth' && <ActiveAuthorizationsPage />}
+        {activePage === 'missions' && <MissionsPage />}
+        {activePage === 'settings' && <SettingsPage />}
+
+        {!activePage && (
+          <>
+            {state.step === 0 && <WelcomeStep onNext={next} />}
+            {state.step === 1 && (
+              <IdentityStep data={state.profile} onUpdate={p => setState(s => ({ ...s, profile: p }))} onNext={next} />
+            )}
+            {state.step === 2 && (
+              <CategoryStep activeModules={state.activeModules} onUpdate={m => setState(s => ({ ...s, activeModules: m }))} onNext={next} />
+            )}
+            {state.step === 3 && (
+              <SportSetupStep data={state.sportSetup} onUpdate={d => setState(s => ({ ...s, sportSetup: d }))} onNext={next} />
+            )}
+            {state.step === 4 && (
+              <SportTwinStep data={state.sportTwin} onUpdate={d => setState(s => ({ ...s, sportTwin: d }))} onNext={next} />
+            )}
+            {state.step === 5 && (
+              <SoulStep data={state.soul} onUpdate={d => setState(s => ({ ...s, soul: d }))} onNext={next} />
+            )}
+            {state.step === 6 && <GenerateStep onComplete={handleGenerateComplete} />}
+            {state.step === 7 && (
+              <ReviewStep signature={state.signature} username={state.profile.username} tags={state.soul.tags} activeModules={state.activeModules} onNext={next} />
+            )}
+            {state.step === 8 && (
+              <AuthStep data={state.authSetup} onUpdate={d => setState(s => ({ ...s, authSetup: d }))} onNext={next} />
+            )}
+            {state.step === 9 && (
+              <CompleteStep username={state.profile.username} scope={state.authSetup.scope} duration={state.authSetup.duration} />
+            )}
+          </>
         )}
       </main>
 

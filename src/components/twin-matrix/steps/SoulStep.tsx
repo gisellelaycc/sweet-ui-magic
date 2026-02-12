@@ -123,7 +123,12 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
           />
           <div className="flex justify-between items-center">
             {showEnterHint && (
-              <span className="text-xs text-foreground/40 animate-fade-in">Press ↵ Enter to extract tags</span>
+              <button
+                onClick={() => { if (debounceRef.current) clearTimeout(debounceRef.current); generateTags(soul.sentence); }}
+                className="btn-twin btn-twin-ghost py-1.5 px-4 text-xs animate-fade-in"
+              >
+                Extract Tags ↵
+              </button>
             )}
             {!showEnterHint && <span />}
             <span className="text-xs text-muted-foreground/50">{soul.sentence.length}/120</span>
