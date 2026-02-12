@@ -101,13 +101,14 @@ body {
 body::after {
   content: '';
   position: fixed;
-  inset: 0;
+  inset: -20%;
   background:
-    radial-gradient(ellipse 120% 80% at 30% 20%, rgba(60, 80, 140, 0.06) 0%, transparent 60%),
-    radial-gradient(ellipse 100% 70% at 75% 80%, rgba(40, 60, 120, 0.05) 0%, transparent 55%);
+    radial-gradient(ellipse 60% 50% at 25% 15%, rgba(50, 80, 160, 0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 60% at 80% 75%, rgba(30, 55, 130, 0.10) 0%, transparent 50%),
+    radial-gradient(ellipse 40% 35% at 60% 30%, rgba(70, 100, 180, 0.06) 0%, transparent 45%);
   pointer-events: none;
   z-index: 0;
-  animation: ambient-drift 25s ease-in-out infinite alternate;
+  animation: ambient-drift 20s ease-in-out infinite alternate;
 }
 
 /* Subtle noise texture */
@@ -309,12 +310,15 @@ body::before {
 
 @keyframes ambient-drift {
   0% {
-    transform: translate(0, 0) scale(1);
+    transform: translate(0, 0) scale(1) rotate(0deg);
   }
-  50% {
-    transform: translate(2%, -1%) scale(1.02);
+  33% {
+    transform: translate(4%, -3%) scale(1.04) rotate(0.5deg);
+  }
+  66% {
+    transform: translate(-3%, 4%) scale(0.98) rotate(-0.3deg);
   }
   100% {
-    transform: translate(-1%, 2%) scale(1);
+    transform: translate(2%, -2%) scale(1.02) rotate(0.2deg);
   }
 }
