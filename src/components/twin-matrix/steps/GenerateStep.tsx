@@ -49,7 +49,7 @@ export const GenerateStep = ({ onComplete }: Props) => {
           const sig = Array.from({ length: 256 }, () => Math.floor(Math.random() * 256));
           setFinalSignature(sig);
           setGridValues(sig);
-          setTimeout(() => onComplete(sig), 800);
+          setTimeout(() => onComplete(sig), 3000);
         }
         return next;
       });
