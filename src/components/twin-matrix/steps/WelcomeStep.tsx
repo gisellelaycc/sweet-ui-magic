@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import logo from '@/assets/twin3-logo.svg';
-
 interface Props {
   username: string;
   onUpdateUsername: (name: string) => void;
@@ -32,13 +31,11 @@ export const WelcomeStep = ({ username, onUpdateUsername, onNext }: Props) => {
         </p>
       </div>
 
-      {/* Username input */}
       <div className="w-full max-w-xs mb-6">
         <div className="relative">
           <input
             value={value}
             onChange={e => setValue(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && handleConfirm()}
             placeholder="your name"
             className="w-full bg-foreground/5 border border-foreground/10 rounded-xl px-4 py-3 text-center text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/20 transition-colors pr-12"
           />
