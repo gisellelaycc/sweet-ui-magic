@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import type { WizardState } from '@/types/twin-matrix';
 import { StepIndicator } from './StepIndicator';
+import { MainMenu } from './MainMenu';
 import { WelcomeStep } from './steps/WelcomeStep';
 import { IdentityStep } from './steps/IdentityStep';
 import { CategoryStep } from './steps/CategoryStep';
@@ -27,6 +28,7 @@ const initialState: WizardState = {
 
 export const WizardLayout = () => {
   const [state, setState] = useState<WizardState>(initialState);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const next = () => setState(s => ({ ...s, step: s.step + 1 }));
 
@@ -40,7 +42,12 @@ export const WizardLayout = () => {
     <div className="h-full flex flex-col relative z-10">
       <header className="flex items-center justify-between px-6 py-4 border-b border-foreground/5">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-foreground/10 flex items-center justify-center text-sm">◈</div>
+          <button
+            onClick={() => setMenuOpen(true)}
+            className="w-8 h-8 rounded-lg bg-foreground/10 flex items-center justify-center text-sm hover:bg-foreground/15 transition-colors"
+          >
+            ◈
+          </button>
           <span className="font-semibold tracking-tight">Twin Matrix</span>
         </div>
         {showIndicator && <StepIndicator current={state.step} total={TOTAL_STEPS} />}
@@ -86,6 +93,8 @@ export const WizardLayout = () => {
           <CompleteStep username={state.profile.username} scope={state.authSetup.scope} duration={state.authSetup.duration} />
         )}
       </main>
+
+      <MainMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
     </div>
   );
 };

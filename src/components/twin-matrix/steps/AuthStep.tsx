@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { AuthSetup } from '@/types/twin-matrix';
 
 const SCOPE_OPTIONS = ['Core Identity', 'Topic Modules', 'Motivation Layer', 'Full Identity'];
-const DURATION_OPTIONS = ['24 Hours', '7 Days', 'Custom'];
+const DURATION_OPTIONS = ['24 Hours', '7 Days', '30 Days', '90 Days'];
 const USAGE_OPTIONS = ['Single Use', 'Limited Uses', 'Non-resettable'];
 
 interface Props {
