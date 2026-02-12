@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import type { AgentSetup } from '@/types/twin-matrix';
+import { TaskCapabilitySection } from './TaskCapabilitySection';
 
 const TASK_TYPES = ['Campaign', 'Product', 'Marathon', 'Location', 'Task'];
 const MATCH_STRATEGIES = ['Based on Skill', 'Based on Brand', 'Based on Soul', 'Based on Core'];
@@ -42,95 +43,110 @@ export const AuthStep = ({ data, onUpdate, onNext }: Props) => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* LEFT — Agent Definition */}
-        <div className="glass-card space-y-5">
-          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Behavior Builder</h3>
+        <div className="space-y-4">
+          <div className="glass-card space-y-5">
+            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Behavior Builder</h3>
 
-          {/* Agent Name */}
-          <div className="space-y-1.5">
-            <label className="text-xs text-muted-foreground">Agent Name</label>
-            <input
-              type="text"
-              value={setup.agent.name}
-              onChange={e => update({ ...setup, agent: { ...setup.agent, name: e.target.value } })}
-              placeholder="e.g. Sport Product Scout"
-              className="w-full bg-foreground/5 border border-foreground/10 rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/25 transition-colors"
-            />
-          </div>
-
-          {/* Task Types */}
-          <div className="space-y-2">
-            <label className="text-xs text-muted-foreground">Task Types</label>
+            {/* Agent Name */}
             <div className="space-y-1.5">
-              {TASK_TYPES.map(t => (
-                <label key={t} className="flex items-center gap-2 text-sm cursor-pointer">
-                  <Checkbox
-                    checked={setup.agent.taskTypes.includes(t)}
-                    onCheckedChange={() => update({ ...setup, agent: { ...setup.agent, taskTypes: toggleArrayItem(setup.agent.taskTypes, t) } })}
-                  />
-                  <span className="text-foreground/80">{t}</span>
-                </label>
-              ))}
+              <label className="text-xs text-muted-foreground">Agent Name</label>
+              <input
+                type="text"
+                value={setup.agent.name}
+                onChange={e => update({ ...setup, agent: { ...setup.agent, name: e.target.value } })}
+                placeholder="e.g. Sport Product Scout"
+                className="w-full bg-foreground/5 border border-foreground/10 rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/25 transition-colors"
+              />
+            </div>
+
+            {/* Task Types */}
+            <div className="space-y-2">
+              <label className="text-xs text-muted-foreground">Task Types</label>
+              <div className="space-y-1.5">
+                {TASK_TYPES.map(t => (
+                  <label key={t} className="flex items-center gap-2 text-sm cursor-pointer">
+                    <Checkbox
+                      checked={setup.agent.taskTypes.includes(t)}
+                      onCheckedChange={() => update({ ...setup, agent: { ...setup.agent, taskTypes: toggleArrayItem(setup.agent.taskTypes, t) } })}
+                    />
+                    <span className="text-foreground/80">{t}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Matching Strategy */}
+            <div className="space-y-2">
+              <label className="text-xs text-muted-foreground">Matching Strategy</label>
+              <div className="space-y-1.5">
+                {MATCH_STRATEGIES.map(s => (
+                  <label key={s} className="flex items-center gap-2 text-sm cursor-pointer">
+                    <Checkbox
+                      checked={setup.agent.matchingStrategy.includes(s)}
+                      onCheckedChange={() => update({ ...setup, agent: { ...setup.agent, matchingStrategy: toggleArrayItem(setup.agent.matchingStrategy, s) } })}
+                    />
+                    <span className="text-foreground/80">{s}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Behavior Mode */}
+            <div className="space-y-2">
+              <label className="text-xs text-muted-foreground">Behavior Mode</label>
+              <div className="space-y-1.5">
+                {BEHAVIOR_MODES.map(m => (
+                  <label key={m} className="flex items-center gap-2 text-sm cursor-pointer">
+                    <input
+                      type="radio"
+                      name="behavior"
+                      checked={setup.agent.behaviorMode === m}
+                      onChange={() => update({ ...setup, agent: { ...setup.agent, behaviorMode: m } })}
+                      className="accent-foreground"
+                    />
+                    <span className="text-foreground/80">{m}</span>
+                  </label>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Matching Strategy */}
-          <div className="space-y-2">
-            <label className="text-xs text-muted-foreground">Matching Strategy</label>
-            <div className="space-y-1.5">
-              {MATCH_STRATEGIES.map(s => (
-                <label key={s} className="flex items-center gap-2 text-sm cursor-pointer">
-                  <Checkbox
-                    checked={setup.agent.matchingStrategy.includes(s)}
-                    onCheckedChange={() => update({ ...setup, agent: { ...setup.agent, matchingStrategy: toggleArrayItem(setup.agent.matchingStrategy, s) } })}
-                  />
-                  <span className="text-foreground/80">{s}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {/* Behavior Mode */}
-          <div className="space-y-2">
-            <label className="text-xs text-muted-foreground">Behavior Mode</label>
-            <div className="space-y-1.5">
-              {BEHAVIOR_MODES.map(m => (
-                <label key={m} className="flex items-center gap-2 text-sm cursor-pointer">
-                  <input
-                    type="radio"
-                    name="behavior"
-                    checked={setup.agent.behaviorMode === m}
-                    onChange={() => update({ ...setup, agent: { ...setup.agent, behaviorMode: m } })}
-                    className="accent-foreground"
-                  />
-                  <span className="text-foreground/80">{m}</span>
-                </label>
-              ))}
-            </div>
-          </div>
+          {/* Task Capability */}
+          <TaskCapabilitySection
+            capabilities={setup.agent.capabilities || {}}
+            onUpdate={(caps) => update({ ...setup, agent: { ...setup.agent, capabilities: caps } })}
+          />
         </div>
 
         {/* RIGHT — Permission + Autonomy */}
         <div className="glass-card space-y-5">
           <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Permission & Autonomy</h3>
 
-          {/* Identity Scope */}
+          {/* Identity Scope — Multi-select */}
           <div className="space-y-2">
             <label className="text-xs text-muted-foreground">Identity Scope</label>
             <p className="text-[10px] text-muted-foreground/50">Grants structured summary access only — no raw values exposed.</p>
             <div className="flex flex-wrap gap-1.5">
-              {IDENTITY_SCOPES.map(s => (
-                <button
-                  key={s}
-                  onClick={() => update({ ...setup, permission: { ...setup.permission, identityScope: s } })}
-                  className={`text-[11px] px-3 py-1.5 rounded-lg transition-all ${
-                    setup.permission.identityScope === s
-                      ? 'bg-foreground/20 text-foreground border border-foreground/20'
-                      : 'bg-foreground/5 text-muted-foreground border border-foreground/5 hover:border-foreground/15'
-                  }`}
-                >
-                  {s}
-                </button>
-              ))}
+              {IDENTITY_SCOPES.map(s => {
+                const selected = (setup.permission.identityScopes || [setup.permission.identityScope]).includes(s);
+                return (
+                  <button
+                    key={s}
+                    onClick={() => {
+                      const current = setup.permission.identityScopes || [setup.permission.identityScope];
+                      const next = selected ? current.filter(x => x !== s) : [...current, s];
+                      update({ ...setup, permission: { ...setup.permission, identityScopes: next, identityScope: next[0] || '' } });
+                    }}
+                    className={`text-[11px] px-3 py-1.5 rounded-lg transition-all ${
+                      selected
+                        ? 'bg-foreground/20 text-foreground border border-foreground/20'
+                        : 'bg-foreground/5 text-muted-foreground border border-foreground/5 hover:border-foreground/15'
+                    }`}
+                  >
+                    {s}
+                  </button>
+                );
+              })}
             </div>
           </div>
 

@@ -53,10 +53,12 @@ export interface AgentDefinition {
   taskTypes: string[];
   matchingStrategy: string[];
   behaviorMode: string;
+  capabilities?: Record<string, string[]>;
 }
 
 export interface AgentPermission {
   identityScope: string;
+  identityScopes?: string[];
   tradingAuthority: string;
   maxPerTask: string;
   dailyCap: string;
