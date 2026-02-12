@@ -42,7 +42,7 @@ export const MainMenu = ({ open, onClose, onNavigate, hasIdentity }: Props) => {
 
         <nav className="flex-1 py-3 px-3 space-y-1">
           {MENU_ITEMS.map(item => {
-            const disabled = !hasIdentity && item.id !== 'settings';
+            const disabled = false;
             return (
               <button
                 key={item.id}

@@ -1,29 +1,34 @@
+import { Eye, X, Heart, FileText, DollarSign, Clock } from 'lucide-react';
+
 const DEMO_MISSIONS = [
   {
     id: '1',
     type: 'passive' as const,
-    brand: 'Nike',
-    agentId: 'nike-running-01',
+    brand: 'Nike Running',
+    brandInitial: 'N',
+    agentId: 'agent:nike-run-0x3f',
     title: 'New Pegasus 42 release + City Marathon registration open',
     whyMe: ['Running affinity: high', 'Performance oriented'],
-    token: { module: 'soul.sports.running', remaining: 12, validDays: 28 },
+    token: { module: 'soul.sports.running', remaining: 12, validDays: 30 },
   },
   {
     id: '2',
     type: 'task' as const,
-    brand: 'Adidas',
-    agentId: 'adidas-feedback-03',
-    title: '7-day training feedback task',
-    reward: '15 USDT',
-    deadline: '2025-03-01',
-    whyMe: ['Sport module active', 'Consistent training pattern'],
-    token: { module: 'soul.sports.general', remaining: 5, validDays: 14 },
+    brand: 'Adidas Training',
+    brandInitial: 'A',
+    agentId: 'agent:adidas-train-0xa1',
+    title: '7-day training feedback task for Ultraboost GTX prototype',
+    reward: '85 USDT',
+    deadline: 'Feb 28, 2026',
+    whyMe: ['Gym affinity: high', 'Discipline motivation'],
+    token: { module: 'skill.sports.gym', remaining: 1, validDays: 14 },
   },
   {
     id: '3',
     type: 'passive' as const,
     brand: 'Spotify',
-    agentId: 'spotify-discovery-07',
+    brandInitial: 'S',
+    agentId: 'agent:spotify-disc-0x7b',
     title: 'Curated workout playlist based on your rhythm profile',
     whyMe: ['Music affinity: medium', 'High-tempo preference'],
     token: { module: 'soul.music.listening', remaining: 8, validDays: 30 },
@@ -38,80 +43,93 @@ export const MissionsPage = () => {
         <p className="text-muted-foreground text-sm">Recommendations and tasks from brands & agents</p>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-4">
         {DEMO_MISSIONS.map(mission => (
-          <div key={mission.id} className="glass-card space-y-4">
-            {/* Header */}
+          <div key={mission.id} className="glass-card space-y-5">
+            {/* Header with avatar */}
             <div className="flex items-start justify-between">
-              <div>
-                <p className="font-semibold text-sm">{mission.brand}</p>
-                <p className="text-[10px] text-muted-foreground font-mono">{mission.agentId}</p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-foreground/8 flex items-center justify-center text-sm font-semibold text-foreground/60">
+                  {mission.brandInitial}
+                </div>
+                <div>
+                  <p className="font-semibold">{mission.brand}</p>
+                  <p className="text-[11px] text-muted-foreground font-mono">{mission.agentId}</p>
+                </div>
               </div>
-              <span className={`text-[10px] px-2.5 py-0.5 rounded-full ${
-                mission.type === 'task' 
-                  ? 'bg-amber-400/10 text-amber-400' 
-                  : 'bg-foreground/5 text-muted-foreground'
+              <span className={`text-[11px] px-3 py-1 rounded-full border ${
+                mission.type === 'task'
+                  ? 'border-amber-400/30 text-amber-400'
+                  : 'border-foreground/10 text-muted-foreground'
               }`}>
                 {mission.type === 'task' ? 'Task' : 'Passive'}
               </span>
             </div>
 
-            {/* Content */}
+            {/* Description */}
             <p className="text-sm text-foreground/90">{mission.title}</p>
 
-            {/* Task-specific info */}
+            {/* Task reward & deadline pills */}
             {mission.type === 'task' && (
-              <div className="flex gap-4 text-xs">
-                <div>
-                  <span className="text-muted-foreground">Reward</span>
-                  <p className="text-foreground font-medium">{mission.reward}</p>
-                </div>
-                <div>
-                  <span className="text-muted-foreground">Deadline</span>
-                  <p className="text-foreground font-medium">{mission.deadline}</p>
-                </div>
+              <div className="flex gap-3">
+                <span className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-full bg-foreground/5">
+                  <DollarSign className="w-3.5 h-3.5 text-muted-foreground" />
+                  <span className="font-medium">{mission.reward}</span>
+                </span>
+                <span className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-full bg-foreground/5">
+                  <Clock className="w-3.5 h-3.5 text-muted-foreground" />
+                  <span>{mission.deadline}</span>
+                </span>
               </div>
             )}
 
             {/* WHY ME */}
-            <div className="space-y-1.5">
-              <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Why Me</p>
-              <div className="flex flex-wrap gap-1.5">
+            <div className="space-y-2">
+              <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">Why Me</p>
+              <div className="flex flex-wrap gap-2">
                 {mission.whyMe.map(reason => (
-                  <span key={reason} className="text-[11px] px-2.5 py-1 rounded-lg bg-foreground/5 text-foreground/60">{reason}</span>
+                  <span key={reason} className="text-xs px-3 py-1.5 rounded-full bg-foreground/5 text-foreground/70">{reason}</span>
                 ))}
               </div>
             </div>
 
-            {/* Token */}
-            <div className="space-y-1 pt-2 border-t border-foreground/5">
-              <p className="text-[10px] text-muted-foreground font-mono">{mission.token.module}</p>
-              <div className="flex gap-3 text-[10px] text-muted-foreground">
-                <span>{mission.token.remaining} uses left</span>
-                <span>·</span>
-                <span>{mission.token.validDays}d valid</span>
-              </div>
+            {/* Token bar */}
+            <div className="flex items-center justify-between px-4 py-2.5 rounded-xl bg-foreground/[0.03]">
+              <span className="text-xs text-muted-foreground font-mono">Token: {mission.token.module}</span>
+              <span className="text-xs text-muted-foreground">{mission.token.remaining} uses · {mission.token.validDays}d</span>
             </div>
 
-            {/* Actions */}
-            <div className="flex gap-2">
+            {/* Actions with icons */}
+            <div className="flex items-center gap-4">
               {mission.type === 'passive' ? (
                 <>
-                  <button className="btn-twin btn-twin-primary flex-1 py-2 text-xs">View</button>
-                  <button className="btn-twin btn-twin-ghost flex-1 py-2 text-xs">Dismiss</button>
-                  <button className="btn-twin btn-twin-ghost py-2 px-3 text-xs">More like this</button>
+                  <button className="btn-twin btn-twin-primary inline-flex items-center gap-2 py-2.5 px-5 text-sm">
+                    <Eye className="w-4 h-4" /> View
+                  </button>
+                  <button className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                    <X className="w-4 h-4" /> Dismiss
+                  </button>
+                  <button className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                    <Heart className="w-4 h-4" /> More like this
+                  </button>
                 </>
               ) : (
                 <>
-                  <button className="btn-twin btn-twin-primary flex-1 py-2 text-xs">Review Details</button>
-                  <button className="btn-twin btn-twin-ghost flex-1 py-2 text-xs">Decline</button>
+                  <button className="btn-twin btn-twin-primary inline-flex items-center gap-2 py-2.5 px-5 text-sm">
+                    <FileText className="w-4 h-4" /> Review details
+                  </button>
+                  <button className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                    <X className="w-4 h-4" /> Decline
+                  </button>
                 </>
               )}
             </div>
 
             {/* Usage hint */}
-            <p className="text-[9px] text-muted-foreground/40 text-center">
-              {mission.type === 'passive' ? 'View consumes 1 usage' : 'Accept locks 1 usage'}
+            <p className="text-[10px] text-muted-foreground/40">
+              {mission.type === 'passive'
+                ? 'View consumes 1 usage · Dismiss is free'
+                : 'Accept locks 1 usage · Payment releases on task completion'}
             </p>
           </div>
         ))}
