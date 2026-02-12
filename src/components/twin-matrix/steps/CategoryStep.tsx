@@ -69,7 +69,7 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
                 onClick={() => toggleExpand(mod.id)}
                 className={`glass-card !p-4 flex items-center gap-4 transition-all duration-500 cursor-pointer ${
                   isActivated ? 'border-foreground/25 shadow-[0_0_16px_rgba(255,255,255,0.06)]' : ''
-                } ${justActivated === mod.id ? '!border-white/50 !shadow-[0_0_24px_rgba(255,255,255,0.15),0_0_48px_rgba(255,255,255,0.05)]' : ''}
+                } ${justActivated === mod.id ? 'animate-glow-pulse' : ''}
                 ${isMinted ? '!border-green-400/20' : ''} ${isExpanded ? '!rounded-b-none' : ''}`}
               >
                 <span className="text-2xl">{mod.icon}</span>
