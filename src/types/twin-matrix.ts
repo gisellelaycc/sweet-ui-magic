@@ -25,8 +25,18 @@ export interface SportTwin {
 }
 
 export interface SoulData {
-  sentence: string;
-  tags: string[];
+  spectrum: {
+    achievementFreedom: number;   // 0=Achievement, 100=Freedom
+    healthSocial: number;         // 0=Health, 100=Social
+    disciplineRelease: number;    // 0=Discipline, 100=Release
+  };
+  weights: {
+    achievement: number;
+    exploration: number;
+    discipline: number;
+    social: number;
+    emotional: number;
+  };
   confirmed: boolean;
 }
 
@@ -38,10 +48,27 @@ export interface IdentityModule {
   active: boolean;
 }
 
-export interface AuthSetup {
-  scope: string;
-  duration: string;
-  usageLimit: string;
+export interface AgentDefinition {
+  name: string;
+  taskTypes: string[];
+  matchingStrategy: string[];
+  behaviorMode: string;
+}
+
+export interface AgentPermission {
+  identityScope: string;
+  tradingAuthority: string;
+  maxPerTask: string;
+  dailyCap: string;
+  weeklyCap: string;
+  spendResetPolicy: string[];
+  taskTypeBound: boolean;
+  brandRestriction: boolean;
+}
+
+export interface AgentSetup {
+  agent: AgentDefinition;
+  permission: AgentPermission;
 }
 
 export interface WizardState {
@@ -51,6 +78,6 @@ export interface WizardState {
   sportSetup: SportSetup;
   sportTwin: SportTwin;
   soul: SoulData;
-  signature: string[];
-  authSetup: AuthSetup;
+  signature: number[];  // 256 dimensions, 0-255 each
+  agentSetup: AgentSetup;
 }

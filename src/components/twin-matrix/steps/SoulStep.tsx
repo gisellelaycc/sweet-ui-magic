@@ -1,43 +1,16 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
-import { ArrowRight, CheckCircle } from 'lucide-react';
+import { useState, useCallback } from 'react';
+import { Slider } from '@/components/ui/slider';
 import type { SoulData } from '@/types/twin-matrix';
 
-const MOTIVATION_KEYWORDS: Record<string, string[]> = {
-  'better': ['Self-improvement', 'Growth'],
-  'strong': ['Strength', 'Resilience'],
-  'stress': ['Stress Relief', 'Balance'],
-  'free': ['Freedom', 'Liberation'],
-  'fun': ['Joy', 'Playfulness'],
-  'health': ['Wellness', 'Longevity'],
-  'compete': ['Competition', 'Achievement'],
-  'team': ['Community', 'Connection'],
-  'peace': ['Mindfulness', 'Calm'],
-  'push': ['Discipline', 'Perseverance'],
-  'challenge': ['Adventure', 'Breakthrough'],
-  'focus': ['Clarity', 'Concentration'],
-};
-
-const DEFAULT_TAGS = ['Discipline', 'Growth', 'Balance', 'Passion', 'Healing', 'Adventure', 'Perseverance', 'Freedom'];
-
-function extractTags(sentence: string): string[] {
-  const lower = sentence.toLowerCase();
-  const found = new Set<string>();
-  for (const [keyword, tags] of Object.entries(MOTIVATION_KEYWORDS)) {
-    if (lower.includes(keyword)) {
-      tags.forEach(t => found.add(t));
-    }
-  }
-  if (found.size === 0) {
-    // Pick defaults based on sentence hash
-    const hash = sentence.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
-    const start = hash % DEFAULT_TAGS.length;
-    return [
-      DEFAULT_TAGS[start % DEFAULT_TAGS.length],
-      DEFAULT_TAGS[(start + 1) % DEFAULT_TAGS.length],
-      DEFAULT_TAGS[(start + 2) % DEFAULT_TAGS.length],
-    ];
-  }
-  return Array.from(found).slice(0, 6);
+function computeWeights(spectrum: SoulData['spectrum']) {
+  const { achievementFreedom, healthSocial, disciplineRelease } = spectrum;
+  return {
+    achievement: Math.round((100 - achievementFreedom) * 0.6 + (100 - disciplineRelease) * 0.2 + (100 - healthSocial) * 0.2),
+    exploration: Math.round(achievementFreedom * 0.5 + disciplineRelease * 0.3 + healthSocial * 0.2),
+    discipline: Math.round((100 - disciplineRelease) * 0.6 + (100 - achievementFreedom) * 0.3 + (100 - healthSocial) * 0.1),
+    social: Math.round(healthSocial * 0.6 + achievementFreedom * 0.2 + disciplineRelease * 0.2),
+    emotional: Math.round(disciplineRelease * 0.5 + healthSocial * 0.3 + achievementFreedom * 0.2),
+  };
 }
 
 interface Props {
@@ -46,127 +19,112 @@ interface Props {
   onNext: () => void;
 }
 
-export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
-  const [soul, setSoul] = useState(data);
-  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+const spectrumConfig = [
+  { key: 'achievementFreedom' as const, left: 'Achievement', right: 'Freedom' },
+  { key: 'healthSocial' as const, left: 'Health', right: 'Social' },
+  { key: 'disciplineRelease' as const, left: 'Discipline', right: 'Release' },
+];
 
-  const generateTags = useCallback((sentence: string) => {
-    const tags = extractTags(sentence);
-    const next = { ...soul, sentence, tags, confirmed: false };
+export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
+  const [soul, setSoul] = useState<SoulData>(data);
+  const [interacted, setInteracted] = useState(false);
+
+  const handleSlider = useCallback((key: keyof SoulData['spectrum'], value: number) => {
+    setInteracted(true);
+    const nextSpectrum = { ...soul.spectrum, [key]: value };
+    const weights = computeWeights(nextSpectrum);
+    const next: SoulData = { spectrum: nextSpectrum, weights, confirmed: false };
     setSoul(next);
     onUpdate(next);
   }, [soul, onUpdate]);
 
-  const updateSentence = (s: string) => {
-    const next = { ...soul, sentence: s, tags: [], confirmed: false };
-    setSoul(next);
-    onUpdate(next);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && soul.sentence.trim().length > 5) {
-      e.preventDefault();
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-      generateTags(soul.sentence);
-    }
-  };
-
-  const removeTag = (t: string) => {
-    const next = { ...soul, tags: soul.tags.filter(x => x !== t), confirmed: false };
-    setSoul(next);
-    onUpdate(next);
-  };
-
-  const regenerate = () => {
-    // Shuffle defaults differently
-    const shuffled = [...DEFAULT_TAGS].sort(() => Math.random() - 0.5).slice(0, 3);
-    const keywordTags = extractTags(soul.sentence);
-    const tags = keywordTags.length > 0 && keywordTags[0] !== DEFAULT_TAGS[0] ? keywordTags : shuffled;
-    const next = { ...soul, tags, confirmed: false };
-    setSoul(next);
-    onUpdate(next);
-  };
-
-  const confirmTags = () => {
+  const confirm = () => {
     const next = { ...soul, confirmed: true };
     setSoul(next);
     onUpdate(next);
   };
 
-  const canConfirm = soul.tags.length > 0 && !soul.confirmed;
-  const canProceed = soul.confirmed && soul.tags.length > 0;
-  const showEnterHint = soul.sentence.trim().length > 5 && soul.tags.length === 0;
+  const topWeights = Object.entries(soul.weights)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 3);
 
   return (
     <div className="animate-fade-in space-y-6 max-w-lg mx-auto">
       <div>
         <h2 className="text-2xl font-bold mb-1">Soul Layer</h2>
-        <p className="text-muted-foreground text-sm">Commit your core signal in one sentence.</p>
+        <p className="text-muted-foreground text-sm">Define your signal spectrum.</p>
       </div>
 
-      <div className="glass-card space-y-5">
-        <div className="space-y-3">
-          <label className="text-sm text-muted-foreground">Your signal in one sentence</label>
-          <div className="relative">
-            <input
-              type="text"
-              value={soul.sentence}
-              onChange={e => updateSentence(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="e.g. I run to become a better version of myself"
-              maxLength={120}
-              className="w-full bg-foreground/5 border border-foreground/10 rounded-xl px-4 py-3.5 pr-14 text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-foreground/25 transition-colors text-sm"
-            />
-            <button
-              onClick={() => { if (soul.sentence.trim().length > 5) { if (debounceRef.current) clearTimeout(debounceRef.current); generateTags(soul.sentence); } }}
-              disabled={soul.sentence.trim().length <= 5}
-              className={`absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-lg flex items-center justify-center transition-all ${
-                soul.sentence.trim().length > 5
-                  ? 'bg-foreground/15 text-foreground hover:bg-foreground/25 cursor-pointer'
-                  : 'text-muted-foreground/20 cursor-not-allowed'
-              }`}
-            >
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
-          <span className="text-[10px] text-muted-foreground/40 block text-right">{soul.sentence.length}/120</span>
-        </div>
+      <div className="glass-card space-y-7">
+        <p className="text-xs text-muted-foreground uppercase tracking-widest">Why do you move?</p>
 
-        {soul.tags.length > 0 && (
-          <div className="space-y-3 animate-fade-in">
-            <label className="text-sm text-muted-foreground">Signal tags — tap to remove</label>
-            <div className="flex flex-wrap gap-2">
-              {soul.tags.map(t => (
-                <button
-                  key={t}
-                  onClick={() => removeTag(t)}
-                  className="chip text-sm !bg-foreground/15 !border-foreground/30 !text-foreground group"
-                >
-                  #{t}
-                  <span className="ml-1 text-xs opacity-50 group-hover:opacity-100">×</span>
-                </button>
-              ))}
+        {spectrumConfig.map(({ key, left, right }) => (
+          <div key={key} className="space-y-3">
+            <div className="flex justify-between text-xs text-muted-foreground">
+              <span>{left}</span>
+              <span>{right}</span>
             </div>
-            <div className="flex gap-2">
-              <button onClick={regenerate} className="btn-twin btn-twin-ghost flex-1 py-2 text-xs">
-                Re-signal
-              </button>
-              {canConfirm && (
-                <button onClick={confirmTags} className="btn-twin btn-twin-primary flex-1 py-2 text-xs">
-                  Commit Tags
-                </button>
-              )}
+            <div className="relative group">
+              <div
+                className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                style={{
+                  background: `radial-gradient(ellipse at ${soul.spectrum[key]}% 50%, rgba(40, 180, 160, 0.15) 0%, transparent 70%)`,
+                }}
+              />
+              <Slider
+                value={[soul.spectrum[key]]}
+                onValueChange={([v]) => handleSlider(key, v)}
+                max={100}
+                step={1}
+                className="relative z-10"
+              />
             </div>
-            {soul.confirmed && (
-              <div className="flex justify-center">
-                <CheckCircle className="w-5 h-5 text-green-400" />
+          </div>
+        ))}
+      </div>
+
+      {/* Weight Preview */}
+      {interacted && (
+        <div className="glass-card space-y-3 animate-fade-in">
+          <p className="text-xs text-muted-foreground uppercase tracking-widest">Signal Weights</p>
+          <div className="space-y-2">
+            {topWeights.map(([name, value]) => (
+              <div key={name} className="space-y-1">
+                <div className="flex justify-between text-[11px]">
+                  <span className="text-foreground/70 capitalize">{name}</span>
+                  <span className="text-muted-foreground">{value}</span>
+                </div>
+                <div className="h-1.5 bg-foreground/5 rounded-full overflow-hidden">
+                  <div
+                    className="h-full rounded-full transition-all duration-500"
+                    style={{
+                      width: `${value}%`,
+                      background: 'linear-gradient(90deg, rgba(40, 180, 160, 0.4), rgba(40, 180, 160, 0.7))',
+                    }}
+                  />
+                </div>
               </div>
-            )}
+            ))}
           </div>
-        )}
-      </div>
 
-      <button onClick={onNext} disabled={!canProceed} className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${canProceed ? 'btn-glow' : ''}`}>
+          {!soul.confirmed && (
+            <button onClick={confirm} className="btn-twin btn-twin-primary w-full py-2 text-xs mt-2">
+              Commit Signal
+            </button>
+          )}
+          {soul.confirmed && (
+            <div className="flex justify-center">
+              <span className="text-green-400 text-sm">✓ Signal Committed</span>
+            </div>
+          )}
+        </div>
+      )}
+
+      <button
+        onClick={onNext}
+        disabled={!soul.confirmed}
+        className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${soul.confirmed ? 'btn-glow' : ''}`}
+      >
         Mint Identity State
       </button>
     </div>
