@@ -333,3 +333,22 @@ body::before {
     transform: scale(1.03);
   }
 }
+
+@keyframes chip-drift {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(1.5px, -2px);
+  }
+  50% {
+    transform: translate(-1px, 1.5px);
+  }
+  75% {
+    transform: translate(2px, 0.5px);
+  }
+}
+
+.animate-chip-drift {
+  animation: chip-drift 4s ease-in-out infinite;
+}
