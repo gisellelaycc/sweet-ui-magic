@@ -1,6 +1,9 @@
 import { useEffect, useState, useMemo, useRef } from 'react';
+import type { WizardState } from '@/types/twin-matrix';
+import { encodeIdentityVector } from '@/lib/twin-encoder';
 
 interface Props {
+  wizardState: WizardState;
   onComplete: (signature: number[]) => void;
 }
 
@@ -22,7 +25,7 @@ function generateGridState(phase: number, progress: number): number[] {
   return grid;
 }
 
-export const GenerateStep = ({ onComplete }: Props) => {
+export const GenerateStep = ({ wizardState, onComplete }: Props) => {
   const [activePhase, setActivePhase] = useState(0);
   const [progress, setProgress] = useState(0);
   const [gridValues, setGridValues] = useState<number[]>(new Array(256).fill(0));
@@ -50,7 +53,9 @@ export const GenerateStep = ({ onComplete }: Props) => {
         const next = Math.min(p + 1.2, 100);
         if (next >= 100) {
           clearInterval(progressTimer);
-          const sig = Array.from({ length: 256 }, () => Math.floor(Math.random() * 256));
+          // Use deterministic encoder instead of random
+          const result = encodeIdentityVector(wizardState);
+          const sig = result.signature ?? Array.from({ length: 256 }, () => 0);
           setFinalSignature(sig);
           setGridValues(sig);
           // Mark all cells as changed for final flash
