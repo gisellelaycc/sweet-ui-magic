@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { computeDensity } from "@/lib/twin-encoder";
 
 // Updated color strategy per spec
 const SLICES = [
@@ -23,10 +24,7 @@ interface Props {
 export const ReviewStep = ({ signature, username, activeModules, onNext }: Props) => {
   const [hoveredCell, setHoveredCell] = useState<number | null>(null);
 
-  const identityDensity = useMemo(() => {
-    const nonZero = signature.filter((v) => v > 0).length;
-    return Math.round((nonZero / 256) * 100);
-  }, [signature]);
+  const identityDensity = useMemo(() => computeDensity(signature), [signature]);
 
   const quadrant = useMemo(() => {
     const x206 = signature[206] ?? 0;

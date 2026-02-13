@@ -1,6 +1,8 @@
 import { useState, useCallback } from 'react';
 import { Home } from 'lucide-react';
+import { toast } from 'sonner';
 import type { WizardState } from '@/types/twin-matrix';
+import { validateBaseline } from '@/lib/twin-encoder';
 import logo from '@/assets/twin3-logo.svg';
 import { StepIndicator } from './StepIndicator';
 import { MainMenu } from './MainMenu';
@@ -51,7 +53,17 @@ export const WizardLayout = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activePage, setActivePage] = useState<MenuPage>(null);
 
-  const next = () => setState(s => ({ ...s, step: s.step + 1 }));
+  const next = () => {
+    // Change Set 3: validate baseline before generate step (step 5 → 6)
+    if (state.step === 5) {
+      const err = validateBaseline(state);
+      if (err) {
+        toast.error(err.message, { description: `Error: ${err.code}` });
+        return;
+      }
+    }
+    setState(s => ({ ...s, step: s.step + 1 }));
+  };
 
   const handleGenerateComplete = useCallback((sig: number[]) => {
     setState(s => ({ ...s, signature: sig, step: s.step + 1 }));
@@ -123,7 +135,7 @@ export const WizardLayout = () => {
             {state.step === 5 && (
               <SoulStep data={state.soul} onUpdate={d => setState(s => ({ ...s, soul: d }))} onNext={next} />
             )}
-            {state.step === 6 && <GenerateStep onComplete={handleGenerateComplete} />}
+            {state.step === 6 && <GenerateStep wizardState={state} onComplete={handleGenerateComplete} />}
             {state.step === 7 && (
               <ReviewStep signature={state.signature} username={state.profile.username} tags={[]} activeModules={state.activeModules} onNext={next} />
             )}
