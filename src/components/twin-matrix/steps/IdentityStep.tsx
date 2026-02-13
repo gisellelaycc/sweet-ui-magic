@@ -1,18 +1,18 @@
-import { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
-import type { UserProfile } from '@/types/twin-matrix';
+import { useState } from "react";
+import { ChevronDown } from "lucide-react";
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
+import type { UserProfile } from "@/types/twin-matrix";
 
-const FIELDS: { key: keyof UserProfile; label: string; options: string[] }[] = [
-  { key: 'ageBin', label: 'Age?', options: ['18–24', '25–34', '35–44', '45–54', '55–64', '65+'] },
-  { key: 'gender', label: 'Gender?', options: ['Male', 'Female', 'Non-binary', 'Prefer not to say'] },
-  { key: 'heightBin', label: 'Height?', options: ['< 160 cm', '160–170', '170–180', '> 180 cm'] },
-  { key: 'weightBin', label: 'Weight?', options: ['< 50 kg', '50–65', '65–80', '> 80 kg'] },
-  { key: 'education', label: 'Education?', options: ['High School', "Bachelor's", "Master's", 'Doctorate', 'Other', 'Prefer not to say'] },
-  { key: 'income', label: 'Income?', options: ['< $30k', '$30k–60k', '$60k–100k', '$100k+', 'Prefer not to say'] },
-  { key: 'maritalStatus', label: 'Status?', options: ['Single', 'In a relationship', 'Married', 'N/A', 'Prefer not to say'] },
-  { key: 'occupation', label: 'Work?', options: ['Student', 'Employee', 'Self-employed', 'Freelancer', 'Other'] },
-  { key: 'livingType', label: 'Living?', options: ['Urban', 'Suburban', 'Rural', 'Prefer not to say'] },
-];
+const AGE_OPTIONS = ["18–24", "25–34", "35–44", "45–54", "55–64", "65+"];
+const HEIGHT_OPTIONS = ["< 160 cm", "160–170", "170–180", "> 180 cm"];
+const WEIGHT_OPTIONS = ["< 50 kg", "50–65", "65–80", "> 80 kg"];
+const GENDER_OPTIONS = ["Male", "Female", "Non-binary", "Prefer not to say"];
+
+const EDUCATION_OPTIONS = ["High School", "Bachelor's", "Master's", "Doctorate", "Other", "Prefer not to say"];
+const INCOME_OPTIONS = ["< $30k", "$30k–60k", "$60k–100k", "$100k+", "Prefer not to say"];
+const MARITAL_OPTIONS = ["Single", "In a relationship", "Married", "N/A", "Prefer not to say"];
+const OCCUPATION_OPTIONS = ["Student", "Employee", "Self-employed", "Freelancer", "Other", "Prefer not to say"];
+const LIVING_OPTIONS = ["Urban", "Suburban", "Rural", "Prefer not to say"];
 
 interface Props {
   data: UserProfile;
@@ -20,111 +20,146 @@ interface Props {
   onNext: () => void;
 }
 
+const MiniField = ({
+  label,
+  options,
+  value,
+  onChange,
+}: {
+  label: string;
+  options: string[];
+  value: string;
+  onChange: (v: string) => void;
+}) => (
+  <div className="space-y-1">
+    <span className="text-[10px] font-medium text-foreground/60 uppercase tracking-wider">{label}</span>
+    {!value && <p className="text-[10px] text-muted-foreground/40 italic">No direction yet</p>}
+    <div className="flex flex-wrap gap-2">
+      {options.map((o) => (
+        <button
+          key={o}
+          onClick={() => onChange(value === o ? "" : o)}
+          className={`chip !text-[10px] !py-1 !px-3 ${value === o ? "!bg-foreground/15 !border-foreground/30 !text-foreground" : ""}`}
+        >
+          {o}
+        </button>
+      ))}
+    </div>
+  </div>
+);
+
 export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
   const [profile, setProfile] = useState(data);
-  const [openKey, setOpenKey] = useState<string | null>(null);
-
   const update = (key: keyof UserProfile, val: string) => {
-    const next = { ...profile, [key]: val === profile[key] ? '' : val };
+    const next = { ...profile, [key]: val };
     setProfile(next);
     onUpdate(next);
-    if (val !== profile[key]) setOpenKey(null);
   };
 
-  const toggle = (key: string) => setOpenKey(prev => (prev === key ? null : key));
-
-  const answered = (key: keyof UserProfile) => !!profile[key];
-
-  // Split into rows of 3-3-3
-  const rows = [FIELDS.slice(0, 3), FIELDS.slice(3, 6), FIELDS.slice(6, 9)];
+  const isValid = true; // username already confirmed on welcome page
 
   return (
-    <div className="animate-fade-in flex flex-col items-center justify-center h-full max-w-4xl mx-auto px-4">
-      {/* Title block */}
-      <div className="text-center mb-20">
-        <h2 className="text-2xl font-bold text-foreground mb-1">Core Identity</h2>
-        <p className="text-foreground/50 text-xs leading-relaxed">
-          All optional · Nothing public · Set your direction
+    <div className="animate-fade-in space-y-5 max-w-2xl mx-auto">
+      <div className="text-center">
+        <h2 className="text-2xl font-bold mb-0.5">Core Identity</h2>
+        <p className="text-muted-foreground text-xs leading-relaxed">
+          All fields optional.
+          <br />
+          Nothing is public.
+          <br />
+          This defines your identity direction.
         </p>
       </div>
 
-      {/* Chip cloud — 3×3 centered, wide gaps, inline options */}
-      <div className="flex flex-col items-center gap-5 mb-20 w-full">
-        {rows.map((row, ri) => (
-          <div key={ri} className="flex justify-center gap-8">
-            {row.map((f, i) => {
-              const globalIdx = ri * 3 + i;
-              const isOpen = openKey === f.key;
-              const isAnswered = answered(f.key);
-              const driftDelay = `${(globalIdx * 0.6) % 3.5}s`;
+      {/* Biological — default open */}
+      <Collapsible defaultOpen>
+        <div className="glass-card !p-3 space-y-2">
+          <CollapsibleTrigger className="flex items-center justify-between w-full">
+            <h3 className="text-[9px] font-semibold text-muted-foreground uppercase tracking-widest">
+              Biological Layer
+            </h3>
+            <ChevronDown className="w-3.5 h-3.5 text-muted-foreground transition-transform duration-200 [[data-state=open]>&]:rotate-180" />
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <div className="grid grid-cols-2 gap-3 pt-1">
+              <MiniField
+                label="Age"
+                options={AGE_OPTIONS}
+                value={profile.ageBin}
+                onChange={(v) => update("ageBin", v)}
+              />
+              <MiniField
+                label="Gender"
+                options={GENDER_OPTIONS}
+                value={profile.gender}
+                onChange={(v) => update("gender", v)}
+              />
+              <MiniField
+                label="Height"
+                options={HEIGHT_OPTIONS}
+                value={profile.heightBin}
+                onChange={(v) => update("heightBin", v)}
+              />
+              <MiniField
+                label="Weight"
+                options={WEIGHT_OPTIONS}
+                value={profile.weightBin}
+                onChange={(v) => update("weightBin", v)}
+              />
+            </div>
+          </CollapsibleContent>
+        </div>
+      </Collapsible>
 
-              return (
-                <div
-                  key={f.key}
-                  className={`relative flex items-center gap-2 transition-all duration-300 ${!isAnswered && !isOpen ? 'animate-chip-drift' : ''}`}
-                  style={!isAnswered && !isOpen ? { animationDelay: driftDelay } : undefined}
-                >
-                  <button
-                    onClick={() => toggle(f.key)}
-                    className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[13px] transition-all duration-200 border whitespace-nowrap shrink-0 ${
-                      isAnswered
-                        ? 'border-foreground/15 text-foreground'
-                        : 'border-foreground/10 text-foreground/60 hover:text-foreground/90 hover:border-foreground/15'
-                    }`}
-                    style={
-                      isAnswered
-                        ? {
-                            background: 'rgba(40, 180, 160, 0.08)',
-                            boxShadow: '0 0 10px rgba(40, 180, 160, 0.15), 0 0 20px rgba(40, 180, 160, 0.06)',
-                          }
-                        : { background: 'rgba(255, 255, 255, 0.04)' }
-                    }
-                  >
-                    <span className="font-medium">{f.label}</span>
-                    {isAnswered && (
-                      <span className="text-[11px] text-foreground/60 ml-0.5">{profile[f.key]}</span>
-                    )}
-                    <ChevronDown
-                      className={`w-3 h-3 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''} ${
-                        isAnswered ? 'text-foreground/40' : 'text-foreground/30'
-                      }`}
-                    />
-                  </button>
+      {/* Social — default collapsed */}
+      <Collapsible>
+        <div className="glass-card !p-3 space-y-2">
+          <CollapsibleTrigger className="flex items-center justify-between w-full">
+            <h3 className="text-[9px] font-semibold text-muted-foreground uppercase tracking-widest">Social Layer</h3>
+            <ChevronDown className="w-3.5 h-3.5 text-muted-foreground transition-transform duration-200 [[data-state=open]>&]:rotate-180" />
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <div className="grid grid-cols-2 gap-3 pt-1">
+              <MiniField
+                label="Education"
+                options={EDUCATION_OPTIONS}
+                value={profile.education}
+                onChange={(v) => update("education", v)}
+              />
+              <MiniField
+                label="Income"
+                options={INCOME_OPTIONS}
+                value={profile.income}
+                onChange={(v) => update("income", v)}
+              />
+              <MiniField
+                label="Status"
+                options={MARITAL_OPTIONS}
+                value={profile.maritalStatus}
+                onChange={(v) => update("maritalStatus", v)}
+              />
+              <MiniField
+                label="Occupation"
+                options={OCCUPATION_OPTIONS}
+                value={profile.occupation}
+                onChange={(v) => update("occupation", v)}
+              />
+              <MiniField
+                label="Living"
+                options={LIVING_OPTIONS}
+                value={profile.livingType}
+                onChange={(v) => update("livingType", v)}
+              />
+            </div>
+          </CollapsibleContent>
+        </div>
+      </Collapsible>
 
-                  {isOpen && (
-                    <div className="animate-fade-in flex items-center gap-1.5 flex-nowrap">
-                      {f.options.map(o => (
-                        <button
-                          key={o}
-                          onClick={() => update(f.key, o)}
-                          className={`text-[11px] px-2.5 py-1 rounded-full border transition-all duration-200 whitespace-nowrap ${
-                            profile[f.key] === o
-                              ? 'border-foreground/20 text-foreground'
-                              : 'border-transparent text-foreground/40 hover:text-foreground/70'
-                          }`}
-                          style={
-                            profile[f.key] === o
-                              ? {
-                                  background: 'rgba(40, 180, 160, 0.12)',
-                                  boxShadow: '0 0 8px rgba(40, 180, 160, 0.2)',
-                                }
-                              : { background: 'transparent' }
-                          }
-                        >
-                          {o}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        ))}
-      </div>
-
-      {/* Commit button */}
-      <button onClick={onNext} className="btn-twin btn-twin-primary w-full max-w-md py-2.5 btn-glow">
+      <button
+        onClick={onNext}
+        disabled={!isValid}
+        className={`btn-twin btn-twin-primary w-full py-2.5 disabled:opacity-30 disabled:cursor-not-allowed ${isValid ? "btn-glow" : ""}`}
+      >
         Commit Core Layer
       </button>
     </div>
