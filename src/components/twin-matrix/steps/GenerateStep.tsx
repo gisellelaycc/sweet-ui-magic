@@ -155,8 +155,11 @@ export const GenerateStep = ({ onComplete }: Props) => {
                   return (
                     <div
                       key={col}
-                      className="w-5 h-5 rounded-sm flex items-center justify-center relative"
+                      className="rounded-sm flex items-center justify-center relative"
                       style={{
+                        width: 20,
+                        height: 20,
+                        aspectRatio: '1',
                         background: val > 0
                           ? `rgba(40, 200, 180, ${(0.25 + 0.75 * intensity) * 0.4})`
                           : 'rgba(255, 255, 255, 0.015)',
@@ -209,7 +212,7 @@ export const GenerateStep = ({ onComplete }: Props) => {
       </div>
 
       {/* Progress */}
-      <div className="w-64 h-1.5 bg-foreground/5 rounded-full overflow-hidden">
+      <div className="w-64 h-1.5 bg-transparent rounded-full overflow-hidden">
         <div
           className="h-full rounded-full transition-all duration-200"
           style={{

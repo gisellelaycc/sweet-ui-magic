@@ -9,15 +9,9 @@ const DEFAULT_BARS: SoulBar[] = [
   { id: 'BAR_PASSIVE_ACTIVE', label: 'Engagement Mode', left: 'I mostly consume sports content', right: 'I actively track or share my activity', value: null },
 ];
 
-function getBarState(value: number | null): { label: string; raw: number } {
-  if (value === null) return { label: 'No direction yet', raw: 0 };
-  const mapped = Math.round((value / 100) * 255);
-  const t = value / 100;
-  let label: string;
-  if (t < 0.4) label = 'Left';
-  else if (t > 0.6) label = 'Right';
-  else label = 'Balanced';
-  return { label, raw: mapped };
+function getBarRaw(value: number | null): number {
+  if (value === null) return 0;
+  return Math.round((value / 100) * 255);
 }
 
 interface Props {
@@ -84,18 +78,15 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
           </div>
           <div className="space-y-2">
             {bars.map(bar => {
-              const state = getBarState(bar.value);
+              const raw = getBarRaw(bar.value);
               return (
                 <div key={bar.id} className="flex items-center justify-between text-[11px]">
                   <span className="text-foreground/60">{bar.label}</span>
-                  <div className="flex items-center gap-2">
-                    <span className={`font-medium ${state.label === 'No direction yet' ? 'text-muted-foreground/40 italic' : 'text-foreground/80'}`}>
-                      {state.label}
-                    </span>
-                    {bar.value !== null && (
-                      <span className="text-[9px] text-muted-foreground font-mono">{state.raw} / 255</span>
-                    )}
-                  </div>
+                  {bar.value !== null ? (
+                    <span className="text-[9px] text-muted-foreground font-mono">{raw} / 255</span>
+                  ) : (
+                    <span className="text-muted-foreground/40 italic text-[10px]">No direction yet</span>
+                  )}
                 </div>
               );
             })}
