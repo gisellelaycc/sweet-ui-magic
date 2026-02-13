@@ -159,16 +159,23 @@ export const AuthStep = ({ data, onUpdate, onNext }: Props) => {
                     {/* Matching Strategy */}
                     <div className="space-y-2">
                       <label className="text-xs text-muted-foreground">Matching Strategy</label>
-                      <div className="space-y-1.5">
-                        {MATCH_STRATEGIES.map(s => (
-                          <label key={s} className="flex items-center gap-2 text-sm cursor-pointer">
-                            <Checkbox
-                              checked={card.agent.matchingStrategy.includes(s)}
-                              onCheckedChange={() => updateAgent(card.id, { agent: { ...card.agent, matchingStrategy: toggleArrayItem(card.agent.matchingStrategy, s) } })}
-                            />
-                            <span className="text-foreground/80">{s}</span>
-                          </label>
-                        ))}
+                      <div className="flex flex-wrap gap-1.5">
+                        {MATCH_STRATEGIES.map(s => {
+                          const selected = card.agent.matchingStrategy.includes(s);
+                          return (
+                            <button
+                              key={s}
+                              onClick={() => updateAgent(card.id, { agent: { ...card.agent, matchingStrategy: toggleArrayItem(card.agent.matchingStrategy, s) } })}
+                              className={`text-[11px] px-3 py-1.5 rounded-lg transition-all ${
+                                selected
+                                  ? 'bg-foreground/20 text-foreground border border-foreground/20'
+                                  : 'bg-foreground/5 text-muted-foreground border border-foreground/5 hover:border-foreground/15'
+                              }`}
+                            >
+                              {s}
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
