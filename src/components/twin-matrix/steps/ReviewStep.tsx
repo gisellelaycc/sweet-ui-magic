@@ -72,9 +72,9 @@ export const ReviewStep = ({ signature, username, activeModules, onNext }: Props
         <p className="text-muted-foreground text-sm">Your minted state at a glance</p>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-6 items-start">
+      <div className="flex flex-col lg:flex-row gap-6 items-stretch">
         {/* Left: Computed Identity Signals */}
-        <div className="lg:w-1/2 space-y-5 shrink-0">
+        <div className="lg:w-1/2 space-y-5">
           {/* Soul Quadrant */}
           <div className="glass-card space-y-3">
             <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">Quadrant Position</h3>
@@ -110,7 +110,7 @@ export const ReviewStep = ({ signature, username, activeModules, onNext }: Props
             </div>
           </div>
 
-          {/* Layer Mix — additive glow bars */}
+          {/* Layer Mix */}
           <div className="glass-card space-y-3">
             <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">Layer Mix</h3>
             {[
@@ -139,7 +139,7 @@ export const ReviewStep = ({ signature, username, activeModules, onNext }: Props
           </div>
         </div>
 
-        {/* Right: Twin Matrix Projection — flowing energy field */}
+        {/* Right: Twin Matrix Projection — 16×16 square with 4 quadrants */}
         <div className="lg:w-1/2 flex flex-col items-center justify-center relative">
           <div
             className="absolute inset-0 pointer-events-none"
@@ -156,77 +156,84 @@ export const ReviewStep = ({ signature, username, activeModules, onNext }: Props
           />
 
           <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-3 relative z-10">
-            🧬 Twin Matrix Projection (256D)
+            Twin Matrix Projection (256D)
           </h3>
           <div className="overflow-x-auto relative z-10">
+            {/* 16×16 grid: quadrants TL=Physical, TR=Digital, BL=Social, BR=Spiritual */}
             <div className="flex flex-col min-w-fit">
-              {SLICES.map((slice, sliceIdx) => (
-                <div key={slice.label} className={sliceIdx > 0 ? "mt-3" : ""}>
-                  <p className="text-[7px] text-muted-foreground/30 uppercase tracking-widest mb-1 ml-9 font-light">
-                    {slice.label}
-                  </p>
-                  {Array.from({ length: 4 }, (_, localRow) => {
-                    const globalRow = sliceIdx * 4 + localRow;
-                    return (
-                      <div key={globalRow} className="flex items-center gap-1 mb-px">
-                        <span className="text-[7px] text-muted-foreground/25 font-mono w-7 text-right shrink-0">
-                          {(globalRow * 16).toString(16).toUpperCase().padStart(4, "0")}
-                        </span>
-                        <div className="flex gap-px">
-                          {Array.from({ length: 16 }, (_, col) => {
-                            const idx = globalRow * 16 + col;
-                            const val = signature[idx] ?? 0;
-                            const intensity = val / 255;
-                            const isTop = topIndices.has(idx);
-                            const isHovered = hoveredCell === idx;
-                            // opacity = 0.25 + 0.75 * intensity (per spec)
-                            const cellOpacity = val > 0 ? 0.25 + 0.75 * intensity : 0.03;
-                            return (
-                              <div
-                                key={col}
-                                className="w-5 h-5 rounded-sm flex items-center justify-center cursor-default relative transition-transform duration-150"
-                                style={{
-                                  background:
-                                    val > 0
-                                      ? `rgba(${slice.color}, ${cellOpacity * 0.5})`
-                                      : "rgba(255, 255, 255, 0.015)",
-                                  boxShadow:
-                                    isTop && val > 0
-                                      ? `0 0 8px rgba(${slice.color}, ${cellOpacity * 0.6}), 0 0 16px rgba(${slice.color}, ${cellOpacity * 0.25})`
-                                      : val > 120
-                                        ? `0 0 6px rgba(${slice.color}, ${cellOpacity * 0.3})`
-                                        : "none",
-                                  transform: isHovered ? "scale(1.15)" : "scale(1)",
-                                }}
-                                onMouseEnter={() => setHoveredCell(idx)}
-                                onMouseLeave={() => setHoveredCell(null)}
-                              >
-                                <span
-                                  className="text-[6px] font-mono"
-                                  style={{ color: `rgba(255,255,255, ${0.15 + intensity * 0.55})` }}
-                                >
-                                  {val.toString(16).toUpperCase().padStart(2, "0")}
-                                </span>
-                                {isHovered && (
-                                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-foreground/90 text-background text-[8px] px-1.5 py-0.5 rounded whitespace-nowrap z-10">
-                                    D{idx}: {val} ({slice.label})
-                                  </div>
-                                )}
+              {Array.from({ length: 16 }, (_, row) => {
+                const isTopHalf = row < 8;
+                return (
+                  <div key={row} className={`flex items-center gap-1 ${row === 8 ? "mt-2" : "mb-px"}`}>
+                    <span className="text-[7px] text-muted-foreground/25 font-mono w-7 text-right shrink-0">
+                      {(row * 16).toString(16).toUpperCase().padStart(4, "0")}
+                    </span>
+                    <div className="flex gap-px">
+                      {Array.from({ length: 16 }, (_, col) => {
+                        const isLeftHalf = col < 8;
+                        // Map quadrant to slice: TL=Physical, TR=Digital, BL=Social, BR=Spiritual
+                        let sliceIdx: number;
+                        let localRow: number;
+                        let localCol: number;
+                        if (isTopHalf && isLeftHalf) {
+                          sliceIdx = 0; localRow = row; localCol = col;
+                        } else if (isTopHalf && !isLeftHalf) {
+                          sliceIdx = 1; localRow = row; localCol = col - 8;
+                        } else if (!isTopHalf && isLeftHalf) {
+                          sliceIdx = 2; localRow = row - 8; localCol = col;
+                        } else {
+                          sliceIdx = 3; localRow = row - 8; localCol = col - 8;
+                        }
+                        const slice = SLICES[sliceIdx];
+                        const idx = slice.range[0] + localRow * 8 + localCol;
+                        const val = signature[idx] ?? 0;
+                        const intensity = val / 255;
+                        const isTop = topIndices.has(idx);
+                        const isHovered = hoveredCell === idx;
+                        const cellOpacity = val > 0 ? 0.25 + 0.75 * intensity : 0.03;
+                        return (
+                          <div
+                            key={col}
+                            className={`rounded-sm flex items-center justify-center cursor-default relative transition-transform duration-150 ${col === 8 ? "ml-1" : ""}`}
+                            style={{
+                              width: "1.25rem",
+                              height: "1.25rem",
+                              aspectRatio: "1",
+                              background:
+                                val > 0
+                                  ? `rgba(${slice.color}, ${cellOpacity * 0.5})`
+                                  : "rgba(255, 255, 255, 0.015)",
+                              boxShadow:
+                                isTop && val > 0
+                                  ? `0 0 8px rgba(${slice.color}, ${cellOpacity * 0.6}), 0 0 16px rgba(${slice.color}, ${cellOpacity * 0.25})`
+                                  : val > 120
+                                    ? `0 0 6px rgba(${slice.color}, ${cellOpacity * 0.3})`
+                                    : "none",
+                              transform: isHovered ? "scale(1.15)" : "scale(1)",
+                            }}
+                            onMouseEnter={() => setHoveredCell(idx)}
+                            onMouseLeave={() => setHoveredCell(null)}
+                          >
+                            <span
+                              className="text-[6px] font-mono"
+                              style={{ color: `rgba(255,255,255, ${0.15 + intensity * 0.55})` }}
+                            >
+                              {val.toString(16).toUpperCase().padStart(2, "0")}
+                            </span>
+                            {isHovered && (
+                              <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-foreground/90 text-background text-[8px] px-1.5 py-0.5 rounded whitespace-nowrap z-10">
+                                D{idx}: {val} ({slice.label})
                               </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              ))}
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
-          <div
-            className="w-full h-8 mt-1 pointer-events-none"
-            style={{ background: "linear-gradient(to bottom, transparent, hsl(var(--background)))" }}
-          />
         </div>
       </div>
 
