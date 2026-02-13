@@ -1,6 +1,4 @@
-import { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
-import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
+import { useState, useRef, useEffect } from 'react';
 import type { UserProfile } from '@/types/twin-matrix';
 
 const AGE_OPTIONS = ['18–24', '25–34', '35–44', '45–54', '55–64', '65+'];
@@ -20,95 +18,170 @@ interface Props {
   onNext: () => void;
 }
 
-const MiniField = ({
-  label,
+interface FieldDef {
+  key: keyof UserProfile;
+  label: string;
+  options: string[];
+}
+
+const BIO_FIELDS: FieldDef[] = [
+  { key: 'ageBin', label: 'Age', options: AGE_OPTIONS },
+  { key: 'gender', label: 'Gender', options: GENDER_OPTIONS },
+  { key: 'heightBin', label: 'Height', options: HEIGHT_OPTIONS },
+  { key: 'weightBin', label: 'Weight', options: WEIGHT_OPTIONS },
+];
+
+const SOCIAL_FIELDS: FieldDef[] = [
+  { key: 'education', label: 'Education', options: EDUCATION_OPTIONS },
+  { key: 'income', label: 'Income', options: INCOME_OPTIONS },
+  { key: 'maritalStatus', label: 'Status', options: MARITAL_OPTIONS },
+  { key: 'occupation', label: 'Occupation', options: OCCUPATION_OPTIONS },
+  { key: 'livingType', label: 'Living', options: LIVING_OPTIONS },
+];
+
+const SwipeRail = ({
   options,
   value,
   onChange,
+  isFirstField,
+  hasInteracted,
 }: {
-  label: string;
   options: string[];
   value: string;
   onChange: (v: string) => void;
+  isFirstField: boolean;
+  hasInteracted: boolean;
+}) => {
+  const railRef = useRef<HTMLDivElement>(null);
+
+  return (
+    <div className="relative">
+      {!value && (
+        <p className="text-[9px] text-muted-foreground/40 italic mb-1">
+          {isFirstField && !hasInteracted ? 'Slide to set' : 'No direction yet'}
+        </p>
+      )}
+      <div
+        ref={railRef}
+        className="flex gap-1.5 overflow-x-auto scrollbar-hide pb-1 snap-x snap-mandatory"
+        style={{ WebkitOverflowScrolling: 'touch' }}
+      >
+        {options.map(o => (
+          <button
+            key={o}
+            onClick={() => onChange(value === o ? '' : o)}
+            className={`snap-center shrink-0 text-[10px] px-2.5 py-1 rounded-full border transition-all duration-200 ${
+              value === o
+                ? 'border-foreground/25 text-foreground'
+                : 'border-transparent text-muted-foreground/50 hover:text-muted-foreground/80'
+            }`}
+            style={
+              value === o
+                ? {
+                    background: 'rgba(40, 180, 160, 0.12)',
+                    boxShadow: '0 0 8px rgba(40, 180, 160, 0.2), 0 0 16px rgba(40, 180, 160, 0.08)',
+                  }
+                : { background: 'transparent' }
+            }
+          >
+            {o}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const FieldRow = ({
+  field,
+  value,
+  onChange,
+  isFirstField,
+  hasInteracted,
+}: {
+  field: FieldDef;
+  value: string;
+  onChange: (v: string) => void;
+  isFirstField: boolean;
+  hasInteracted: boolean;
 }) => (
-  <div className="space-y-1">
-    <span className="text-[10px] font-medium text-foreground/60 uppercase tracking-wider">{label}</span>
-    {!value && (
-      <p className="text-[10px] text-muted-foreground/40 italic">No direction yet</p>
-    )}
-    <div className="flex flex-wrap gap-2">
-      {options.map(o => (
-        <button
-          key={o}
-          onClick={() => onChange(value === o ? '' : o)}
-          className={`chip !text-[10px] !py-1 !px-3 ${value === o ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}
-        >
-          {o}
-        </button>
-      ))}
+  <div className="flex items-start gap-4 py-2.5 border-b border-foreground/[0.04] last:border-0">
+    <span className="text-[10px] font-medium text-muted-foreground/60 uppercase tracking-wider w-16 shrink-0 pt-0.5">
+      {field.label}
+    </span>
+    <div className="flex-1 min-w-0">
+      <SwipeRail
+        options={field.options}
+        value={value}
+        onChange={onChange}
+        isFirstField={isFirstField}
+        hasInteracted={hasInteracted}
+      />
     </div>
   </div>
 );
 
 export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
   const [profile, setProfile] = useState(data);
+  const [hasInteracted, setHasInteracted] = useState(false);
+
   const update = (key: keyof UserProfile, val: string) => {
+    if (!hasInteracted) setHasInteracted(true);
     const next = { ...profile, [key]: val };
     setProfile(next);
     onUpdate(next);
   };
 
-  const isValid = true; // username already confirmed on welcome page
-
   return (
-    <div className="animate-fade-in space-y-5 max-w-2xl mx-auto">
-      <div className="text-center">
-        <h2 className="text-2xl font-bold mb-0.5">Core Identity</h2>
-        <p className="text-muted-foreground text-xs leading-relaxed">
-          All fields optional.<br />
-          Nothing is public.<br />
-          This defines your identity direction.
+    <div className="animate-fade-in space-y-4 max-w-3xl mx-auto">
+      <div className="text-center mb-4">
+        <h2 className="text-xl font-bold mb-0.5">Core Identity</h2>
+        <p className="text-muted-foreground text-[10px] leading-relaxed">
+          All fields optional · Nothing is public · This defines your identity direction
         </p>
       </div>
 
-      {/* Biological — default open */}
-      <Collapsible defaultOpen>
-        <div className="glass-card !p-3 space-y-2">
-          <CollapsibleTrigger className="flex items-center justify-between w-full">
-            <h3 className="text-[9px] font-semibold text-muted-foreground uppercase tracking-widest">Biological Layer</h3>
-            <ChevronDown className="w-3.5 h-3.5 text-muted-foreground transition-transform duration-200 [[data-state=open]>&]:rotate-180" />
-          </CollapsibleTrigger>
-          <CollapsibleContent>
-            <div className="grid grid-cols-2 gap-3 pt-1">
-              <MiniField label="Age" options={AGE_OPTIONS} value={profile.ageBin} onChange={v => update('ageBin', v)} />
-              <MiniField label="Gender" options={GENDER_OPTIONS} value={profile.gender} onChange={v => update('gender', v)} />
-              <MiniField label="Height" options={HEIGHT_OPTIONS} value={profile.heightBin} onChange={v => update('heightBin', v)} />
-              <MiniField label="Weight" options={WEIGHT_OPTIONS} value={profile.weightBin} onChange={v => update('weightBin', v)} />
-            </div>
-          </CollapsibleContent>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Biological Layer */}
+        <div className="space-y-0">
+          <h3 className="text-[9px] font-semibold text-muted-foreground/50 uppercase tracking-widest mb-2">
+            Biological Layer
+          </h3>
+          <div className="glass-card !p-3 !rounded-xl">
+            {BIO_FIELDS.map((f, i) => (
+              <FieldRow
+                key={f.key}
+                field={f}
+                value={profile[f.key]}
+                onChange={v => update(f.key, v)}
+                isFirstField={i === 0}
+                hasInteracted={hasInteracted}
+              />
+            ))}
+          </div>
         </div>
-      </Collapsible>
 
-      {/* Social — default collapsed */}
-      <Collapsible>
-        <div className="glass-card !p-3 space-y-2">
-          <CollapsibleTrigger className="flex items-center justify-between w-full">
-            <h3 className="text-[9px] font-semibold text-muted-foreground uppercase tracking-widest">Social Layer</h3>
-            <ChevronDown className="w-3.5 h-3.5 text-muted-foreground transition-transform duration-200 [[data-state=open]>&]:rotate-180" />
-          </CollapsibleTrigger>
-          <CollapsibleContent>
-            <div className="grid grid-cols-2 gap-3 pt-1">
-              <MiniField label="Education" options={EDUCATION_OPTIONS} value={profile.education} onChange={v => update('education', v)} />
-              <MiniField label="Income" options={INCOME_OPTIONS} value={profile.income} onChange={v => update('income', v)} />
-              <MiniField label="Status" options={MARITAL_OPTIONS} value={profile.maritalStatus} onChange={v => update('maritalStatus', v)} />
-              <MiniField label="Occupation" options={OCCUPATION_OPTIONS} value={profile.occupation} onChange={v => update('occupation', v)} />
-              <MiniField label="Living" options={LIVING_OPTIONS} value={profile.livingType} onChange={v => update('livingType', v)} />
-            </div>
-          </CollapsibleContent>
+        {/* Social Layer */}
+        <div className="space-y-0">
+          <h3 className="text-[9px] font-semibold text-muted-foreground/50 uppercase tracking-widest mb-2">
+            Social Layer
+          </h3>
+          <div className="glass-card !p-3 !rounded-xl">
+            {SOCIAL_FIELDS.map((f, i) => (
+              <FieldRow
+                key={f.key}
+                field={f}
+                value={profile[f.key]}
+                onChange={v => update(f.key, v)}
+                isFirstField={false}
+                hasInteracted={hasInteracted}
+              />
+            ))}
+          </div>
         </div>
-      </Collapsible>
+      </div>
 
-      <button onClick={onNext} disabled={!isValid} className={`btn-twin btn-twin-primary w-full py-2.5 disabled:opacity-30 disabled:cursor-not-allowed ${isValid ? 'btn-glow' : ''}`}>
+      <button onClick={onNext} className="btn-twin btn-twin-primary w-full py-2.5 btn-glow">
         Commit Core Layer
       </button>
     </div>
