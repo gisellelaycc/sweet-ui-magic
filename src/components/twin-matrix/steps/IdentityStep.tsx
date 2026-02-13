@@ -49,9 +49,9 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
       </div>
 
       {/* Chip cloud — 3×3 centered, wide gaps, inline options */}
-      <div className="flex flex-col items-center gap-5 mb-20 w-full">
+      <div className="flex flex-col items-center gap-16 mb-20 w-full">
         {rows.map((row, ri) => (
-          <div key={ri} className="flex justify-center gap-8">
+          <div key={ri} className="flex justify-center gap-10">
             {row.map((f, i) => {
               const globalIdx = ri * 3 + i;
               const isOpen = openKey === f.key;
@@ -61,12 +61,12 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
               return (
                 <div
                   key={f.key}
-                  className={`relative flex items-center gap-2 transition-all duration-300 ${!isAnswered && !isOpen ? 'animate-chip-drift' : ''}`}
+                  className={`flex flex-col items-center transition-all duration-300 ${!isAnswered && !isOpen ? 'animate-chip-drift' : ''}`}
                   style={!isAnswered && !isOpen ? { animationDelay: driftDelay } : undefined}
                 >
                   <button
                     onClick={() => toggle(f.key)}
-                    className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[13px] transition-all duration-200 border whitespace-nowrap shrink-0 ${
+                    className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[13px] transition-all duration-200 border whitespace-nowrap ${
                       isAnswered
                         ? 'border-foreground/15 text-foreground'
                         : 'border-foreground/10 text-foreground/60 hover:text-foreground/90 hover:border-foreground/15'
@@ -92,7 +92,7 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
                   </button>
 
                   {isOpen && (
-                    <div className="animate-fade-in flex items-center gap-1.5 flex-nowrap">
+                    <div className="animate-fade-in mt-2 flex flex-wrap gap-1.5 justify-center max-w-[320px]">
                       {f.options.map(o => (
                         <button
                           key={o}
