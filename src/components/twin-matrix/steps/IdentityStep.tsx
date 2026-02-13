@@ -39,19 +39,19 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
   const rows = [FIELDS.slice(0, 3), FIELDS.slice(3, 6), FIELDS.slice(6, 9)];
 
   return (
-    <div className="animate-fade-in flex flex-col items-center justify-center h-full max-w-2xl mx-auto px-4">
+    <div className="animate-fade-in flex flex-col items-center justify-center h-full max-w-4xl mx-auto px-4">
       {/* Title block */}
-      <div className="text-center mb-10">
+      <div className="text-center mb-20">
         <h2 className="text-2xl font-bold text-foreground mb-1">Core Identity</h2>
         <p className="text-foreground/50 text-xs leading-relaxed">
           All optional · Nothing public · Set your direction
         </p>
       </div>
 
-      {/* Chip cloud — 3×3 centered */}
-      <div className="flex flex-col items-center gap-4 mb-10 w-full">
+      {/* Chip cloud — 3×3 centered, wide gaps, inline options */}
+      <div className="flex flex-col items-center gap-5 mb-20 w-full">
         {rows.map((row, ri) => (
-          <div key={ri} className="flex flex-wrap justify-center gap-3">
+          <div key={ri} className="flex justify-center gap-8">
             {row.map((f, i) => {
               const globalIdx = ri * 3 + i;
               const isOpen = openKey === f.key;
@@ -61,12 +61,12 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
               return (
                 <div
                   key={f.key}
-                  className={`flex flex-col items-center transition-all duration-300 ${!isAnswered && !isOpen ? 'animate-chip-drift' : ''}`}
+                  className={`relative flex items-center gap-2 transition-all duration-300 ${!isAnswered && !isOpen ? 'animate-chip-drift' : ''}`}
                   style={!isAnswered && !isOpen ? { animationDelay: driftDelay } : undefined}
                 >
                   <button
                     onClick={() => toggle(f.key)}
-                    className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[13px] transition-all duration-200 border ${
+                    className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[13px] transition-all duration-200 border whitespace-nowrap shrink-0 ${
                       isAnswered
                         ? 'border-foreground/15 text-foreground'
                         : 'border-foreground/10 text-foreground/60 hover:text-foreground/90 hover:border-foreground/15'
@@ -92,12 +92,12 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
                   </button>
 
                   {isOpen && (
-                    <div className="animate-fade-in mt-2 flex flex-wrap gap-1.5 justify-center max-w-[280px]">
+                    <div className="animate-fade-in flex items-center gap-1.5 flex-nowrap">
                       {f.options.map(o => (
                         <button
                           key={o}
                           onClick={() => update(f.key, o)}
-                          className={`text-[11px] px-2.5 py-1 rounded-full border transition-all duration-200 ${
+                          className={`text-[11px] px-2.5 py-1 rounded-full border transition-all duration-200 whitespace-nowrap ${
                             profile[f.key] === o
                               ? 'border-foreground/20 text-foreground'
                               : 'border-transparent text-foreground/40 hover:text-foreground/70'
