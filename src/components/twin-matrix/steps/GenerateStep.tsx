@@ -158,14 +158,12 @@ export const GenerateStep = ({ onComplete }: Props) => {
                       className="w-5 h-5 rounded-sm flex items-center justify-center relative"
                       style={{
                         background: val > 0
-                          ? `rgba(40, 180, 160, ${0.04 + intensity * 0.5})`
+                          ? `rgba(40, 200, 180, ${(0.25 + 0.75 * intensity) * 0.4})`
                           : 'rgba(255, 255, 255, 0.015)',
                         boxShadow: justChanged
-                          ? `0 0 12px rgba(40, 180, 160, 0.7), 0 0 4px rgba(40, 180, 160, 0.4)`
-                          : val > 200
-                          ? `0 0 8px rgba(40, 180, 160, ${intensity * 0.4})`
-                          : val > 120
-                          ? `0 0 3px rgba(40, 180, 160, ${intensity * 0.15})`
+                          ? `0 0 10px rgba(40, 200, 180, 0.5), 0 0 20px rgba(40, 200, 180, 0.2)`
+                          : val > 150
+                          ? `0 0 6px rgba(40, 200, 180, ${intensity * 0.3})`
                           : 'none',
                         transform: justChanged ? 'scale(1.2)' : 'scale(1)',
                         transition: 'all 0.35s ease-out',

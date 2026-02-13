@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 
-// Dimension label mapping (by slice)
 const DIMENSION_MAP: Record<number, { layer: string; name: string }> = {
   206: { layer: 'Spiritual', name: 'Outcome' },
   207: { layer: 'Spiritual', name: 'Experience' },
@@ -13,10 +12,10 @@ const DIMENSION_MAP: Record<number, { layer: string; name: string }> = {
 };
 
 const SLICES = [
-  { label: 'Physical', range: [0, 63] as const, color: 'rgba(200, 60, 60' },
-  { label: 'Digital', range: [64, 127] as const, color: 'rgba(60, 130, 200' },
-  { label: 'Social', range: [128, 191] as const, color: 'rgba(200, 180, 40' },
-  { label: 'Spiritual', range: [192, 255] as const, color: 'rgba(40, 180, 160' },
+  { label: 'Physical', range: [0, 63] as const, color: '120, 50, 50' },
+  { label: 'Digital', range: [64, 127] as const, color: '80, 140, 210' },
+  { label: 'Social', range: [128, 191] as const, color: '160, 170, 80' },
+  { label: 'Spiritual', range: [192, 255] as const, color: '40, 200, 180' },
 ];
 
 interface Props {
@@ -47,7 +46,6 @@ export const CompleteStep = ({ username, signature, agentName }: Props) => {
   const sbtId = useMemo(() => generateSBTId(), []);
   const [telegramConnected, setTelegramConnected] = useState(false);
 
-  // Dominant Dimensions: top-N non-zero dims
   const dominantDimensions = useMemo(() => {
     return signature
       .map((val, idx) => {
@@ -80,42 +78,56 @@ export const CompleteStep = ({ username, signature, agentName }: Props) => {
           <p className="text-xs font-mono text-foreground/70 break-all">{identityHash}</p>
         </div>
 
-        {/* Dominant Dimensions */}
-        <div className="space-y-2">
+        {/* Dominant Dimensions — reduced noise */}
+        <div className="space-y-2.5">
           <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Dominant Dimensions</p>
-          <div className="space-y-1">
+          <div className="space-y-1.5">
             {dominantDimensions.map(d => (
-              <div key={d.idx} className="flex items-center justify-between text-[11px]">
-                <span className="text-foreground/70">{d.layer}: {d.name}</span>
-                <span className="text-muted-foreground font-mono">({d.value.toFixed(2)})</span>
+              <div key={d.idx} className="flex items-center justify-between">
+                <span className="text-[11px] font-light text-foreground/60">
+                  {d.layer} · {d.name}
+                </span>
+                <span className="text-[10px] text-muted-foreground/60 font-mono font-light">
+                  {d.value.toFixed(2)}
+                </span>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Vector Fingerprint — full 256D with slice segmentation */}
+        {/* Vector Fingerprint — glow dots with spacing */}
         <div className="space-y-2">
           <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Vector Fingerprint</p>
           <p className="text-[9px] text-muted-foreground/50">256D Snapshot at Mint Time</p>
-          <div className="space-y-1.5">
-            {SLICES.map(slice => (
-              <div key={slice.label}>
-                <p className="text-[8px] text-muted-foreground/40 uppercase tracking-wider mb-0.5">{slice.label}</p>
-                <div className="flex flex-wrap gap-px">
-                  {signature.slice(slice.range[0], slice.range[1] + 1).map((v, i) => (
-                    <div
-                      key={i}
-                      className="w-2.5 h-2.5 rounded-[1px]"
-                      style={{
-                        background: v > 0
-                          ? `${slice.color}, ${v / 255})`
-                          : 'rgba(255, 255, 255, 0.02)',
-                      }}
-                    />
-                  ))}
+          <div className="space-y-3">
+            {SLICES.map(slice => {
+              const sliceData = signature.slice(slice.range[0], slice.range[1] + 1);
+              return (
+                <div key={slice.label}>
+                  <p className="text-[8px] text-muted-foreground/30 uppercase tracking-wider mb-1 font-light">{slice.label}</p>
+                  <div className="flex flex-wrap gap-px">
+                    {sliceData.map((v, i) => {
+                      const intensity = v / 255;
+                      const cellOpacity = v > 0 ? 0.25 + 0.75 * intensity : 0.03;
+                      return (
+                        <div
+                          key={i}
+                          className="w-2.5 h-2.5 rounded-[1px]"
+                          style={{
+                            background: v > 0
+                              ? `rgba(${slice.color}, ${cellOpacity * 0.5})`
+                              : 'rgba(255, 255, 255, 0.02)',
+                            boxShadow: v > 150
+                              ? `0 0 4px rgba(${slice.color}, ${cellOpacity * 0.4})`
+                              : 'none',
+                          }}
+                        />
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
