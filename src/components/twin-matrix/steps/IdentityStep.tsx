@@ -33,6 +33,9 @@ const MiniField = ({
 }) => (
   <div className="space-y-1">
     <span className="text-[10px] font-medium text-foreground/60 uppercase tracking-wider">{label}</span>
+    {!value && (
+      <p className="text-[10px] text-muted-foreground/40 italic">No direction yet</p>
+    )}
     <div className="flex flex-wrap gap-2">
       {options.map(o => (
         <button
