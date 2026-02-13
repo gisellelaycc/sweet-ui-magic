@@ -12,6 +12,7 @@ const BEHAVIOR_MODES = [
 ];
 const IDENTITY_SCOPES = ['Core', 'Skill', 'Soul', 'Full Identity'];
 const TRADING_OPTIONS = ['Manual Only', 'Auto-Approve under threshold', 'Full Auto'];
+const DURATION_OPTIONS = ['7 days', '30 days', 'Custom'];
 const RISK_CONTROLS = [
   { key: 'pauseCap', label: 'Pause when daily cap reached' },
   { key: 'switchManual', label: 'Switch to Manual after cap reached' },
@@ -22,6 +23,7 @@ const RISK_CONTROLS = [
 const defaultAgent: AgentDefinition = { name: '', taskTypes: [], matchingStrategy: [], behaviorMode: 'Active search', capabilities: {} };
 const defaultPermission: AgentPermission = {
   identityScope: 'Core', identityScopes: ['Core'], tradingAuthority: 'Manual Only',
+  authorizationDuration: '', customDurationDays: '',
   maxPerTask: '', dailyCap: '', weeklyCap: '', spendResetPolicy: [], taskTypeBound: false, brandRestriction: false,
 };
 
@@ -52,7 +54,6 @@ export const AuthStep = ({ data, onUpdate, onNext }: Props) => {
 
   const saveAgent = (card: AgentCard) => {
     setAgents(prev => prev.map(a => a.id === card.id ? { ...a, saved: true } : a));
-    // Push first agent to parent state
     if (card.id === agents[0]?.id) {
       onUpdate({ agent: card.agent, permission: card.permission });
     }
@@ -73,6 +74,11 @@ export const AuthStep = ({ data, onUpdate, onNext }: Props) => {
 
   const allSaved = agents.every(a => a.saved);
 
+  const handleSkip = () => {
+    // Skip without validation — agent not configured
+    onNext();
+  };
+
   return (
     <div className="animate-fade-in space-y-6 max-w-3xl mx-auto">
       <div className="text-center">
@@ -88,6 +94,7 @@ export const AuthStep = ({ data, onUpdate, onNext }: Props) => {
         const needsThreshold = card.permission.tradingAuthority === 'Auto-Approve under threshold';
         const isFullAuto = card.permission.tradingAuthority === 'Full Auto';
         const canSave = card.agent.name.trim().length > 0 && (!isFullAuto || card.fullAutoConfirm);
+        const isCustomDuration = card.permission.authorizationDuration === 'Custom';
 
         return (
           <div key={card.id} className="glass-card space-y-4">
@@ -233,6 +240,41 @@ export const AuthStep = ({ data, onUpdate, onNext }: Props) => {
                     </div>
                   </div>
 
+                  {/* Authorization Duration */}
+                  <div className="space-y-2">
+                    <label className="text-xs text-muted-foreground">Authorization Duration</label>
+                    <div className="space-y-1.5">
+                      {DURATION_OPTIONS.map(d => (
+                        <label key={d} className="flex items-center gap-2 text-sm cursor-pointer">
+                          <input
+                            type="radio"
+                            name={`duration-${card.id}`}
+                            checked={card.permission.authorizationDuration === d}
+                            onChange={() => updateAgent(card.id, { permission: { ...card.permission, authorizationDuration: d, customDurationDays: d === 'Custom' ? card.permission.customDurationDays : '' } })}
+                            className="accent-foreground"
+                          />
+                          <span className="text-foreground/80">{d}</span>
+                        </label>
+                      ))}
+                    </div>
+                    {isCustomDuration && (
+                      <div className="animate-fade-in flex items-center gap-2 mt-1">
+                        <span className="text-[11px] text-muted-foreground w-24">Duration (days)</span>
+                        <input
+                          type="number"
+                          min="1"
+                          value={card.permission.customDurationDays}
+                          onChange={e => {
+                            const val = e.target.value.replace(/[^0-9]/g, '');
+                            updateAgent(card.id, { permission: { ...card.permission, customDurationDays: val } });
+                          }}
+                          placeholder="Enter number of days"
+                          className="flex-1 bg-foreground/5 border border-foreground/10 rounded-lg px-3 py-1.5 text-xs text-foreground focus:outline-none focus:border-foreground/25"
+                        />
+                      </div>
+                    )}
+                  </div>
+
                   {/* Threshold inputs */}
                   {needsThreshold && (
                     <div className="space-y-2 animate-fade-in">
@@ -287,30 +329,37 @@ export const AuthStep = ({ data, onUpdate, onNext }: Props) => {
               </div>
             )}
 
-            {/* Save Agent */}
+            {/* Save / Skip */}
             {!card.collapsed && (
-              <button
-                onClick={() => saveAgent(card)}
-                disabled={!canSave}
-                className={`w-full py-2.5 text-sm rounded-xl transition-all ${
-                  card.saved
-                    ? 'bg-foreground/5 text-green-400 border border-green-400/20'
-                    : 'btn-twin btn-twin-primary btn-glow disabled:opacity-30 disabled:cursor-not-allowed'
-                }`}
-              >
-                {card.saved ? 'Agent Saved ✓' : 'Save Agent'}
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => saveAgent(card)}
+                  disabled={!canSave}
+                  className={`flex-1 py-2.5 text-sm rounded-xl transition-all ${
+                    card.saved
+                      ? 'bg-foreground/5 text-green-400 border border-green-400/20'
+                      : 'btn-twin btn-twin-primary btn-glow disabled:opacity-30 disabled:cursor-not-allowed'
+                  }`}
+                >
+                  {card.saved ? 'Agent Saved ✓' : 'Save Agent'}
+                </button>
+              </div>
             )}
           </div>
         );
       })}
 
-      {/* Continue */}
-      {allSaved && agents.length > 0 && (
-        <button onClick={onNext} className="btn-twin btn-twin-primary w-full py-3 btn-glow animate-fade-in">
-          Continue →
+      {/* Bottom Actions */}
+      <div className="flex gap-3">
+        <button onClick={handleSkip} className="btn-twin btn-twin-ghost flex-1 py-3">
+          Skip for now
         </button>
-      )}
+        {allSaved && agents.length > 0 && (
+          <button onClick={onNext} className="btn-twin btn-twin-primary flex-1 py-3 btn-glow animate-fade-in">
+            Continue →
+          </button>
+        )}
+      </div>
     </div>
   );
 };

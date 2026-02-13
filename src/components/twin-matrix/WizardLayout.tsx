@@ -26,19 +26,23 @@ type MenuPage = 'identity' | 'update' | 'auth' | 'agent' | 'missions' | 'setting
 
 const initialState: WizardState = {
   step: 0,
-  profile: { username: '', heightBin: '', weightBin: '', ageBin: '', gender: '', education: '', income: '', maritalStatus: '', occupation: '', livingType: '', ethnicity: '' },
+  profile: { username: '', heightBin: '', weightBin: '', ageBin: '', gender: '', education: '', income: '', maritalStatus: '', occupation: '', livingType: '' },
   activeModules: [],
   sportSetup: { frequency: '', duration: '', dailySteps: '' },
   sportTwin: { sportRanking: [], outfitStyle: [], brands: [] },
   soul: {
-    spectrum: { achievementFreedom: 50, healthSocial: 50, disciplineRelease: 50 },
-    weights: { achievement: 50, exploration: 50, discipline: 50, social: 50, emotional: 50 },
+    bars: [
+      { id: 'BAR_OUTCOME_EXPERIENCE', label: 'Performance Orientation', left: 'I train to improve performance', right: 'I train for the experience', value: null },
+      { id: 'BAR_CONTROL_RELEASE', label: 'Structure Preference', left: 'I prefer structured training', right: 'I prefer spontaneous movement', value: null },
+      { id: 'BAR_SOLO_GROUP', label: 'Social Preference', left: 'I prefer training alone', right: 'I prefer training with others', value: null },
+      { id: 'BAR_PASSIVE_ACTIVE', label: 'Engagement Mode', left: 'I mostly consume sports content', right: 'I actively track or share my activity', value: null },
+    ],
     confirmed: false,
   },
   signature: [],
   agentSetup: {
     agent: { name: '', taskTypes: [], matchingStrategy: [], behaviorMode: 'Active search' },
-    permission: { identityScope: 'Core', tradingAuthority: 'Manual Only', maxPerTask: '', dailyCap: '', weeklyCap: '', spendResetPolicy: [], taskTypeBound: false, brandRestriction: false },
+    permission: { identityScope: 'Core', tradingAuthority: 'Manual Only', authorizationDuration: '', customDurationDays: '', maxPerTask: '', dailyCap: '', weeklyCap: '', spendResetPolicy: [], taskTypeBound: false, brandRestriction: false },
   },
 };
 

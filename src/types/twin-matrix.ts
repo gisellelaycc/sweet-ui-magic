@@ -9,7 +9,6 @@ export interface UserProfile {
   maritalStatus: string;
   occupation: string;
   livingType: string;
-  ethnicity: string;
 }
 
 export interface SportSetup {
@@ -24,19 +23,16 @@ export interface SportTwin {
   brands: string[];
 }
 
+export interface SoulBar {
+  id: string;
+  label: string;
+  left: string;
+  right: string;
+  value: number | null; // null = not touched
+}
+
 export interface SoulData {
-  spectrum: {
-    achievementFreedom: number;   // 0=Achievement, 100=Freedom
-    healthSocial: number;         // 0=Health, 100=Social
-    disciplineRelease: number;    // 0=Discipline, 100=Release
-  };
-  weights: {
-    achievement: number;
-    exploration: number;
-    discipline: number;
-    social: number;
-    emotional: number;
-  };
+  bars: SoulBar[];
   confirmed: boolean;
 }
 
@@ -60,6 +56,8 @@ export interface AgentPermission {
   identityScope: string;
   identityScopes?: string[];
   tradingAuthority: string;
+  authorizationDuration: string;
+  customDurationDays: string;
   maxPerTask: string;
   dailyCap: string;
   weeklyCap: string;

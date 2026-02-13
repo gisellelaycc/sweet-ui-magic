@@ -3,17 +3,16 @@ import { ChevronDown } from 'lucide-react';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
 import type { UserProfile } from '@/types/twin-matrix';
 
-const AGE_OPTIONS = ['18–24', '25–34', '35–44', '45+'];
+const AGE_OPTIONS = ['18–24', '25–34', '35–44', '45–54', '55–64', '65+'];
 const HEIGHT_OPTIONS = ['< 160 cm', '160–170', '170–180', '> 180 cm'];
 const WEIGHT_OPTIONS = ['< 50 kg', '50–65', '65–80', '> 80 kg'];
 const GENDER_OPTIONS = ['Male', 'Female', 'Non-binary', 'Prefer not to say'];
 
-const EDUCATION_OPTIONS = ['High School', 'Bachelor\'s', 'Master\'s', 'Doctorate', 'Other'];
-const INCOME_OPTIONS = ['< $30k', '$30k–60k', '$60k–100k', '$100k+', 'N/A'];
-const MARITAL_OPTIONS = ['Single', 'In a relationship', 'Married', 'N/A'];
+const EDUCATION_OPTIONS = ['High School', "Bachelor's", "Master's", 'Doctorate', 'Other', 'Prefer not to say'];
+const INCOME_OPTIONS = ['< $30k', '$30k–60k', '$60k–100k', '$100k+', 'Prefer not to say'];
+const MARITAL_OPTIONS = ['Single', 'In a relationship', 'Married', 'N/A', 'Prefer not to say'];
 const OCCUPATION_OPTIONS = ['Student', 'Employee', 'Self-employed', 'Freelancer', 'Other'];
-const LIVING_OPTIONS = ['Urban', 'Suburban', 'Rural'];
-const ETHNICITY_OPTIONS = ['Asian', 'Black', 'Hispanic', 'White', 'Mixed', 'Other', 'N/A'];
+const LIVING_OPTIONS = ['Urban', 'Suburban', 'Rural', 'Prefer not to say'];
 
 interface Props {
   data: UserProfile;
@@ -101,7 +100,6 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
               <MiniField label="Status" options={MARITAL_OPTIONS} value={profile.maritalStatus} onChange={v => update('maritalStatus', v)} />
               <MiniField label="Occupation" options={OCCUPATION_OPTIONS} value={profile.occupation} onChange={v => update('occupation', v)} />
               <MiniField label="Living" options={LIVING_OPTIONS} value={profile.livingType} onChange={v => update('livingType', v)} />
-              <MiniField label="Ethnicity" options={ETHNICITY_OPTIONS} value={profile.ethnicity} onChange={v => update('ethnicity', v)} />
             </div>
           </CollapsibleContent>
         </div>
