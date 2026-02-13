@@ -99,7 +99,7 @@ export const ReviewStep = ({ signature, username, activeModules, onNext }: Props
               <span className="text-3xl font-bold text-foreground">{identityDensity}%</span>
               <span className="text-xs text-muted-foreground mb-1">of 256 dimensions active</span>
             </div>
-            <div className="h-1.5 bg-foreground/[0.04] rounded-full overflow-visible">
+            <div className="h-1.5 bg-transparent rounded-full overflow-visible">
               <div
                 className="h-full rounded-full transition-all duration-700"
                 style={{
@@ -125,7 +125,7 @@ export const ReviewStep = ({ signature, username, activeModules, onNext }: Props
                   <span className="text-foreground/70">{layer.label}</span>
                   <span className="text-muted-foreground">{layer.value}%</span>
                 </div>
-                <div className="h-1.5 bg-foreground/[0.04] rounded-full overflow-visible">
+                <div className="h-1.5 bg-transparent rounded-full overflow-visible">
                   <div
                     className="h-full rounded-full transition-all duration-700"
                     style={{
@@ -182,8 +182,11 @@ export const ReviewStep = ({ signature, username, activeModules, onNext }: Props
                             return (
                               <div
                                 key={col}
-                                className="w-5 h-5 rounded-sm flex items-center justify-center cursor-default relative transition-transform duration-150"
+                                className="rounded-sm flex items-center justify-center cursor-default relative transition-transform duration-150"
                                 style={{
+                                  width: 20,
+                                  height: 20,
+                                  aspectRatio: '1',
                                   background: val > 0
                                     ? `rgba(${slice.color}, ${cellOpacity * 0.5})`
                                     : 'rgba(255, 255, 255, 0.015)',

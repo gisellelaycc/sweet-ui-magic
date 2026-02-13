@@ -7,7 +7,7 @@ export const StepIndicator = ({ current, total }: StepIndicatorProps) => {
   const progress = ((current) / total) * 100;
 
   return (
-    <div className="w-24 h-1 rounded-full bg-foreground/10 overflow-hidden relative">
+    <div className="w-24 h-1 rounded-full bg-transparent overflow-hidden relative">
       <div
         className="h-full rounded-full transition-all duration-700 ease-out animate-glow-pulse"
         style={{

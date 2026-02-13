@@ -112,8 +112,11 @@ export const CompleteStep = ({ username, signature, agentName }: Props) => {
                       return (
                         <div
                           key={i}
-                          className="w-2.5 h-2.5 rounded-[1px]"
+                         className="rounded-[1px]"
                           style={{
+                            width: 10,
+                            height: 10,
+                            aspectRatio: '1',
                             background: v > 0
                               ? `rgba(${slice.color}, ${cellOpacity * 0.5})`
                               : 'rgba(255, 255, 255, 0.02)',
