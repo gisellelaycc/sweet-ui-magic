@@ -2,16 +2,16 @@ import { useState } from 'react';
 import type { SportTwin } from '@/types/twin-matrix';
 
 const SPORTS = [
-  '🏃 Running', '🏋️ Weight Training', '🧘 Yoga', '🚴 Cycling',
-  '🏊 Swimming', '⚽ Team Sports', '🥊 Combat Sports', '🎾 Racquet Sports',
-  '🧗 Climbing', '🏌️ Golf',
+  'Running', 'Cycling', 'Long-distance Swimming', 'Trail / Off-road Running',
+  'Strength Training', 'Yoga & Pilates', 'Team Sports', 'Combat Sports',
+  'Racquet Sports', 'Climbing', 'Golf',
 ];
 const OUTFIT_STYLES = [
   'Minimal Functional', 'Streetwear Athletic', 'Pro Competition', 'Casual Comfort',
   'Premium Athletic', 'Retro Sports', 'Outdoor Technical', 'Tight Performance',
-  'Vivid Energetic', 'Black & White Hardcore', 'Daily Mix & Match', 'Brand-Centric',
+  'Vivid & Energetic', 'Brand Centric',
 ];
-const BRANDS = ['Nike', 'Adidas', 'Under Armour', 'lululemon', 'New Balance', 'ASICS', 'Puma', 'Reebok', 'On', 'Hoka'];
+const BRANDS = ['Nike', 'Adidas', 'Under Armour', 'Lululemon', 'New Balance', 'ASICS', 'Puma', 'Reebok', 'On', 'Hoka'];
 
 interface Props {
   data: SportTwin;
@@ -25,7 +25,7 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
   const toggleSport = (s: string) => {
     const list = twin.sportRanking.includes(s)
       ? twin.sportRanking.filter(x => x !== s)
-      : [...twin.sportRanking, s];
+      : twin.sportRanking.length < 10 ? [...twin.sportRanking, s] : twin.sportRanking;
     const next = { ...twin, sportRanking: list };
     setTwin(next);
     onUpdate(next);
@@ -62,11 +62,11 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
       <div className="glass-card !p-4 space-y-2">
         <div>
           <label className="text-xs font-medium text-foreground">Select your most frequent activities</label>
-          <p className="text-[10px] text-muted-foreground mt-0.5">Click order = ranking. First click = primary.</p>
+          <p className="text-[10px] text-muted-foreground mt-0.5">Order reflects priority (up to 10).</p>
         </div>
         {twin.sportRanking.length > 0 && (
           <p className="text-[10px] text-muted-foreground">
-            Selected {twin.sportRanking.length} / {SPORTS.length}
+            Selected {twin.sportRanking.length} / 10
           </p>
         )}
         <div className="flex flex-wrap gap-1.5">
@@ -93,7 +93,10 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
 
       {/* Outfit Style */}
       <div className="glass-card !p-4 space-y-2">
-        <label className="text-xs font-medium text-foreground">Outfit Style (multi-select)</label>
+        <div>
+          <label className="text-xs font-medium text-foreground">Outfit Style</label>
+          <p className="text-[10px] text-muted-foreground mt-0.5">Select styles that best represent your athletic expression.</p>
+        </div>
         <div className="flex flex-wrap gap-1.5">
           {OUTFIT_STYLES.map(s => (
             <button
@@ -111,7 +114,7 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
       <div className="glass-card !p-4 space-y-2">
         <div>
           <label className="text-xs font-medium text-foreground">Brand Preferences</label>
-          <p className="text-[10px] text-muted-foreground mt-0.5">Brands you've worn most in the past year</p>
+          <p className="text-[10px] text-muted-foreground mt-0.5">Brands you've worn most in the past year.</p>
         </div>
         <div className="flex flex-wrap gap-1.5">
           {BRANDS.map(b => (

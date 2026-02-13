@@ -71,7 +71,8 @@ export const SportSetupStep = ({ data, onUpdate, onNext }: Props) => {
     onUpdate(next);
   };
 
-  const isValid = setup.frequency && setup.duration;
+  // All 3 fields required per spec
+  const isValid = setup.frequency !== '' && setup.duration !== '' && setup.dailySteps !== '';
 
   return (
     <div className="animate-fade-in space-y-6 max-w-lg mx-auto">
@@ -86,7 +87,7 @@ export const SportSetupStep = ({ data, onUpdate, onNext }: Props) => {
         <SliderSelect label="Average Daily Steps" options={STEP_OPTIONS} value={setup.dailySteps} onChange={v => update('dailySteps', v)} />
       </div>
 
-      <button onClick={onNext} disabled={!isValid} className="btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed">
+      <button onClick={onNext} disabled={!isValid} className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${isValid ? 'btn-glow' : ''}`}>
         Proceed
       </button>
     </div>
