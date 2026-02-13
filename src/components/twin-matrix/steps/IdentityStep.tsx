@@ -35,88 +35,96 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
 
   const answered = (key: keyof UserProfile) => !!profile[key];
 
+  // Split into rows of 3-3-3
+  const rows = [FIELDS.slice(0, 3), FIELDS.slice(3, 6), FIELDS.slice(6, 9)];
+
   return (
-    <div className="animate-fade-in space-y-6 max-w-2xl mx-auto">
-      <div className="text-center mb-6">
-        <h2 className="text-xl font-bold mb-0.5">Core Identity</h2>
-        <p className="text-muted-foreground text-[10px] leading-relaxed">
+    <div className="animate-fade-in flex flex-col items-center justify-center h-full max-w-2xl mx-auto px-4">
+      {/* Title block */}
+      <div className="text-center mb-10">
+        <h2 className="text-2xl font-bold text-foreground mb-1">Core Identity</h2>
+        <p className="text-foreground/50 text-xs leading-relaxed">
           All optional · Nothing public · Set your direction
         </p>
       </div>
 
-      {/* Chip cloud */}
-      <div className="flex flex-wrap justify-center gap-2.5 px-2">
-        {FIELDS.map((f, i) => {
-          const isOpen = openKey === f.key;
-          const isAnswered = answered(f.key);
-          const driftDelay = `${(i * 0.6) % 3.5}s`;
+      {/* Chip cloud — 3×3 centered */}
+      <div className="flex flex-col items-center gap-4 mb-10 w-full">
+        {rows.map((row, ri) => (
+          <div key={ri} className="flex flex-wrap justify-center gap-3">
+            {row.map((f, i) => {
+              const globalIdx = ri * 3 + i;
+              const isOpen = openKey === f.key;
+              const isAnswered = answered(f.key);
+              const driftDelay = `${(globalIdx * 0.6) % 3.5}s`;
 
-          return (
-            <div
-              key={f.key}
-              className={`transition-all duration-300 ${!isAnswered && !isOpen ? 'animate-chip-drift' : ''}`}
-              style={!isAnswered && !isOpen ? { animationDelay: driftDelay } : undefined}
-            >
-              {/* Chip button */}
-              <button
-                onClick={() => toggle(f.key)}
-                className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-[12px] transition-all duration-200 border ${
-                  isAnswered
-                    ? 'border-foreground/15 text-foreground'
-                    : 'border-foreground/[0.06] text-muted-foreground/60 hover:text-muted-foreground/90 hover:border-foreground/10'
-                }`}
-                style={
-                  isAnswered
-                    ? {
-                        background: 'rgba(40, 180, 160, 0.08)',
-                        boxShadow: '0 0 10px rgba(40, 180, 160, 0.15), 0 0 20px rgba(40, 180, 160, 0.06)',
-                      }
-                    : { background: 'rgba(255, 255, 255, 0.03)' }
-                }
-              >
-                <span className="font-medium">{f.label}</span>
-                {isAnswered && (
-                  <span className="text-[10px] text-muted-foreground/80 ml-0.5">{profile[f.key]}</span>
-                )}
-                <ChevronDown
-                  className={`w-3 h-3 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''} ${
-                    isAnswered ? 'text-foreground/40' : 'text-muted-foreground/30'
-                  }`}
-                />
-              </button>
-
-              {/* Expandable options */}
-              {isOpen && (
-                <div className="animate-fade-in mt-1.5 flex flex-wrap gap-1 justify-center max-w-[280px]">
-                  {f.options.map(o => (
-                    <button
-                      key={o}
-                      onClick={() => update(f.key, o)}
-                      className={`text-[10px] px-2.5 py-1 rounded-full border transition-all duration-200 ${
-                        profile[f.key] === o
-                          ? 'border-foreground/20 text-foreground'
-                          : 'border-transparent text-muted-foreground/50 hover:text-muted-foreground/80'
+              return (
+                <div
+                  key={f.key}
+                  className={`flex flex-col items-center transition-all duration-300 ${!isAnswered && !isOpen ? 'animate-chip-drift' : ''}`}
+                  style={!isAnswered && !isOpen ? { animationDelay: driftDelay } : undefined}
+                >
+                  <button
+                    onClick={() => toggle(f.key)}
+                    className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[13px] transition-all duration-200 border ${
+                      isAnswered
+                        ? 'border-foreground/15 text-foreground'
+                        : 'border-foreground/10 text-foreground/60 hover:text-foreground/90 hover:border-foreground/15'
+                    }`}
+                    style={
+                      isAnswered
+                        ? {
+                            background: 'rgba(40, 180, 160, 0.08)',
+                            boxShadow: '0 0 10px rgba(40, 180, 160, 0.15), 0 0 20px rgba(40, 180, 160, 0.06)',
+                          }
+                        : { background: 'rgba(255, 255, 255, 0.04)' }
+                    }
+                  >
+                    <span className="font-medium">{f.label}</span>
+                    {isAnswered && (
+                      <span className="text-[11px] text-foreground/60 ml-0.5">{profile[f.key]}</span>
+                    )}
+                    <ChevronDown
+                      className={`w-3 h-3 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''} ${
+                        isAnswered ? 'text-foreground/40' : 'text-foreground/30'
                       }`}
-                      style={
-                        profile[f.key] === o
-                          ? {
-                              background: 'rgba(40, 180, 160, 0.12)',
-                              boxShadow: '0 0 8px rgba(40, 180, 160, 0.2)',
-                            }
-                          : { background: 'transparent' }
-                      }
-                    >
-                      {o}
-                    </button>
-                  ))}
+                    />
+                  </button>
+
+                  {isOpen && (
+                    <div className="animate-fade-in mt-2 flex flex-wrap gap-1.5 justify-center max-w-[280px]">
+                      {f.options.map(o => (
+                        <button
+                          key={o}
+                          onClick={() => update(f.key, o)}
+                          className={`text-[11px] px-2.5 py-1 rounded-full border transition-all duration-200 ${
+                            profile[f.key] === o
+                              ? 'border-foreground/20 text-foreground'
+                              : 'border-transparent text-foreground/40 hover:text-foreground/70'
+                          }`}
+                          style={
+                            profile[f.key] === o
+                              ? {
+                                  background: 'rgba(40, 180, 160, 0.12)',
+                                  boxShadow: '0 0 8px rgba(40, 180, 160, 0.2)',
+                                }
+                              : { background: 'transparent' }
+                          }
+                        >
+                          {o}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          );
-        })}
+              );
+            })}
+          </div>
+        ))}
       </div>
 
-      <button onClick={onNext} className="btn-twin btn-twin-primary w-full py-2.5 btn-glow mt-4">
+      {/* Commit button */}
+      <button onClick={onNext} className="btn-twin btn-twin-primary w-full max-w-md py-2.5 btn-glow">
         Commit Core Layer
       </button>
     </div>
