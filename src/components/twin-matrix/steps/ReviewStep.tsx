@@ -1,5 +1,6 @@
 import { useMemo, useState, useEffect, useCallback } from "react";
 import { computeDensity } from "@/lib/twin-encoder";
+import { StepLayout, StepHeader, StepContent, StepFooter } from '../StepLayout';
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import lobsterIcon from "@/assets/lobster-icon.png";
 
@@ -69,11 +70,16 @@ export const ReviewStep = ({ signature, username, activeModules, onNext, onBack 
   }, [signature]);
 
   return (
-    <div className="animate-fade-in space-y-6 max-w-4xl mx-auto">
-      <div className="text-center">
-        <h2 className="text-2xl font-bold mb-1">Identity Preview</h2>
-        <p className="text-muted-foreground text-sm">Not yet sealed. Review before recording.</p>
-      </div>
+    <StepLayout>
+      <StepHeader>
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-1">Identity Preview</h2>
+          <p className="text-muted-foreground text-sm">Not yet sealed. Review before recording.</p>
+        </div>
+      </StepHeader>
+
+      <StepContent>
+        <div className="w-full max-w-4xl mx-auto space-y-6 animate-fade-in">
 
       <div className="flex flex-col lg:flex-row gap-6 items-stretch">
         {/* Left: Computed Identity Signals */}
@@ -240,24 +246,27 @@ export const ReviewStep = ({ signature, username, activeModules, onNext, onBack 
         </div>
       </div>
 
-      <p className="text-xs text-center text-muted-foreground/50">@{username}</p>
+          <p className="text-xs text-center text-muted-foreground/50">@{username}</p>
+        </div>
+      </StepContent>
 
-      <div className="flex gap-3">
-        <button onClick={onBack} className="btn-twin btn-twin-ghost flex-1 py-3">
-          Refine Responses
-        </button>
-        <button onClick={() => { setShowWallet(true); setWalletPhase('connect'); }} className="btn-twin btn-twin-primary btn-glow flex-1 py-3">
-          Commit Identity State
-        </button>
-      </div>
+      <StepFooter>
+        <div className="flex gap-3">
+          <button onClick={onBack} className="btn-twin btn-twin-ghost flex-1 py-3">
+            Refine Responses
+          </button>
+          <button onClick={() => { setShowWallet(true); setWalletPhase('connect'); }} className="btn-twin btn-twin-primary btn-glow flex-1 py-3">
+            Commit Identity State
+          </button>
+        </div>
+      </StepFooter>
 
-      {/* MetaMask-style Wallet Signature Animation */}
       <Dialog open={showWallet} onOpenChange={() => {}}>
         <DialogContent className="max-w-sm border-foreground/10 bg-[#1a1a2e] p-0 overflow-hidden [&>button]:hidden" onPointerDownOutside={e => e.preventDefault()}>
           <WalletAnimation phase={walletPhase} setPhase={setWalletPhase} onComplete={onNext} />
         </DialogContent>
       </Dialog>
-    </div>
+    </StepLayout>
   );
 };
 

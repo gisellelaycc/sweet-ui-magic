@@ -105,7 +105,7 @@ export const WizardLayout = () => {
         </div>
       </header>
 
-      <main className="flex-1 overflow-y-auto px-4 py-8 scrollbar-hide">
+      <main className="flex-1 min-h-0 px-4 py-4 flex flex-col">
         {activePage === 'identity' && (
           <MyIdentityPage username={state.profile.username} activeModules={state.activeModules} signature={state.signature} onNavigate={handlePageNavigate} />
         )}
