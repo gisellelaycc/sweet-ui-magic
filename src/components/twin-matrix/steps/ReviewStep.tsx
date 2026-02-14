@@ -271,7 +271,7 @@ function WalletAnimation({
           <span className="text-xs font-medium text-foreground/80">Twin3 Wallet</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <div className={`w-2 h-2 rounded-full ${phase === 'confirmed' ? 'bg-green-400' : 'bg-cyan-400 animate-pulse'}`} />
+          <div className={`w-2 h-2 rounded-full ${phase === 'confirmed' ? 'bg-[#F24455]' : 'bg-[#F24455]/60 animate-pulse'}`} />
           <span className="text-[10px] text-foreground/50">
             {phase === 'connect' ? 'Connecting…' : phase === 'signing' ? 'Awaiting…' : 'Connected'}
           </span>
@@ -281,23 +281,23 @@ function WalletAnimation({
       <div className="px-6 py-8 space-y-6">
         <div className="relative w-16 h-16 mx-auto">
           <div
-            className={`absolute inset-0 rounded-full border-2 ${phase === 'confirmed' ? 'border-green-400/60' : 'border-cyan-400/30 animate-spin'}`}
-            style={{ animationDuration: '3s', borderTopColor: phase !== 'confirmed' ? 'rgba(10, 255, 255, 0.8)' : undefined }}
+            className={`absolute inset-0 rounded-full border-2 ${phase === 'confirmed' ? 'border-[#F24455]/60' : 'border-[#F24455]/30 animate-spin'}`}
+            style={{ animationDuration: '3s', borderTopColor: phase !== 'confirmed' ? 'rgba(242, 68, 85, 0.8)' : undefined }}
           />
           <div
             className="absolute inset-2 rounded-full flex items-center justify-center"
             style={{
               background: phase === 'confirmed'
-                ? 'radial-gradient(circle, rgba(74, 222, 128, 0.2) 0%, transparent 70%)'
-                : 'radial-gradient(circle, rgba(10, 255, 255, 0.15) 0%, transparent 70%)',
+                ? 'radial-gradient(circle, rgba(242, 68, 85, 0.2) 0%, transparent 70%)'
+                : 'radial-gradient(circle, rgba(242, 68, 85, 0.15) 0%, transparent 70%)',
             }}
           >
             {phase === 'confirmed' ? (
-              <svg className="w-8 h-8 text-green-400 animate-scale-in" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <svg className="w-8 h-8 text-[#F24455] animate-scale-in" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <polyline points="20 6 9 17 4 12" />
               </svg>
             ) : (
-              <svg className="w-7 h-7 text-cyan-400/70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <svg className="w-7 h-7 text-[#F24455]/70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <rect x="3" y="11" width="18" height="11" rx="2" />
                 <path d="M7 11V7a5 5 0 0 1 10 0v4" />
               </svg>
@@ -342,11 +342,11 @@ function WalletAnimation({
               width: phase === 'connect' ? '33%' : phase === 'signing' ? '66%' : '100%',
               transitionDuration: phase === 'connect' ? '1.8s' : phase === 'signing' ? '2.5s' : '0.5s',
               background: phase === 'confirmed'
-                ? 'linear-gradient(90deg, rgba(74, 222, 128, 0.6), rgba(74, 222, 128, 0.9))'
-                : 'linear-gradient(90deg, rgba(10, 255, 255, 0.5), rgba(10, 255, 255, 0.9))',
+                ? 'linear-gradient(90deg, rgba(242, 68, 85, 0.6), rgba(242, 68, 85, 0.9))'
+                : 'linear-gradient(90deg, rgba(242, 68, 85, 0.5), rgba(242, 68, 85, 0.9))',
               boxShadow: phase === 'confirmed'
-                ? '0 0 8px rgba(74, 222, 128, 0.5)'
-                : '0 0 8px rgba(10, 255, 255, 0.5)',
+                ? '0 0 8px rgba(242, 68, 85, 0.5)'
+                : '0 0 8px rgba(242, 68, 85, 0.5)',
             }}
           />
         </div>

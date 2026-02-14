@@ -160,10 +160,10 @@ const ParticleCanvas = ({ width, height }: { width: number; height: number }) =>
         const glowOpacity = phase === 'hold' ? p.opacity * 1.2 : p.opacity;
         // Square pixel block style
         const s = p.size;
-        ctx.fillStyle = `rgba(54, 230, 255, ${glowOpacity})`;
+        ctx.fillStyle = `rgba(242, 68, 85, ${glowOpacity})`;
         ctx.fillRect(Math.round(p.x - s / 2), Math.round(p.y - s / 2), s, s);
         if (phase === 'hold') {
-          ctx.fillStyle = `rgba(54, 230, 255, ${glowOpacity * 0.1})`;
+          ctx.fillStyle = `rgba(242, 68, 85, ${glowOpacity * 0.1})`;
           ctx.fillRect(Math.round(p.x - s * 1.5), Math.round(p.y - s * 1.5), s * 3, s * 3);
         }
       }
@@ -316,8 +316,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                   <div key={sa.id} className="glass-card !p-4 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <img src={lobsterIcon} alt="" className="w-6 h-6" style={{
-                        filter: 'brightness(0) saturate(100%) invert(78%) sepia(60%) saturate(1000%) hue-rotate(145deg) brightness(1.1)',
-                        opacity: 0.6,
+                        filter: 'drop-shadow(0 0 4px rgba(242, 68, 85, 0.4))',
                       }} />
                       <div>
                         <p className="text-sm font-medium text-foreground">{sa.name}</p>
@@ -325,7 +324,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <span className={`text-[10px] font-medium ${sa.status === 'ACTIVE' ? 'text-[#36E6FF]' : 'text-muted-foreground'}`}>
+                      <span className={`text-[10px] font-medium ${sa.status === 'ACTIVE' ? 'text-[#F24455]' : 'text-muted-foreground'}`}>
                         ● {sa.status}
                       </span>
                       <button
@@ -343,7 +342,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                   <div className="glass-card !p-5 space-y-3 animate-fade-in">
                     <div className="flex items-center justify-between">
                       <h4 className="text-sm font-semibold text-foreground">{viewingAgent.name}</h4>
-                      <span className={`text-[10px] ${viewingAgent.status === 'ACTIVE' ? 'text-[#36E6FF]' : 'text-muted-foreground'}`}>
+                      <span className={`text-[10px] ${viewingAgent.status === 'ACTIVE' ? 'text-[#F24455]' : 'text-muted-foreground'}`}>
                         ● {viewingAgent.status}
                       </span>
                     </div>
@@ -368,7 +367,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                       )}
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Telegram</span>
-                        <span className={viewingAgent.telegramConnected ? 'text-[#36E6FF]' : 'text-muted-foreground'}>
+                        <span className={viewingAgent.telegramConnected ? 'text-[#F24455]' : 'text-muted-foreground'}>
                           {viewingAgent.telegramConnected ? '✓ Connected' : 'Not connected'}
                         </span>
                       </div>
@@ -402,8 +401,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
             <div className="glass-card space-y-5">
               <div className="flex items-center gap-3">
                 <img src={lobsterIcon} alt="" className="w-10 h-10" style={{
-                  filter: 'brightness(0) saturate(100%) invert(78%) sepia(60%) saturate(1000%) hue-rotate(145deg) brightness(1.1)',
-                  opacity: 0.5,
+                  filter: 'drop-shadow(0 0 6px rgba(242, 68, 85, 0.4))',
                 }} />
                 <div>
                   <h3 className="text-sm font-semibold">Name your agent</h3>
@@ -445,7 +443,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                   <div className="space-y-1.5">
                     <label className="text-xs text-muted-foreground">Agent Name</label>
                     <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-foreground/5 text-sm text-foreground" style={{ boxShadow: '0 0 0 1px rgba(255,255,255,0.06) inset' }}>
-                      <img src={lobsterIcon} alt="" className="w-4 h-4" style={{ filter: 'brightness(0) saturate(100%) invert(78%) sepia(60%) saturate(1000%) hue-rotate(145deg) brightness(1.1)', opacity: 0.6 }} />
+                      <img src={lobsterIcon} alt="" className="w-4 h-4" style={{ filter: 'drop-shadow(0 0 4px rgba(242, 68, 85, 0.4))' }} />
                       {agent.name}
                     </div>
                   </div>
@@ -606,8 +604,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
           <div className="space-y-6 animate-fade-in max-w-md mx-auto">
             <div className="glass-card space-y-5 text-center">
               <img src={lobsterIcon} alt="" className="w-14 h-14 mx-auto" style={{
-                filter: 'brightness(0) saturate(100%) invert(78%) sepia(60%) saturate(1000%) hue-rotate(145deg) brightness(1.1)',
-                opacity: 0.6,
+                filter: 'drop-shadow(0 0 8px rgba(242, 68, 85, 0.5))',
               }} />
               <div>
                 <h3 className="text-lg font-semibold mb-1">{currentSavedAgent?.name || agent.name}</h3>
@@ -619,7 +616,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                   🔗 Connect Telegram
                 </button>
               ) : (
-                <p className="text-sm" style={{ color: '#36E6FF' }}>✓ Telegram Connected</p>
+                <p className="text-sm" style={{ color: '#F24455' }}>✓ Telegram Connected</p>
               )}
               <p className="text-[9px] text-muted-foreground/50">Required for agent notifications and task dispatch.</p>
             </div>
@@ -641,17 +638,17 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
               <div className="flex items-center justify-between">
                 <span className="text-xs text-muted-foreground">Agent</span>
                 <span className="text-sm font-medium text-foreground flex items-center gap-1.5">
-                  <img src={lobsterIcon} alt="" className="w-4 h-4" style={{ filter: 'brightness(0) saturate(100%) invert(78%) sepia(60%) saturate(1000%) hue-rotate(145deg) brightness(1.1)', opacity: 0.6 }} />
+                  <img src={lobsterIcon} alt="" className="w-4 h-4" style={{ filter: 'drop-shadow(0 0 4px rgba(242, 68, 85, 0.4))' }} />
                   {currentSavedAgent?.name || agent.name}
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-xs text-muted-foreground">Status</span>
-                <span className="text-xs font-medium" style={{ color: '#36E6FF' }}>● Active</span>
+                <span className="text-xs font-medium" style={{ color: '#F24455' }}>● Active</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-xs text-muted-foreground">Telegram</span>
-                <span className="text-xs" style={{ color: '#36E6FF' }}>✓ Connected</span>
+                <span className="text-xs" style={{ color: '#F24455' }}>✓ Connected</span>
               </div>
             </div>
 
@@ -686,10 +683,9 @@ function RedFlashLobster() {
   if (!showRed) {
     return (
       <div className="animate-fade-in">
-        <img src={lobsterIcon} alt="" className="w-16 h-16 mx-auto" style={{
-          filter: 'brightness(0) saturate(100%) invert(78%) sepia(60%) saturate(1000%) hue-rotate(145deg) brightness(1.1)',
-          opacity: 0.7,
-        }} />
+      <img src={lobsterIcon} alt="" className="w-16 h-16 mx-auto" style={{
+        filter: 'drop-shadow(0 0 8px rgba(242, 68, 85, 0.5))',
+      }} />
       </div>
     );
   }

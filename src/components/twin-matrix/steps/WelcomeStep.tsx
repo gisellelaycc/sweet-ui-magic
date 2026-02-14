@@ -79,7 +79,7 @@ const ParticleCanvas = ({ phase }: { phase: 'scatter' | 'converge' | 'bg' }) => 
 
         ctx.beginPath();
         ctx.arc(px, py, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(10, 255, 255, ${alpha})`;
+        ctx.fillStyle = `rgba(242, 68, 85, ${alpha})`;
         ctx.fill();
         raf.current = requestAnimationFrame(draw);
         return; // handled individually in bg
@@ -90,7 +90,7 @@ const ParticleCanvas = ({ phase }: { phase: 'scatter' | 'converge' | 'bg' }) => 
 
       ctx.beginPath();
       ctx.arc(px, py, p.size, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(10, 255, 255, ${alpha})`;
+      ctx.fillStyle = `rgba(242, 68, 85, ${alpha})`;
       ctx.fill();
     }
 
@@ -125,7 +125,7 @@ const ParticleCanvas = ({ phase }: { phase: 'scatter' | 'converge' | 'bg' }) => 
 
       ctx.beginPath();
       ctx.arc(px, py, p.size, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(10, 255, 255, ${alpha})`;
+      ctx.fillStyle = `rgba(242, 68, 85, ${alpha})`;
       ctx.fill();
     }
     raf.current = requestAnimationFrame(drawBg);
