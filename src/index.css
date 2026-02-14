@@ -167,16 +167,20 @@ body::before {
 
   .glass-card {
     position: relative;
-    background: rgba(255, 255, 255, 0.03);
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.05) 0%,
+      rgba(255, 255, 255, 0.03) 55%,
+      rgba(0, 0, 0, 0.15) 100%
+    );
     backdrop-filter: blur(16px) saturate(160%);
     -webkit-backdrop-filter: blur(16px) saturate(160%);
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 20px;
     padding: 2rem;
     box-shadow:
-      0 0 0 1px rgba(255, 255, 255, 0.05) inset,
-      0 1px 0 rgba(255, 255, 255, 0.06) inset,
-      0 8px 40px rgba(0, 0, 0, 0.3);
+      0 1px 0 rgba(255, 255, 255, 0.04) inset,
+      0 4px 24px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
     overflow: hidden;
   }
@@ -190,19 +194,18 @@ body::before {
     height: 20px;
     background: linear-gradient(
       to bottom,
-      rgba(255, 255, 255, 0.08),
-      rgba(255, 255, 255, 0.02)
+      rgba(255, 255, 255, 0.06),
+      transparent
     );
     pointer-events: none;
     border-radius: 20px 20px 0 0;
   }
 
   .glass-card-hover:hover {
-    transform: translateY(-4px);
     box-shadow:
-      0 0 0 1px rgba(255, 255, 255, 0.08) inset,
-      0 1px 0 rgba(255, 255, 255, 0.08) inset,
-      0 12px 60px rgba(0, 0, 0, 0.4);
+      0 1px 0 rgba(255, 255, 255, 0.06) inset,
+      0 8px 40px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.14);
   }
 
   .chip {
@@ -285,6 +288,16 @@ body::before {
   to { opacity: 1; transform: scale(1); }
 }
 
+@keyframes soft-enter {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes soft-enter-title {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 @keyframes bounce-dot {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-4px); }
@@ -296,6 +309,15 @@ body::before {
 
 .animate-fade-in-scale {
   animation: fade-in-scale 0.25s ease-out;
+}
+
+.animate-soft-enter {
+  animation: soft-enter 600ms ease-out both;
+}
+
+.animate-soft-enter-title {
+  animation: soft-enter-title 700ms ease-out both;
+  animation-delay: 100ms;
 }
 
 .animate-bounce-dot {
