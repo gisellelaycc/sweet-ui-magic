@@ -12,19 +12,14 @@ const Slider = React.forwardRef<
     className={cn("relative flex w-full touch-none select-none items-center", className)}
     {...props}
   >
-    <SliderPrimitive.Track className="relative h-1.5 w-full grow overflow-visible rounded-full bg-transparent">
-      <SliderPrimitive.Range
-        className="absolute h-full rounded-full"
-        style={{
-          background: 'linear-gradient(90deg, rgba(10, 255, 255, 0.5), rgba(173, 255, 255, 0.5))',
-          boxShadow: '0 0 8px rgba(10, 255, 255, 0.4), 0 0 20px rgba(10, 255, 255, 0.2), 0 0 40px rgba(173, 255, 255, 0.1)',
-        }}
-      />
+    <SliderPrimitive.Track className="relative h-[2px] w-full grow overflow-visible rounded-full bg-foreground/12">
+      {/* No visible Range — axis is always complete */}
+      <SliderPrimitive.Range className="absolute h-full rounded-full bg-transparent" />
     </SliderPrimitive.Track>
     <SliderPrimitive.Thumb
-      className="block h-4 w-4 rounded-full border border-foreground/20 bg-foreground/80 ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+      className="block h-3.5 w-3.5 rounded-full bg-foreground/70 border border-foreground/20 ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 disabled:pointer-events-none disabled:opacity-50"
       style={{
-        boxShadow: '0 0 8px rgba(10, 255, 255, 0.5), 0 0 16px rgba(173, 255, 255, 0.3)',
+        boxShadow: '0 0 6px rgba(10, 255, 255, 0.35), 0 0 14px rgba(173, 255, 255, 0.15)',
       }}
     />
   </SliderPrimitive.Root>
