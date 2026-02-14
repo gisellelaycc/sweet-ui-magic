@@ -3,10 +3,10 @@ import { computeDensity } from "@/lib/twin-encoder";
 
 // Updated color strategy per spec
 const SLICES = [
-  { label: "Physical", range: [0, 63], color: "120, 50, 50" }, // low-saturation dark gray-red
-  { label: "Digital", range: [64, 127], color: "80, 140, 210" }, // cool blue
-  { label: "Social", range: [128, 191], color: "160, 170, 80" }, // muted yellow-green
-  { label: "Spiritual", range: [192, 255], color: "40, 200, 180" }, // brightest teal/cyan
+  { label: "Physical", range: [0, 63], color: "255, 60, 100" },
+  { label: "Digital", range: [64, 127], color: "60, 180, 255" },
+  { label: "Social", range: [128, 191], color: "255, 200, 40" },
+  { label: "Spiritual", range: [192, 255], color: "10, 255, 255" },
 ];
 
 function getSliceForDim(idx: number): (typeof SLICES)[number] {
@@ -67,7 +67,7 @@ export const ReviewStep = ({ signature, username, activeModules, onNext }: Props
     <div className="animate-fade-in space-y-6 max-w-4xl mx-auto">
       <div className="text-center">
         <h2 className="text-2xl font-bold mb-1">Identity State</h2>
-        <p className="text-muted-foreground text-sm">Your minted state at a glance</p>
+        <p className="text-muted-foreground text-sm">A private snapshot of who you chose to be.</p>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-6 items-stretch">
@@ -96,13 +96,13 @@ export const ReviewStep = ({ signature, username, activeModules, onNext }: Props
               <span className="text-3xl font-bold text-foreground">{identityDensity}%</span>
               <span className="text-xs text-muted-foreground mb-1">of 256 dimensions active</span>
             </div>
-            <div className="h-1.5 bg-foreground/[0.04] rounded-full overflow-visible">
+            <div className="h-1.5 bg-transparent rounded-full overflow-visible">
               <div
                 className="h-full rounded-full transition-all duration-700"
                 style={{
                   width: `${identityDensity}%`,
-                  background: "rgba(40, 200, 180, 0.3)",
-                  boxShadow: "0 0 12px rgba(40, 200, 180, 0.35), 0 0 24px rgba(40, 200, 180, 0.12)",
+                  background: "rgba(10, 255, 255, 0.5)",
+                  boxShadow: "0 0 8px rgba(10, 255, 255, 0.6), 0 0 20px rgba(10, 255, 255, 0.3), 0 0 40px rgba(10, 255, 255, 0.1)",
                 }}
               />
             </div>
@@ -112,23 +112,23 @@ export const ReviewStep = ({ signature, username, activeModules, onNext }: Props
           <div className="glass-card space-y-3">
             <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">Layer Mix</h3>
             {[
-              { label: "Physical", value: layerMix.physical, color: "120, 50, 50" },
-              { label: "Digital", value: layerMix.digital, color: "80, 140, 210" },
-              { label: "Social", value: layerMix.social, color: "160, 170, 80" },
-              { label: "Spiritual", value: layerMix.spiritual, color: "40, 200, 180" },
+              { label: "Physical", value: layerMix.physical, color: "255, 60, 100" },
+              { label: "Digital", value: layerMix.digital, color: "60, 180, 255" },
+              { label: "Social", value: layerMix.social, color: "255, 200, 40" },
+              { label: "Spiritual", value: layerMix.spiritual, color: "10, 255, 255" },
             ].map((layer) => (
               <div key={layer.label} className="space-y-1">
                 <div className="flex justify-between text-xs">
                   <span className="text-foreground/70">{layer.label}</span>
                   <span className="text-muted-foreground">{layer.value}%</span>
                 </div>
-                <div className="h-1.5 bg-foreground/[0.04] rounded-full overflow-visible">
+                <div className="h-1.5 bg-transparent rounded-full overflow-visible">
                   <div
                     className="h-full rounded-full transition-all duration-700"
                     style={{
                       width: `${layer.value}%`,
-                      background: `rgba(${layer.color}, 0.35)`,
-                      boxShadow: `0 0 10px rgba(${layer.color}, 0.3), 0 0 20px rgba(${layer.color}, 0.1)`,
+                      background: `rgba(${layer.color}, 0.6)`,
+                      boxShadow: `0 0 6px rgba(${layer.color}, 0.7), 0 0 16px rgba(${layer.color}, 0.35), 0 0 32px rgba(${layer.color}, 0.12)`,
                     }}
                   />
                 </div>
@@ -143,13 +143,13 @@ export const ReviewStep = ({ signature, username, activeModules, onNext }: Props
             className="absolute inset-0 pointer-events-none"
             style={{
               background:
-                "radial-gradient(ellipse at center, rgba(40,200,180,0.10) 0%, rgba(40,200,180,0.03) 40%, transparent 70%)",
+                "radial-gradient(ellipse at center, rgba(10,255,255,0.08) 0%, rgba(10,255,255,0.02) 40%, transparent 70%)",
             }}
           />
           <div
             className="absolute inset-0 pointer-events-none animate-[field-breathe_5s_ease-in-out_infinite]"
             style={{
-              background: "radial-gradient(ellipse at center, rgba(40,200,180,0.06) 0%, transparent 60%)",
+              background: "radial-gradient(ellipse at center, rgba(10,255,255,0.05) 0%, transparent 60%)",
             }}
           />
 

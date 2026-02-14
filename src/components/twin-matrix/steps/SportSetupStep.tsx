@@ -77,8 +77,8 @@ export const SportSetupStep = ({ data, onUpdate, onNext }: Props) => {
   return (
     <div className="animate-fade-in space-y-6 max-w-lg mx-auto">
       <div>
-        <h2 className="text-2xl font-bold mb-1">Activity Baseline</h2>
-        <p className="text-muted-foreground text-sm">Define your physical signal baseline for this layer.</p>
+        <h2 className="text-2xl font-bold mb-1">Baseline</h2>
+        <p className="text-muted-foreground text-sm">A quiet calibration of your physical rhythm.</p>
       </div>
 
       <div className="glass-card space-y-6">

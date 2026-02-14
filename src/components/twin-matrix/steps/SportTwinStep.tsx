@@ -55,7 +55,7 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
     <div className="animate-fade-in space-y-4 max-w-lg mx-auto">
       <div>
         <h2 className="text-2xl font-bold mb-1">Skill & Style</h2>
-        <p className="text-muted-foreground text-sm">Commit your athletic signal through preference and ranking.</p>
+        <p className="text-muted-foreground text-sm">Order what feels essential.</p>
       </div>
 
       {/* Sport Ranking */}

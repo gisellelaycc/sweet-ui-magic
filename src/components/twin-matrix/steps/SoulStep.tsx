@@ -38,7 +38,7 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
     <div className="animate-fade-in space-y-6 max-w-lg mx-auto">
       <div>
         <h2 className="text-2xl font-bold mb-1">Soul Layer</h2>
-        <p className="text-muted-foreground text-sm">Define your signal spectrum.</p>
+        <p className="text-muted-foreground text-sm">Balance intention and instinct.</p>
       </div>
 
       <div className="glass-card space-y-7">
@@ -54,7 +54,7 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
               <div
                 className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                 style={{
-                  background: `radial-gradient(ellipse at ${bar.value ?? 50}% 50%, rgba(40, 180, 160, 0.15) 0%, transparent 70%)`,
+                  background: `radial-gradient(ellipse at ${bar.value ?? 50}% 50%, rgba(10, 255, 255, 0.15) 0%, transparent 70%)`,
                 }}
               />
               <Slider
@@ -99,7 +99,7 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
         disabled={!hasInteracted}
         className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${hasInteracted ? 'btn-glow' : ''}`}
       >
-        Mint Identity State
+        Mint This State
       </button>
     </div>
   );

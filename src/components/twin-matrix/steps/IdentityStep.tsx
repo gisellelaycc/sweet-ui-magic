@@ -44,7 +44,7 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
       <div className="text-center mb-20">
         <h2 className="text-2xl font-bold text-foreground mb-1">Core Identity</h2>
         <p className="text-foreground/50 text-xs leading-relaxed">
-          All optional · Nothing public · Set your direction
+          Optional signals. Nothing exposed.
         </p>
       </div>
 
@@ -74,8 +74,8 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
                     style={
                       isAnswered
                         ? {
-                            background: 'rgba(40, 180, 160, 0.08)',
-                            boxShadow: '0 0 10px rgba(40, 180, 160, 0.15), 0 0 20px rgba(40, 180, 160, 0.06)',
+                            background: 'rgba(10, 255, 255, 0.08)',
+                            boxShadow: '0 0 10px rgba(10, 255, 255, 0.2), 0 0 20px rgba(10, 255, 255, 0.08)',
                           }
                         : { background: 'rgba(255, 255, 255, 0.04)' }
                     }
@@ -105,8 +105,8 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
                           style={
                             profile[f.key] === o
                               ? {
-                                  background: 'rgba(40, 180, 160, 0.12)',
-                                  boxShadow: '0 0 8px rgba(40, 180, 160, 0.2)',
+                                  background: 'rgba(10, 255, 255, 0.12)',
+                                  boxShadow: '0 0 8px rgba(10, 255, 255, 0.25)',
                                 }
                               : { background: 'transparent' }
                           }
