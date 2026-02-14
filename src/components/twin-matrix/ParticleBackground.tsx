@@ -21,14 +21,20 @@ const createParticles = (count: number): Particle[] =>
     jitter: 0.5 + Math.random() * 2,
   }));
 
+interface ParticleBackgroundProps {
+  color?: 'cyan' | 'red';
+}
+
 /**
  * Global ambient particle background that renders on every page.
- * 256 cyan particles in a wide, breathing elliptical orbit.
+ * 256 particles in a wide, breathing elliptical orbit.
  */
-export const ParticleBackground = () => {
+export const ParticleBackground = ({ color = 'cyan' }: ParticleBackgroundProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particles = useRef(createParticles(256));
   const raf = useRef(0);
+  const colorRef = useRef(color);
+  colorRef.current = color;
 
   const draw = useCallback((time: number) => {
     const canvas = canvasRef.current;
@@ -57,7 +63,8 @@ export const ParticleBackground = () => {
 
       ctx.beginPath();
       ctx.arc(px, py, p.size, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(242, 68, 85, ${alpha})`;
+      const rgb = colorRef.current === 'red' ? '242, 68, 85' : '10, 255, 255';
+      ctx.fillStyle = `rgba(${rgb}, ${alpha})`;
       ctx.fill();
     }
     raf.current = requestAnimationFrame(draw);

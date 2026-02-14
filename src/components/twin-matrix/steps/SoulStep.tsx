@@ -38,7 +38,7 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
   return (
     <StepLayout>
       <StepContent>
-        <div className="w-full flex flex-col lg:flex-row gap-8 lg:gap-12 items-center">
+        <div className="w-full flex flex-col lg:flex-row gap-8 lg:gap-12 items-end">
           {/* Left: Title + Sliders */}
           <div className="flex-1 min-w-0">
             {/* Title */}

@@ -70,7 +70,7 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
           <div className="space-y-4 w-full max-w-lg">
             <div className="glass-card !p-4 space-y-2">
               <div>
-                <label className="text-sm font-medium text-foreground">Select your most frequent activities</label>
+                <label className="text-sm font-medium text-foreground"><span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-foreground/10 text-[10px] font-bold mr-2">A</span>Select your most frequent activities</label>
                 <p className="text-xs text-muted-foreground mt-0.5">Order reflects priority (up to 10).</p>
               </div>
               {twin.sportRanking.length > 0 && (
@@ -100,7 +100,7 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
 
             <div className="glass-card !p-4 space-y-2">
               <div>
-                <label className="text-sm font-medium text-foreground">Outfit Style</label>
+                <label className="text-sm font-medium text-foreground"><span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-foreground/10 text-[10px] font-bold mr-2">B</span>Outfit Style</label>
                 <p className="text-xs text-muted-foreground mt-0.5">Select styles that best represent your athletic expression.</p>
               </div>
               <div className="flex flex-wrap gap-1.5">
@@ -118,7 +118,7 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
 
             <div className="glass-card !p-4 space-y-2">
               <div>
-                <label className="text-sm font-medium text-foreground">Brand Preferences</label>
+                <label className="text-sm font-medium text-foreground"><span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-foreground/10 text-[10px] font-bold mr-2">C</span>Brand Preferences</label>
                 <p className="text-xs text-muted-foreground mt-0.5">Brands you've worn most in the past year.</p>
               </div>
               <div className="flex flex-wrap gap-1.5">
