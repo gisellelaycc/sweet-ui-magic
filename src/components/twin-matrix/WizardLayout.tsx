@@ -20,6 +20,7 @@ import { AuthStep } from './steps/AuthStep';
 import { CompleteStep } from './steps/CompleteStep';
 
 import { IdentityDashboard } from './pages/IdentityDashboard';
+import { AgentStudioPage } from './pages/AgentStudioPage';
 import { UpdateIdentityPage } from './pages/UpdateIdentityPage';
 import { ActiveAuthorizationsPage } from './pages/ActiveAuthorizationsPage';
 import { MissionsPage } from './pages/MissionsPage';
@@ -93,6 +94,12 @@ export const WizardLayout = () => {
         )}
         {activePage === 'update' && (
           <UpdateIdentityPage username={state.profile.username} activeModules={state.activeModules} tags={[]} onNavigate={handlePageNavigate} />
+        )}
+        {activePage === 'agent' && (
+          <AgentStudioPage
+            onCreateAgent={() => { setActivePage(null); setState(s => ({ ...s, step: 8 })); }}
+            onEditAgent={() => { setActivePage(null); setState(s => ({ ...s, step: 8 })); }}
+          />
         )}
         {activePage === 'auth' && <ActiveAuthorizationsPage />}
         {activePage === 'missions' && <SignalMarketplacePage />}
