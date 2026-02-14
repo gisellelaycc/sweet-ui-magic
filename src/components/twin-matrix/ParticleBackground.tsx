@@ -72,7 +72,7 @@ export const ParticleBackground = () => {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full pointer-events-none z-0"
-      style={{ opacity: 0.45 }}
+      style={{ opacity: 0.6 }}
     />
   );
 };

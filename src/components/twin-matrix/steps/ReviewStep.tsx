@@ -69,18 +69,18 @@ export const ReviewStep = ({ signature, username, activeModules, onNext, onBack 
       <StepContent>
         <div className="w-full">
           {/* Title */}
-          <div className="mb-8">
-            <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] tracking-tight mb-2 animate-soft-enter">
+          <div className="mb-6">
+            <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] tracking-tight mb-2">
               Identity Preview
             </h2>
-            <p className="text-muted-foreground text-base md:text-lg animate-soft-enter" style={{ animationDelay: '100ms' }}>
+            <p className="text-muted-foreground text-base md:text-lg">
               Not yet sealed. Review before recording.
             </p>
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
-            {/* Left: Matrix (larger) */}
-            <div className="lg:flex-[1.2] min-w-0 animate-soft-enter" style={{ animationDelay: '200ms' }}>
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-center">
+            {/* Left: Matrix — 60% */}
+            <div className="lg:w-[60%] min-w-0">
               <div className="relative">
                 <div className="absolute inset-0 pointer-events-none" style={{
                   background: "radial-gradient(ellipse at center, rgba(10,255,255,0.08) 0%, transparent 70%)",
@@ -119,7 +119,7 @@ export const ReviewStep = ({ signature, username, activeModules, onNext, onBack 
                                   key={col}
                                   className={`rounded-sm flex items-center justify-center cursor-default relative transition-transform duration-150 ${col === 8 ? "ml-1" : ""}`}
                                   style={{
-                                    width: "1.1rem", height: "1.1rem", aspectRatio: "1",
+                                    width: "1.25rem", height: "1.25rem", aspectRatio: "1",
                                     background: val > 0 ? `rgba(${slice.color}, ${cellOpacity * 0.5})` : "rgba(255, 255, 255, 0.015)",
                                     boxShadow: isTop && val > 0
                                       ? `0 0 8px rgba(${slice.color}, ${cellOpacity * 0.6})`
@@ -150,10 +150,10 @@ export const ReviewStep = ({ signature, username, activeModules, onNext, onBack 
               </div>
             </div>
 
-            {/* Right: 3 glass cards */}
-            <div className="lg:flex-1 space-y-4 animate-soft-enter" style={{ animationDelay: '350ms' }}>
+            {/* Right: 3 data sections — 40%, no glass cards, vertically centered */}
+            <div className="lg:w-[40%] space-y-6">
               {/* Soul Quadrant */}
-              <div className="glass-card !p-4 space-y-2">
+              <div className="space-y-2">
                 <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Quadrant Position</h3>
                 {quadrant.missing ? (
                   <p className="text-sm text-muted-foreground/50">Incomplete Axis</p>
@@ -168,8 +168,10 @@ export const ReviewStep = ({ signature, username, activeModules, onNext, onBack 
                 )}
               </div>
 
+              <div className="h-px w-full" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)' }} />
+
               {/* Identity Density */}
-              <div className="glass-card !p-4 space-y-2">
+              <div className="space-y-2">
                 <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Identity Density</h3>
                 <div className="flex items-end gap-2">
                   <span className="text-3xl font-bold text-foreground">{identityDensity}%</span>
@@ -184,8 +186,10 @@ export const ReviewStep = ({ signature, username, activeModules, onNext, onBack 
                 </div>
               </div>
 
+              <div className="h-px w-full" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)' }} />
+
               {/* Layer Mix */}
-              <div className="glass-card !p-4 space-y-2">
+              <div className="space-y-2">
                 <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Layer Mix</h3>
                 {[
                   { label: "Physical", value: layerMix.physical, color: "255, 60, 100" },
@@ -210,19 +214,18 @@ export const ReviewStep = ({ signature, username, activeModules, onNext, onBack 
               </div>
             </div>
           </div>
+
+          {/* CTA centered */}
+          <div className="flex gap-2 max-w-[420px] mx-auto mt-8">
+            <button onClick={onBack} className="btn-twin btn-twin-ghost flex-1 py-2.5 text-sm">
+              Refine
+            </button>
+            <button onClick={() => { setShowWallet(true); setWalletPhase('connect'); }} className="btn-twin btn-twin-primary btn-glow flex-1 py-2.5 text-sm">
+              Commit State
+            </button>
+          </div>
         </div>
       </StepContent>
-
-      <StepFooter>
-        <div className="flex gap-2">
-          <button onClick={onBack} className="btn-twin btn-twin-ghost flex-1 py-2.5 text-sm">
-            Refine
-          </button>
-          <button onClick={() => { setShowWallet(true); setWalletPhase('connect'); }} className="btn-twin btn-twin-primary btn-glow flex-1 py-2.5 text-sm">
-            Commit State
-          </button>
-        </div>
-      </StepFooter>
 
       <Dialog open={showWallet} onOpenChange={() => {}}>
         <DialogContent className="max-w-sm border-foreground/10 bg-[#1a1a2e] p-0 overflow-hidden [&>button]:hidden" onPointerDownOutside={e => e.preventDefault()}>
