@@ -243,7 +243,6 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
 
   return (
     <div ref={containerRef} className="relative h-full agent-ambient">
-      {dims.w > 0 && <ParticleCanvas width={dims.w} height={dims.h} />}
 
       <div className="relative z-10 h-full overflow-y-auto scrollbar-hide">
         <div className="max-w-lg mx-auto px-6 py-10 space-y-0">
