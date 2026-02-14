@@ -34,41 +34,38 @@ export const WelcomeStep = ({ username, onUpdateUsername, onNext }: Props) => {
         </p>
       </div>
 
-      {/* Input card */}
-      <div className="glass-card max-w-md w-full flex flex-col items-center">
-        <div className="w-full max-w-xs mx-auto mb-6">
-          <div className="relative">
-            <input
-              value={value}
-              onChange={e => setValue(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleConfirm()}
-              placeholder="your name"
-              className="w-full bg-foreground/5 border-none rounded-xl px-4 py-3 text-center text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none transition-colors pr-12"
-              style={{ boxShadow: '0 0 0 1px rgba(255,255,255,0.06) inset' }}
-            />
-            <button
-              onClick={handleConfirm}
-              disabled={!isValid}
-              className={`absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center transition-all ${
-                isValid
-                  ? 'text-foreground bg-foreground/10 hover:bg-foreground/15'
-                  : 'text-muted-foreground/30 cursor-not-allowed'
-              }`}
-            >
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
+      {/* Name input — glass style */}
+      <div className="w-full max-w-xs mx-auto mb-6">
+        <div className="relative glass-card !p-0 !rounded-xl">
+          <input
+            value={value}
+            onChange={e => setValue(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && handleConfirm()}
+            placeholder="your name"
+            className="w-full bg-transparent border-none rounded-xl px-4 py-3 text-center text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none transition-colors pr-12 relative z-10"
+          />
+          <button
+            onClick={handleConfirm}
+            disabled={!isValid}
+            className={`absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center transition-all z-10 ${
+              isValid
+                ? 'text-foreground bg-foreground/10 hover:bg-foreground/15'
+                : 'text-muted-foreground/30 cursor-not-allowed'
+            }`}
+          >
+            <ArrowRight className="w-4 h-4" />
+          </button>
         </div>
-
-        <button
-          onClick={handleConfirm}
-          disabled={!isValid}
-          className={`btn-twin btn-twin-primary text-base px-10 py-3 disabled:opacity-30 disabled:cursor-not-allowed ${isValid ? 'btn-glow' : ''}`}
-        >
-          Enter the Space →
-        </button>
-        <p className="text-muted-foreground/50 text-xs mt-6">Takes about 2 minutes</p>
       </div>
+
+      <button
+        onClick={handleConfirm}
+        disabled={!isValid}
+        className={`btn-twin btn-twin-primary text-base px-10 py-3 disabled:opacity-30 disabled:cursor-not-allowed ${isValid ? 'btn-glow' : ''}`}
+      >
+        Enter the Space →
+      </button>
+      <p className="text-muted-foreground/50 text-xs mt-6">Takes about 2 minutes</p>
     </div>
   );
 };
