@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { SportTwin } from '@/types/twin-matrix';
-import { SplitStepLayout } from '../StepLayout';
+import { StepLayout, StepContent } from '../StepLayout';
 
 const SPORTS = [
   'Running', 'Cycling', 'Long-distance Swimming', 'Trail / Off-road Running',
@@ -53,82 +53,96 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
   const isValid = twin.sportRanking.length > 0 && twin.outfitStyle.length > 0 && twin.brands.length > 0;
 
   return (
-    <SplitStepLayout
-      title="Skill & Style"
-      subtitle="Order what feels essential."
-      footer={
-        <button onClick={onNext} disabled={!isValid} className="btn-twin btn-twin-primary w-full py-2.5 text-sm disabled:opacity-30 disabled:cursor-not-allowed">
-          Commit Layer
-        </button>
-      }
-    >
-      <div className="space-y-4 w-full max-w-lg">
-        <div className="glass-card !p-4 space-y-2">
-          <div>
-            <label className="text-sm font-medium text-foreground">Select your most frequent activities</label>
-            <p className="text-xs text-muted-foreground mt-0.5">Order reflects priority (up to 10).</p>
+    <StepLayout>
+      <StepContent>
+        <div className="flex flex-col items-center">
+          {/* Title centered */}
+          <div className="text-center mb-8">
+            <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] tracking-tight mb-2 animate-soft-enter">
+              Skill & Style
+            </h2>
+            <p className="text-muted-foreground text-base md:text-lg animate-soft-enter" style={{ animationDelay: '100ms' }}>
+              Order what feels essential.
+            </p>
           </div>
-          {twin.sportRanking.length > 0 && (
-            <p className="text-xs text-muted-foreground">Selected {twin.sportRanking.length} / 10</p>
-          )}
-          <div className="flex flex-wrap gap-1.5">
-            {SPORTS.map(s => {
-              const rank = twin.sportRanking.indexOf(s);
-              const isSelected = rank >= 0;
-              return (
-                <button
-                  key={s}
-                  onClick={() => toggleSport(s)}
-                  className={`chip !text-xs !py-1.5 !px-3 relative ${isSelected ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}
-                >
-                  {s}
-                  {isSelected && (
-                    <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-foreground text-background text-[9px] flex items-center justify-center font-bold">
-                      {rank + 1}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        </div>
 
-        <div className="glass-card !p-4 space-y-2">
-          <div>
-            <label className="text-sm font-medium text-foreground">Outfit Style</label>
-            <p className="text-xs text-muted-foreground mt-0.5">Select styles that best represent your athletic expression.</p>
-          </div>
-          <div className="flex flex-wrap gap-1.5">
-            {OUTFIT_STYLES.map(s => (
-              <button
-                key={s}
-                onClick={() => toggleStyle(s)}
-                className={`chip !text-xs !py-1.5 !px-3 ${twin.outfitStyle.includes(s) ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}
-              >
-                {s}
-              </button>
-            ))}
-          </div>
-        </div>
+          {/* 3 cards stacked vertically, centered */}
+          <div className="space-y-4 w-full max-w-lg">
+            <div className="glass-card !p-4 space-y-2 animate-soft-enter" style={{ animationDelay: '200ms' }}>
+              <div>
+                <label className="text-sm font-medium text-foreground">Select your most frequent activities</label>
+                <p className="text-xs text-muted-foreground mt-0.5">Order reflects priority (up to 10).</p>
+              </div>
+              {twin.sportRanking.length > 0 && (
+                <p className="text-xs text-muted-foreground">Selected {twin.sportRanking.length} / 10</p>
+              )}
+              <div className="flex flex-wrap gap-1.5">
+                {SPORTS.map(s => {
+                  const rank = twin.sportRanking.indexOf(s);
+                  const isSelected = rank >= 0;
+                  return (
+                    <button
+                      key={s}
+                      onClick={() => toggleSport(s)}
+                      className={`chip !text-xs !py-1.5 !px-3 relative ${isSelected ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}
+                    >
+                      {s}
+                      {isSelected && (
+                        <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-foreground text-background text-[9px] flex items-center justify-center font-bold">
+                          {rank + 1}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
 
-        <div className="glass-card !p-4 space-y-2">
-          <div>
-            <label className="text-sm font-medium text-foreground">Brand Preferences</label>
-            <p className="text-xs text-muted-foreground mt-0.5">Brands you've worn most in the past year.</p>
+            <div className="glass-card !p-4 space-y-2 animate-soft-enter" style={{ animationDelay: '300ms' }}>
+              <div>
+                <label className="text-sm font-medium text-foreground">Outfit Style</label>
+                <p className="text-xs text-muted-foreground mt-0.5">Select styles that best represent your athletic expression.</p>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {OUTFIT_STYLES.map(s => (
+                  <button
+                    key={s}
+                    onClick={() => toggleStyle(s)}
+                    className={`chip !text-xs !py-1.5 !px-3 ${twin.outfitStyle.includes(s) ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="glass-card !p-4 space-y-2 animate-soft-enter" style={{ animationDelay: '400ms' }}>
+              <div>
+                <label className="text-sm font-medium text-foreground">Brand Preferences</label>
+                <p className="text-xs text-muted-foreground mt-0.5">Brands you've worn most in the past year.</p>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {BRANDS.map(b => (
+                  <button
+                    key={b}
+                    onClick={() => toggleBrand(b)}
+                    className={`chip !text-xs !py-1.5 !px-3 ${twin.brands.includes(b) ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}
+                  >
+                    {b}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
-          <div className="flex flex-wrap gap-1.5">
-            {BRANDS.map(b => (
-              <button
-                key={b}
-                onClick={() => toggleBrand(b)}
-                className={`chip !text-xs !py-1.5 !px-3 ${twin.brands.includes(b) ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}
-              >
-                {b}
-              </button>
-            ))}
+
+          {/* CTA centered */}
+          <div className="w-full max-w-lg mt-6 animate-soft-enter" style={{ animationDelay: '500ms' }}>
+            <button onClick={onNext} disabled={!isValid} className="btn-twin btn-twin-primary w-full py-2.5 text-sm disabled:opacity-30 disabled:cursor-not-allowed">
+              Commit Layer
+            </button>
           </div>
         </div>
-      </div>
-    </SplitStepLayout>
+      </StepContent>
+    </StepLayout>
   );
 };
