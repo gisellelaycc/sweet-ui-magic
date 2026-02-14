@@ -72,7 +72,7 @@ export const SportSetupStep = ({ data, onUpdate, onNext }: Props) => {
       </StepContent>
 
       <StepFooter>
-        <button onClick={onNext} disabled={!isValid} className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${isValid ? 'btn-glow' : ''}`}>
+        <button onClick={onNext} disabled={!isValid} className={`btn-twin btn-twin-primary w-full py-2.5 text-sm disabled:opacity-30 disabled:cursor-not-allowed ${isValid ? 'btn-glow' : ''}`}>
           Proceed
         </button>
       </StepFooter>

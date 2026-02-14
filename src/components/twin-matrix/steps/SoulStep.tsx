@@ -107,7 +107,7 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
         <button
           onClick={onNext}
           disabled={!hasInteracted}
-          className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${hasInteracted ? 'btn-glow' : ''}`}
+          className={`btn-twin btn-twin-primary w-full py-2.5 text-sm disabled:opacity-30 disabled:cursor-not-allowed ${hasInteracted ? 'btn-glow' : ''}`}
         >
           Review Your State →
         </button>

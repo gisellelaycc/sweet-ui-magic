@@ -251,12 +251,12 @@ export const ReviewStep = ({ signature, username, activeModules, onNext, onBack 
       </StepContent>
 
       <StepFooter>
-        <div className="flex gap-3">
-          <button onClick={onBack} className="btn-twin btn-twin-ghost flex-1 py-3">
-            Refine Responses
+        <div className="flex gap-2">
+          <button onClick={onBack} className="btn-twin btn-twin-ghost flex-1 py-2.5 text-sm">
+            Refine
           </button>
-          <button onClick={() => { setShowWallet(true); setWalletPhase('connect'); }} className="btn-twin btn-twin-primary btn-glow flex-1 py-3">
-            Commit Identity State
+          <button onClick={() => { setShowWallet(true); setWalletPhase('connect'); }} className="btn-twin btn-twin-primary btn-glow flex-1 py-2.5 text-sm">
+            Commit State
           </button>
         </div>
       </StepFooter>

@@ -110,7 +110,7 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
       </StepContent>
 
       <StepFooter>
-        <button onClick={onNext} className="btn-twin btn-twin-primary w-full max-w-md mx-auto block py-2.5 btn-glow">
+        <button onClick={onNext} className="btn-twin btn-twin-primary w-full py-2.5 text-sm btn-glow">
           Commit Core Layer
         </button>
       </StepFooter>
