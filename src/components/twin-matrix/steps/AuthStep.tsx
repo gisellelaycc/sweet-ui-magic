@@ -293,11 +293,11 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
   const isCustomDuration = permission.authorizationDuration === 'Custom';
 
   return (
-    <div ref={containerRef} className="relative animate-fade-in overflow-hidden min-h-[70vh]">
+    <div ref={containerRef} className="relative animate-fade-in overflow-hidden h-full flex flex-col">
       {/* Particle lobster background */}
       {dims.w > 0 && <ParticleCanvas width={dims.w} height={dims.h} />}
 
-      <div className="relative z-10 space-y-6 max-w-3xl mx-auto">
+      <div className="relative z-10 space-y-6 max-w-3xl mx-auto flex-1 min-h-0 overflow-y-auto scrollbar-hide">
         {/* Header — always visible */}
         <div className="text-center">
           <h2 className="text-2xl font-bold mb-1">Activate an Agent</h2>

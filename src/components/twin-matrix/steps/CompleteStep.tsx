@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { StepLayout, StepContent, StepFooter } from '../StepLayout';
 
 const DIMENSION_MAP: Record<number, { layer: string; name: string }> = {
   206: { layer: 'Spiritual', name: 'Outcome' },
@@ -65,7 +66,9 @@ export const CompleteStep = ({ username, signature, onActivateAgent, onDashboard
   }, [signature]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[70vh] text-center animate-fade-in px-4">
+    <StepLayout>
+      <StepContent>
+        <div className="flex flex-col items-center text-center animate-fade-in px-4">
       <div className="text-6xl mb-6">✨</div>
       <h2 className="text-3xl font-bold mb-2">Identity State</h2>
       <p className="text-muted-foreground mb-8 max-w-sm">
@@ -148,18 +151,22 @@ export const CompleteStep = ({ username, signature, onActivateAgent, onDashboard
         </div>
       </div>
 
-      {/* CTAs per PDF spec */}
-      <div className="w-full max-w-lg mt-8 space-y-3">
-        <button onClick={onActivateAgent} className="btn-twin btn-twin-primary btn-glow w-full py-3">
-          Activate an Agent →
-        </button>
-        <button onClick={onDashboard} className="btn-twin btn-twin-ghost w-full py-2.5 text-sm">
-          Return to Dashboard
-        </button>
-        <p className="text-[10px] text-muted-foreground/40 text-center">
-          You can activate an agent anytime from your dashboard.
-        </p>
-      </div>
-    </div>
+        </div>
+      </StepContent>
+
+      <StepFooter>
+        <div className="w-full max-w-lg mx-auto space-y-3">
+          <button onClick={onActivateAgent} className="btn-twin btn-twin-primary btn-glow w-full py-3">
+            Activate an Agent →
+          </button>
+          <button onClick={onDashboard} className="btn-twin btn-twin-ghost w-full py-2.5 text-sm">
+            Return to Dashboard
+          </button>
+          <p className="text-[10px] text-muted-foreground/40 text-center">
+            You can activate an agent anytime from your dashboard.
+          </p>
+        </div>
+      </StepFooter>
+    </StepLayout>
   );
 };

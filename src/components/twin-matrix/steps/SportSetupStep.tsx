@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { SportSetup } from '@/types/twin-matrix';
+import { StepLayout, StepHeader, StepContent, StepFooter } from '../StepLayout';
 
 const FREQ_OPTIONS = [
   { label: '1–2x / week', zone: 'Light Activity' },
@@ -26,39 +27,20 @@ interface Props {
   onNext: () => void;
 }
 
-const SliderSelect = ({
-  label,
-  options,
-  value,
-  onChange,
-}: {
-  label: string;
-  options: { label: string; zone: string }[];
-  value: string;
-  onChange: (v: string) => void;
-}) => {
+const SliderSelect = ({ label, options, value, onChange }: { label: string; options: { label: string; zone: string }[]; value: string; onChange: (v: string) => void }) => {
   const idx = options.findIndex(o => o.label === value);
   const zone = idx >= 0 ? options[idx].zone : null;
-
   return (
     <div className="space-y-3">
       <label className="text-sm text-muted-foreground">{label}</label>
       <div className="flex gap-2">
         {options.map(o => (
-          <button
-            key={o.label}
-            onClick={() => onChange(o.label)}
-            className={`chip !text-xs flex-1 justify-center ${value === o.label ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}
-          >
+          <button key={o.label} onClick={() => onChange(o.label)} className={`chip !text-xs flex-1 justify-center ${value === o.label ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}>
             {o.label}
           </button>
         ))}
       </div>
-      {zone && (
-        <div className="text-xs text-center py-1.5 px-3 rounded-full bg-foreground/5 text-foreground/60 inline-block">
-          Zone: {zone}
-        </div>
-      )}
+      {zone && <div className="text-xs text-center py-1.5 px-3 rounded-full bg-foreground/5 text-foreground/60 inline-block">Zone: {zone}</div>}
     </div>
   );
 };
@@ -70,26 +52,30 @@ export const SportSetupStep = ({ data, onUpdate, onNext }: Props) => {
     setSetup(next);
     onUpdate(next);
   };
-
-  // All 3 fields required per spec
   const isValid = setup.frequency !== '' && setup.duration !== '' && setup.dailySteps !== '';
 
   return (
-    <div className="animate-fade-in space-y-6 max-w-lg mx-auto">
-      <div>
-        <h2 className="text-2xl font-bold mb-1">Baseline</h2>
-        <p className="text-muted-foreground text-sm">A quiet calibration of your physical rhythm.</p>
-      </div>
+    <StepLayout>
+      <StepHeader>
+        <div>
+          <h2 className="text-2xl font-bold mb-1">Baseline</h2>
+          <p className="text-muted-foreground text-sm">A quiet calibration of your physical rhythm.</p>
+        </div>
+      </StepHeader>
 
-      <div className="glass-card space-y-6">
-        <SliderSelect label="Exercise Frequency" options={FREQ_OPTIONS} value={setup.frequency} onChange={v => update('frequency', v)} />
-        <SliderSelect label="Session Duration" options={DURATION_OPTIONS} value={setup.duration} onChange={v => update('duration', v)} />
-        <SliderSelect label="Average Daily Steps" options={STEP_OPTIONS} value={setup.dailySteps} onChange={v => update('dailySteps', v)} />
-      </div>
+      <StepContent>
+        <div className="glass-card space-y-6 w-full max-w-lg animate-fade-in">
+          <SliderSelect label="Exercise Frequency" options={FREQ_OPTIONS} value={setup.frequency} onChange={v => update('frequency', v)} />
+          <SliderSelect label="Session Duration" options={DURATION_OPTIONS} value={setup.duration} onChange={v => update('duration', v)} />
+          <SliderSelect label="Average Daily Steps" options={STEP_OPTIONS} value={setup.dailySteps} onChange={v => update('dailySteps', v)} />
+        </div>
+      </StepContent>
 
-      <button onClick={onNext} disabled={!isValid} className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${isValid ? 'btn-glow' : ''}`}>
-        Proceed
-      </button>
-    </div>
+      <StepFooter>
+        <button onClick={onNext} disabled={!isValid} className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${isValid ? 'btn-glow' : ''}`}>
+          Proceed
+        </button>
+      </StepFooter>
+    </StepLayout>
   );
 };
