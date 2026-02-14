@@ -96,7 +96,7 @@ export const WizardLayout = () => {
             <button onClick={() => setActivePage(null)} className="text-sm text-muted-foreground hover:text-foreground transition-colors">← Back</button>
           )}
           {(showBack || showPageBack) && (
-            <button onClick={() => { setActivePage(null); setState(s => ({ ...s, step: 0 })); }} className="text-muted-foreground hover:text-foreground transition-colors">
+            <button onClick={() => { setActivePage(null); setState(s => ({ ...s, step: 0, signature: [], agentSetup: initialState.agentSetup })); }} className="text-muted-foreground hover:text-foreground transition-colors">
               <Home className="w-4 h-4" />
             </button>
           )}

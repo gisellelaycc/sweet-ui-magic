@@ -24,10 +24,10 @@ export const WelcomeStep = ({ username, onUpdateUsername, onNext }: Props) => {
           <img src={logo} alt="Twin Matrix" className="w-12 h-12" />
         </div>
         <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
-          Enter a private ritual of self-definition.
+          Define your identity state.
         </h1>
         <p className="text-muted-foreground text-lg max-w-md mx-auto leading-relaxed">
-          
+          A private space for clarity.
         </p>
       </div>
 
