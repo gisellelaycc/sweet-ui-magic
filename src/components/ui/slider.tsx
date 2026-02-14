@@ -16,15 +16,15 @@ const Slider = React.forwardRef<
       <SliderPrimitive.Range
         className="absolute h-full rounded-full"
         style={{
-          background: 'rgba(40, 180, 160, 0.25)',
-          boxShadow: '0 0 12px rgba(40, 180, 160, 0.3), 0 0 24px rgba(40, 180, 160, 0.12)',
+          background: 'linear-gradient(90deg, rgba(10, 255, 255, 0.5), rgba(173, 255, 255, 0.5))',
+          boxShadow: '0 0 8px rgba(10, 255, 255, 0.4), 0 0 20px rgba(10, 255, 255, 0.2), 0 0 40px rgba(173, 255, 255, 0.1)',
         }}
       />
     </SliderPrimitive.Track>
     <SliderPrimitive.Thumb
       className="block h-4 w-4 rounded-full border border-foreground/20 bg-foreground/80 ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
       style={{
-        boxShadow: '0 0 10px rgba(40, 180, 160, 0.4), 0 0 20px rgba(40, 180, 160, 0.15)',
+        boxShadow: '0 0 8px rgba(10, 255, 255, 0.5), 0 0 16px rgba(173, 255, 255, 0.3)',
       }}
     />
   </SliderPrimitive.Root>
