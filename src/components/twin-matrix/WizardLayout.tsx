@@ -86,7 +86,14 @@ export const WizardLayout = () => {
     <div className={`h-full flex flex-col relative z-10 ${state.step >= 9 ? 'agent-ambient' : ''}`}>
       <ParticleBackground color={state.step >= 9 ? 'red' : 'cyan'} />
 
-      <TopNav activePage={activePage} onNavigate={(id) => setActivePage(id)} hasIdentity={hasIdentity} />
+      <TopNav activePage={activePage} onNavigate={(id) => {
+        if (id === null) {
+          setActivePage(null);
+          setState(s => ({ ...s, step: 0, signature: [], agentSetup: initialState.agentSetup }));
+        } else {
+          setActivePage(id);
+        }
+      }} hasIdentity={hasIdentity} />
 
       <main className="flex-1 min-h-0 px-4 py-4 flex flex-col relative z-10">
         {activePage === 'identity' && (
