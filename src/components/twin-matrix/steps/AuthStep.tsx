@@ -16,20 +16,40 @@ interface SavedAgent {
 }
 
 /* ── Particle Canvas (lobster silhouette) ── */
+/* Lobster silhouette – top-down crustacean with claws, body segments, tail */
 const LOBSTER_PIXELS = [
-  [6,1],[7,1],[9,1],[10,1],
-  [5,2],[6,2],[8,2],[9,2],[10,2],[11,2],
-  [4,3],[5,3],[6,3],[7,3],[8,3],[9,3],[10,3],[11,3],
-  [3,4],[4,4],[5,4],[6,4],[7,4],[8,4],[9,4],[10,4],[11,4],[12,4],
-  [4,5],[5,5],[6,5],[7,5],[8,5],[9,5],[10,5],[11,5],
-  [5,6],[6,6],[7,6],[8,6],[9,6],[10,6],
-  [4,7],[5,7],[6,7],[7,7],[8,7],[9,7],[10,7],[11,7],
-  [3,8],[4,8],[5,8],[6,8],[7,8],[8,8],[9,8],[10,8],[11,8],[12,8],
-  [2,9],[3,9],[5,9],[6,9],[7,9],[8,9],[9,9],[10,9],[12,9],[13,9],
-  [1,10],[2,10],[6,10],[7,10],[8,10],[9,10],[13,10],[14,10],
-  [5,11],[6,11],[7,11],[8,11],[9,11],[10,11],
-  [4,12],[5,12],[7,12],[8,12],[10,12],[11,12],
-  [3,13],[4,13],[11,13],[12,13],
+  // antennae
+  [3,0],[13,0],[2,1],[14,1],[1,2],[15,2],
+  // claws (left)
+  [2,3],[3,3],[4,3],
+  [1,4],[2,4],[4,4],[5,4],
+  [1,5],[2,5],[3,5],[5,5],
+  // claws (right)
+  [12,3],[13,3],[14,3],
+  [11,4],[12,4],[14,4],[15,4],
+  [11,5],[13,5],[14,5],[15,5],
+  // head
+  [6,3],[7,3],[8,3],[9,3],[10,3],
+  [6,4],[7,4],[8,4],[9,4],[10,4],
+  [5,5],[6,5],[7,5],[8,5],[9,5],[10,5],[11,5],
+  // body segment 1
+  [5,6],[6,6],[7,6],[8,6],[9,6],[10,6],[11,6],
+  [6,7],[7,7],[8,7],[9,7],[10,7],
+  // body segment 2
+  [5,8],[6,8],[7,8],[8,8],[9,8],[10,8],[11,8],
+  [6,9],[7,9],[8,9],[9,9],[10,9],
+  // body segment 3
+  [5,10],[6,10],[7,10],[8,10],[9,10],[10,10],[11,10],
+  [6,11],[7,11],[8,11],[9,11],[10,11],
+  // legs (left)
+  [3,7],[4,7],[3,9],[4,9],[3,11],[4,11],
+  // legs (right)
+  [12,7],[13,7],[12,9],[13,9],[12,11],[13,11],
+  // tail
+  [6,12],[7,12],[8,12],[9,12],[10,12],
+  [7,13],[8,13],[9,13],
+  [6,14],[7,14],[8,14],[9,14],[10,14],
+  [5,15],[7,15],[8,15],[9,15],[11,15],
 ];
 
 interface Particle {
@@ -40,27 +60,43 @@ interface Particle {
   opacity: number;
 }
 
+const CORNERS = [
+  { xr: 0.15, yr: 0.15 },
+  { xr: 0.75, yr: 0.15 },
+  { xr: 0.15, yr: 0.70 },
+  { xr: 0.75, yr: 0.70 },
+];
+
 const ParticleCanvas = ({ width, height }: { width: number; height: number }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
   const timerRef = useRef(0);
+  const cornerIdxRef = useRef(Math.floor(Math.random() * 4));
+
+  const setTargetsToCorner = useCallback((particles: Particle[], ci: number) => {
+    const scale = Math.min(width, height) * 0.016;
+    const cx = width * CORNERS[ci].xr;
+    const cy = height * CORNERS[ci].yr;
+    const lobsterCount = LOBSTER_PIXELS.length;
+    particles.forEach((p, i) => {
+      if (i < lobsterCount) {
+        p.tx = cx + LOBSTER_PIXELS[i][0] * scale;
+        p.ty = cy + LOBSTER_PIXELS[i][1] * scale;
+      }
+    });
+  }, [width, height]);
 
   const initParticles = useCallback(() => {
-    const scale = Math.min(width, height) * 0.018;
-    // Random corner for gathering
-    const corners = [
-      { x: width * 0.15, y: height * 0.15 },
-      { x: width * 0.8, y: height * 0.15 },
-      { x: width * 0.15, y: height * 0.8 },
-      { x: width * 0.8, y: height * 0.75 },
-    ];
-    const corner = corners[Math.floor(Math.random() * corners.length)];
+    const scale = Math.min(width, height) * 0.016;
+    const ci = cornerIdxRef.current;
+    const cx = width * CORNERS[ci].xr;
+    const cy = height * CORNERS[ci].yr;
 
     const particles: Particle[] = LOBSTER_PIXELS.map(([px, py]) => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      tx: corner.x + px * scale,
-      ty: corner.y + py * scale,
+      tx: cx + px * scale,
+      ty: cy + py * scale,
       ox: Math.random() * width,
       oy: Math.random() * height,
       size: 1.2 + Math.random() * 1.2,
@@ -94,6 +130,16 @@ const ParticleCanvas = ({ width, height }: { width: number; height: number }) =>
       const t = timerRef.current % TOTAL;
       ctx.clearRect(0, 0, width, height);
 
+      // On new cycle start, rotate to next corner
+      if (t === 0) {
+        cornerIdxRef.current = (cornerIdxRef.current + 1) % 4;
+        setTargetsToCorner(particlesRef.current, cornerIdxRef.current);
+        for (const p of particlesRef.current) {
+          p.ox = p.x;
+          p.oy = p.y;
+        }
+      }
+
       for (const p of particlesRef.current) {
         if (t < GATHER) {
           const ease = (t / GATHER) ** 2 * (3 - 2 * (t / GATHER));
@@ -108,7 +154,6 @@ const ParticleCanvas = ({ width, height }: { width: number; height: number }) =>
           const ny = p.oy + (Math.random() - 0.5) * 40;
           p.x = p.tx + (nx - p.tx) * progress;
           p.y = p.ty + (ny - p.ty) * progress;
-          if (t === TOTAL - 1) { p.ox = p.x; p.oy = p.y; }
         }
 
         const phase = t < GATHER ? 'gather' : t < GATHER + HOLD ? 'hold' : 'scatter';
@@ -128,7 +173,7 @@ const ParticleCanvas = ({ width, height }: { width: number; height: number }) =>
     };
     raf = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(raf);
-  }, [width, height, initParticles]);
+  }, [width, height, initParticles, setTargetsToCorner]);
 
   return <canvas ref={canvasRef} width={width} height={height} className="absolute inset-0 pointer-events-none" style={{ opacity: 0.5 }} />;
 };
