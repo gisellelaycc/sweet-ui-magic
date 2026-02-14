@@ -12,10 +12,10 @@ const DIMENSION_MAP: Record<number, { layer: string; name: string }> = {
 };
 
 const SLICES = [
-  { label: 'Physical', range: [0, 63] as const, color: '120, 50, 50' },
-  { label: 'Digital', range: [64, 127] as const, color: '80, 140, 210' },
-  { label: 'Social', range: [128, 191] as const, color: '160, 170, 80' },
-  { label: 'Spiritual', range: [192, 255] as const, color: '40, 200, 180' },
+  { label: 'Physical', range: [0, 63] as const, color: '255, 60, 100' },
+  { label: 'Digital', range: [64, 127] as const, color: '60, 180, 255' },
+  { label: 'Social', range: [128, 191] as const, color: '255, 200, 40' },
+  { label: 'Spiritual', range: [192, 255] as const, color: '10, 255, 255' },
 ];
 
 interface Props {
@@ -68,7 +68,7 @@ export const CompleteStep = ({ username, signature, agentName }: Props) => {
       <div className="text-6xl mb-6">✨</div>
       <h2 className="text-3xl font-bold mb-2">State Committed</h2>
       <p className="text-muted-foreground mb-8 max-w-sm">
-        Your identity vector has been locked and committed.
+        Defined with clarity. Preserved in privacy.
       </p>
 
       <div className="glass-card max-w-lg w-full text-left space-y-5">

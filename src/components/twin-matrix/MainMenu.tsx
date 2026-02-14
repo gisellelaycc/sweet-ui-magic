@@ -3,10 +3,10 @@ import logo from '@/assets/twin3-logo.svg';
 
 const MENU_ITEMS = [
   { id: 'identity', icon: '◈', label: 'Identity State' },
-  { id: 'update', icon: '✏️', label: 'Update State' },
-  { id: 'auth', icon: '🔐', label: 'Issued Tokens' },
+  { id: 'update', icon: '✏️', label: 'Refine State' },
+  { id: 'auth', icon: '🔐', label: 'Issued Records' },
   { id: 'missions', icon: '🎯', label: 'Signal Requests' },
-  { id: 'settings', icon: '⚙️', label: 'Settings' },
+  { id: 'settings', icon: '⚙️', label: 'Preferences' },
 ];
 
 interface Props {

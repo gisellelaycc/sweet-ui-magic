@@ -43,8 +43,8 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
   return (
     <div className="animate-fade-in space-y-6 max-w-2xl mx-auto">
       <div>
-        <h2 className="text-2xl font-bold mb-1">Signal Modules</h2>
-        <p className="text-muted-foreground text-sm">Activate the layers that compose your identity state.</p>
+        <h2 className="text-2xl font-bold mb-1">Signal Layers</h2>
+        <p className="text-muted-foreground text-sm">Choose which aspects of yourself shape this state.</p>
       </div>
 
       <div className="space-y-2">
@@ -125,7 +125,7 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
       </div>
 
       <button onClick={onNext} disabled={!hasActive} className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${hasActive ? 'btn-glow' : ''}`}>
-        Proceed to Soul
+        Proceed
       </button>
     </div>
   );

@@ -12,8 +12,8 @@ const PHASES = [
   { label: 'Dimension Projection', desc: 'Projecting signals into a 256-dimensional identity space.' },
   { label: 'Weight Aggregation', desc: 'Calculating dimension intensity and layer distribution.' },
   { label: 'Matrix Encoding', desc: 'Encoding into 0–255 vector format.' },
-  { label: 'Vector Finalization', desc: 'Generating structured identity fingerprint.' },
-  { label: 'Twin Matrix Commit', desc: 'Writing your identity into Twin Matrix.' },
+  { label: 'Vector Finalization', desc: 'A distilled expression of this moment.' },
+  { label: 'Soul Signature', desc: 'A distilled expression of this moment.' },
 ];
 
 function generateGridState(phase: number, progress: number): number[] {
@@ -135,13 +135,13 @@ export const GenerateStep = ({ wizardState, onComplete }: Props) => {
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'radial-gradient(ellipse at center, rgba(40,180,160,0.12) 0%, rgba(40,180,160,0.04) 40%, transparent 70%)',
+            background: 'radial-gradient(ellipse at center, rgba(10,255,255,0.10) 0%, rgba(10,255,255,0.03) 40%, transparent 70%)',
           }}
         />
         <div
           className="absolute inset-0 pointer-events-none animate-[field-breathe_5s_ease-in-out_infinite]"
           style={{
-            background: 'radial-gradient(ellipse at center, rgba(40,180,160,0.08) 0%, transparent 60%)',
+            background: 'radial-gradient(ellipse at center, rgba(10,255,255,0.06) 0%, transparent 60%)',
           }}
         />
         <div className="flex flex-col gap-px relative z-10">
@@ -166,12 +166,12 @@ export const GenerateStep = ({ wizardState, onComplete }: Props) => {
                         height: 20,
                         aspectRatio: '1',
                         background: val > 0
-                          ? `rgba(40, 200, 180, ${(0.25 + 0.75 * intensity) * 0.4})`
+                          ? `rgba(10, 255, 255, ${(0.25 + 0.75 * intensity) * 0.4})`
                           : 'rgba(255, 255, 255, 0.015)',
                         boxShadow: justChanged
-                          ? `0 0 10px rgba(40, 200, 180, 0.5), 0 0 20px rgba(40, 200, 180, 0.2)`
+                          ? `0 0 10px rgba(10, 255, 255, 0.6), 0 0 20px rgba(10, 255, 255, 0.3)`
                           : val > 150
-                          ? `0 0 6px rgba(40, 200, 180, ${intensity * 0.3})`
+                          ? `0 0 6px rgba(10, 255, 255, ${intensity * 0.4})`
                           : 'none',
                         transform: justChanged ? 'scale(1.2)' : 'scale(1)',
                         transition: 'all 0.35s ease-out',
@@ -207,7 +207,7 @@ export const GenerateStep = ({ wizardState, onComplete }: Props) => {
             key={i}
             className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${
               i < activePhase || isDone
-                ? 'bg-[rgba(40,180,160,0.6)]'
+                ? 'bg-[rgba(10,255,255,0.6)]'
                 : i === activePhase
                 ? 'bg-foreground/60 animate-glow-pulse'
                 : 'bg-foreground/10'
@@ -222,7 +222,8 @@ export const GenerateStep = ({ wizardState, onComplete }: Props) => {
           className="h-full rounded-full transition-all duration-200"
           style={{
             width: `${progress}%`,
-            background: 'linear-gradient(90deg, rgba(40,180,160,0.5), rgba(40,180,160,0.8))',
+            background: 'linear-gradient(90deg, rgba(10,255,255,0.5), rgba(10,255,255,0.9))',
+            boxShadow: '0 0 8px rgba(10,255,255,0.5), 0 0 20px rgba(10,255,255,0.2)',
           }}
         />
       </div>
