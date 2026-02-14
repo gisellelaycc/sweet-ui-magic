@@ -45,7 +45,7 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
       </StepHeader>
 
       <StepContent>
-        <div className="w-full max-w-lg space-y-6 animate-fade-in">
+        <div className="w-full max-w-lg mx-auto space-y-6 animate-fade-in">
           <div className="glass-card space-y-7">
             <p className="text-xs text-muted-foreground uppercase tracking-widest">Why do you train?</p>
 

@@ -32,18 +32,10 @@ export const StepContent = ({ children }: Props) => (
   </div>
 );
 
-/** Bottom zone: glass dock pinned at bottom with constrained CTA. */
+/** Bottom zone: pinned at bottom, centered narrow CTA. */
 export const StepFooter = ({ children }: Props) => (
   <div className="shrink-0 px-8 py-3">
-    <div
-      className="max-w-[420px] mx-auto rounded-2xl px-6 py-3"
-      style={{
-        background: 'rgba(255, 255, 255, 0.03)',
-        backdropFilter: 'blur(20px) saturate(160%)',
-        WebkitBackdropFilter: 'blur(20px) saturate(160%)',
-        boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.06) inset, 0 -4px 24px rgba(0, 0, 0, 0.2)',
-      }}
-    >
+    <div className="max-w-[420px] mx-auto">
       {children}
     </div>
   </div>
