@@ -51,12 +51,16 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
               <span className="max-w-[45%] text-right leading-tight">{bar.right}</span>
             </div>
             <div className="relative group">
-              <div
-                className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                style={{
-                  background: `radial-gradient(ellipse at ${bar.value ?? 50}% 50%, rgba(10, 255, 255, 0.15) 0%, transparent 70%)`,
-                }}
-              />
+              {/* Light trail extending from thumb center */}
+              {bar.value !== null && (
+                <div
+                  className="absolute top-1/2 left-0 right-0 h-[2px] -translate-y-1/2 rounded-full pointer-events-none z-0"
+                  style={{
+                    background: `linear-gradient(90deg, transparent 0%, rgba(10, 255, 255, 0.05) ${Math.max(bar.value - 30, 0)}%, rgba(10, 255, 255, 0.35) ${bar.value}%, rgba(173, 255, 255, 0.05) ${Math.min(bar.value + 30, 100)}%, transparent 100%)`,
+                    boxShadow: `0 0 8px rgba(10, 255, 255, 0.15), 0 0 20px rgba(10, 255, 255, 0.06)`,
+                  }}
+                />
+              )}
               <Slider
                 value={[bar.value ?? 50]}
                 onValueChange={([v]) => handleSlider(idx, v)}
