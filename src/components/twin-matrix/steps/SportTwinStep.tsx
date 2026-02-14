@@ -62,7 +62,7 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
       </StepHeader>
 
       <StepContent>
-        <div className="space-y-4 w-full max-w-lg animate-fade-in">
+        <div className="space-y-4 w-full max-w-lg mx-auto animate-fade-in">
           <div className="glass-card !p-4 space-y-2">
             <div>
               <label className="text-xs font-medium text-foreground">Select your most frequent activities</label>

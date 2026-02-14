@@ -64,7 +64,7 @@ export const SportSetupStep = ({ data, onUpdate, onNext }: Props) => {
       </StepHeader>
 
       <StepContent>
-        <div className="glass-card space-y-6 w-full max-w-lg animate-fade-in">
+        <div className="glass-card space-y-6 w-full max-w-lg mx-auto animate-fade-in">
           <SliderSelect label="Exercise Frequency" options={FREQ_OPTIONS} value={setup.frequency} onChange={v => update('frequency', v)} />
           <SliderSelect label="Session Duration" options={DURATION_OPTIONS} value={setup.duration} onChange={v => update('duration', v)} />
           <SliderSelect label="Average Daily Steps" options={STEP_OPTIONS} value={setup.dailySteps} onChange={v => update('dailySteps', v)} />

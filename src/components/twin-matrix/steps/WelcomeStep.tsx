@@ -58,18 +58,19 @@ export const WelcomeStep = ({ username, onUpdateUsername, onNext }: Props) => {
               </button>
             </div>
           </div>
+
+          <div className="w-full max-w-xs mx-auto mt-2">
+            <button
+              onClick={handleConfirm}
+              disabled={!isValid}
+              className={`btn-twin btn-twin-primary text-sm px-8 py-2.5 w-full disabled:opacity-30 disabled:cursor-not-allowed ${isValid ? 'btn-glow' : ''}`}
+            >
+              Enter the Space →
+            </button>
+            <p className="text-muted-foreground/50 text-[10px] mt-2 text-center">Takes about 2 minutes</p>
+          </div>
         </div>
       </StepContent>
-      <StepFooter>
-        <button
-          onClick={handleConfirm}
-          disabled={!isValid}
-          className={`btn-twin btn-twin-primary text-sm px-8 py-2.5 w-full disabled:opacity-30 disabled:cursor-not-allowed ${isValid ? 'btn-glow' : ''}`}
-        >
-          Enter the Space →
-        </button>
-        <p className="text-muted-foreground/50 text-[10px] mt-2 text-center">Takes about 2 minutes</p>
-      </StepFooter>
     </StepLayout>
   );
 };
