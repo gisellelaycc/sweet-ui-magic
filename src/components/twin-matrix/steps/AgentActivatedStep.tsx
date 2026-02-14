@@ -180,7 +180,7 @@ export const AgentActivatedStep = ({ agentName, onDashboard, onCreateAnother }: 
   const [telegramConnected, setTelegramConnected] = useState(false);
 
   return (
-    <div ref={containerRef} className="relative flex flex-col items-center justify-center min-h-[70vh] text-center animate-fade-in px-4 overflow-hidden">
+    <div ref={containerRef} className="relative flex flex-col items-center justify-center min-h-[70vh] text-center animate-fade-in px-4 overflow-hidden agent-ambient">
       {/* Particle background — lobster silhouette gather/scatter */}
       {dims.w > 0 && <ParticleCanvas width={dims.w} height={dims.h} />}
 
@@ -208,13 +208,10 @@ export const AgentActivatedStep = ({ agentName, onDashboard, onCreateAnother }: 
         </div>
       )}
 
-      <h2 className="text-3xl font-bold mb-2 relative z-10">Agent Activated</h2>
-      <p className="text-muted-foreground mb-8 max-w-md relative z-10">
-        Your agent is now operating under your committed identity.
-      </p>
+      <h2 className="text-3xl font-bold mb-8 relative z-10">Agent Activated</h2>
 
       {/* Agent Info Card */}
-      <div className="glass-card max-w-sm w-full space-y-4 mb-8 relative z-10">
+      <div className="glass-card glass-card-agent max-w-sm w-full space-y-4 mb-8 relative z-10">
         <div className="flex items-center justify-between">
           <span className="text-xs text-muted-foreground">Agent</span>
           <span className="text-sm font-medium text-foreground flex items-center gap-1.5">
@@ -247,7 +244,7 @@ export const AgentActivatedStep = ({ agentName, onDashboard, onCreateAnother }: 
 
       {/* CTAs */}
       <div className="w-full max-w-sm space-y-3 relative z-10">
-        <button onClick={onDashboard} className="btn-twin btn-twin-primary btn-glow w-full py-3">
+        <button onClick={onDashboard} className="btn-twin btn-twin-primary btn-glow-red w-full py-3">
           Return to Dashboard
         </button>
         <button onClick={onCreateAnother} className="btn-twin btn-twin-ghost w-full py-2.5 text-sm">

@@ -66,11 +66,11 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
             </p>
           </div>
 
-          {/* 3 cards stacked vertically, centered */}
-          <div className="space-y-4 w-full max-w-lg">
-            <div className="glass-card !p-4 space-y-2">
+          {/* 3 cards horizontal */}
+          <div className="flex flex-col md:flex-row gap-4 w-full">
+            <div className="glass-card !p-4 space-y-2 flex-1 min-w-0">
               <div>
-                <label className="text-sm font-medium text-foreground"><span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-foreground/10 text-[10px] font-bold mr-2">A</span>Select your most frequent activities</label>
+                <label className="text-sm font-medium text-foreground">Select your most frequent activities</label>
                 <p className="text-xs text-muted-foreground mt-0.5">Order reflects priority (up to 10).</p>
               </div>
               {twin.sportRanking.length > 0 && (
@@ -98,9 +98,9 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
               </div>
             </div>
 
-            <div className="glass-card !p-4 space-y-2">
+            <div className="glass-card !p-4 space-y-2 flex-1 min-w-0">
               <div>
-                <label className="text-sm font-medium text-foreground"><span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-foreground/10 text-[10px] font-bold mr-2">B</span>Outfit Style</label>
+                <label className="text-sm font-medium text-foreground">Outfit Style</label>
                 <p className="text-xs text-muted-foreground mt-0.5">Select styles that best represent your athletic expression.</p>
               </div>
               <div className="flex flex-wrap gap-1.5">
@@ -116,9 +116,9 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
               </div>
             </div>
 
-            <div className="glass-card !p-4 space-y-2">
+            <div className="glass-card !p-4 space-y-2 flex-1 min-w-0">
               <div>
-                <label className="text-sm font-medium text-foreground"><span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-foreground/10 text-[10px] font-bold mr-2">C</span>Brand Preferences</label>
+                <label className="text-sm font-medium text-foreground">Brand Preferences</label>
                 <p className="text-xs text-muted-foreground mt-0.5">Brands you've worn most in the past year.</p>
               </div>
               <div className="flex flex-wrap gap-1.5">
@@ -136,7 +136,7 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
           </div>
 
           {/* CTA centered */}
-          <div className="w-full max-w-lg mt-6">
+          <div className="w-full max-w-md mx-auto mt-6">
             <button onClick={onNext} disabled={!isValid} className="btn-twin btn-twin-primary w-full py-2.5 text-sm disabled:opacity-30 disabled:cursor-not-allowed">
               Commit Layer
             </button>
