@@ -6,6 +6,7 @@ import { validateBaseline } from '@/lib/twin-encoder';
 import logo from '@/assets/twin3-logo.svg';
 import { StepIndicator } from './StepIndicator';
 import { MainMenu } from './MainMenu';
+import { TopNav } from './TopNav';
 import { ParticleBackground } from './ParticleBackground';
 import { WelcomeStep } from './steps/WelcomeStep';
 import { IdentityStep } from './steps/IdentityStep';
@@ -18,7 +19,7 @@ import { ReviewStep } from './steps/ReviewStep';
 import { AuthStep } from './steps/AuthStep';
 import { CompleteStep } from './steps/CompleteStep';
 
-import { MyIdentityPage } from './pages/MyIdentityPage';
+import { IdentityDashboard } from './pages/IdentityDashboard';
 import { UpdateIdentityPage } from './pages/UpdateIdentityPage';
 import { ActiveAuthorizationsPage } from './pages/ActiveAuthorizationsPage';
 import { MissionsPage } from './pages/MissionsPage';
@@ -83,33 +84,35 @@ export const WizardLayout = () => {
     <div className={`h-full flex flex-col relative z-10 ${state.step >= 9 ? 'agent-ambient' : ''}`}>
       <ParticleBackground color={state.step >= 9 ? 'red' : 'cyan'} />
 
-      <header className="flex items-center justify-between px-6 py-4 border-b border-foreground/5 relative z-10">
-        <div className="flex items-center gap-3">
-          <button onClick={() => setMenuOpen(true)} className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-foreground/10 transition-colors">
-            <img src={logo} alt="Twin Matrix" className="w-6 h-6" />
-          </button>
-          <span className="font-semibold tracking-tight">Twin Matrix</span>
-        </div>
-        {showIndicator && <StepIndicator current={state.step} total={TOTAL_STEPS} />}
-        <div className="flex items-center gap-3">
-          {showBack && (
-            <button onClick={() => setState(s => ({ ...s, step: s.step - 1 }))} className="text-sm text-muted-foreground hover:text-foreground transition-colors">← Back</button>
-          )}
-          {showPageBack && (
-            <button onClick={() => setActivePage(null)} className="text-sm text-muted-foreground hover:text-foreground transition-colors">← Back</button>
-          )}
-          {(showBack || showPageBack) && (
-            <button onClick={() => { setActivePage(null); setState(s => ({ ...s, step: 0, signature: [], agentSetup: initialState.agentSetup })); }} className="text-muted-foreground hover:text-foreground transition-colors">
-              <Home className="w-4 h-4" />
+      {/* New TopNav for post-identity states; old header for wizard */}
+      {hasIdentity ? (
+        <TopNav activePage={activePage} onNavigate={handleMenuNavigate} hasIdentity={hasIdentity} />
+      ) : (
+        <header className="flex items-center justify-between px-6 py-4 border-b border-foreground/5 relative z-10">
+          <div className="flex items-center gap-3">
+            <button onClick={() => setMenuOpen(true)} className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-foreground/10 transition-colors">
+              <img src={logo} alt="Twin Matrix" className="w-6 h-6" />
             </button>
-          )}
-          {!showBack && !showPageBack && <div className="w-12" />}
-        </div>
-      </header>
+            <span className="font-semibold tracking-tight">Twin Matrix</span>
+          </div>
+          {showIndicator && <StepIndicator current={state.step} total={TOTAL_STEPS} />}
+          <div className="flex items-center gap-3">
+            {showBack && (
+              <button onClick={() => setState(s => ({ ...s, step: s.step - 1 }))} className="text-sm text-muted-foreground hover:text-foreground transition-colors">← Back</button>
+            )}
+            {showBack && (
+              <button onClick={() => { setActivePage(null); setState(s => ({ ...s, step: 0, signature: [], agentSetup: initialState.agentSetup })); }} className="text-muted-foreground hover:text-foreground transition-colors">
+                <Home className="w-4 h-4" />
+              </button>
+            )}
+            {!showBack && <div className="w-12" />}
+          </div>
+        </header>
+      )}
 
       <main className="flex-1 min-h-0 px-4 py-4 flex flex-col relative z-10">
         {activePage === 'identity' && (
-          <MyIdentityPage username={state.profile.username} activeModules={state.activeModules} signature={state.signature} onNavigate={handlePageNavigate} />
+          <IdentityDashboard username={state.profile.username} activeModules={state.activeModules} signature={state.signature} onNavigate={handlePageNavigate} />
         )}
         {activePage === 'update' && (
           <UpdateIdentityPage username={state.profile.username} activeModules={state.activeModules} tags={[]} onNavigate={handlePageNavigate} />
