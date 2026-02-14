@@ -6,6 +6,7 @@ import { validateBaseline } from '@/lib/twin-encoder';
 import logo from '@/assets/twin3-logo.svg';
 import { StepIndicator } from './StepIndicator';
 import { MainMenu } from './MainMenu';
+import { ParticleBackground } from './ParticleBackground';
 import { WelcomeStep } from './steps/WelcomeStep';
 import { IdentityStep } from './steps/IdentityStep';
 import { CategoryStep } from './steps/CategoryStep';
@@ -55,7 +56,6 @@ export const WizardLayout = () => {
   const [activePage, setActivePage] = useState<MenuPage>(null);
 
   const next = () => {
-    // Change Set 3: validate baseline before generate step (step 5 → 6)
     if (state.step === 5) {
       const err = validateBaseline(state);
       if (err) {
@@ -81,7 +81,9 @@ export const WizardLayout = () => {
 
   return (
     <div className="h-full flex flex-col relative z-10">
-      <header className="flex items-center justify-between px-6 py-4 border-b border-foreground/5">
+      <ParticleBackground />
+
+      <header className="flex items-center justify-between px-6 py-4 border-b border-foreground/5 relative z-10">
         <div className="flex items-center gap-3">
           <button onClick={() => setMenuOpen(true)} className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-foreground/10 transition-colors">
             <img src={logo} alt="Twin Matrix" className="w-6 h-6" />
@@ -105,7 +107,7 @@ export const WizardLayout = () => {
         </div>
       </header>
 
-      <main className="flex-1 min-h-0 px-4 py-4 flex flex-col">
+      <main className="flex-1 min-h-0 px-4 py-4 flex flex-col relative z-10">
         {activePage === 'identity' && (
           <MyIdentityPage username={state.profile.username} activeModules={state.activeModules} signature={state.signature} onNavigate={handlePageNavigate} />
         )}
