@@ -1,19 +1,23 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { ChevronLeft, ChevronRight, Lock, Plus } from 'lucide-react';
 import type { IdentityModule } from '@/types/twin-matrix';
 
-const MODULES: IdentityModule[] = [
+/* ── Signal data ── */
+const SIGNALS: (IdentityModule & { soon?: boolean })[] = [
   { id: 'sport', icon: '🏃', label: 'Sport', description: 'Physical signal · competitive state', active: true },
   { id: 'music', icon: '🎵', label: 'Music', description: 'Rhythm signal · listening state', active: true },
   { id: 'art', icon: '🎨', label: 'Art', description: 'Aesthetic signal · creative state', active: true },
   { id: 'reading', icon: '📚', label: 'Reading', description: 'Knowledge signal · absorption state', active: true },
   { id: 'food', icon: '🍳', label: 'Food', description: 'Lifestyle signal · dietary state', active: true },
   { id: 'travel', icon: '✈️', label: 'Travel', description: 'Mobility signal · exploration state', active: true },
-  { id: 'finance', icon: '💰', label: 'Finance', description: 'Risk signal · asset state', active: false },
-  { id: 'gaming', icon: '🎮', label: 'Gaming', description: 'Strategic signal · competitive state', active: false },
-  { id: 'learning', icon: '🧠', label: 'Learning', description: 'Growth signal · focus state', active: false },
+  { id: 'finance', icon: '💰', label: 'Finance', description: 'Risk signal · asset state', active: false, soon: true },
+  { id: 'gaming', icon: '🎮', label: 'Gaming', description: 'Strategic signal · competitive state', active: false, soon: true },
+  { id: 'learning', icon: '🧠', label: 'Learning', description: 'Growth signal · focus state', active: false, soon: true },
 ];
 
-// Demo: pretend these modules have already been minted
+// Virtual items: signals + "and more" card
+const CAROUSEL_ITEMS = [...SIGNALS, { id: '_more', icon: '', label: '+ And More', description: 'Emerging signals.', active: false }];
+
 const MINTED_MODULES = ['music', 'reading'];
 
 interface Props {
@@ -23,14 +27,24 @@ interface Props {
 }
 
 export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
-  const [expanded, setExpanded] = useState<string | null>(null);
+  const [centerIdx, setCenterIdx] = useState(0); // default Sport
   const [activated, setActivated] = useState<string[]>(activeModules);
+  const [transitioning, setTransitioning] = useState(false);
+  const [lockTooltip, setLockTooltip] = useState<string | null>(null);
+  const tooltipTimer = useRef<ReturnType<typeof setTimeout>>();
 
-  const toggleExpand = (id: string) => {
-    setExpanded(expanded === id ? null : id);
+  const total = CAROUSEL_ITEMS.length;
+
+  const slide = (dir: -1 | 1) => {
+    if (transitioning) return;
+    setTransitioning(true);
+    setCenterIdx(prev => (prev + dir + total) % total);
+    setTimeout(() => setTransitioning(false), 380);
   };
 
   const toggleModule = (id: string) => {
+    const item = SIGNALS.find(s => s.id === id);
+    if (!item || item.soon || !item.active) return;
     const next = activated.includes(id)
       ? activated.filter(m => m !== id)
       : [...activated, id];
@@ -38,95 +52,226 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
     onUpdate(next);
   };
 
+  const showLockTooltip = (id: string) => {
+    setLockTooltip(id);
+    clearTimeout(tooltipTimer.current);
+    tooltipTimer.current = setTimeout(() => setLockTooltip(null), 2000);
+  };
+
+  useEffect(() => () => clearTimeout(tooltipTimer.current), []);
+
   const hasActive = activated.length > 0;
 
+  // Get visible indices: [left2, left1, center, right1, right2]
+  const getVisibleIndices = () => {
+    const indices: number[] = [];
+    for (let offset = -2; offset <= 2; offset++) {
+      indices.push((centerIdx + offset + total) % total);
+    }
+    return indices;
+  };
+
+  const visibleIndices = getVisibleIndices();
+
   return (
-    <div className="animate-fade-in space-y-6 max-w-2xl mx-auto">
-      <div>
+    <div className="animate-fade-in space-y-8 max-w-3xl mx-auto">
+      {/* Header */}
+      <div className="text-center">
         <h2 className="text-2xl font-bold mb-1">Signal Layers</h2>
         <p className="text-muted-foreground text-sm">Choose which aspects of yourself shape this state.</p>
       </div>
 
-      <div className="space-y-2">
-        {MODULES.map(mod => {
-          const isExpanded = expanded === mod.id;
-          const isActivated = activated.includes(mod.id);
-          const isAvailable = mod.active;
-          const isMinted = MINTED_MODULES.includes(mod.id);
+      {/* Carousel */}
+      <div className="relative flex items-center justify-center" style={{ minHeight: '260px' }}>
+        {/* Left arrow */}
+        <button
+          onClick={() => slide(-1)}
+          className="absolute left-0 z-20 p-2 text-muted-foreground/40 hover:text-foreground/70 transition-colors"
+          aria-label="Previous signal"
+        >
+          <ChevronLeft className="w-6 h-6" />
+        </button>
 
-          return (
-            <div key={mod.id} className="overflow-hidden">
+        {/* Cards track */}
+        <div className="relative w-full flex items-center justify-center overflow-hidden" style={{ height: '240px' }}>
+          {visibleIndices.map((itemIdx, posIdx) => {
+            const offset = posIdx - 2; // -2, -1, 0, 1, 2
+            const item = CAROUSEL_ITEMS[itemIdx];
+            const isCenter = offset === 0;
+            const isMore = item.id === '_more';
+            const isSoon = 'soon' in item && item.soon;
+            const isMinted = MINTED_MODULES.includes(item.id);
+            const isActivated = activated.includes(item.id);
+
+            const scale = isCenter ? 1.08 : Math.abs(offset) === 1 ? 0.88 : 0.72;
+            const opacity = isCenter ? 1 : Math.abs(offset) === 1 ? 0.55 : 0.25;
+            const translateX = offset * 140;
+            const zIndex = isCenter ? 10 : Math.abs(offset) === 1 ? 5 : 1;
+            const blur = isSoon ? 3 : isCenter ? 0 : Math.abs(offset) === 1 ? 0.5 : 2;
+
+            return (
               <div
-                onClick={() => toggleExpand(mod.id)}
-                className={`glass-card !p-4 flex items-center gap-4 transition-all duration-500 cursor-pointer ${
-                  isActivated && !isMinted ? 'animate-glow-pulse' : ''
-                } ${isActivated && !isMinted ? 'border-foreground/25' : ''}
-                ${isMinted ? '!border-green-400/20' : ''} ${isExpanded ? '!rounded-b-none' : ''}`}
+                key={item.id}
+                className="absolute flex flex-col items-center justify-center"
+                style={{
+                  transform: `translateX(${translateX}px) scale(${scale})`,
+                  opacity,
+                  filter: `blur(${blur}px)`,
+                  transition: 'all 350ms cubic-bezier(0.4, 0, 0.2, 1)',
+                  zIndex,
+                  width: '160px',
+                  pointerEvents: isCenter ? 'auto' : 'none',
+                }}
               >
-                <span className="text-2xl">{mod.icon}</span>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold text-sm">{mod.label}</span>
-                    {!isAvailable && (
-                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-foreground/5 text-muted-foreground">soon</span>
-                    )}
-                    {isMinted && (
-                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-green-400/10 text-green-400">minted</span>
-                    )}
+                {isMore ? (
+                  /* "+ And More" card */
+                  <div
+                    className="glass-card !p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:scale-105 transition-transform"
+                    style={{ width: '150px', height: '180px' }}
+                  >
+                    <Plus className="w-8 h-8 text-muted-foreground/40 mb-3" />
+                    <p className="text-sm font-semibold text-foreground/70">And More</p>
+                    <p className="text-[10px] text-muted-foreground/50 mt-1">Emerging signals.</p>
                   </div>
-                  <p className="text-[11px] text-muted-foreground truncate">{mod.description}</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className={`w-2.5 h-2.5 rounded-full shrink-0 transition-all ${
-                    isMinted ? 'bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.5)]'
-                    : isActivated ? 'bg-foreground/60 shadow-[0_0_6px_rgba(255,255,255,0.2)]'
-                    : 'bg-foreground/10'
-                  }`} />
-                  <span className="text-muted-foreground/50 text-xs transition-transform duration-200" style={{ transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)' }}>▾</span>
-                </div>
-              </div>
+                ) : (
+                  /* Signal card */
+                  <div
+                    onClick={() => {
+                      if (isSoon) {
+                        showLockTooltip(item.id);
+                        return;
+                      }
+                      if (isCenter) toggleModule(item.id);
+                    }}
+                    className="relative glass-card !p-5 flex flex-col items-center justify-center text-center cursor-pointer group"
+                    style={{
+                      width: '150px',
+                      height: '180px',
+                      animation: !isCenter && !isSoon ? 'signal-float 6s ease-in-out infinite' : undefined,
+                      animationDelay: `${itemIdx * 0.8}s`,
+                    }}
+                  >
+                    {/* Soon: lock overlay */}
+                    {isSoon && isCenter && (
+                      <div className="absolute inset-0 flex items-center justify-center z-10 rounded-[20px]">
+                        <Lock
+                          className="w-5 h-5 text-foreground/15 group-hover:animate-[lock-shake_0.4s_ease-in-out]"
+                        />
+                      </div>
+                    )}
 
-              {isExpanded && (
-                <div className="glass-card !rounded-t-none !border-t-0 !pt-0 !pb-4 px-4 animate-fade-in">
-                  <div className="border-t border-foreground/5 pt-3 space-y-3">
-                    {isMinted && (
-                      <div className="flex items-center gap-2 text-xs text-green-400/80">
-                        <span>✓</span>
-                        <span>This layer has been minted into your identity state</span>
+                    {/* Lock tooltip */}
+                    {lockTooltip === item.id && isCenter && (
+                      <div className="absolute -top-16 left-1/2 -translate-x-1/2 z-30 glass-card !p-3 !rounded-xl whitespace-nowrap animate-fade-in">
+                        <p className="text-[11px] font-medium text-foreground/80">Dormant signal</p>
+                        <p className="text-[9px] text-muted-foreground/60">Unlock in future release</p>
                       </div>
                     )}
-                    {isAvailable ? (
-                      <div className="flex gap-2">
-                        {isMinted ? (
-                          <button
-                            onClick={(e) => { e.stopPropagation(); }}
-                            className="btn-twin btn-twin-ghost flex-1 py-2.5 text-sm"
-                          >
-                            ✏️ Edit Layer
-                          </button>
-                        ) : (
-                          <button
-                            onClick={(e) => { e.stopPropagation(); toggleModule(mod.id); }}
-                            className={`btn-twin flex-1 py-2.5 text-sm ${isActivated ? 'btn-twin-ghost' : 'btn-twin-primary'}`}
-                          >
-                            {isActivated ? 'Deactivate' : 'Activate Layer'}
-                          </button>
-                        )}
-                      </div>
-                    ) : (
-                      <p className="text-xs text-muted-foreground/50 text-center py-1">This layer is not yet available.</p>
+
+                    {/* Icon */}
+                    <span
+                      className="text-3xl mb-2"
+                      style={{
+                        opacity: isSoon ? 0.3 : 1,
+                      }}
+                    >
+                      {item.icon}
+                    </span>
+
+                    {/* Label */}
+                    <p className={`text-sm font-semibold mb-0.5 ${isSoon ? 'text-foreground/30' : 'text-foreground'}`}>
+                      {item.label}
+                    </p>
+
+                    {/* Minted badge */}
+                    {isMinted && (
+                      <span className="text-[9px] px-2 py-0.5 rounded-full bg-green-400/10 text-green-400 mb-1">
+                        minted
+                      </span>
+                    )}
+
+                    {/* Description */}
+                    <p className={`text-[10px] leading-tight ${
+                      isCenter && !isSoon ? 'text-muted-foreground/80' : 'text-muted-foreground/30'
+                    }`}>
+                      {item.description}
+                    </p>
+
+                    {/* Active indicator: breathing glow at bottom */}
+                    {isActivated && !isSoon && (
+                      <div
+                        className="absolute bottom-3 left-1/2 -translate-x-1/2 w-6 h-1 rounded-full"
+                        style={{
+                          background: isMinted
+                            ? 'rgba(74, 222, 128, 0.5)'
+                            : 'rgba(54, 230, 255, 0.4)',
+                          boxShadow: isMinted
+                            ? '0 0 12px rgba(74, 222, 128, 0.3)'
+                            : '0 0 12px rgba(54, 230, 255, 0.25)',
+                          animation: 'signal-breathe 3s ease-in-out infinite',
+                        }}
+                      />
                     )}
                   </div>
-                </div>
-              )}
-            </div>
-          );
-        })}
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Right arrow */}
+        <button
+          onClick={() => slide(1)}
+          className="absolute right-0 z-20 p-2 text-muted-foreground/40 hover:text-foreground/70 transition-colors"
+          aria-label="Next signal"
+        >
+          <ChevronRight className="w-6 h-6" />
+        </button>
       </div>
 
-      <button onClick={onNext} disabled={!hasActive} className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${hasActive ? 'btn-glow' : ''}`}>
+      {/* Center card action hint */}
+      <div className="text-center">
+        {(() => {
+          const centerItem = CAROUSEL_ITEMS[centerIdx];
+          if (centerItem.id === '_more') return <p className="text-xs text-muted-foreground/40">More signals coming soon</p>;
+          const isSoon = 'soon' in centerItem && centerItem.soon;
+          const isActivated = activated.includes(centerItem.id);
+          const isMinted = MINTED_MODULES.includes(centerItem.id);
+          if (isSoon) return <p className="text-xs text-muted-foreground/30">Dormant signal</p>;
+          if (isMinted) return <p className="text-xs text-green-400/50">Layer minted into your state</p>;
+          return (
+            <p className="text-xs text-muted-foreground/50">
+              {isActivated ? '✓ Active — tap to deactivate' : 'Tap to activate this signal'}
+            </p>
+          );
+        })()}
+      </div>
+
+      {/* Proceed */}
+      <button
+        onClick={onNext}
+        disabled={!hasActive}
+        className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${hasActive ? 'btn-glow' : ''}`}
+      >
         Proceed
       </button>
+
+      {/* Inline keyframes */}
+      <style>{`
+        @keyframes signal-float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-2px); }
+        }
+        @keyframes signal-breathe {
+          0%, 100% { opacity: 0.4; }
+          50% { opacity: 1; }
+        }
+        @keyframes lock-shake {
+          0%, 100% { transform: rotate(0deg); }
+          25% { transform: rotate(-8deg); }
+          75% { transform: rotate(8deg); }
+        }
+      `}</style>
     </div>
   );
 };
