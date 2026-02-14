@@ -443,6 +443,20 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                     </div>
                   ))}
                 </div>
+                {permission.tradingAuthority === 'Auto-Approve under threshold' && (
+                  <div className="animate-fade-in pt-2 space-y-3">
+                    <p className="text-[10px] text-muted-foreground/50">Set spend limits for auto-approved tasks.</p>
+                    {(['maxPerTask', 'dailyCap', 'weeklyCap'] as const).map((field) => (
+                      <div key={field} className="flex items-center gap-3">
+                        <span className="text-[11px] text-muted-foreground w-20">{field === 'maxPerTask' ? 'Max / task' : field === 'dailyCap' ? 'Daily cap' : 'Weekly cap'}</span>
+                        <input type="text" value={permission[field]}
+                          onChange={(e) => setPermission((p) => ({ ...p, [field]: e.target.value }))}
+                          placeholder="$"
+                          className="flex-1 bg-transparent border-b border-foreground/10 px-0 py-1.5 text-xs text-foreground focus:outline-none focus:border-foreground/30 transition-colors" />
+                      </div>
+                    ))}
+                  </div>
+                )}
                 {permission.tradingAuthority === 'Full Auto' && (
                   <div className="animate-fade-in pt-1">
                     <label className="flex items-center gap-2 text-xs cursor-pointer">
@@ -454,52 +468,6 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
               </div>
 
               <ThinDivider />
-
-              {/* Authorization Duration */}
-              <div className="py-5 space-y-3">
-                <label className="text-xs text-muted-foreground uppercase tracking-widest">Authorization Duration</label>
-                <div className="space-y-2">
-                  {DURATION_OPTIONS.map((d) => (
-                    <div key={d} className="flex items-center gap-3 cursor-pointer" onClick={() => setPermission((p) => ({ ...p, authorizationDuration: d, customDurationDays: d === 'Custom' ? p.customDurationDays : '' }))}>
-                      <span className="w-3.5 h-3.5 rounded-full border flex items-center justify-center flex-shrink-0"
-                        style={{ borderColor: permission.authorizationDuration === d ? '#F24455' : 'rgba(255,255,255,0.15)' }}>
-                        {permission.authorizationDuration === d && <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#F24455' }} />}
-                      </span>
-                      <span className="text-sm text-foreground/80">{d}</span>
-                    </div>
-                  ))}
-                </div>
-                {permission.authorizationDuration === 'Custom' && (
-                  <div className="animate-fade-in flex items-center gap-2 pt-1">
-                    <span className="text-[11px] text-muted-foreground">Days:</span>
-                    <input type="number" min="1" value={permission.customDurationDays}
-                      onChange={(e) => setPermission((p) => ({ ...p, customDurationDays: e.target.value.replace(/[^0-9]/g, '') }))}
-                      placeholder="e.g. 14"
-                      className="flex-1 bg-transparent border-b border-foreground/10 px-0 py-1.5 text-xs text-foreground focus:outline-none focus:border-foreground/30 transition-colors" />
-                  </div>
-                )}
-              </div>
-
-              <ThinDivider />
-
-              {/* Spend Thresholds (visible when Auto-Approve) */}
-              {permission.tradingAuthority === 'Auto-Approve under threshold' && (
-                <>
-                  <div className="py-5 space-y-3 animate-fade-in">
-                    <label className="text-xs text-muted-foreground uppercase tracking-widest">Spend Limits</label>
-                    {(['maxPerTask', 'dailyCap', 'weeklyCap'] as const).map((field) => (
-                      <div key={field} className="flex items-center gap-3">
-                        <span className="text-[11px] text-muted-foreground w-20">{field === 'maxPerTask' ? 'Max / task' : field === 'dailyCap' ? 'Daily cap' : 'Weekly cap'}</span>
-                        <input type="text" value={permission[field]}
-                          onChange={(e) => setPermission((p) => ({ ...p, [field]: e.target.value }))}
-                          placeholder="$"
-                          className="flex-1 bg-transparent border-b border-foreground/10 px-0 py-1.5 text-xs text-foreground focus:outline-none focus:border-foreground/30 transition-colors" />
-                      </div>
-                    ))}
-                  </div>
-                  <ThinDivider />
-                </>
-              )}
 
               {/* Risk Controls */}
               <div className="py-5 space-y-3">
