@@ -38,14 +38,14 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
   return (
     <StepLayout>
       <StepHeader>
-        <div className="text-center">
+        <div className="text-center animate-soft-enter-title">
           <h2 className="text-2xl font-bold mb-1">Soul Layer</h2>
           <p className="text-muted-foreground text-sm">Balance intention and instinct.</p>
         </div>
       </StepHeader>
 
       <StepContent>
-        <div className="w-full max-w-lg mx-auto space-y-6 animate-fade-in">
+        <div className="w-full max-w-lg mx-auto space-y-6 animate-soft-enter">
           <div className="glass-card space-y-7">
             <p className="text-xs text-muted-foreground uppercase tracking-widest">Why do you train?</p>
 

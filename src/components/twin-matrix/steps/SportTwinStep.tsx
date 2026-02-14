@@ -55,14 +55,14 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
   return (
     <StepLayout>
       <StepHeader>
-        <div className="text-center">
+        <div className="text-center animate-soft-enter-title">
           <h2 className="text-2xl font-bold mb-1">Skill & Style</h2>
           <p className="text-muted-foreground text-sm">Order what feels essential.</p>
         </div>
       </StepHeader>
 
       <StepContent>
-        <div className="space-y-4 w-full max-w-lg mx-auto animate-fade-in">
+        <div className="space-y-4 w-full max-w-lg mx-auto animate-soft-enter">
           <div className="glass-card !p-4 space-y-2">
             <div>
               <label className="text-xs font-medium text-foreground">Select your most frequent activities</label>
