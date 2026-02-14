@@ -301,9 +301,13 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
         <div className="min-h-full flex flex-col items-center px-8 py-4">
           <div className="w-full max-w-[760px] space-y-6">
         {/* Header — always visible */}
-        <div className="text-center">
-          
-          <p className="text-muted-foreground text-sm">Let this identity act on your behalf.</p>
+        <div className="text-center space-y-1">
+          <h2 className="text-2xl font-bold">
+            {subStep === 'create' ? 'Name your agent' : subStep === 'config' ? 'Configure Agent' : subStep === 'telegram' ? 'Connect Telegram' : subStep === 'activated' ? 'Agent Activated' : 'Agent Studio'}
+          </h2>
+          <p className="text-muted-foreground text-sm">
+            {subStep === 'create' ? 'Give your agent an identity to get started.' : subStep === 'config' ? 'Define behavior and permissions.' : subStep === 'telegram' ? 'Link Telegram to activate your agent.' : subStep === 'activated' ? 'Your agent is now operating under your identity.' : 'Let this identity act on your behalf.'}
+          </p>
         </div>
 
         {/* ═══ Sub-step: LIST (shows saved agents + create new) ═══ */}
