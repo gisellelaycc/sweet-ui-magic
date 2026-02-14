@@ -35,7 +35,6 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
   const toggle = (key: string) => setOpenKey(prev => (prev === key ? null : key));
   const answered = (key: keyof UserProfile) => !!profile[key];
 
-  // Split into rows of 3
   const rows: typeof FIELDS[] = [];
   for (let i = 0; i < FIELDS.length; i += 3) {
     rows.push(FIELDS.slice(i, i + 3));
@@ -47,16 +46,16 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
         <div className="flex flex-col items-center">
           {/* Title centered */}
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] tracking-tight mb-2 animate-soft-enter">
+            <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] tracking-tight mb-2">
               Core Identity
             </h2>
-            <p className="text-muted-foreground text-base md:text-lg animate-soft-enter" style={{ animationDelay: '100ms' }}>
+            <p className="text-muted-foreground text-base md:text-lg">
               Optional signals. Nothing exposed.
             </p>
           </div>
 
           {/* 3-3-3 chip grid centered */}
-          <div className="flex flex-col items-center gap-6 mb-12 animate-soft-enter" style={{ animationDelay: '200ms' }}>
+          <div className="flex flex-col items-center gap-6 mb-12">
             {rows.map((row, rowIdx) => (
               <div key={rowIdx} className="flex flex-wrap justify-center gap-3">
                 {row.map((f, i) => {
@@ -119,7 +118,7 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
           </div>
 
           {/* CTA centered */}
-          <div className="w-full max-w-[420px] animate-soft-enter" style={{ animationDelay: '300ms' }}>
+          <div className="w-full max-w-[420px]">
             <button onClick={onNext} className="btn-twin btn-twin-primary w-full py-2.5 text-sm btn-glow">
               Commit Core Layer
             </button>

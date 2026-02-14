@@ -38,21 +38,21 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
   return (
     <StepLayout>
       <StepContent>
-        <div className="w-full flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
-          {/* Left: Title + Sliders (no glass frame) */}
+        <div className="w-full flex flex-col lg:flex-row gap-8 lg:gap-12 items-center">
+          {/* Left: Title + Sliders */}
           <div className="flex-1 min-w-0">
             {/* Title */}
             <div className="mb-8">
-              <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] tracking-tight mb-2 animate-soft-enter">
+              <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] tracking-tight mb-2">
                 Soul Layer
               </h2>
-              <p className="text-muted-foreground text-base md:text-lg animate-soft-enter" style={{ animationDelay: '100ms' }}>
+              <p className="text-muted-foreground text-base md:text-lg">
                 Balance intention and instinct.
               </p>
             </div>
 
-            {/* Sliders directly — no glass card */}
-            <div className="space-y-8 animate-soft-enter" style={{ animationDelay: '200ms' }}>
+            {/* Sliders directly */}
+            <div className="space-y-8">
               <p className="text-xs text-muted-foreground uppercase tracking-widest">Why do you train?</p>
 
               {bars.map((bar, idx) => (
@@ -84,7 +84,7 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
             </div>
 
             {/* CTA below sliders */}
-            <div className="mt-8 animate-soft-enter" style={{ animationDelay: '300ms' }}>
+            <div className="mt-8">
               <button
                 onClick={onNext}
                 disabled={!hasInteracted}
@@ -95,10 +95,10 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
             </div>
           </div>
 
-          {/* Right: Soul Signature — floating control panel */}
+          {/* Right: Soul Signature — vertically centered */}
           {hasInteracted && (
             <div
-              className="lg:w-[260px] shrink-0 animate-fade-in lg:sticky lg:top-8"
+              className="lg:w-[260px] shrink-0 animate-fade-in"
               style={{
                 background: 'rgba(255, 255, 255, 0.03)',
                 backdropFilter: 'blur(20px) saturate(160%)',

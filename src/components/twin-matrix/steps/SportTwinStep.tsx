@@ -58,17 +58,17 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
         <div className="flex flex-col items-center">
           {/* Title centered */}
           <div className="text-center mb-8">
-            <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] tracking-tight mb-2 animate-soft-enter">
+            <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] tracking-tight mb-2">
               Skill & Style
             </h2>
-            <p className="text-muted-foreground text-base md:text-lg animate-soft-enter" style={{ animationDelay: '100ms' }}>
+            <p className="text-muted-foreground text-base md:text-lg">
               Order what feels essential.
             </p>
           </div>
 
           {/* 3 cards stacked vertically, centered */}
           <div className="space-y-4 w-full max-w-lg">
-            <div className="glass-card !p-4 space-y-2 animate-soft-enter" style={{ animationDelay: '200ms' }}>
+            <div className="glass-card !p-4 space-y-2">
               <div>
                 <label className="text-sm font-medium text-foreground">Select your most frequent activities</label>
                 <p className="text-xs text-muted-foreground mt-0.5">Order reflects priority (up to 10).</p>
@@ -98,7 +98,7 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
               </div>
             </div>
 
-            <div className="glass-card !p-4 space-y-2 animate-soft-enter" style={{ animationDelay: '300ms' }}>
+            <div className="glass-card !p-4 space-y-2">
               <div>
                 <label className="text-sm font-medium text-foreground">Outfit Style</label>
                 <p className="text-xs text-muted-foreground mt-0.5">Select styles that best represent your athletic expression.</p>
@@ -116,7 +116,7 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
               </div>
             </div>
 
-            <div className="glass-card !p-4 space-y-2 animate-soft-enter" style={{ animationDelay: '400ms' }}>
+            <div className="glass-card !p-4 space-y-2">
               <div>
                 <label className="text-sm font-medium text-foreground">Brand Preferences</label>
                 <p className="text-xs text-muted-foreground mt-0.5">Brands you've worn most in the past year.</p>
@@ -136,7 +136,7 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
           </div>
 
           {/* CTA centered */}
-          <div className="w-full max-w-lg mt-6 animate-soft-enter" style={{ animationDelay: '500ms' }}>
+          <div className="w-full max-w-lg mt-6">
             <button onClick={onNext} disabled={!isValid} className="btn-twin btn-twin-primary w-full py-2.5 text-sm disabled:opacity-30 disabled:cursor-not-allowed">
               Commit Layer
             </button>

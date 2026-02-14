@@ -60,23 +60,23 @@ export const SportSetupStep = ({ data, onUpdate, onNext }: Props) => {
         <div className="flex flex-col items-center">
           {/* Title top-left aligned */}
           <div className="w-full max-w-lg mb-8">
-            <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] tracking-tight mb-2 animate-soft-enter">
+            <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] tracking-tight mb-2">
               Baseline
             </h2>
-            <p className="text-muted-foreground text-base md:text-lg animate-soft-enter" style={{ animationDelay: '100ms' }}>
+            <p className="text-muted-foreground text-base md:text-lg">
               A quiet calibration of your physical rhythm.
             </p>
           </div>
 
           {/* Card centered */}
-          <div className="glass-card space-y-6 w-full max-w-lg animate-soft-enter" style={{ animationDelay: '200ms' }}>
+          <div className="glass-card space-y-6 w-full max-w-lg">
             <SliderSelect label="Exercise Frequency" options={FREQ_OPTIONS} value={setup.frequency} onChange={v => update('frequency', v)} />
             <SliderSelect label="Session Duration" options={DURATION_OPTIONS} value={setup.duration} onChange={v => update('duration', v)} />
             <SliderSelect label="Average Daily Steps" options={STEP_OPTIONS} value={setup.dailySteps} onChange={v => update('dailySteps', v)} />
           </div>
 
           {/* CTA centered with card */}
-          <div className="w-full max-w-lg mt-6 animate-soft-enter" style={{ animationDelay: '300ms' }}>
+          <div className="w-full max-w-lg mt-6">
             <button onClick={onNext} disabled={!isValid} className={`btn-twin btn-twin-primary w-full py-2.5 text-sm disabled:opacity-30 disabled:cursor-not-allowed ${isValid ? 'btn-glow' : ''}`}>
               Proceed
             </button>

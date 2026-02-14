@@ -76,20 +76,19 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
           <div className="flex-1 min-w-0 flex flex-col items-center lg:items-start">
             {/* Title */}
             <div className="mb-8 w-full">
-              <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] tracking-tight mb-2 animate-soft-enter">
+              <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] tracking-tight mb-2">
                 Signal Layers
               </h2>
-              <p className="text-muted-foreground text-base md:text-lg animate-soft-enter" style={{ animationDelay: '100ms' }}>
+              <p className="text-muted-foreground text-base md:text-lg">
                 Choose which aspects of yourself shape this state.
               </p>
             </div>
 
-            {/* Main Card — glowing entity, no hard edges */}
+            {/* Main Card — glowing entity */}
             <div
               onClick={toggleActive}
-              className="relative cursor-pointer w-full animate-soft-enter"
+              className="relative cursor-pointer w-full"
               style={{
-                animationDelay: '200ms',
                 maxWidth: '520px',
                 height: '260px',
                 borderRadius: '28px',
@@ -132,7 +131,7 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
             </div>
 
             {/* CTA below big card */}
-            <div className="w-full mt-6 animate-soft-enter" style={{ maxWidth: '520px', animationDelay: '300ms' }}>
+            <div className="w-full mt-6" style={{ maxWidth: '520px' }}>
               <button onClick={onNext} disabled={!hasActive}
                 className={`btn-twin btn-twin-primary w-full py-2.5 text-sm disabled:opacity-30 disabled:cursor-not-allowed ${hasActive ? 'btn-glow' : ''}`}>
                 Proceed
@@ -140,8 +139,8 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
             </div>
           </div>
 
-          {/* Right column: vertical chip list with descriptions */}
-          <div className="lg:w-[280px] shrink-0 flex flex-col gap-2 animate-soft-enter" style={{ animationDelay: '350ms' }}>
+          {/* Right column: vertical chip list */}
+          <div className="lg:w-[280px] shrink-0 flex flex-col gap-2">
             {chipItems.map(chip => {
               const isMore = chip.id === '_more';
               const isSoon = chip.soon;
