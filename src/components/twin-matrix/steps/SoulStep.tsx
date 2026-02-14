@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { Slider } from '@/components/ui/slider';
 import type { SoulData, SoulBar } from '@/types/twin-matrix';
 import { StepLayout, StepHeader, StepContent, StepFooter } from '../StepLayout';
+import { AnimatedTitle } from '../AnimatedTitle';
 
 const DEFAULT_BARS: SoulBar[] = [
   { id: 'BAR_OUTCOME_EXPERIENCE', label: 'Performance Orientation', left: 'I train to improve performance', right: 'I train for the experience', value: null },
@@ -38,10 +39,7 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
   return (
     <StepLayout>
       <StepHeader>
-        <div className="text-center animate-soft-enter-title">
-          <h2 className="text-2xl font-bold mb-1">Soul Layer</h2>
-          <p className="text-muted-foreground text-sm">Balance intention and instinct.</p>
-        </div>
+        <AnimatedTitle title="Soul Layer" subtitle="Balance intention and instinct." />
       </StepHeader>
 
       <StepContent>

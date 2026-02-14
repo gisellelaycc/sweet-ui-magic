@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { SportSetup } from '@/types/twin-matrix';
 import { StepLayout, StepHeader, StepContent, StepFooter } from '../StepLayout';
+import { AnimatedTitle } from '../AnimatedTitle';
 
 const FREQ_OPTIONS = [
   { label: '1–2x / week', zone: 'Light Activity' },
@@ -57,10 +58,7 @@ export const SportSetupStep = ({ data, onUpdate, onNext }: Props) => {
   return (
     <StepLayout>
       <StepHeader>
-        <div className="text-center animate-soft-enter-title">
-          <h2 className="text-2xl font-bold mb-1">Baseline</h2>
-          <p className="text-muted-foreground text-sm">A quiet calibration of your physical rhythm.</p>
-        </div>
+        <AnimatedTitle title="Baseline" subtitle="A quiet calibration of your physical rhythm." />
       </StepHeader>
 
       <StepContent>

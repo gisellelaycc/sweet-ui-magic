@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { SportTwin } from '@/types/twin-matrix';
 import { StepLayout, StepHeader, StepContent, StepFooter } from '../StepLayout';
+import { AnimatedTitle } from '../AnimatedTitle';
 
 const SPORTS = [
   'Running', 'Cycling', 'Long-distance Swimming', 'Trail / Off-road Running',
@@ -55,10 +56,7 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
   return (
     <StepLayout>
       <StepHeader>
-        <div className="text-center animate-soft-enter-title">
-          <h2 className="text-2xl font-bold mb-1">Skill & Style</h2>
-          <p className="text-muted-foreground text-sm">Order what feels essential.</p>
-        </div>
+        <AnimatedTitle title="Skill & Style" subtitle="Order what feels essential." />
       </StepHeader>
 
       <StepContent>
