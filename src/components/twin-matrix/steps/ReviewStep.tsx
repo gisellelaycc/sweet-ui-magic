@@ -1,5 +1,7 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect, useCallback } from "react";
 import { computeDensity } from "@/lib/twin-encoder";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import lobsterIcon from "@/assets/lobster-icon.png";
 
 // Updated color strategy per spec
 const SLICES = [
@@ -23,6 +25,8 @@ interface Props {
 
 export const ReviewStep = ({ signature, username, activeModules, onNext }: Props) => {
   const [hoveredCell, setHoveredCell] = useState<number | null>(null);
+  const [showWallet, setShowWallet] = useState(false);
+  const [walletPhase, setWalletPhase] = useState<'connect' | 'signing' | 'confirmed'>('connect');
 
   const identityDensity = useMemo(() => computeDensity(signature), [signature]);
 
@@ -237,9 +241,150 @@ export const ReviewStep = ({ signature, username, activeModules, onNext }: Props
 
       <p className="text-xs text-center text-muted-foreground/50">@{username}</p>
 
-      <button onClick={onNext} className="btn-twin btn-twin-primary btn-glow w-full py-3">
-        Open Agent Studio →
+      <button onClick={() => { setShowWallet(true); setWalletPhase('connect'); }} className="btn-twin btn-twin-primary btn-glow w-full py-3">
+        Commit Identity State
       </button>
+
+      {/* MetaMask-style Wallet Signature Animation */}
+      <Dialog open={showWallet} onOpenChange={() => {}}>
+        <DialogContent className="max-w-sm border-foreground/10 bg-[#1a1a2e] p-0 overflow-hidden [&>button]:hidden" onPointerDownOutside={e => e.preventDefault()}>
+          <WalletAnimation phase={walletPhase} setPhase={setWalletPhase} onComplete={onNext} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
+
+/* ─── Wallet Signature Animation Component ─── */
+function WalletAnimation({
+  phase,
+  setPhase,
+  onComplete,
+}: {
+  phase: 'connect' | 'signing' | 'confirmed';
+  setPhase: (p: 'connect' | 'signing' | 'confirmed') => void;
+  onComplete: () => void;
+}) {
+  useEffect(() => {
+    if (phase === 'connect') {
+      const t = setTimeout(() => setPhase('signing'), 1800);
+      return () => clearTimeout(t);
+    }
+    if (phase === 'signing') {
+      const t = setTimeout(() => setPhase('confirmed'), 2500);
+      return () => clearTimeout(t);
+    }
+    if (phase === 'confirmed') {
+      const t = setTimeout(() => onComplete(), 1500);
+      return () => clearTimeout(t);
+    }
+  }, [phase, setPhase, onComplete]);
+
+  return (
+    <div className="flex flex-col items-center text-center">
+      {/* Header bar */}
+      <div className="w-full flex items-center justify-between px-4 py-3 border-b border-foreground/10">
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-6 rounded-full overflow-hidden">
+            <img src={lobsterIcon} alt="wallet" className="w-full h-full object-cover" />
+          </div>
+          <span className="text-xs font-medium text-foreground/80">Twin3 Wallet</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className={`w-2 h-2 rounded-full ${phase === 'confirmed' ? 'bg-green-400' : 'bg-cyan-400 animate-pulse'}`} />
+          <span className="text-[10px] text-foreground/50">
+            {phase === 'connect' ? 'Connecting…' : phase === 'signing' ? 'Awaiting…' : 'Connected'}
+          </span>
+        </div>
+      </div>
+
+      {/* Body */}
+      <div className="px-6 py-8 space-y-6">
+        {/* Icon area */}
+        <div className="relative w-16 h-16 mx-auto">
+          {/* Outer ring */}
+          <div
+            className={`absolute inset-0 rounded-full border-2 ${
+              phase === 'confirmed'
+                ? 'border-green-400/60'
+                : 'border-cyan-400/30 animate-spin'
+            }`}
+            style={{
+              animationDuration: '3s',
+              borderTopColor: phase !== 'confirmed' ? 'rgba(10, 255, 255, 0.8)' : undefined,
+            }}
+          />
+          {/* Inner glow */}
+          <div
+            className="absolute inset-2 rounded-full flex items-center justify-center"
+            style={{
+              background: phase === 'confirmed'
+                ? 'radial-gradient(circle, rgba(74, 222, 128, 0.2) 0%, transparent 70%)'
+                : 'radial-gradient(circle, rgba(10, 255, 255, 0.15) 0%, transparent 70%)',
+            }}
+          >
+            {phase === 'confirmed' ? (
+              <svg className="w-8 h-8 text-green-400 animate-scale-in" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            ) : (
+              <svg className="w-7 h-7 text-cyan-400/70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <rect x="3" y="11" width="18" height="11" rx="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+            )}
+          </div>
+        </div>
+
+        {/* Text */}
+        <div className="space-y-2">
+          <h3 className="text-base font-semibold text-foreground">
+            {phase === 'connect' && 'Committing your identity…'}
+            {phase === 'signing' && 'Awaiting wallet signature'}
+            {phase === 'confirmed' && 'Identity Committed'}
+          </h3>
+          <p className="text-xs text-foreground/40 leading-relaxed">
+            {phase === 'connect' && 'Preparing state for on-chain commitment.'}
+            {phase === 'signing' && 'Please confirm the signature request.'}
+            {phase === 'confirmed' && 'Your identity state has been sealed.'}
+          </p>
+        </div>
+
+        {/* Fake transaction details */}
+        {phase !== 'connect' && (
+          <div className="animate-fade-in space-y-2 bg-foreground/5 rounded-lg p-3 text-left">
+            <div className="flex justify-between text-[10px]">
+              <span className="text-foreground/30">Network</span>
+              <span className="text-foreground/60">Twin3 Sovereign Layer</span>
+            </div>
+            <div className="flex justify-between text-[10px]">
+              <span className="text-foreground/30">Action</span>
+              <span className="text-foreground/60">commitIdentityState()</span>
+            </div>
+            <div className="flex justify-between text-[10px]">
+              <span className="text-foreground/30">Gas</span>
+              <span className="text-foreground/60">0.00 (Gasless)</span>
+            </div>
+          </div>
+        )}
+
+        {/* Progress bar */}
+        <div className="h-[2px] w-full bg-foreground/5 rounded-full overflow-hidden">
+          <div
+            className="h-full rounded-full transition-all ease-linear"
+            style={{
+              width: phase === 'connect' ? '33%' : phase === 'signing' ? '66%' : '100%',
+              transitionDuration: phase === 'connect' ? '1.8s' : phase === 'signing' ? '2.5s' : '0.5s',
+              background: phase === 'confirmed'
+                ? 'rgba(74, 222, 128, 0.7)'
+                : 'rgba(10, 255, 255, 0.6)',
+              boxShadow: phase === 'confirmed'
+                ? '0 0 10px rgba(74, 222, 128, 0.5)'
+                : '0 0 10px rgba(10, 255, 255, 0.4)',
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
