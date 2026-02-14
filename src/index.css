@@ -253,6 +253,10 @@ body::before {
     animation: btn-pulse-glow 2s ease-in-out infinite;
   }
 
+  .agent-ambient .btn-twin-primary.btn-glow {
+    animation: btn-pulse-glow-red 2s ease-in-out infinite;
+  }
+
   .btn-twin-primary.btn-glow:disabled {
     animation: none;
   }
