@@ -389,7 +389,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
               {/* Matching Strategy */}
               <div className="py-5 space-y-3">
                 <label className="text-xs text-muted-foreground uppercase tracking-widest">Matching Strategy</label>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex gap-2 flex-nowrap overflow-x-auto scrollbar-hide">
                   {MATCH_STRATEGIES.map((s) => {
                     const selected = agent.matchingStrategy.includes(s);
                     return (
@@ -469,7 +469,32 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
 
               <ThinDivider />
 
-              {/* Risk Controls */}
+              {/* Authorization Duration */}
+              <div className="py-5 space-y-3">
+                <label className="text-xs text-muted-foreground uppercase tracking-widest">Authorization Duration</label>
+                <div className="space-y-2">
+                  {DURATION_OPTIONS.map((d) => (
+                    <div key={d} className="flex items-center gap-3 cursor-pointer" onClick={() => setPermission((p) => ({ ...p, authorizationDuration: d, customDurationDays: d === 'Custom' ? p.customDurationDays : '' }))}>
+                      <span className="w-3.5 h-3.5 rounded-full border flex items-center justify-center flex-shrink-0"
+                        style={{ borderColor: permission.authorizationDuration === d ? '#F24455' : 'rgba(255,255,255,0.15)' }}>
+                        {permission.authorizationDuration === d && <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#F24455' }} />}
+                      </span>
+                      <span className="text-sm text-foreground/80">{d}</span>
+                    </div>
+                  ))}
+                </div>
+                {permission.authorizationDuration === 'Custom' && (
+                  <div className="animate-fade-in flex items-center gap-2 pt-1">
+                    <span className="text-[11px] text-muted-foreground">Days:</span>
+                    <input type="number" min="1" value={permission.customDurationDays}
+                      onChange={(e) => setPermission((p) => ({ ...p, customDurationDays: e.target.value.replace(/[^0-9]/g, '') }))}
+                      placeholder="e.g. 14"
+                      className="flex-1 bg-transparent border-b border-foreground/10 px-0 py-1.5 text-xs text-foreground focus:outline-none focus:border-foreground/30 transition-colors" />
+                  </div>
+                )}
+              </div>
+
+              <ThinDivider />
               <div className="py-5 space-y-3">
                 <label className="text-xs text-muted-foreground uppercase tracking-widest">Risk Controls</label>
                 <p className="text-[10px] text-muted-foreground/50">Reduce financial and operational exposure.</p>
