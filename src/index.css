@@ -292,47 +292,46 @@ body::before {
 }
 
 .glass-card-agent {
-  border-color: rgba(242, 68, 85, 0.15);
-  border-top-color: rgba(242, 68, 85, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .glass-card-agent::before {
   background: linear-gradient(
     to bottom,
-    rgba(242, 68, 85, 0.12),
+    rgba(255, 255, 255, 0.06),
     transparent
   ) !important;
 }
 
 /* Suppress cyan ambient behind agent sections */
+.agent-ambient {
+  position: relative;
+}
+
 .agent-ambient::before {
   content: '';
-  position: absolute;
+  position: fixed;
   inset: 0;
-  background: hsl(228 14% 4%);
+  background: hsl(228 14% 5%);
+  z-index: -2;
+}
+
+.agent-ambient::after {
+  content: '';
+  position: fixed;
+  inset: -20%;
+  background:
+    radial-gradient(ellipse 60% 50% at 25% 15%, rgba(242, 68, 85, 0.10) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 60% at 80% 75%, rgba(242, 68, 85, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 40% 35% at 60% 30%, rgba(242, 68, 85, 0.05) 0%, transparent 45%);
+  pointer-events: none;
   z-index: -1;
+  animation: ambient-drift 20s ease-in-out infinite alternate;
 }
 
 @keyframes divider-trace-welcome {
   0% { left: -60px; }
   100% { left: 100%; }
-}
-
-.agent-ambient {
-  position: relative;
-}
-
-.agent-ambient::after {
-  content: '';
-  position: absolute;
-  inset: -20%;
-  background:
-    radial-gradient(ellipse 60% 50% at 25% 15%, rgba(242, 68, 85, 0.08) 0%, transparent 55%),
-    radial-gradient(ellipse 50% 60% at 80% 75%, rgba(242, 68, 85, 0.06) 0%, transparent 50%),
-    radial-gradient(ellipse 40% 35% at 60% 30%, rgba(242, 68, 85, 0.04) 0%, transparent 45%);
-  pointer-events: none;
-  z-index: 0;
-  animation: ambient-drift 20s ease-in-out infinite alternate;
 }
 
 @keyframes fade-in {

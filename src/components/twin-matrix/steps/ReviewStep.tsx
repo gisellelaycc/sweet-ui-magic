@@ -177,11 +177,11 @@ export const ReviewStep = ({ signature, username, activeModules, onNext, onBack 
                   <span className="text-3xl font-bold text-foreground">{identityDensity}%</span>
                   <span className="text-xs text-muted-foreground mb-1">of 256 dimensions active</span>
                 </div>
-                <div className="h-1.5 bg-transparent rounded-full overflow-visible">
+                <div className="h-[3px] bg-transparent rounded-full overflow-visible">
                   <div className="h-full rounded-full transition-all duration-700" style={{
                     width: `${identityDensity}%`,
                     background: "rgba(10, 255, 255, 0.5)",
-                    boxShadow: "0 0 8px rgba(10, 255, 255, 0.6), 0 0 20px rgba(10, 255, 255, 0.3)",
+                    boxShadow: "0 0 6px rgba(10, 255, 255, 0.5), 0 0 14px rgba(10, 255, 255, 0.25)",
                   }} />
                 </div>
               </div>
@@ -202,11 +202,11 @@ export const ReviewStep = ({ signature, username, activeModules, onNext, onBack 
                       <span className="text-foreground/70">{layer.label}</span>
                       <span className="text-muted-foreground">{layer.value}%</span>
                     </div>
-                    <div className="h-1.5 bg-transparent rounded-full overflow-visible">
+                    <div className="h-[3px] bg-transparent rounded-full overflow-visible">
                       <div className="h-full rounded-full transition-all duration-700" style={{
                         width: `${layer.value}%`,
                         background: `rgba(${layer.color}, 0.6)`,
-                        boxShadow: `0 0 6px rgba(${layer.color}, 0.7), 0 0 16px rgba(${layer.color}, 0.35)`,
+                        boxShadow: `0 0 5px rgba(${layer.color}, 0.6), 0 0 12px rgba(${layer.color}, 0.3)`,
                       }} />
                     </div>
                   </div>

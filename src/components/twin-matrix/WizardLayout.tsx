@@ -80,7 +80,7 @@ export const WizardLayout = () => {
   const showPageBack = activePage !== null;
 
   return (
-    <div className="h-full flex flex-col relative z-10">
+    <div className={`h-full flex flex-col relative z-10 ${state.step >= 9 ? 'agent-ambient' : ''}`}>
       <ParticleBackground color={state.step >= 9 ? 'red' : 'cyan'} />
 
       <header className="flex items-center justify-between px-6 py-4 border-b border-foreground/5 relative z-10">
