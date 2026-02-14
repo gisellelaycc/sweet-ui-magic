@@ -293,6 +293,7 @@ body::before {
 
 .glass-card-agent {
   border-color: rgba(242, 68, 85, 0.15);
+  border-top-color: rgba(242, 68, 85, 0.3);
 }
 
 .glass-card-agent::before {
@@ -301,6 +302,20 @@ body::before {
     rgba(242, 68, 85, 0.12),
     transparent
   ) !important;
+}
+
+/* Suppress cyan ambient behind agent sections */
+.agent-ambient::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: hsl(228 14% 4%);
+  z-index: -1;
+}
+
+@keyframes divider-trace-welcome {
+  0% { left: -60px; }
+  100% { left: 100%; }
 }
 
 .agent-ambient {

@@ -59,7 +59,7 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
           {/* Title centered */}
           <div className="text-center mb-8">
             <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] tracking-tight mb-2">
-              Skill & Style
+              Most frequent activities
             </h2>
             <p className="text-muted-foreground text-base md:text-lg">
               Order what feels essential.
