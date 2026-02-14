@@ -180,7 +180,7 @@ export const AgentActivatedStep = ({ agentName, onDashboard, onCreateAnother }: 
   const [telegramConnected, setTelegramConnected] = useState(false);
 
   return (
-    <div ref={containerRef} className="relative flex flex-col items-center justify-center min-h-[70vh] text-center animate-fade-in px-4 overflow-hidden agent-ambient">
+    <div ref={containerRef} className="relative flex flex-col items-center justify-center min-h-[70vh] text-center animate-fade-in px-4 overflow-hidden">
       {/* Particle background — lobster silhouette gather/scatter */}
       {dims.w > 0 && <ParticleCanvas width={dims.w} height={dims.h} />}
 

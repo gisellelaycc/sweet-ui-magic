@@ -293,7 +293,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
   const isCustomDuration = permission.authorizationDuration === 'Custom';
 
   return (
-    <div ref={containerRef} className="relative animate-fade-in overflow-hidden h-full flex flex-col agent-ambient">
+    <div ref={containerRef} className="relative animate-fade-in overflow-hidden h-full flex flex-col">
       {/* Particle lobster background */}
       {dims.w > 0 && <ParticleCanvas width={dims.w} height={dims.h} />}
 

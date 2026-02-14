@@ -98,7 +98,7 @@ export const WelcomeStep = ({ username, onUpdateUsername, onNext }: Props) => {
               }}
             >
               {/* Inline input with arrow */}
-              <div className="relative flex items-center border-b border-foreground/15 pb-1">
+              <div className="relative flex items-center pb-1">
                 <input
                   value={value}
                   onChange={e => setValue(e.target.value)}
