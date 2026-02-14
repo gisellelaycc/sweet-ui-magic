@@ -97,8 +97,8 @@ export const WizardLayout = () => {
         )}
         {activePage === 'agent' && (
           <AgentStudioPage
-            onCreateAgent={() => { setActivePage(null); setState(s => ({ ...s, step: 8 })); }}
-            onEditAgent={() => { setActivePage(null); setState(s => ({ ...s, step: 8 })); }}
+            onCreateAgent={() => { setActivePage(null); setState(s => ({ ...s, step: 9 })); }}
+            onEditAgent={() => { setActivePage(null); setState(s => ({ ...s, step: 9 })); }}
           />
         )}
         {activePage === 'auth' && <ActiveAuthorizationsPage />}
