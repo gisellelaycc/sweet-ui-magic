@@ -16,14 +16,14 @@ import { GenerateStep } from './steps/GenerateStep';
 import { ReviewStep } from './steps/ReviewStep';
 import { AuthStep } from './steps/AuthStep';
 import { CompleteStep } from './steps/CompleteStep';
-import { AgentActivatedStep } from './steps/AgentActivatedStep';
+
 import { MyIdentityPage } from './pages/MyIdentityPage';
 import { UpdateIdentityPage } from './pages/UpdateIdentityPage';
 import { ActiveAuthorizationsPage } from './pages/ActiveAuthorizationsPage';
 import { MissionsPage } from './pages/MissionsPage';
 import { SettingsPage } from './pages/SettingsPage';
 
-const TOTAL_STEPS = 10;
+const TOTAL_STEPS = 9;
 
 type MenuPage = 'identity' | 'update' | 'auth' | 'agent' | 'missions' | 'settings' | null;
 
@@ -70,12 +70,12 @@ export const WizardLayout = () => {
     setState(s => ({ ...s, signature: sig, step: s.step + 1 }));
   }, []);
 
-  const hasIdentity = state.step >= 10;
+  const hasIdentity = state.step >= 9;
 
   const handleMenuNavigate = (id: string) => setActivePage(id as MenuPage);
   const handlePageNavigate = (id: string) => setActivePage(id as MenuPage);
 
-  const showIndicator = !activePage && state.step > 0 && state.step < 10;
+  const showIndicator = !activePage && state.step > 0 && state.step < 9;
   const showBack = !activePage && state.step > 0 && state.step < 6;
   const showPageBack = activePage !== null;
 
@@ -150,13 +150,11 @@ export const WizardLayout = () => {
               />
             )}
             {state.step === 9 && (
-              <AuthStep data={state.agentSetup} onUpdate={d => setState(s => ({ ...s, agentSetup: d }))} onNext={next} />
-            )}
-            {state.step === 10 && (
-              <AgentActivatedStep
-                agentName={state.agentSetup.agent.name}
+              <AuthStep
+                data={state.agentSetup}
+                onUpdate={d => setState(s => ({ ...s, agentSetup: d }))}
+                onNext={next}
                 onDashboard={() => { setActivePage(null); setState(s => ({ ...s, step: 0, signature: [], agentSetup: initialState.agentSetup })); }}
-                onCreateAnother={() => setState(s => ({ ...s, step: 9, agentSetup: initialState.agentSetup }))}
               />
             )}
           </>
