@@ -124,13 +124,13 @@ const ParticleCanvas = ({ width, height }: { width: number; height: number }) =>
         const glowOpacity = phaseRef.current === 'hold' ? p.opacity * 1.5 : p.opacity;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(54, 230, 255, ${glowOpacity})`;
+        ctx.fillStyle = `rgba(242, 68, 85, ${glowOpacity})`;
         ctx.fill();
         
         if (phaseRef.current === 'hold') {
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.size * 2.5, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(54, 230, 255, ${glowOpacity * 0.15})`;
+          ctx.fillStyle = `rgba(242, 68, 85, ${glowOpacity * 0.15})`;
           ctx.fill();
         }
       }
@@ -199,12 +199,11 @@ export const AgentActivatedStep = ({ agentName, onDashboard, onCreateAnother }: 
         </div>
       )}
 
-      {/* Permanent cyan lobster icon */}
+      {/* Permanent red lobster icon */}
       {!showRedFlash && (
         <div className="mb-6 relative z-10 animate-fade-in">
           <img src={lobsterIcon} alt="" className="w-16 h-16" style={{
-            filter: 'brightness(0) saturate(100%) invert(78%) sepia(60%) saturate(1000%) hue-rotate(145deg) brightness(1.1)',
-            opacity: 0.7,
+            filter: 'drop-shadow(0 0 12px rgba(242, 68, 85, 0.5))',
           }} />
         </div>
       )}
@@ -220,15 +219,14 @@ export const AgentActivatedStep = ({ agentName, onDashboard, onCreateAnother }: 
           <span className="text-xs text-muted-foreground">Agent</span>
           <span className="text-sm font-medium text-foreground flex items-center gap-1.5">
             <img src={lobsterIcon} alt="" className="w-4 h-4" style={{
-              filter: 'brightness(0) saturate(100%) invert(78%) sepia(60%) saturate(1000%) hue-rotate(145deg) brightness(1.1)',
-              opacity: 0.6,
+              filter: 'drop-shadow(0 0 4px rgba(242, 68, 85, 0.4))',
             }} />
             {agentName || 'Lobster-01'}
           </span>
         </div>
         <div className="flex items-center justify-between">
           <span className="text-xs text-muted-foreground">Status</span>
-          <span className="text-xs font-medium" style={{ color: '#36E6FF' }}>● Active</span>
+          <span className="text-xs font-medium" style={{ color: '#F24455' }}>● Active</span>
         </div>
 
         {/* Telegram connection */}
@@ -241,7 +239,7 @@ export const AgentActivatedStep = ({ agentName, onDashboard, onCreateAnother }: 
               🔗 Connect Telegram
             </button>
           ) : (
-            <p className="text-xs text-center" style={{ color: '#36E6FF' }}>✓ Telegram Connected</p>
+            <p className="text-xs text-center" style={{ color: '#F24455' }}>✓ Telegram Connected</p>
           )}
           <p className="text-[9px] text-muted-foreground/50 mt-1 text-center">Required for agent notifications</p>
         </div>

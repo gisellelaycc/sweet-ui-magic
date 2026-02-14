@@ -95,31 +95,18 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
             </div>
           </div>
 
-          {/* Right: Soul Signature — vertically centered */}
+          {/* Right: Soul Signature — plain text, vertically centered with bars */}
           {hasInteracted && (
-            <div
-              className="lg:w-[260px] shrink-0 animate-fade-in"
-              style={{
-                background: 'rgba(255, 255, 255, 0.03)',
-                backdropFilter: 'blur(20px) saturate(160%)',
-                borderRadius: '20px',
-                padding: '1.5rem',
-                border: '1px solid rgba(255, 255, 255, 0.06)',
-                boxShadow: '0 0 40px -15px rgba(10, 255, 255, 0.08), 0 8px 32px rgba(0, 0, 0, 0.15)',
-              }}
-            >
-              <div className="flex items-center justify-between mb-4">
-                <p className="text-xs text-muted-foreground uppercase tracking-widest">Soul Signature</p>
-                <p className="text-[10px] text-muted-foreground">{touchedCount} / 4</p>
-              </div>
-              <div className="space-y-3">
+            <div className="lg:w-[220px] shrink-0 animate-fade-in flex flex-col justify-center">
+              <p className="text-xs text-muted-foreground uppercase tracking-widest mb-4">Soul Signature</p>
+              <div className="space-y-6">
                 {bars.map(bar => {
                   const raw = getBarRaw(bar.value);
                   return (
-                    <div key={bar.id} className="flex items-center justify-between text-[11px]">
-                      <span className="text-foreground/60">{bar.label}</span>
+                    <div key={bar.id}>
+                      <span className="text-[11px] text-foreground/60 block">{bar.label}</span>
                       {bar.value !== null ? (
-                        <span className="text-[9px] text-muted-foreground font-mono">{raw} / 255</span>
+                        <span className="text-[10px] text-muted-foreground font-mono">{raw} / 255</span>
                       ) : (
                         <span className="text-muted-foreground/40 italic text-[10px]">—</span>
                       )}

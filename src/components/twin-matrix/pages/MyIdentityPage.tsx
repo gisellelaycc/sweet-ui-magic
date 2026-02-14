@@ -68,7 +68,7 @@ export const MyIdentityPage = ({ username, activeModules, signature, onNavigate 
         <div className="flex items-center justify-between">
           <div>
             <p className="font-semibold">@{username || 'unnamed'}</p>
-            <p className="text-xs text-green-400">● Active</p>
+            <p className="text-xs" style={{ color: '#F24455' }}>● Active</p>
           </div>
           <div className="text-right">
             <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Layers</p>
