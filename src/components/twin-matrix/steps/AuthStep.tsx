@@ -373,13 +373,13 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                 <label className="text-xs text-muted-foreground uppercase tracking-widest">Behavior</label>
                 <div className="space-y-2">
                   {['Active search', 'Passive receive only'].map((mode) => (
-                    <label key={mode} className="flex items-center gap-3 cursor-pointer">
+                    <div key={mode} className="flex items-center gap-3 cursor-pointer" onClick={() => setAgent((a) => ({ ...a, behaviorMode: mode }))}>
                       <span className="w-3.5 h-3.5 rounded-full border flex items-center justify-center flex-shrink-0"
                         style={{ borderColor: agent.behaviorMode === mode ? '#F24455' : 'rgba(255,255,255,0.15)' }}>
                         {agent.behaviorMode === mode && <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#F24455' }} />}
                       </span>
                       <span className="text-sm text-foreground/80">{mode === 'Active search' ? 'Active' : 'Passive'}</span>
-                    </label>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -434,13 +434,13 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                 <label className="text-xs text-muted-foreground uppercase tracking-widest">Trading Authority</label>
                 <div className="space-y-2">
                   {TRADING_OPTIONS.map((mode) => (
-                    <label key={mode} className="flex items-center gap-3 cursor-pointer">
+                    <div key={mode} className="flex items-center gap-3 cursor-pointer" onClick={() => { setPermission((p) => ({ ...p, tradingAuthority: mode })); if (mode !== 'Full Auto') setFullAutoConfirm(false); }}>
                       <span className="w-3.5 h-3.5 rounded-full border flex items-center justify-center flex-shrink-0"
                         style={{ borderColor: permission.tradingAuthority === mode ? '#F24455' : 'rgba(255,255,255,0.15)' }}>
                         {permission.tradingAuthority === mode && <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#F24455' }} />}
                       </span>
                       <span className="text-sm text-foreground/80">{mode}</span>
-                    </label>
+                    </div>
                   ))}
                 </div>
                 {permission.tradingAuthority === 'Full Auto' && (
@@ -460,13 +460,13 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                 <label className="text-xs text-muted-foreground uppercase tracking-widest">Authorization Duration</label>
                 <div className="space-y-2">
                   {DURATION_OPTIONS.map((d) => (
-                    <label key={d} className="flex items-center gap-3 cursor-pointer">
+                    <div key={d} className="flex items-center gap-3 cursor-pointer" onClick={() => setPermission((p) => ({ ...p, authorizationDuration: d, customDurationDays: d === 'Custom' ? p.customDurationDays : '' }))}>
                       <span className="w-3.5 h-3.5 rounded-full border flex items-center justify-center flex-shrink-0"
                         style={{ borderColor: permission.authorizationDuration === d ? '#F24455' : 'rgba(255,255,255,0.15)' }}>
                         {permission.authorizationDuration === d && <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#F24455' }} />}
                       </span>
                       <span className="text-sm text-foreground/80">{d}</span>
-                    </label>
+                    </div>
                   ))}
                 </div>
                 {permission.authorizationDuration === 'Custom' && (
