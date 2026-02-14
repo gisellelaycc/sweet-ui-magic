@@ -396,43 +396,47 @@ body::before {
   animation: chip-drift 4s ease-in-out infinite;
 }
 
-/* ── Dimension Scan Effect ── */
-.scan-title {
+/* ── Dimension Scan: text glow sweep ── */
+.scan-text-base {
   position: relative;
-  overflow: hidden;
+  z-index: 1;
+  background: linear-gradient(90deg, hsl(var(--foreground)) 100%, hsl(var(--foreground)) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.scan-line {
+.scan-text-glow {
   position: absolute;
-  top: 0;
-  left: -40%;
-  width: 40%;
-  height: 100%;
+  inset: 0;
+  z-index: 2;
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(10, 255, 255, 0.06) 30%,
-    rgba(10, 255, 255, 0.18) 50%,
-    rgba(10, 255, 255, 0.06) 70%,
+    transparent 35%,
+    rgba(10, 255, 255, 0.9) 48%,
+    rgba(173, 255, 255, 1) 50%,
+    rgba(10, 255, 255, 0.9) 52%,
+    transparent 65%,
     transparent 100%
   );
+  background-size: 250% 100%;
+  background-position: -100% 0;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   pointer-events: none;
-  animation: dimension-scan 4s ease-in-out 1.5s infinite;
+  animation: text-scan-glow 4s ease-in-out 3s infinite;
 }
 
-@keyframes dimension-scan {
+@keyframes text-scan-glow {
   0% {
-    left: -40%;
-    opacity: 0;
+    background-position: -100% 0;
   }
-  10% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 1;
+  40% {
+    background-position: 200% 0;
   }
   100% {
-    left: 120%;
-    opacity: 0;
+    background-position: 200% 0;
   }
 }
