@@ -50,8 +50,8 @@ const ParticleCanvas = ({ width, height }: { width: number; height: number }) =>
       ty: offsetY + py * scale,
       ox: Math.random() * width,
       oy: Math.random() * height,
-      size: 1.2 + Math.random() * 1.2,
-      opacity: 0.15 + Math.random() * 0.25,
+      size: 1.8 + Math.random() * 1.5,
+      opacity: 0.25 + Math.random() * 0.35,
     }));
     
     // Add extra ambient particles
@@ -148,7 +148,7 @@ const ParticleCanvas = ({ width, height }: { width: number; height: number }) =>
       width={width}
       height={height}
       className="absolute inset-0 pointer-events-none"
-      style={{ opacity: 0.6 }}
+      style={{ opacity: 0.8 }}
     />
   );
 };

@@ -11,7 +11,7 @@ interface Props {
 
 /* ── Glowing divider line (white, shimmering) ── */
 const GlowLine = () => (
-  <div className="relative w-full h-px my-6">
+  <div className="relative w-full h-px mt-1 mb-6">
     <div className="absolute inset-0 bg-foreground/10" />
     <div className="absolute inset-0 overflow-hidden">
       <div
@@ -98,13 +98,13 @@ export const WelcomeStep = ({ username, onUpdateUsername, onNext }: Props) => {
               }}
             >
               {/* Inline input with arrow */}
-              <div className="relative flex items-center pb-1">
+              <div className="relative flex items-center pb-0">
                 <input
                   value={value}
                   onChange={e => setValue(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && handleConfirm()}
                   placeholder="Your name"
-                  className="flex-1 bg-transparent border-none px-0 py-2 text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none"
+                  className="flex-1 bg-transparent border-none px-0 py-1 text-xl text-foreground placeholder:text-muted-foreground/40 focus:outline-none"
                 />
                 <button
                   onClick={handleConfirm}
@@ -119,11 +119,11 @@ export const WelcomeStep = ({ username, onUpdateUsername, onNext }: Props) => {
                 </button>
               </div>
 
-              {/* Glow divider */}
+              {/* Glow divider — tight to input */}
               <GlowLine />
 
               {/* Subtitle below divider */}
-              <p className="text-muted-foreground/50 text-xs text-center">
+              <p className="text-muted-foreground/50 text-xs text-center -mt-3">
                 Shape your 256D space in 2 min.
               </p>
             </div>
