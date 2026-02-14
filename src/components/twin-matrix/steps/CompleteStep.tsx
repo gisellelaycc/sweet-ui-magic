@@ -22,6 +22,8 @@ interface Props {
   username: string;
   signature: number[];
   agentName: string;
+  onActivateAgent: () => void;
+  onDashboard: () => void;
 }
 
 function generateWalletAddress(): string {
@@ -40,11 +42,10 @@ function generateSBTId(): string {
   return `SBT-${Math.floor(Math.random() * 900000 + 100000)}`;
 }
 
-export const CompleteStep = ({ username, signature, agentName }: Props) => {
+export const CompleteStep = ({ username, signature, onActivateAgent, onDashboard }: Props) => {
   const walletAddress = useMemo(() => generateWalletAddress(), []);
   const identityHash = useMemo(() => generateHash(signature), [signature]);
   const sbtId = useMemo(() => generateSBTId(), []);
-  const [telegramConnected, setTelegramConnected] = useState(false);
 
   const dominantDimensions = useMemo(() => {
     return signature
@@ -66,9 +67,9 @@ export const CompleteStep = ({ username, signature, agentName }: Props) => {
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] text-center animate-fade-in px-4">
       <div className="text-6xl mb-6">✨</div>
-      <h2 className="text-3xl font-bold mb-2">State Committed</h2>
+      <h2 className="text-3xl font-bold mb-2">Identity State</h2>
       <p className="text-muted-foreground mb-8 max-w-sm">
-        Defined with clarity. Preserved in privacy.
+        Defined with clarity. Recorded to your wallet.
       </p>
 
       <div className="glass-card max-w-lg w-full text-left space-y-5">
@@ -78,7 +79,7 @@ export const CompleteStep = ({ username, signature, agentName }: Props) => {
           <p className="text-xs font-mono text-foreground/70 break-all">{identityHash}</p>
         </div>
 
-        {/* Dominant Dimensions — reduced noise */}
+        {/* Dominant Dimensions */}
         <div className="space-y-2.5">
           <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Dominant Dimensions</p>
           <div className="space-y-1.5">
@@ -95,7 +96,7 @@ export const CompleteStep = ({ username, signature, agentName }: Props) => {
           </div>
         </div>
 
-        {/* Vector Fingerprint — glow dots with spacing */}
+        {/* Vector Fingerprint */}
         <div className="space-y-2">
           <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Vector Fingerprint</p>
           <p className="text-[9px] text-muted-foreground/50">256D Snapshot at Mint Time</p>
@@ -112,7 +113,7 @@ export const CompleteStep = ({ username, signature, agentName }: Props) => {
                       return (
                         <div
                           key={i}
-                         className="rounded-[1px]"
+                          className="rounded-[1px]"
                           style={{
                             width: 10,
                             height: 10,
@@ -145,29 +146,20 @@ export const CompleteStep = ({ username, signature, agentName }: Props) => {
           <p className="text-xs text-green-400">✓ Bound to sovereign wallet</p>
           <p className="text-[10px] text-muted-foreground font-mono break-all">{walletAddress}</p>
         </div>
-
-        {/* Telegram */}
-        <div className="pt-3 border-t border-foreground/10">
-          {!telegramConnected ? (
-            <button
-              onClick={() => setTelegramConnected(true)}
-              className="btn-twin btn-twin-ghost w-full py-2 text-xs"
-            >
-              🔗 Connect Telegram
-            </button>
-          ) : (
-            <p className="text-xs text-green-400 text-center">✓ Telegram Connected</p>
-          )}
-          <p className="text-[9px] text-muted-foreground/50 mt-1 text-center">Required for agent notifications</p>
-        </div>
       </div>
 
-      <button
-        onClick={() => window.location.reload()}
-        className="btn-twin btn-twin-ghost mt-8 px-8 py-3"
-      >
-        Start Over
-      </button>
+      {/* CTAs per PDF spec */}
+      <div className="w-full max-w-lg mt-8 space-y-3">
+        <button onClick={onActivateAgent} className="btn-twin btn-twin-primary btn-glow w-full py-3">
+          Activate an Agent →
+        </button>
+        <button onClick={onDashboard} className="btn-twin btn-twin-ghost w-full py-2.5 text-sm">
+          Return to Dashboard
+        </button>
+        <p className="text-[10px] text-muted-foreground/40 text-center">
+          You can activate an agent anytime from your dashboard.
+        </p>
+      </div>
     </div>
   );
 };

@@ -82,8 +82,8 @@ export const AuthStep = ({ data, onUpdate, onNext }: Props) => {
   return (
     <div className="animate-fade-in space-y-6 max-w-3xl mx-auto">
       <div className="text-center">
-        <h2 className="text-2xl font-bold mb-1">Agent Studio</h2>
-        <p className="text-muted-foreground text-sm">Delegate your agents with intention.</p>
+        <h2 className="text-2xl font-bold mb-1">Activate an Agent</h2>
+        <p className="text-muted-foreground text-sm">Let this identity act on your behalf.</p>
       </div>
 
       <button onClick={addAgent} className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors">

@@ -21,9 +21,10 @@ interface Props {
   tags: string[];
   activeModules: string[];
   onNext: () => void;
+  onBack: () => void;
 }
 
-export const ReviewStep = ({ signature, username, activeModules, onNext }: Props) => {
+export const ReviewStep = ({ signature, username, activeModules, onNext, onBack }: Props) => {
   const [hoveredCell, setHoveredCell] = useState<number | null>(null);
   const [showWallet, setShowWallet] = useState(false);
   const [walletPhase, setWalletPhase] = useState<'connect' | 'signing' | 'confirmed'>('connect');
@@ -70,8 +71,8 @@ export const ReviewStep = ({ signature, username, activeModules, onNext }: Props
   return (
     <div className="animate-fade-in space-y-6 max-w-4xl mx-auto">
       <div className="text-center">
-        <h2 className="text-2xl font-bold mb-1">Identity State</h2>
-        <p className="text-muted-foreground text-sm">A private snapshot of who you chose to be.</p>
+        <h2 className="text-2xl font-bold mb-1">Identity Preview</h2>
+        <p className="text-muted-foreground text-sm">Not yet sealed. Review before recording.</p>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-6 items-stretch">
@@ -241,9 +242,14 @@ export const ReviewStep = ({ signature, username, activeModules, onNext }: Props
 
       <p className="text-xs text-center text-muted-foreground/50">@{username}</p>
 
-      <button onClick={() => { setShowWallet(true); setWalletPhase('connect'); }} className="btn-twin btn-twin-primary btn-glow w-full py-3">
-        Commit Identity State
-      </button>
+      <div className="flex gap-3">
+        <button onClick={onBack} className="btn-twin btn-twin-ghost flex-1 py-3">
+          Refine Responses
+        </button>
+        <button onClick={() => { setShowWallet(true); setWalletPhase('connect'); }} className="btn-twin btn-twin-primary btn-glow flex-1 py-3">
+          Commit Identity State
+        </button>
+      </div>
 
       {/* MetaMask-style Wallet Signature Animation */}
       <Dialog open={showWallet} onOpenChange={() => {}}>
