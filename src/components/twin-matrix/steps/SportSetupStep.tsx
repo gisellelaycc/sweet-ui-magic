@@ -57,7 +57,7 @@ export const SportSetupStep = ({ data, onUpdate, onNext }: Props) => {
   return (
     <StepLayout>
       <StepHeader>
-        <div>
+        <div className="text-center">
           <h2 className="text-2xl font-bold mb-1">Baseline</h2>
           <p className="text-muted-foreground text-sm">A quiet calibration of your physical rhythm.</p>
         </div>

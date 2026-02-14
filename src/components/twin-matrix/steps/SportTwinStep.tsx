@@ -55,7 +55,7 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
   return (
     <StepLayout>
       <StepHeader>
-        <div>
+        <div className="text-center">
           <h2 className="text-2xl font-bold mb-1">Skill & Style</h2>
           <p className="text-muted-foreground text-sm">Order what feels essential.</p>
         </div>
