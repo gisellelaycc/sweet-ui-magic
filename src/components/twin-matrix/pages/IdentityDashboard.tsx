@@ -23,21 +23,8 @@ function generateSBTId(): string {
   return `SBT-299331`;
 }
 
-const GlowDivider = () => (
-  <div className="relative w-full h-px my-5">
-    <div className="absolute inset-0" style={{
-      background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent)',
-    }} />
-    <div className="absolute inset-0 overflow-hidden">
-      <div
-        className="absolute top-0 h-full w-[60px]"
-        style={{
-          background: 'linear-gradient(90deg, transparent, rgba(10, 255, 255, 0.25), rgba(173, 255, 255, 0.15), transparent)',
-          animation: 'divider-trace-welcome 6s linear infinite',
-        }}
-      />
-    </div>
-  </div>
+const ThinDivider = () => (
+  <div className="w-full h-px my-6" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)' }} />
 );
 
 export const IdentityDashboard = ({ username, signature, activeModules, onNavigate }: Props) => {
@@ -45,7 +32,6 @@ export const IdentityDashboard = ({ username, signature, activeModules, onNaviga
   const sbtId = useMemo(() => generateSBTId(), []);
   const walletAddress = useMemo(() => '0x12a4…f9A9', []);
 
-  // Layer mix calculation
   const layerMix = useMemo(() => {
     return SLICES.map(slice => {
       const sliceData = signature.slice(slice.range[0], slice.range[1] + 1);
@@ -55,7 +41,6 @@ export const IdentityDashboard = ({ username, signature, activeModules, onNaviga
     });
   }, [signature]);
 
-  // AI summary based on signature
   const aiSummary = useMemo(() => {
     const physical = layerMix.find(l => l.label === 'Physical')?.percent ?? 0;
     const social = layerMix.find(l => l.label === 'Social')?.percent ?? 0;
@@ -68,7 +53,6 @@ export const IdentityDashboard = ({ username, signature, activeModules, onNaviga
     return traits.join('. ') + '.';
   }, [layerMix]);
 
-  // Top dimensions
   const dominantDimensions = useMemo(() => {
     const DIMENSION_MAP: Record<number, { layer: string; name: string }> = {
       206: { layer: 'Spiritual', name: 'Outcome' },
@@ -102,11 +86,11 @@ export const IdentityDashboard = ({ username, signature, activeModules, onNaviga
 
   return (
     <div className="animate-fade-in h-full overflow-y-auto scrollbar-hide">
-      <div className="max-w-5xl mx-auto px-6 py-6 space-y-0">
+      <div className="max-w-5xl mx-auto px-6 py-6">
 
         {/* ① Current State Overview */}
         <section>
-          <div className="flex items-center justify-between mb-1">
+          <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="text-2xl font-bold">Identity State</h2>
               <p className="text-xs text-muted-foreground">@{username || 'unnamed'} · <span style={{ color: 'rgba(10,255,255,0.7)' }}>● Sealed</span></p>
@@ -114,26 +98,20 @@ export const IdentityDashboard = ({ username, signature, activeModules, onNaviga
             <p className="text-[10px] text-muted-foreground/50">Last sealed · 2 hours ago</p>
           </div>
 
-          <GlowDivider />
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* Identity Hash */}
-            <div className="glass-card !rounded-2xl !p-4 space-y-1">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-4">
+            <div className="space-y-1 py-3 border-b border-foreground/5">
               <p className="text-[9px] text-muted-foreground uppercase tracking-widest">Identity Hash</p>
               <p className="text-[11px] font-mono text-foreground/70 break-all leading-relaxed">{identityHash}</p>
             </div>
-            {/* SBT ID */}
-            <div className="glass-card !rounded-2xl !p-4 space-y-1">
+            <div className="space-y-1 py-3 border-b border-foreground/5">
               <p className="text-[9px] text-muted-foreground uppercase tracking-widest">Minted SBT ID</p>
               <p className="text-sm font-mono text-foreground">{sbtId}</p>
             </div>
-            {/* Bound Wallet */}
-            <div className="glass-card !rounded-2xl !p-4 space-y-1">
+            <div className="space-y-1 py-3 border-b border-foreground/5">
               <p className="text-[9px] text-muted-foreground uppercase tracking-widest">Bound Wallet</p>
               <p className="text-[11px] font-mono text-foreground/70">{walletAddress}</p>
             </div>
-            {/* Vector Imprint mini */}
-            <div className="glass-card !rounded-2xl !p-4 space-y-1.5">
+            <div className="space-y-1.5 py-3 border-b border-foreground/5">
               <p className="text-[9px] text-muted-foreground uppercase tracking-widest">Vector Imprint</p>
               <div className="flex gap-px flex-wrap">
                 {signature.slice(0, 64).map((v, i) => (
@@ -153,29 +131,26 @@ export const IdentityDashboard = ({ username, signature, activeModules, onNaviga
           </div>
         </section>
 
-        <GlowDivider />
+        <ThinDivider />
 
         {/* ② State Summary */}
         <section>
-          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-3">State Insight</h3>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-4">State Insight</h3>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Layer Mix */}
-            <div className="glass-card !rounded-2xl !p-5 space-y-3">
+            <div className="space-y-3">
               <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Layer Mix</p>
-              <div className="space-y-2">
+              <div className="space-y-2.5">
                 {layerMix.map(l => (
                   <div key={l.label} className="space-y-1">
                     <div className="flex justify-between text-[11px]">
                       <span className="text-foreground/60">{l.label}</span>
                       <span className="text-muted-foreground">{l.percent}%</span>
                     </div>
-                    <div className="h-1.5 bg-foreground/5 rounded-full overflow-hidden">
+                    <div className="h-1 bg-foreground/5 rounded-full overflow-hidden">
                       <div
                         className="h-full rounded-full"
-                        style={{
-                          width: `${l.percent}%`,
-                          background: `rgba(${l.color}, 0.5)`,
-                        }}
+                        style={{ width: `${l.percent}%`, background: `rgba(${l.color}, 0.5)` }}
                       />
                     </div>
                   </div>
@@ -183,13 +158,13 @@ export const IdentityDashboard = ({ username, signature, activeModules, onNaviga
               </div>
             </div>
 
-            {/* AI Summary + Dominant Dimensions */}
-            <div className="space-y-4">
-              <div className="glass-card !rounded-2xl !p-5 space-y-2">
+            {/* AI Summary + Dimensions */}
+            <div className="space-y-6">
+              <div className="space-y-2">
                 <p className="text-[10px] text-muted-foreground uppercase tracking-widest">AI Summary</p>
                 <p className="text-sm text-foreground/80 italic leading-relaxed">{aiSummary}</p>
               </div>
-              <div className="glass-card !rounded-2xl !p-5 space-y-2">
+              <div className="space-y-2">
                 <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Dominant Dimensions</p>
                 <div className="space-y-1.5">
                   {dominantDimensions.map(d => (
@@ -204,62 +179,68 @@ export const IdentityDashboard = ({ username, signature, activeModules, onNaviga
           </div>
         </section>
 
-        <GlowDivider />
+        <ThinDivider />
 
         {/* ③ Version History */}
         <section>
           <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-3">Version History</h3>
-          <div className="space-y-2">
-            {versions.map(v => (
-              <div key={v.version} className="glass-card !rounded-2xl !p-4 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <span className={`text-sm font-medium ${v.current ? 'text-foreground' : 'text-foreground/50'}`}>
-                    State {v.version}
-                  </span>
-                  <span className="text-[10px] text-muted-foreground">{v.date}</span>
-                  {v.current && (
-                    <span className="text-[9px] px-2 py-0.5 rounded-full bg-foreground/5 text-muted-foreground">current</span>
-                  )}
+          <div className="space-y-0">
+            {versions.map((v, idx) => (
+              <div key={v.version}>
+                <div className="py-3 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <span className={`text-sm font-medium ${v.current ? 'text-foreground' : 'text-foreground/50'}`}>
+                      State {v.version}
+                    </span>
+                    <span className="text-[10px] text-muted-foreground">{v.date}</span>
+                    {v.current && (
+                      <span className="text-[9px] px-2 py-0.5 rounded-full bg-foreground/5 text-muted-foreground">current</span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button className="text-[10px] text-muted-foreground hover:text-foreground transition-colors">View</button>
+                    {!v.current && (
+                      <button className="text-[10px] text-muted-foreground hover:text-foreground transition-colors">Compare</button>
+                    )}
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <button className="text-[10px] text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded-lg hover:bg-foreground/5">
-                    View
-                  </button>
-                  {!v.current && (
-                    <button className="text-[10px] text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded-lg hover:bg-foreground/5">
-                      Compare
-                    </button>
-                  )}
-                </div>
+                {idx < versions.length - 1 && (
+                  <div className="h-px" style={{ background: 'rgba(255,255,255,0.04)' }} />
+                )}
               </div>
             ))}
           </div>
         </section>
 
-        <GlowDivider />
+        <ThinDivider />
 
         {/* ⑤ Agent Bindings */}
         <section>
           <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-3">Bound Agents</h3>
-          <div className="space-y-2">
-            {boundAgents.map(a => (
-              <div key={a.name} className="glass-card !rounded-2xl !p-4 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full" style={{ background: '#F24455', boxShadow: '0 0 6px rgba(242,68,85,0.4)' }} />
-                  <span className="text-sm text-foreground/80">{a.name}</span>
+          <div className="space-y-0">
+            {boundAgents.map((a, idx) => (
+              <div key={a.name}>
+                <div className="py-3 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 rounded-full" style={{ background: '#F24455', boxShadow: '0 0 6px rgba(242,68,85,0.4)' }} />
+                    <span className="text-sm text-foreground/80">{a.name}</span>
+                  </div>
+                  <span className="text-[10px] text-muted-foreground">{a.status}</span>
                 </div>
-                <span className="text-[10px] text-muted-foreground">{a.status}</span>
+                {idx < boundAgents.length - 1 && (
+                  <div className="h-px" style={{ background: 'rgba(255,255,255,0.04)' }} />
+                )}
               </div>
             ))}
           </div>
         </section>
 
-        <GlowDivider />
+        <ThinDivider />
 
         {/* ④ Manage State */}
         <section className="pb-8">
           <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-3">Manage State</h3>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
+          <div className="flex gap-4 flex-wrap">
             {[
               { label: 'Refine State', action: () => onNavigate('update') },
               { label: 'Re-seal', action: () => {} },
@@ -269,7 +250,7 @@ export const IdentityDashboard = ({ username, signature, activeModules, onNaviga
               <button
                 key={btn.label}
                 onClick={btn.action}
-                className="btn-twin btn-twin-ghost py-2.5 text-xs"
+                className="text-xs text-muted-foreground hover:text-foreground transition-colors py-2 px-4 border border-foreground/8 rounded-lg hover:bg-foreground/5"
               >
                 {btn.label}
               </button>
