@@ -64,11 +64,11 @@ export const WelcomeStep = ({ username, onUpdateUsername, onNext }: Props) => {
         <button
           onClick={handleConfirm}
           disabled={!isValid}
-          className={`btn-twin btn-twin-primary text-base px-10 py-3 w-full disabled:opacity-30 disabled:cursor-not-allowed ${isValid ? 'btn-glow' : ''}`}
+          className={`btn-twin btn-twin-primary text-sm px-8 py-2.5 w-full disabled:opacity-30 disabled:cursor-not-allowed ${isValid ? 'btn-glow' : ''}`}
         >
           Enter the Space →
         </button>
-        <p className="text-muted-foreground/50 text-xs mt-3 text-center">Takes about 2 minutes</p>
+        <p className="text-muted-foreground/50 text-[10px] mt-2 text-center">Takes about 2 minutes</p>
       </StepFooter>
     </StepLayout>
   );

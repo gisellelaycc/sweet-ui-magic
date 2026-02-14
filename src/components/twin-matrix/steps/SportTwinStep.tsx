@@ -134,7 +134,7 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
       </StepContent>
 
       <StepFooter>
-        <button onClick={onNext} disabled={!isValid} className="btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed">
+        <button onClick={onNext} disabled={!isValid} className="btn-twin btn-twin-primary w-full py-2.5 text-sm disabled:opacity-30 disabled:cursor-not-allowed">
           Commit Layer
         </button>
       </StepFooter>

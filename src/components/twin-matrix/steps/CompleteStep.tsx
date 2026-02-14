@@ -155,16 +155,13 @@ export const CompleteStep = ({ username, signature, onActivateAgent, onDashboard
       </StepContent>
 
       <StepFooter>
-        <div className="w-full max-w-lg mx-auto space-y-3">
-          <button onClick={onActivateAgent} className="btn-twin btn-twin-primary btn-glow w-full py-3">
+        <div className="space-y-2">
+          <button onClick={onActivateAgent} className="btn-twin btn-twin-primary btn-glow w-full py-2.5 text-sm">
             Activate an Agent →
           </button>
-          <button onClick={onDashboard} className="btn-twin btn-twin-ghost w-full py-2.5 text-sm">
+          <button onClick={onDashboard} className="btn-twin btn-twin-ghost w-full py-2 text-xs">
             Return to Dashboard
           </button>
-          <p className="text-[10px] text-muted-foreground/40 text-center">
-            You can activate an agent anytime from your dashboard.
-          </p>
         </div>
       </StepFooter>
     </StepLayout>
