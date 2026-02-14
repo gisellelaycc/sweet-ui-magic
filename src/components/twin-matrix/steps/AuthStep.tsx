@@ -100,7 +100,7 @@ const ParticleCanvas = ({ width, height }: { width: number; height: number }) =>
       ox: Math.random() * width,
       oy: Math.random() * height,
       size: 2.5 + Math.random() * 2,
-      opacity: 0.08 + Math.random() * 0.14,
+      opacity: 0.2 + Math.random() * 0.25,
     }));
 
     for (let i = 0; i < 30; i++) {
@@ -173,7 +173,7 @@ const ParticleCanvas = ({ width, height }: { width: number; height: number }) =>
     return () => cancelAnimationFrame(raf);
   }, [width, height, initParticles, setTargetsToCorner]);
 
-  return <canvas ref={canvasRef} width={width} height={height} className="absolute inset-0 pointer-events-none" style={{ opacity: 0.35 }} />;
+  return <canvas ref={canvasRef} width={width} height={height} className="absolute inset-0 pointer-events-none" style={{ opacity: 0.7 }} />;
 };
 
 /* ── Constants ── */
@@ -300,7 +300,15 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
       <div className="relative z-10 flex-1 min-h-0 overflow-y-auto scrollbar-hide">
         <div className="min-h-full flex flex-col items-center px-8 py-4">
           <div className="w-full max-w-[760px] space-y-6">
-        {/* Header removed per design */}
+        {/* Page-level title */}
+        <div className="text-center space-y-1">
+          <h2 className="text-2xl font-bold">
+            {subStep === 'create' ? 'Name your agent' : subStep === 'config' ? 'Configure Agent' : subStep === 'telegram' ? 'Connect Telegram' : subStep === 'activated' ? 'Agent Activated' : 'Your Agents'}
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            {subStep === 'create' ? 'Give your agent an identity to act on your behalf.' : subStep === 'config' ? 'Set behavior rules and permissions.' : subStep === 'telegram' ? 'Link Telegram for agent notifications.' : subStep === 'activated' ? 'Your agent is live.' : 'Manage your deployed agents.'}
+          </p>
+        </div>
 
         {/* ═══ Sub-step: LIST (shows saved agents + create new) ═══ */}
         {subStep === 'list' && (
