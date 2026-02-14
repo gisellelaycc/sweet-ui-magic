@@ -17,6 +17,7 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { id: 'identity', label: 'Identity' },
   { id: 'agent', label: 'Agents' },
+  { id: 'missions', label: 'Signal Marketplace' },
   { id: 'auth', label: 'Records' },
 ];
 

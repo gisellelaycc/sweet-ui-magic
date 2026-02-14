@@ -23,6 +23,7 @@ import { IdentityDashboard } from './pages/IdentityDashboard';
 import { UpdateIdentityPage } from './pages/UpdateIdentityPage';
 import { ActiveAuthorizationsPage } from './pages/ActiveAuthorizationsPage';
 import { MissionsPage } from './pages/MissionsPage';
+import { SignalMarketplacePage } from './pages/SignalMarketplacePage';
 import { SettingsPage } from './pages/SettingsPage';
 
 const TOTAL_STEPS = 9;
@@ -94,7 +95,7 @@ export const WizardLayout = () => {
           <UpdateIdentityPage username={state.profile.username} activeModules={state.activeModules} tags={[]} onNavigate={handlePageNavigate} />
         )}
         {activePage === 'auth' && <ActiveAuthorizationsPage />}
-        {activePage === 'missions' && <MissionsPage />}
+        {activePage === 'missions' && <SignalMarketplacePage />}
         {activePage === 'settings' && <SettingsPage />}
 
         {!activePage && (
