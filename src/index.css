@@ -326,17 +326,11 @@ body::before {
 .agent-ambient::after {
   content: '';
   position: fixed;
-  inset: -30%;
+  inset: 0;
   background:
-    radial-gradient(ellipse 80% 70% at 20% 10%, rgba(242, 68, 85, 0.16) 0%, transparent 60%),
-    radial-gradient(ellipse 70% 80% at 85% 80%, rgba(242, 68, 85, 0.14) 0%, transparent 55%),
-    radial-gradient(ellipse 60% 50% at 55% 25%, rgba(242, 68, 85, 0.09) 0%, transparent 50%),
-    radial-gradient(ellipse 50% 60% at 10% 70%, rgba(242, 68, 85, 0.11) 0%, transparent 50%),
-    radial-gradient(ellipse 45% 45% at 75% 40%, rgba(180, 50, 65, 0.07) 0%, transparent 45%),
-    radial-gradient(ellipse 90% 60% at 50% 90%, rgba(242, 68, 85, 0.10) 0%, transparent 55%);
+    radial-gradient(ellipse 45% 35% at 50% 22%, rgba(242, 68, 85, 0.12) 0%, transparent 70%);
   pointer-events: none;
   z-index: -1;
-  animation: ambient-drift 20s ease-in-out infinite alternate;
 }
 
 @keyframes divider-trace-welcome {
