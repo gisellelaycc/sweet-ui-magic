@@ -3,6 +3,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { ChevronDown, ChevronUp, Plus, Trash2 } from 'lucide-react';
 import type { AgentSetup, AgentDefinition, AgentPermission } from '@/types/twin-matrix';
 import { TaskCapabilitySection } from './TaskCapabilitySection';
+import { SplitStepLayout } from '../StepLayout';
 import lobsterIcon from '@/assets/lobster-icon.png';
 
 /* ── Saved Agent Record ── */
@@ -292,385 +293,268 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
   const canSaveConfig = agent.name.trim().length > 0 && (!isFullAuto || fullAutoConfirm);
   const isCustomDuration = permission.authorizationDuration === 'Custom';
 
+  const title = subStep === 'activated' ? 'Agent Activated' : 'Activate an Agent';
+  const subtitle = subStep === 'activated'
+    ? 'Your agent is now operating under your committed identity.'
+    : 'Let this identity act on your behalf.';
+
+  const footer = subStep === 'activated' ? (
+    <div className="space-y-3">
+      <button onClick={onDashboard} className="btn-twin btn-twin-primary btn-glow w-full py-3">
+        Return to Dashboard
+      </button>
+      <button onClick={handleCreateAnother} className="btn-twin btn-twin-ghost w-full py-2.5 text-sm">
+        Create Another Agent
+      </button>
+    </div>
+  ) : undefined;
+
   return (
-    <div ref={containerRef} className="relative animate-fade-in overflow-hidden h-full flex flex-col">
-      {/* Particle lobster background */}
+    <div ref={containerRef} className="relative h-full agent-ambient">
       {dims.w > 0 && <ParticleCanvas width={dims.w} height={dims.h} />}
 
-      <div className="relative z-10 flex-1 min-h-0 overflow-y-auto scrollbar-hide">
-        <div className="min-h-full flex flex-col items-center px-8 py-4">
-          <div className="w-full max-w-[760px] space-y-6">
-        {/* Header — always visible */}
-        <div className="text-center space-y-1">
-          <h2 className="text-2xl font-bold">
-            {subStep === 'create' ? 'Name your agent' : subStep === 'config' ? 'Configure Agent' : subStep === 'telegram' ? 'Connect Telegram' : subStep === 'activated' ? 'Agent Activated' : 'Agent Studio'}
-          </h2>
-          <p className="text-muted-foreground text-sm">
-            {subStep === 'create' ? 'Give your agent an identity to get started.' : subStep === 'config' ? 'Define behavior and permissions.' : subStep === 'telegram' ? 'Link Telegram to activate your agent.' : subStep === 'activated' ? 'Your agent is now operating under your identity.' : 'Let this identity act on your behalf.'}
-          </p>
-        </div>
-
-        {/* ═══ Sub-step: LIST (shows saved agents + create new) ═══ */}
-        {subStep === 'list' &&
+      <div className="relative z-10 h-full">
+        <SplitStepLayout title={title} subtitle={subtitle} footer={footer}>
+          {/* ═══ Sub-step: LIST ═══ */}
+          {subStep === 'list' &&
             <div className="space-y-4 animate-fade-in">
-            {savedAgents.length > 0 &&
-              <div className="space-y-2">
-                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Your Agents</h3>
-                {savedAgents.map((sa) =>
-                <div key={sa.id} className="glass-card !p-4 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <img src={lobsterIcon} alt="" className="w-6 h-6" style={{
-                      filter: 'drop-shadow(0 0 4px rgba(242, 68, 85, 0.4))',
-                      opacity: 0.8
-                    }} />
-                      <div>
-                        <p className="text-sm font-medium text-foreground">{sa.name}</p>
-                        <p className="text-[10px] text-muted-foreground">ID: {sa.id.slice(0, 16)}…</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <span className={`text-[10px] font-medium ${sa.status === 'ACTIVE' ? 'text-[#F24455]' : 'text-muted-foreground'}`}>
-                        ● {sa.status}
-                      </span>
-                      <button
-                      onClick={() => setViewingAgentId(viewingAgentId === sa.id ? null : sa.id)}
-                      className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-
-                        {viewingAgentId === sa.id ? 'Hide' : 'View'}
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {/* Expanded view of selected agent */}
-                {viewingAgent &&
-                <div className="glass-card !p-5 space-y-3 animate-fade-in">
-                    <div className="flex items-center justify-between">
-                      <h4 className="text-sm font-semibold text-foreground">{viewingAgent.name}</h4>
-                      <span className={`text-[10px] ${viewingAgent.status === 'ACTIVE' ? 'text-[#F24455]' : 'text-muted-foreground'}`}>
-                        ● {viewingAgent.status}
-                      </span>
-                    </div>
-                    <div className="space-y-1.5 text-[11px]">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Behavior Mode</span>
-                        <span className="text-foreground/70">{viewingAgent.agent.behaviorMode}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Trading Authority</span>
-                        <span className="text-foreground/70">{viewingAgent.permission.tradingAuthority}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Identity Scope</span>
-                        <span className="text-foreground/70">{(viewingAgent.permission.identityScopes || [viewingAgent.permission.identityScope]).join(', ')}</span>
-                      </div>
-                      {viewingAgent.agent.matchingStrategy.length > 0 &&
-                    <div className="flex justify-between">
-                          <span className="text-muted-foreground">Matching</span>
-                          <span className="text-foreground/70">{viewingAgent.agent.matchingStrategy.join(', ')}</span>
+              {savedAgents.length > 0 &&
+                <div className="space-y-2">
+                  <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Your Agents</h3>
+                  {savedAgents.map((sa) =>
+                    <div key={sa.id} className="glass-card !p-4 flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <img src={lobsterIcon} alt="" className="w-6 h-6" style={{ filter: 'drop-shadow(0 0 4px rgba(242, 68, 85, 0.4))', opacity: 0.8 }} />
+                        <div>
+                          <p className="text-sm font-medium text-foreground">{sa.name}</p>
+                          <p className="text-[10px] text-muted-foreground">ID: {sa.id.slice(0, 16)}…</p>
                         </div>
-                    }
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Telegram</span>
-                        <span className={viewingAgent.telegramConnected ? 'text-[#F24455]' : 'text-muted-foreground'}>
-                          {viewingAgent.telegramConnected ? '✓ Connected' : 'Not connected'}
-                        </span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className={`text-[10px] font-medium ${sa.status === 'ACTIVE' ? 'text-[#F24455]' : 'text-muted-foreground'}`}>● {sa.status}</span>
+                        <button onClick={() => setViewingAgentId(viewingAgentId === sa.id ? null : sa.id)} className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+                          {viewingAgentId === sa.id ? 'Hide' : 'View'}
+                        </button>
                       </div>
                     </div>
-                  </div>
-                }
-              </div>
-              }
-
-            <button
-                onClick={() => {setAgentName('');setSubStep('create');}}
-                className="btn-twin btn-twin-primary btn-glow w-full py-3">
-
-              <Plus className="w-4 h-4" /> Create New Agent
-            </button>
-          </div>
-            }
-
-        {/* ═══ Sub-step A: CREATE (name input) ═══ */}
-        {subStep === 'create' &&
-            <div className="space-y-6 animate-fade-in max-w-md mx-auto">
-            {savedAgents.length > 0 &&
-              <button
-                onClick={() => setSubStep('list')}
-                className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-
-                ← View existing agents ({savedAgents.length})
-              </button>
-              }
-
-            <div className="glass-card space-y-5">
-              <div className="flex items-center gap-3">
-                <img src={lobsterIcon} alt="" className="w-10 h-10" style={{
-                    filter: 'drop-shadow(0 0 6px rgba(242, 68, 85, 0.5))',
-                    opacity: 0.8
-                  }} />
-                <div>
-                  <h3 className="text-sm font-semibold">Name your agent</h3>
-                  <p className="text-[10px] text-muted-foreground">Give your agent an identity.</p>
+                  )}
+                  {viewingAgent &&
+                    <div className="glass-card !p-5 space-y-3 animate-fade-in">
+                      <div className="flex items-center justify-between">
+                        <h4 className="text-sm font-semibold text-foreground">{viewingAgent.name}</h4>
+                        <span className={`text-[10px] ${viewingAgent.status === 'ACTIVE' ? 'text-[#F24455]' : 'text-muted-foreground'}`}>● {viewingAgent.status}</span>
+                      </div>
+                      <div className="space-y-1.5 text-[11px]">
+                        <div className="flex justify-between"><span className="text-muted-foreground">Behavior Mode</span><span className="text-foreground/70">{viewingAgent.agent.behaviorMode}</span></div>
+                        <div className="flex justify-between"><span className="text-muted-foreground">Trading Authority</span><span className="text-foreground/70">{viewingAgent.permission.tradingAuthority}</span></div>
+                        <div className="flex justify-between"><span className="text-muted-foreground">Identity Scope</span><span className="text-foreground/70">{(viewingAgent.permission.identityScopes || [viewingAgent.permission.identityScope]).join(', ')}</span></div>
+                        {viewingAgent.agent.matchingStrategy.length > 0 &&
+                          <div className="flex justify-between"><span className="text-muted-foreground">Matching</span><span className="text-foreground/70">{viewingAgent.agent.matchingStrategy.join(', ')}</span></div>
+                        }
+                        <div className="flex justify-between"><span className="text-muted-foreground">Telegram</span><span className={viewingAgent.telegramConnected ? 'text-[#F24455]' : 'text-muted-foreground'}>{viewingAgent.telegramConnected ? '✓ Connected' : 'Not connected'}</span></div>
+                      </div>
+                    </div>
+                  }
                 </div>
-              </div>
-
-              <input
-                  type="text"
-                  value={agentName}
-                  onChange={(e) => setAgentName(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleCreateAgent()}
-                  placeholder="e.g. Lobster-01"
-                  className="w-full bg-foreground/5 border-none rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none transition-colors"
-                  style={{ boxShadow: '0 0 0 1px rgba(255,255,255,0.06) inset' }} />
-
-
-              <button
-                  onClick={handleCreateAgent}
-                  disabled={!agentName.trim()}
-                  className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${agentName.trim() ? 'btn-glow' : ''}`}>
-
-                Create Agent
+              }
+              <button onClick={() => { setAgentName(''); setSubStep('create'); }} className="btn-twin btn-twin-primary btn-glow w-full py-3">
+                <Plus className="w-4 h-4" /> Create New Agent
               </button>
             </div>
-          </div>
-            }
+          }
 
-        {/* ═══ Sub-step B: CONFIG ═══ */}
-        {subStep === 'config' &&
-            <div className="space-y-4 animate-fade-in">
-            <div className="glass-card">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* LEFT — Behavior Builder */}
-                <div className="space-y-5">
-                  <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Behavior Builder</h3>
-
-                  {/* Agent Name (readonly) */}
-                  <div className="space-y-1.5">
-                    <label className="text-xs text-muted-foreground">Agent Name</label>
-                    <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-foreground/5 text-sm text-foreground" style={{ boxShadow: '0 0 0 1px rgba(255,255,255,0.06) inset' }}>
-                      <img src={lobsterIcon} alt="" className="w-4 h-4" style={{ filter: 'drop-shadow(0 0 4px rgba(242, 68, 85, 0.4))', opacity: 0.8 }} />
-                      {agent.name}
-                    </div>
+          {/* ═══ Sub-step A: CREATE ═══ */}
+          {subStep === 'create' &&
+            <div className="space-y-6 animate-fade-in">
+              {savedAgents.length > 0 &&
+                <button onClick={() => setSubStep('list')} className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+                  ← View existing agents ({savedAgents.length})
+                </button>
+              }
+              <div className="glass-card space-y-5">
+                <div className="flex items-center gap-3">
+                  <img src={lobsterIcon} alt="" className="w-10 h-10" style={{ filter: 'drop-shadow(0 0 6px rgba(242, 68, 85, 0.5))', opacity: 0.8 }} />
+                  <div>
+                    <h3 className="text-sm font-semibold">Name your agent</h3>
+                    <p className="text-[10px] text-muted-foreground">Give your agent an identity.</p>
                   </div>
-
-                  {/* Behavior Mode */}
-                  <div className="space-y-2">
-                    <label className="text-xs text-muted-foreground">Behavior Mode</label>
-                    <div className="space-y-1.5">
-                      {BEHAVIOR_MODES.map((m) =>
-                        <label key={m.value} className="flex items-start gap-2 text-sm cursor-pointer">
-                          <input type="radio" checked={agent.behaviorMode === m.value} onChange={() => setAgent((a) => ({ ...a, behaviorMode: m.value }))} className="accent-foreground mt-0.5" />
-                          <div>
-                            <span className="text-foreground/80">{m.value}</span>
-                            <p className="text-[10px] text-muted-foreground/50">{m.desc}</p>
-                          </div>
-                        </label>
-                        )}
-                    </div>
-                  </div>
-
-                  {/* Matching Strategy */}
-                  <div className="space-y-2">
-                    <label className="text-xs text-muted-foreground">Matching Strategy</label>
-                    <div className="flex flex-wrap gap-1.5">
-                      {MATCH_STRATEGIES.map((s) => {
-                          const selected = agent.matchingStrategy.includes(s);
-                          return (
-                            <button key={s} onClick={() => setAgent((a) => ({ ...a, matchingStrategy: toggleArrayItem(a.matchingStrategy, s) }))}
-                            className={`text-[11px] px-3 py-1.5 rounded-lg transition-all ${selected ? 'bg-foreground/20 text-foreground border border-foreground/20' : 'bg-foreground/5 text-muted-foreground border border-foreground/5 hover:border-foreground/15'}`}>
-                              {s}</button>);
-
-                        })}
-                    </div>
-                  </div>
-
-                  {/* Task Capability */}
-                  <TaskCapabilitySection capabilities={agent.capabilities || {}} onUpdate={(caps) => setAgent((a) => ({ ...a, capabilities: caps }))} />
                 </div>
+                <input type="text" value={agentName} onChange={(e) => setAgentName(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleCreateAgent()} placeholder="e.g. Lobster-01"
+                  className="w-full bg-foreground/5 border-none rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none transition-colors"
+                  style={{ boxShadow: '0 0 0 1px rgba(255,255,255,0.06) inset' }} />
+                <button onClick={handleCreateAgent} disabled={!agentName.trim()}
+                  className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${agentName.trim() ? 'btn-glow' : ''}`}>
+                  Create Agent
+                </button>
+              </div>
+            </div>
+          }
 
-                {/* RIGHT — Permission & Autonomy */}
-                <div className="space-y-5">
-                  <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Permission & Autonomy</h3>
-
-                  {/* Identity Scope */}
-                  <div className="space-y-2">
-                    <label className="text-xs text-muted-foreground">Identity Scope</label>
-                    <p className="text-[10px] text-muted-foreground/50">Grants structured summary access only — no raw values exposed.</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {IDENTITY_SCOPES.map((s) => {
+          {/* ═══ Sub-step B: CONFIG ═══ */}
+          {subStep === 'config' &&
+            <div className="space-y-4 animate-fade-in">
+              <div className="glass-card">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-5">
+                    <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Behavior Builder</h3>
+                    <div className="space-y-1.5">
+                      <label className="text-xs text-muted-foreground">Agent Name</label>
+                      <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-foreground/5 text-sm text-foreground" style={{ boxShadow: '0 0 0 1px rgba(255,255,255,0.06) inset' }}>
+                        <img src={lobsterIcon} alt="" className="w-4 h-4" style={{ filter: 'drop-shadow(0 0 4px rgba(242, 68, 85, 0.4))', opacity: 0.8 }} />
+                        {agent.name}
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs text-muted-foreground">Behavior Mode</label>
+                      <div className="space-y-1.5">
+                        {BEHAVIOR_MODES.map((m) =>
+                          <label key={m.value} className="flex items-start gap-2 text-sm cursor-pointer">
+                            <input type="radio" checked={agent.behaviorMode === m.value} onChange={() => setAgent((a) => ({ ...a, behaviorMode: m.value }))} className="accent-foreground mt-0.5" />
+                            <div><span className="text-foreground/80">{m.value}</span><p className="text-[10px] text-muted-foreground/50">{m.desc}</p></div>
+                          </label>
+                        )}
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs text-muted-foreground">Matching Strategy</label>
+                      <div className="flex flex-wrap gap-1.5">
+                        {MATCH_STRATEGIES.map((s) => {
+                          const selected = agent.matchingStrategy.includes(s);
+                          return (<button key={s} onClick={() => setAgent((a) => ({ ...a, matchingStrategy: toggleArrayItem(a.matchingStrategy, s) }))}
+                            className={`text-[11px] px-3 py-1.5 rounded-lg transition-all ${selected ? 'bg-foreground/20 text-foreground border border-foreground/20' : 'bg-foreground/5 text-muted-foreground border border-foreground/5 hover:border-foreground/15'}`}>{s}</button>);
+                        })}
+                      </div>
+                    </div>
+                    <TaskCapabilitySection capabilities={agent.capabilities || {}} onUpdate={(caps) => setAgent((a) => ({ ...a, capabilities: caps }))} />
+                  </div>
+                  <div className="space-y-5">
+                    <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Permission & Autonomy</h3>
+                    <div className="space-y-2">
+                      <label className="text-xs text-muted-foreground">Identity Scope</label>
+                      <p className="text-[10px] text-muted-foreground/50">Grants structured summary access only — no raw values exposed.</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {IDENTITY_SCOPES.map((s) => {
                           const scopes = permission.identityScopes || [permission.identityScope];
                           const selected = scopes.includes(s);
-                          return (
-                            <button key={s} onClick={() => {
-                              const next = selected ? scopes.filter((x) => x !== s) : [...scopes, s];
-                              setPermission((p) => ({ ...p, identityScopes: next, identityScope: next[0] || '' }));
-                            }}
-                            className={`text-[11px] px-3 py-1.5 rounded-lg transition-all ${selected ? 'bg-foreground/20 text-foreground border border-foreground/20' : 'bg-foreground/5 text-muted-foreground border border-foreground/5 hover:border-foreground/15'}`}>
-                              {s}</button>);
-
+                          return (<button key={s} onClick={() => { const next = selected ? scopes.filter((x) => x !== s) : [...scopes, s]; setPermission((p) => ({ ...p, identityScopes: next, identityScope: next[0] || '' })); }}
+                            className={`text-[11px] px-3 py-1.5 rounded-lg transition-all ${selected ? 'bg-foreground/20 text-foreground border border-foreground/20' : 'bg-foreground/5 text-muted-foreground border border-foreground/5 hover:border-foreground/15'}`}>{s}</button>);
                         })}
-                    </div>
-                  </div>
-
-                  {/* Trading Authority */}
-                  <div className="space-y-2">
-                    <label className="text-xs text-muted-foreground">Trading Authority</label>
-                    <div className="space-y-1.5">
-                      {TRADING_OPTIONS.map((t) =>
-                        <label key={t} className="flex items-center gap-2 text-sm cursor-pointer">
-                          <input type="radio" checked={permission.tradingAuthority === t} onChange={() => {setPermission((p) => ({ ...p, tradingAuthority: t }));if (t !== 'Full Auto') setFullAutoConfirm(false);}} className="accent-foreground" />
-                          <span className="text-foreground/80">{t}</span>
-                        </label>
-                        )}
-                    </div>
-                  </div>
-
-                  {/* Authorization Duration */}
-                  <div className="space-y-2">
-                    <label className="text-xs text-muted-foreground">Authorization Duration</label>
-                    <div className="space-y-1.5">
-                      {DURATION_OPTIONS.map((d) =>
-                        <label key={d} className="flex items-center gap-2 text-sm cursor-pointer">
-                          <input type="radio" checked={permission.authorizationDuration === d} onChange={() => setPermission((p) => ({ ...p, authorizationDuration: d, customDurationDays: d === 'Custom' ? p.customDurationDays : '' }))} className="accent-foreground" />
-                          <span className="text-foreground/80">{d}</span>
-                        </label>
-                        )}
-                    </div>
-                    {isCustomDuration &&
-                      <div className="animate-fade-in flex items-center gap-2 mt-1">
-                        <span className="text-[11px] text-muted-foreground w-24">Duration (days)</span>
-                        <input type="number" min="1" value={permission.customDurationDays}
-                        onChange={(e) => setPermission((p) => ({ ...p, customDurationDays: e.target.value.replace(/[^0-9]/g, '') }))}
-                        placeholder="Enter number of days"
-                        className="flex-1 bg-foreground/5 border border-foreground/10 rounded-lg px-3 py-1.5 text-xs text-foreground focus:outline-none focus:border-foreground/25" />
-
                       </div>
-                      }
-                  </div>
-
-                  {/* Threshold inputs */}
-                  {needsThreshold &&
-                    <div className="space-y-2 animate-fade-in">
-                      {(['maxPerTask', 'dailyCap', 'weeklyCap'] as const).map((field) =>
-                      <div key={field} className="flex items-center gap-2">
-                          <span className="text-[11px] text-muted-foreground w-24">
-                            {field === 'maxPerTask' ? 'Max/task' : field === 'dailyCap' ? 'Daily cap' : 'Weekly cap'}
-                          </span>
-                          <input type="text" value={permission[field]}
-                        onChange={(e) => setPermission((p) => ({ ...p, [field]: e.target.value }))}
-                        placeholder="$"
-                        className="flex-1 bg-foreground/5 border border-foreground/10 rounded-lg px-3 py-1.5 text-xs text-foreground focus:outline-none focus:border-foreground/25" />
-
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs text-muted-foreground">Trading Authority</label>
+                      <div className="space-y-1.5">
+                        {TRADING_OPTIONS.map((t) =>
+                          <label key={t} className="flex items-center gap-2 text-sm cursor-pointer">
+                            <input type="radio" checked={permission.tradingAuthority === t} onChange={() => { setPermission((p) => ({ ...p, tradingAuthority: t })); if (t !== 'Full Auto') setFullAutoConfirm(false); }} className="accent-foreground" />
+                            <span className="text-foreground/80">{t}</span>
+                          </label>
+                        )}
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs text-muted-foreground">Authorization Duration</label>
+                      <div className="space-y-1.5">
+                        {DURATION_OPTIONS.map((d) =>
+                          <label key={d} className="flex items-center gap-2 text-sm cursor-pointer">
+                            <input type="radio" checked={permission.authorizationDuration === d} onChange={() => setPermission((p) => ({ ...p, authorizationDuration: d, customDurationDays: d === 'Custom' ? p.customDurationDays : '' }))} className="accent-foreground" />
+                            <span className="text-foreground/80">{d}</span>
+                          </label>
+                        )}
+                      </div>
+                      {isCustomDuration &&
+                        <div className="animate-fade-in flex items-center gap-2 mt-1">
+                          <span className="text-[11px] text-muted-foreground w-24">Duration (days)</span>
+                          <input type="number" min="1" value={permission.customDurationDays} onChange={(e) => setPermission((p) => ({ ...p, customDurationDays: e.target.value.replace(/[^0-9]/g, '') }))} placeholder="Enter number of days"
+                            className="flex-1 bg-foreground/5 border border-foreground/10 rounded-lg px-3 py-1.5 text-xs text-foreground focus:outline-none focus:border-foreground/25" />
                         </div>
-                      )}
+                      }
                     </div>
+                    {needsThreshold &&
+                      <div className="space-y-2 animate-fade-in">
+                        {(['maxPerTask', 'dailyCap', 'weeklyCap'] as const).map((field) =>
+                          <div key={field} className="flex items-center gap-2">
+                            <span className="text-[11px] text-muted-foreground w-24">{field === 'maxPerTask' ? 'Max/task' : field === 'dailyCap' ? 'Daily cap' : 'Weekly cap'}</span>
+                            <input type="text" value={permission[field]} onChange={(e) => setPermission((p) => ({ ...p, [field]: e.target.value }))} placeholder="$"
+                              className="flex-1 bg-foreground/5 border border-foreground/10 rounded-lg px-3 py-1.5 text-xs text-foreground focus:outline-none focus:border-foreground/25" />
+                          </div>
+                        )}
+                      </div>
                     }
-
-                  {/* Full Auto confirmation */}
-                  {isFullAuto &&
-                    <div className="animate-fade-in p-3 rounded-xl border border-destructive/30 bg-destructive/5 space-y-2">
-                      <p className="text-xs text-destructive">⚠ Full Auto grants unrestricted trading authority. Confirm to proceed.</p>
-                      <label className="flex items-center gap-2 text-xs cursor-pointer">
-                        <Checkbox checked={fullAutoConfirm} onCheckedChange={() => setFullAutoConfirm(!fullAutoConfirm)} />
-                        <span className="text-foreground/80">I understand the risk</span>
-                      </label>
-                    </div>
+                    {isFullAuto &&
+                      <div className="animate-fade-in p-3 rounded-xl border border-destructive/30 bg-destructive/5 space-y-2">
+                        <p className="text-xs text-destructive">⚠ Full Auto grants unrestricted trading authority. Confirm to proceed.</p>
+                        <label className="flex items-center gap-2 text-xs cursor-pointer">
+                          <Checkbox checked={fullAutoConfirm} onCheckedChange={() => setFullAutoConfirm(!fullAutoConfirm)} />
+                          <span className="text-foreground/80">I understand the risk</span>
+                        </label>
+                      </div>
                     }
-
-                  {/* Risk Controls */}
-                  <div className="space-y-2">
-                    <label className="text-xs text-muted-foreground">Risk Controls</label>
-                    <p className="text-[10px] text-muted-foreground/50">These controls help reduce financial and operational exposure.</p>
-                    <div className="space-y-1.5">
-                      {RISK_CONTROLS.map((rc) => {
+                    <div className="space-y-2">
+                      <label className="text-xs text-muted-foreground">Risk Controls</label>
+                      <p className="text-[10px] text-muted-foreground/50">These controls help reduce financial and operational exposure.</p>
+                      <div className="space-y-1.5">
+                        {RISK_CONTROLS.map((rc) => {
                           const checked = permission.spendResetPolicy.includes(rc.key);
-                          return (
-                            <label key={rc.key} className="flex items-center gap-2 text-[11px] cursor-pointer">
+                          return (<label key={rc.key} className="flex items-center gap-2 text-[11px] cursor-pointer">
                             <Checkbox checked={checked} onCheckedChange={() => setPermission((p) => ({ ...p, spendResetPolicy: toggleArrayItem(p.spendResetPolicy, rc.key) }))} />
                             <span className="text-foreground/70">{rc.label}</span>
                           </label>);
-
                         })}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+              <button onClick={handleSaveConfig} disabled={!canSaveConfig}
+                className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${canSaveConfig ? 'btn-glow' : ''}`}>
+                Save Configuration
+              </button>
             </div>
+          }
 
-            <button onClick={handleSaveConfig} disabled={!canSaveConfig}
-              className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${canSaveConfig ? 'btn-glow' : ''}`}>
-              Save Configuration
-            </button>
-          </div>
-            }
-
-        {/* ═══ Sub-step C: TELEGRAM ═══ */}
-        {subStep === 'telegram' &&
-            <div className="space-y-6 animate-fade-in max-w-md mx-auto">
-            <div className="glass-card space-y-5 text-center">
-              <img src={lobsterIcon} alt="" className="w-14 h-14 mx-auto" style={{
-                  filter: 'drop-shadow(0 0 8px rgba(242, 68, 85, 0.5))',
-                  opacity: 0.8
-                }} />
-              <div>
-                <h3 className="text-lg font-semibold mb-1">{currentSavedAgent?.name || agent.name}</h3>
-                <p className="text-[10px] text-muted-foreground">Status: DRAFT — Connect Telegram to activate.</p>
-              </div>
-
-              {!telegramConnected ?
-                <button onClick={handleConnectTelegram} className="btn-twin btn-twin-primary btn-glow w-full py-3">
-                  🔗 Connect Telegram
-                </button> :
-
-                <p className="text-sm" style={{ color: '#F24455' }}>✓ Telegram Connected</p>
+          {/* ═══ Sub-step C: TELEGRAM ═══ */}
+          {subStep === 'telegram' &&
+            <div className="space-y-6 animate-fade-in">
+              <div className="glass-card space-y-5 text-center">
+                <img src={lobsterIcon} alt="" className="w-14 h-14 mx-auto" style={{ filter: 'drop-shadow(0 0 8px rgba(242, 68, 85, 0.5))', opacity: 0.8 }} />
+                <div>
+                  <h3 className="text-lg font-semibold mb-1">{currentSavedAgent?.name || agent.name}</h3>
+                  <p className="text-[10px] text-muted-foreground">Status: DRAFT — Connect Telegram to activate.</p>
+                </div>
+                {!telegramConnected ?
+                  <button onClick={handleConnectTelegram} className="btn-twin btn-twin-primary btn-glow w-full py-3">🔗 Connect Telegram</button> :
+                  <p className="text-sm" style={{ color: '#F24455' }}>✓ Telegram Connected</p>
                 }
-              <p className="text-[9px] text-muted-foreground/50">Required for agent notifications and task dispatch.</p>
-            </div>
-          </div>
-            }
-
-        {/* ═══ Sub-step D: ACTIVATED ═══ */}
-        {subStep === 'activated' &&
-            <div className="space-y-6 animate-fade-in max-w-md mx-auto text-center">
-            {/* Red flash → cyan lobster */}
-            <RedFlashLobster />
-
-            <h2 className="text-3xl font-bold">Agent Activated</h2>
-            <p className="text-muted-foreground max-w-sm mx-auto">
-              Your agent is now operating under your committed identity.
-            </p>
-
-            <div className="glass-card space-y-3 text-left">
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-muted-foreground">Agent</span>
-                <span className="text-sm font-medium text-foreground flex items-center gap-1.5">
-                  <img src={lobsterIcon} alt="" className="w-4 h-4" style={{ filter: 'drop-shadow(0 0 4px rgba(242, 68, 85, 0.4))', opacity: 0.8 }} />
-                  {currentSavedAgent?.name || agent.name}
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-muted-foreground">Status</span>
-                <span className="text-xs font-medium" style={{ color: '#F24455' }}>● Active</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-muted-foreground">Telegram</span>
-                <span className="text-xs" style={{ color: '#F24455' }}>✓ Connected</span>
+                <p className="text-[9px] text-muted-foreground/50">Required for agent notifications and task dispatch.</p>
               </div>
             </div>
+          }
 
-            <div className="space-y-3">
-              <button onClick={onDashboard} className="btn-twin btn-twin-primary btn-glow w-full py-3">
-                Return to Dashboard
-              </button>
-              <button onClick={handleCreateAnother} className="btn-twin btn-twin-ghost w-full py-2.5 text-sm">
-                Create Another Agent
-              </button>
+          {/* ═══ Sub-step D: ACTIVATED ═══ */}
+          {subStep === 'activated' &&
+            <div className="space-y-6 animate-fade-in">
+              <RedFlashLobster />
+              <div className="glass-card space-y-3 text-left">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-muted-foreground">Agent</span>
+                  <span className="text-sm font-medium text-foreground flex items-center gap-1.5">
+                    <img src={lobsterIcon} alt="" className="w-4 h-4" style={{ filter: 'drop-shadow(0 0 4px rgba(242, 68, 85, 0.4))', opacity: 0.8 }} />
+                    {currentSavedAgent?.name || agent.name}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-muted-foreground">Status</span>
+                  <span className="text-xs font-medium" style={{ color: '#F24455' }}>● Active</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-muted-foreground">Telegram</span>
+                  <span className="text-xs" style={{ color: '#F24455' }}>✓ Connected</span>
+                </div>
+              </div>
             </div>
-          </div>
-            }
-          </div>
-        </div>
+          }
+        </SplitStepLayout>
       </div>
     </div>);
 
