@@ -20,20 +20,22 @@ export const WelcomeStep = ({ username, onUpdateUsername, onNext }: Props) => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] text-center animate-fade-in px-4">
-      <div className="glass-card max-w-md w-full">
-        <div className="mb-8">
-          <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-foreground/5 flex items-center justify-center"
-            style={{ boxShadow: '0 0 0 1px rgba(255,255,255,0.05) inset' }}>
-            <img src={logo} alt="Twin Matrix" className="w-12 h-12" />
-          </div>
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
-            Define your identity state.
-          </h1>
-          <p className="text-muted-foreground text-base max-w-sm mx-auto leading-relaxed">
-            A private space for clarity.
-          </p>
+      {/* Logo & heading — outside card */}
+      <div className="mb-8">
+        <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-foreground/5 flex items-center justify-center"
+          style={{ boxShadow: '0 0 0 1px rgba(255,255,255,0.05) inset' }}>
+          <img src={logo} alt="Twin Matrix" className="w-12 h-12" />
         </div>
+        <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
+          Define your identity state.
+        </h1>
+        <p className="text-muted-foreground text-base max-w-sm mx-auto leading-relaxed">
+          A private space for clarity.
+        </p>
+      </div>
 
+      {/* Input card */}
+      <div className="glass-card max-w-md w-full flex flex-col items-center">
         <div className="w-full max-w-xs mx-auto mb-6">
           <div className="relative">
             <input
