@@ -298,7 +298,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
       {dims.w > 0 && <ParticleCanvas width={dims.w} height={dims.h} />}
 
       <div className="relative z-10 flex-1 min-h-0 overflow-y-auto scrollbar-hide">
-        <div className="min-h-full flex flex-col items-center justify-center px-8 py-4">
+        <div className="min-h-full flex flex-col items-center px-8 py-4">
           <div className="w-full max-w-[760px] space-y-6">
         {/* Header — always visible */}
         <div className="text-center space-y-1">
