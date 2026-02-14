@@ -12,7 +12,7 @@ const Slider = React.forwardRef<
     className={cn("relative flex w-full touch-none select-none items-center", className)}
     {...props}
   >
-    <SliderPrimitive.Track className="relative h-[2px] w-full grow overflow-visible rounded-full bg-foreground/12">
+    <SliderPrimitive.Track className="relative h-[1.5px] w-full grow overflow-visible rounded-full bg-foreground/25">
       {/* No visible Range — axis is always complete */}
       <SliderPrimitive.Range className="absolute h-full rounded-full bg-transparent" />
     </SliderPrimitive.Track>
