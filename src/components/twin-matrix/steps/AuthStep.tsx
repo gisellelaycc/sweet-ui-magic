@@ -133,7 +133,16 @@ const ThinDivider = () => (
 );
 
 /* ── Constants ── */
+const MATCH_STRATEGIES = ['Based on Skill', 'Based on Brand', 'Based on Soul', 'Based on Core'];
 const IDENTITY_SCOPES = ['Core', 'Skill', 'Soul'];
+const TRADING_OPTIONS = ['Manual Only', 'Auto-Approve under threshold', 'Full Auto'];
+const DURATION_OPTIONS = ['7 days', '30 days', 'Custom'];
+const RISK_CONTROLS = [
+  { key: 'pauseCap', label: 'Pause when daily cap reached' },
+  { key: 'switchManual', label: 'Switch to Manual after cap reached' },
+  { key: 'restrictTask', label: 'Restrict to selected task types' },
+  { key: 'restrictBrand', label: 'Restrict to approved brands' },
+];
 
 const defaultAgent: AgentDefinition = { name: '', taskTypes: [], matchingStrategy: [], behaviorMode: 'Active search', capabilities: {} };
 const defaultPermission: AgentPermission = {
@@ -365,13 +374,9 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                 <div className="space-y-2">
                   {['Active search', 'Passive receive only'].map((mode) => (
                     <label key={mode} className="flex items-center gap-3 cursor-pointer">
-                      <span
-                        className="w-3.5 h-3.5 rounded-full border flex items-center justify-center flex-shrink-0"
-                        style={{ borderColor: agent.behaviorMode === mode ? '#F24455' : 'rgba(255,255,255,0.15)' }}
-                      >
-                        {agent.behaviorMode === mode && (
-                          <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#F24455' }} />
-                        )}
+                      <span className="w-3.5 h-3.5 rounded-full border flex items-center justify-center flex-shrink-0"
+                        style={{ borderColor: agent.behaviorMode === mode ? '#F24455' : 'rgba(255,255,255,0.15)' }}>
+                        {agent.behaviorMode === mode && <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#F24455' }} />}
                       </span>
                       <span className="text-sm text-foreground/80">{mode === 'Active search' ? 'Active' : 'Passive'}</span>
                     </label>
@@ -381,27 +386,16 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
 
               <ThinDivider />
 
-              {/* Scope */}
+              {/* Matching Strategy */}
               <div className="py-5 space-y-3">
-                <label className="text-xs text-muted-foreground uppercase tracking-widest">Scope</label>
-                <div className="flex gap-2">
-                  {IDENTITY_SCOPES.map((s) => {
-                    const scopes = permission.identityScopes || ['Core'];
-                    const selected = scopes.includes(s);
+                <label className="text-xs text-muted-foreground uppercase tracking-widest">Matching Strategy</label>
+                <div className="flex flex-wrap gap-2">
+                  {MATCH_STRATEGIES.map((s) => {
+                    const selected = agent.matchingStrategy.includes(s);
                     return (
-                      <button
-                        key={s}
-                        onClick={() => {
-                          const next = selected ? scopes.filter((x) => x !== s) : [...scopes, s];
-                          setPermission((p) => ({ ...p, identityScopes: next, identityScope: next[0] || '' }));
-                        }}
-                        className={`text-xs px-4 py-1.5 rounded-full transition-all ${
-                          selected
-                            ? 'text-foreground border'
-                            : 'text-muted-foreground/50 border border-foreground/10 hover:border-foreground/20'
-                        }`}
-                        style={selected ? { borderColor: 'rgba(242,68,85,0.4)', background: 'rgba(242,68,85,0.08)', color: 'rgba(242,68,85,0.9)' } : {}}
-                      >
+                      <button key={s} onClick={() => setAgent((a) => ({ ...a, matchingStrategy: toggleArrayItem(a.matchingStrategy, s) }))}
+                        className={`text-xs px-4 py-1.5 rounded-full transition-all ${selected ? 'text-foreground border' : 'text-muted-foreground/50 border border-foreground/10 hover:border-foreground/20'}`}
+                        style={selected ? { borderColor: 'rgba(242,68,85,0.4)', background: 'rgba(242,68,85,0.08)', color: 'rgba(242,68,85,0.9)' } : {}}>
                         {s}
                       </button>
                     );
@@ -411,21 +405,41 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
 
               <ThinDivider />
 
-              {/* Autonomy */}
+              {/* Scope */}
               <div className="py-5 space-y-3">
-                <label className="text-xs text-muted-foreground uppercase tracking-widest">Autonomy</label>
+                <label className="text-xs text-muted-foreground uppercase tracking-widest">Scope</label>
+                <p className="text-[10px] text-muted-foreground/50">Grants structured summary access only — no raw values exposed.</p>
+                <div className="flex gap-2">
+                  {IDENTITY_SCOPES.map((s) => {
+                    const scopes = permission.identityScopes || ['Core'];
+                    const selected = scopes.includes(s);
+                    return (
+                      <button key={s} onClick={() => {
+                          const next = selected ? scopes.filter((x) => x !== s) : [...scopes, s];
+                          setPermission((p) => ({ ...p, identityScopes: next, identityScope: next[0] || '' }));
+                        }}
+                        className={`text-xs px-4 py-1.5 rounded-full transition-all ${selected ? 'text-foreground border' : 'text-muted-foreground/50 border border-foreground/10 hover:border-foreground/20'}`}
+                        style={selected ? { borderColor: 'rgba(242,68,85,0.4)', background: 'rgba(242,68,85,0.08)', color: 'rgba(242,68,85,0.9)' } : {}}>
+                        {s}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <ThinDivider />
+
+              {/* Autonomy / Trading Authority */}
+              <div className="py-5 space-y-3">
+                <label className="text-xs text-muted-foreground uppercase tracking-widest">Trading Authority</label>
                 <div className="space-y-2">
-                  {['Manual Only', 'Full Auto'].map((mode) => (
+                  {TRADING_OPTIONS.map((mode) => (
                     <label key={mode} className="flex items-center gap-3 cursor-pointer">
-                      <span
-                        className="w-3.5 h-3.5 rounded-full border flex items-center justify-center flex-shrink-0"
-                        style={{ borderColor: permission.tradingAuthority === mode ? '#F24455' : 'rgba(255,255,255,0.15)' }}
-                      >
-                        {permission.tradingAuthority === mode && (
-                          <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#F24455' }} />
-                        )}
+                      <span className="w-3.5 h-3.5 rounded-full border flex items-center justify-center flex-shrink-0"
+                        style={{ borderColor: permission.tradingAuthority === mode ? '#F24455' : 'rgba(255,255,255,0.15)' }}>
+                        {permission.tradingAuthority === mode && <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#F24455' }} />}
                       </span>
-                      <span className="text-sm text-foreground/80">{mode === 'Manual Only' ? 'Manual' : 'Auto'}</span>
+                      <span className="text-sm text-foreground/80">{mode}</span>
                     </label>
                   ))}
                 </div>
@@ -433,7 +447,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                   <div className="animate-fade-in pt-1">
                     <label className="flex items-center gap-2 text-xs cursor-pointer">
                       <Checkbox checked={fullAutoConfirm} onCheckedChange={() => setFullAutoConfirm(!fullAutoConfirm)} />
-                      <span className="text-muted-foreground">I understand Full Auto grants unrestricted authority</span>
+                      <span className="text-muted-foreground">⚠ I understand Full Auto grants unrestricted trading authority</span>
                     </label>
                   </div>
                 )}
@@ -441,21 +455,80 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
 
               <ThinDivider />
 
+              {/* Authorization Duration */}
+              <div className="py-5 space-y-3">
+                <label className="text-xs text-muted-foreground uppercase tracking-widest">Authorization Duration</label>
+                <div className="space-y-2">
+                  {DURATION_OPTIONS.map((d) => (
+                    <label key={d} className="flex items-center gap-3 cursor-pointer">
+                      <span className="w-3.5 h-3.5 rounded-full border flex items-center justify-center flex-shrink-0"
+                        style={{ borderColor: permission.authorizationDuration === d ? '#F24455' : 'rgba(255,255,255,0.15)' }}>
+                        {permission.authorizationDuration === d && <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#F24455' }} />}
+                      </span>
+                      <span className="text-sm text-foreground/80">{d}</span>
+                    </label>
+                  ))}
+                </div>
+                {permission.authorizationDuration === 'Custom' && (
+                  <div className="animate-fade-in flex items-center gap-2 pt-1">
+                    <span className="text-[11px] text-muted-foreground">Days:</span>
+                    <input type="number" min="1" value={permission.customDurationDays}
+                      onChange={(e) => setPermission((p) => ({ ...p, customDurationDays: e.target.value.replace(/[^0-9]/g, '') }))}
+                      placeholder="e.g. 14"
+                      className="flex-1 bg-transparent border-b border-foreground/10 px-0 py-1.5 text-xs text-foreground focus:outline-none focus:border-foreground/30 transition-colors" />
+                  </div>
+                )}
+              </div>
+
+              <ThinDivider />
+
+              {/* Spend Thresholds (visible when Auto-Approve) */}
+              {permission.tradingAuthority === 'Auto-Approve under threshold' && (
+                <>
+                  <div className="py-5 space-y-3 animate-fade-in">
+                    <label className="text-xs text-muted-foreground uppercase tracking-widest">Spend Limits</label>
+                    {(['maxPerTask', 'dailyCap', 'weeklyCap'] as const).map((field) => (
+                      <div key={field} className="flex items-center gap-3">
+                        <span className="text-[11px] text-muted-foreground w-20">{field === 'maxPerTask' ? 'Max / task' : field === 'dailyCap' ? 'Daily cap' : 'Weekly cap'}</span>
+                        <input type="text" value={permission[field]}
+                          onChange={(e) => setPermission((p) => ({ ...p, [field]: e.target.value }))}
+                          placeholder="$"
+                          className="flex-1 bg-transparent border-b border-foreground/10 px-0 py-1.5 text-xs text-foreground focus:outline-none focus:border-foreground/30 transition-colors" />
+                      </div>
+                    ))}
+                  </div>
+                  <ThinDivider />
+                </>
+              )}
+
+              {/* Risk Controls */}
+              <div className="py-5 space-y-3">
+                <label className="text-xs text-muted-foreground uppercase tracking-widest">Risk Controls</label>
+                <p className="text-[10px] text-muted-foreground/50">Reduce financial and operational exposure.</p>
+                <div className="space-y-2">
+                  {RISK_CONTROLS.map((rc) => {
+                    const checked = permission.spendResetPolicy.includes(rc.key);
+                    return (
+                      <label key={rc.key} className="flex items-center gap-3 text-[11px] cursor-pointer">
+                        <Checkbox checked={checked} onCheckedChange={() => setPermission((p) => ({ ...p, spendResetPolicy: toggleArrayItem(p.spendResetPolicy, rc.key) }))} />
+                        <span className="text-foreground/70">{rc.label}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <ThinDivider />
+
               {/* Actions */}
               <div className="pt-6 space-y-3">
-                <button
-                  onClick={handleSaveConfig}
+                <button onClick={handleSaveConfig}
                   disabled={permission.tradingAuthority === 'Full Auto' && !fullAutoConfirm}
-                  className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${
-                    !(permission.tradingAuthority === 'Full Auto' && !fullAutoConfirm) ? 'btn-glow' : ''
-                  }`}
-                >
+                  className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${!(permission.tradingAuthority === 'Full Auto' && !fullAutoConfirm) ? 'btn-glow' : ''}`}>
                   Save Configuration →
                 </button>
-                <button
-                  onClick={handleSaveDraft}
-                  className="w-full py-2.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
-                >
+                <button onClick={handleSaveDraft}
+                  className="w-full py-2.5 text-xs text-muted-foreground hover:text-foreground transition-colors">
                   Save to Draft
                 </button>
               </div>
