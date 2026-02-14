@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { StepLayout, StepContent, StepFooter } from '../StepLayout';
 
 const DIMENSION_MAP: Record<number, { layer: string; name: string }> = {
@@ -43,6 +43,24 @@ function generateSBTId(): string {
   return `SBT-${Math.floor(Math.random() * 900000 + 100000)}`;
 }
 
+/* Glowing divider with animated light trace */
+const GlowDivider = () => (
+  <div className="relative w-full h-px my-6">
+    <div className="absolute inset-0" style={{
+      background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent)',
+    }} />
+    <div className="absolute inset-0 overflow-hidden">
+      <div
+        className="absolute top-0 h-full w-[60px]"
+        style={{
+          background: 'linear-gradient(90deg, transparent, rgba(10, 255, 255, 0.25), rgba(173, 255, 255, 0.15), transparent)',
+          animation: 'divider-trace 6s linear infinite',
+        }}
+      />
+    </div>
+  </div>
+);
+
 export const CompleteStep = ({ username, signature, onActivateAgent, onDashboard }: Props) => {
   const walletAddress = useMemo(() => generateWalletAddress(), []);
   const identityHash = useMemo(() => generateHash(signature), [signature]);
@@ -69,88 +87,93 @@ export const CompleteStep = ({ username, signature, onActivateAgent, onDashboard
     <StepLayout>
       <StepContent>
         <div className="flex flex-col items-center text-center animate-fade-in px-4">
-      <div className="text-6xl mb-6">✨</div>
-      <h2 className="text-3xl font-bold mb-2">Identity State</h2>
-      <p className="text-muted-foreground mb-8 max-w-sm">
-        Defined with clarity. Recorded to your wallet.
-      </p>
+          <div className="text-6xl mb-6">✨</div>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-2">Identity State Sealed.</h2>
+          <p className="text-muted-foreground mb-10 max-w-sm">
+            Your 256D imprint is now recorded.
+          </p>
 
-      <div className="glass-card max-w-lg w-full text-left space-y-5">
-        {/* Identity Hash */}
-        <div className="space-y-1">
-          <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Identity Hash</p>
-          <p className="text-xs font-mono text-foreground/70 break-all">{identityHash}</p>
-        </div>
+          <div className="max-w-lg w-full text-left">
+            {/* Identity Hash */}
+            <div className="space-y-1">
+              <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Identity Hash</p>
+              <p className="text-xs font-mono text-foreground/70 break-all">{identityHash}</p>
+            </div>
 
-        {/* Dominant Dimensions */}
-        <div className="space-y-2.5">
-          <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Dominant Dimensions</p>
-          <div className="space-y-1.5">
-            {dominantDimensions.map(d => (
-              <div key={d.idx} className="flex items-center justify-between">
-                <span className="text-[11px] font-light text-foreground/60">
-                  {d.layer} · {d.name}
-                </span>
-                <span className="text-[10px] text-muted-foreground/60 font-mono font-light">
-                  {d.value.toFixed(2)}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
+            <GlowDivider />
 
-        {/* Vector Fingerprint */}
-        <div className="space-y-2">
-          <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Vector Fingerprint</p>
-          <p className="text-[9px] text-muted-foreground/50">256D Snapshot at Mint Time</p>
-          <div className="space-y-3">
-            {SLICES.map(slice => {
-              const sliceData = signature.slice(slice.range[0], slice.range[1] + 1);
-              return (
-                <div key={slice.label}>
-                  <p className="text-[8px] text-muted-foreground/30 uppercase tracking-wider mb-1 font-light">{slice.label}</p>
-                  <div className="flex flex-wrap gap-px">
-                    {sliceData.map((v, i) => {
-                      const intensity = v / 255;
-                      const cellOpacity = v > 0 ? 0.25 + 0.75 * intensity : 0.03;
-                      return (
-                        <div
-                          key={i}
-                          className="rounded-[1px]"
-                          style={{
-                            width: 10,
-                            height: 10,
-                            aspectRatio: '1',
-                            background: v > 0
-                              ? `rgba(${slice.color}, ${cellOpacity * 0.5})`
-                              : 'rgba(255, 255, 255, 0.02)',
-                            boxShadow: v > 150
-                              ? `0 0 4px rgba(${slice.color}, ${cellOpacity * 0.4})`
-                              : 'none',
-                          }}
-                        />
-                      );
-                    })}
+            {/* Dominant Dimensions */}
+            <div className="space-y-2.5">
+              <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Dominant Dimensions</p>
+              <div className="space-y-1.5">
+                {dominantDimensions.map(d => (
+                  <div key={d.idx} className="flex items-center justify-between">
+                    <span className="text-[11px] font-light text-foreground/60">
+                      {d.layer} · {d.name}
+                    </span>
+                    <span className="text-[10px] text-muted-foreground/60 font-mono font-light">
+                      {d.value.toFixed(2)}
+                    </span>
                   </div>
-                </div>
-              );
-            })}
+                ))}
+              </div>
+            </div>
+
+            <GlowDivider />
+
+            {/* Vector Imprint */}
+            <div className="space-y-2">
+              <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Vector Imprint</p>
+              <p className="text-[9px] text-muted-foreground/50">256D Snapshot at Mint Time</p>
+              <div className="space-y-3">
+                {SLICES.map(slice => {
+                  const sliceData = signature.slice(slice.range[0], slice.range[1] + 1);
+                  return (
+                    <div key={slice.label}>
+                      <p className="text-[8px] text-muted-foreground/30 uppercase tracking-wider mb-1 font-light">{slice.label}</p>
+                      <div className="flex flex-wrap gap-px">
+                        {sliceData.map((v, i) => {
+                          const intensity = v / 255;
+                          const cellOpacity = v > 0 ? 0.25 + 0.75 * intensity : 0.03;
+                          return (
+                            <div
+                              key={i}
+                              className="rounded-[1px]"
+                              style={{
+                                width: 10,
+                                height: 10,
+                                aspectRatio: '1',
+                                background: v > 0
+                                  ? `rgba(${slice.color}, ${cellOpacity * 0.5})`
+                                  : 'rgba(255, 255, 255, 0.02)',
+                                boxShadow: v > 150
+                                  ? `0 0 4px rgba(${slice.color}, ${cellOpacity * 0.4})`
+                                  : 'none',
+                              }}
+                            />
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <GlowDivider />
+
+            {/* Minted SBT ID + Wallet */}
+            <div className="space-y-3">
+              <div className="flex justify-between items-center text-sm">
+                <span className="text-muted-foreground text-xs">Minted SBT ID</span>
+                <span className="text-foreground font-mono text-xs">{sbtId}</span>
+              </div>
+              <div className="space-y-1 mt-2">
+                <p className="text-xs text-green-400">✓ Bound to sovereign wallet</p>
+                <p className="text-[10px] text-muted-foreground font-mono break-all">{walletAddress}</p>
+              </div>
+            </div>
           </div>
-        </div>
-
-        {/* SBT ID */}
-        <div className="flex justify-between items-center text-sm border-t border-foreground/5 pt-3">
-          <span className="text-muted-foreground text-xs">Minted SBT ID</span>
-          <span className="text-foreground font-mono text-xs">{sbtId}</span>
-        </div>
-
-        {/* Wallet */}
-        <div className="pt-3 border-t border-foreground/10 space-y-1">
-          <p className="text-xs text-green-400">✓ Bound to sovereign wallet</p>
-          <p className="text-[10px] text-muted-foreground font-mono break-all">{walletAddress}</p>
-        </div>
-      </div>
-
         </div>
       </StepContent>
 
@@ -164,6 +187,13 @@ export const CompleteStep = ({ username, signature, onActivateAgent, onDashboard
           </button>
         </div>
       </StepFooter>
+
+      <style>{`
+        @keyframes divider-trace {
+          0% { left: -60px; }
+          100% { left: 100%; }
+        }
+      `}</style>
     </StepLayout>
   );
 };

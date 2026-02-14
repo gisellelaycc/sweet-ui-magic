@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { Slider } from '@/components/ui/slider';
 import type { SoulData, SoulBar } from '@/types/twin-matrix';
-import { SplitStepLayout } from '../StepLayout';
+import { StepLayout, StepContent } from '../StepLayout';
 
 const DEFAULT_BARS: SoulBar[] = [
   { id: 'BAR_OUTCOME_EXPERIENCE', label: 'Performance Orientation', left: 'I train to improve performance', right: 'I train for the experience', value: null },
@@ -36,75 +36,101 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
   const hasInteracted = touchedCount > 0;
 
   return (
-    <SplitStepLayout
-      title="Soul Layer"
-      subtitle="Balance intention and instinct."
-      footer={
-        <button
-          onClick={onNext}
-          disabled={!hasInteracted}
-          className={`btn-twin btn-twin-primary w-full py-2.5 text-sm disabled:opacity-30 disabled:cursor-not-allowed ${hasInteracted ? 'btn-glow' : ''}`}
-        >
-          Review Your State →
-        </button>
-      }
-    >
-      <div className="w-full max-w-lg space-y-6">
-        <div className="glass-card space-y-7">
-          <p className="text-xs text-muted-foreground uppercase tracking-widest">Why do you train?</p>
-
-          {bars.map((bar, idx) => (
-            <div key={bar.id} className="space-y-3">
-              <div className="flex justify-between text-xs text-muted-foreground">
-                <span className="max-w-[45%] text-left leading-tight">{bar.left}</span>
-                <span className="max-w-[45%] text-right leading-tight">{bar.right}</span>
-              </div>
-              <div className="relative group">
-                {bar.value !== null && (
-                  <div
-                    className="absolute top-1/2 left-0 right-0 h-[2px] -translate-y-1/2 rounded-full pointer-events-none z-0"
-                    style={{
-                      background: `linear-gradient(90deg, transparent 0%, rgba(10, 255, 255, 0.05) ${Math.max(bar.value - 30, 0)}%, rgba(10, 255, 255, 0.35) ${bar.value}%, rgba(173, 255, 255, 0.05) ${Math.min(bar.value + 30, 100)}%, transparent 100%)`,
-                      boxShadow: `0 0 8px rgba(10, 255, 255, 0.15), 0 0 20px rgba(10, 255, 255, 0.06)`,
-                    }}
-                  />
-                )}
-                <Slider
-                  value={[bar.value ?? 50]}
-                  onValueChange={([v]) => handleSlider(idx, v)}
-                  max={100}
-                  step={1}
-                  className="relative z-10"
-                />
-              </div>
+    <StepLayout>
+      <StepContent>
+        <div className="w-full flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
+          {/* Left: Title + Sliders (no glass frame) */}
+          <div className="flex-1 min-w-0">
+            {/* Title */}
+            <div className="mb-8">
+              <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] tracking-tight mb-2 animate-soft-enter">
+                Soul Layer
+              </h2>
+              <p className="text-muted-foreground text-base md:text-lg animate-soft-enter" style={{ animationDelay: '100ms' }}>
+                Balance intention and instinct.
+              </p>
             </div>
-          ))}
-        </div>
 
-        {hasInteracted && (
-          <div className="glass-card space-y-3 animate-fade-in">
-            <div className="flex items-center justify-between">
-              <p className="text-xs text-muted-foreground uppercase tracking-widest">Soul Signature</p>
-              <p className="text-[10px] text-muted-foreground">Configured: {touchedCount} / 4</p>
-            </div>
-            <div className="space-y-2">
-              {bars.map(bar => {
-                const raw = getBarRaw(bar.value);
-                return (
-                  <div key={bar.id} className="flex items-center justify-between text-[11px]">
-                    <span className="text-foreground/60">{bar.label}</span>
-                    {bar.value !== null ? (
-                      <span className="text-[9px] text-muted-foreground font-mono">{raw} / 255</span>
-                    ) : (
-                      <span className="text-muted-foreground/40 italic text-[10px]">No direction yet</span>
-                    )}
+            {/* Sliders directly — no glass card */}
+            <div className="space-y-8 animate-soft-enter" style={{ animationDelay: '200ms' }}>
+              <p className="text-xs text-muted-foreground uppercase tracking-widest">Why do you train?</p>
+
+              {bars.map((bar, idx) => (
+                <div key={bar.id} className="space-y-3">
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span className="max-w-[45%] text-left leading-tight">{bar.left}</span>
+                    <span className="max-w-[45%] text-right leading-tight">{bar.right}</span>
                   </div>
-                );
-              })}
+                  <div className="relative group">
+                    {bar.value !== null && (
+                      <div
+                        className="absolute top-1/2 left-0 right-0 h-[2px] -translate-y-1/2 rounded-full pointer-events-none z-0"
+                        style={{
+                          background: `linear-gradient(90deg, transparent 0%, rgba(10, 255, 255, 0.05) ${Math.max(bar.value - 30, 0)}%, rgba(10, 255, 255, 0.35) ${bar.value}%, rgba(173, 255, 255, 0.05) ${Math.min(bar.value + 30, 100)}%, transparent 100%)`,
+                          boxShadow: `0 0 8px rgba(10, 255, 255, 0.15), 0 0 20px rgba(10, 255, 255, 0.06)`,
+                        }}
+                      />
+                    )}
+                    <Slider
+                      value={[bar.value ?? 50]}
+                      onValueChange={([v]) => handleSlider(idx, v)}
+                      max={100}
+                      step={1}
+                      className="relative z-10"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* CTA below sliders */}
+            <div className="mt-8 animate-soft-enter" style={{ animationDelay: '300ms' }}>
+              <button
+                onClick={onNext}
+                disabled={!hasInteracted}
+                className={`btn-twin btn-twin-primary w-full py-2.5 text-sm disabled:opacity-30 disabled:cursor-not-allowed ${hasInteracted ? 'btn-glow' : ''}`}
+              >
+                Review Your State →
+              </button>
             </div>
           </div>
-        )}
-      </div>
-    </SplitStepLayout>
+
+          {/* Right: Soul Signature — floating control panel */}
+          {hasInteracted && (
+            <div
+              className="lg:w-[260px] shrink-0 animate-fade-in lg:sticky lg:top-8"
+              style={{
+                background: 'rgba(255, 255, 255, 0.03)',
+                backdropFilter: 'blur(20px) saturate(160%)',
+                borderRadius: '20px',
+                padding: '1.5rem',
+                border: '1px solid rgba(255, 255, 255, 0.06)',
+                boxShadow: '0 0 40px -15px rgba(10, 255, 255, 0.08), 0 8px 32px rgba(0, 0, 0, 0.15)',
+              }}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <p className="text-xs text-muted-foreground uppercase tracking-widest">Soul Signature</p>
+                <p className="text-[10px] text-muted-foreground">{touchedCount} / 4</p>
+              </div>
+              <div className="space-y-3">
+                {bars.map(bar => {
+                  const raw = getBarRaw(bar.value);
+                  return (
+                    <div key={bar.id} className="flex items-center justify-between text-[11px]">
+                      <span className="text-foreground/60">{bar.label}</span>
+                      {bar.value !== null ? (
+                        <span className="text-[9px] text-muted-foreground font-mono">{raw} / 255</span>
+                      ) : (
+                        <span className="text-muted-foreground/40 italic text-[10px]">—</span>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      </StepContent>
+    </StepLayout>
   );
 };

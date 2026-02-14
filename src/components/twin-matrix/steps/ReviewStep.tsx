@@ -1,6 +1,6 @@
-import { useMemo, useState, useEffect, useCallback } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { computeDensity } from "@/lib/twin-encoder";
-import { SplitStepLayout } from '../StepLayout';
+import { StepLayout, StepContent, StepFooter } from '../StepLayout';
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import lobsterIcon from "@/assets/lobster-icon.png";
 
@@ -10,10 +10,6 @@ const SLICES = [
   { label: "Social", range: [128, 191], color: "255, 200, 40" },
   { label: "Spiritual", range: [192, 255], color: "10, 255, 255" },
 ];
-
-function getSliceForDim(idx: number): (typeof SLICES)[number] {
-  return SLICES.find((s) => idx >= s.range[0] && idx <= s.range[1]) || SLICES[0];
-}
 
 interface Props {
   signature: number[];
@@ -69,10 +65,155 @@ export const ReviewStep = ({ signature, username, activeModules, onNext, onBack 
   }, [signature]);
 
   return (
-    <SplitStepLayout
-      title="Identity Preview"
-      subtitle="Not yet sealed. Review before recording."
-      footer={
+    <StepLayout>
+      <StepContent>
+        <div className="w-full">
+          {/* Title */}
+          <div className="mb-8">
+            <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] tracking-tight mb-2 animate-soft-enter">
+              Identity Preview
+            </h2>
+            <p className="text-muted-foreground text-base md:text-lg animate-soft-enter" style={{ animationDelay: '100ms' }}>
+              Not yet sealed. Review before recording.
+            </p>
+          </div>
+
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+            {/* Left: Matrix (larger) */}
+            <div className="lg:flex-[1.2] min-w-0 animate-soft-enter" style={{ animationDelay: '200ms' }}>
+              <div className="relative">
+                <div className="absolute inset-0 pointer-events-none" style={{
+                  background: "radial-gradient(ellipse at center, rgba(10,255,255,0.08) 0%, transparent 70%)",
+                }} />
+                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-3 relative z-10">
+                  Twin Matrix Projection (256D)
+                </h3>
+                <div className="overflow-x-auto relative z-10">
+                  <div className="flex flex-col min-w-fit">
+                    {Array.from({ length: 16 }, (_, row) => {
+                      const isTopHalf = row < 8;
+                      return (
+                        <div key={row} className={`flex items-center gap-1 ${row === 8 ? "mt-2" : "mb-px"}`}>
+                          <span className="text-[7px] text-muted-foreground/25 font-mono w-7 text-right shrink-0">
+                            {(row * 16).toString(16).toUpperCase().padStart(4, "0")}
+                          </span>
+                          <div className="flex gap-px">
+                            {Array.from({ length: 16 }, (_, col) => {
+                              const isLeftHalf = col < 8;
+                              let sliceIdx: number;
+                              let localRow: number;
+                              let localCol: number;
+                              if (isTopHalf && isLeftHalf) { sliceIdx = 0; localRow = row; localCol = col; }
+                              else if (isTopHalf && !isLeftHalf) { sliceIdx = 1; localRow = row; localCol = col - 8; }
+                              else if (!isTopHalf && isLeftHalf) { sliceIdx = 2; localRow = row - 8; localCol = col; }
+                              else { sliceIdx = 3; localRow = row - 8; localCol = col - 8; }
+                              const slice = SLICES[sliceIdx];
+                              const idx = slice.range[0] + localRow * 8 + localCol;
+                              const val = signature[idx] ?? 0;
+                              const intensity = val / 255;
+                              const isTop = topIndices.has(idx);
+                              const isHovered = hoveredCell === idx;
+                              const cellOpacity = val > 0 ? 0.25 + 0.75 * intensity : 0.03;
+                              return (
+                                <div
+                                  key={col}
+                                  className={`rounded-sm flex items-center justify-center cursor-default relative transition-transform duration-150 ${col === 8 ? "ml-1" : ""}`}
+                                  style={{
+                                    width: "1.1rem", height: "1.1rem", aspectRatio: "1",
+                                    background: val > 0 ? `rgba(${slice.color}, ${cellOpacity * 0.5})` : "rgba(255, 255, 255, 0.015)",
+                                    boxShadow: isTop && val > 0
+                                      ? `0 0 8px rgba(${slice.color}, ${cellOpacity * 0.6})`
+                                      : val > 120 ? `0 0 6px rgba(${slice.color}, ${cellOpacity * 0.3})` : "none",
+                                    transform: isHovered ? "scale(1.15)" : "scale(1)",
+                                  }}
+                                  onMouseEnter={() => setHoveredCell(idx)}
+                                  onMouseLeave={() => setHoveredCell(null)}
+                                >
+                                  <span className="text-[5px] font-mono" style={{ color: `rgba(255,255,255, ${0.15 + intensity * 0.55})` }}>
+                                    {val.toString(16).toUpperCase().padStart(2, "0")}
+                                  </span>
+                                  {isHovered && (
+                                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-foreground/90 text-background text-[8px] px-1.5 py-0.5 rounded whitespace-nowrap z-10">
+                                      D{idx}: {val} ({slice.label})
+                                    </div>
+                                  )}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+                <p className="text-xs text-muted-foreground/50 mt-3">@{username}</p>
+              </div>
+            </div>
+
+            {/* Right: 3 glass cards */}
+            <div className="lg:flex-1 space-y-4 animate-soft-enter" style={{ animationDelay: '350ms' }}>
+              {/* Soul Quadrant */}
+              <div className="glass-card !p-4 space-y-2">
+                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Quadrant Position</h3>
+                {quadrant.missing ? (
+                  <p className="text-sm text-muted-foreground/50">Incomplete Axis</p>
+                ) : (
+                  <div className="space-y-1">
+                    <div className="text-2xl font-bold text-foreground">{quadrant.label}</div>
+                    <div className="text-xs text-muted-foreground space-y-0.5">
+                      <p>X (Outcome ↔ Experience): {quadrant.X}</p>
+                      <p>Y (Control ↔ Release): {quadrant.Y}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Identity Density */}
+              <div className="glass-card !p-4 space-y-2">
+                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Identity Density</h3>
+                <div className="flex items-end gap-2">
+                  <span className="text-3xl font-bold text-foreground">{identityDensity}%</span>
+                  <span className="text-xs text-muted-foreground mb-1">of 256 dimensions active</span>
+                </div>
+                <div className="h-1.5 bg-transparent rounded-full overflow-visible">
+                  <div className="h-full rounded-full transition-all duration-700" style={{
+                    width: `${identityDensity}%`,
+                    background: "rgba(10, 255, 255, 0.5)",
+                    boxShadow: "0 0 8px rgba(10, 255, 255, 0.6), 0 0 20px rgba(10, 255, 255, 0.3)",
+                  }} />
+                </div>
+              </div>
+
+              {/* Layer Mix */}
+              <div className="glass-card !p-4 space-y-2">
+                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Layer Mix</h3>
+                {[
+                  { label: "Physical", value: layerMix.physical, color: "255, 60, 100" },
+                  { label: "Digital", value: layerMix.digital, color: "60, 180, 255" },
+                  { label: "Social", value: layerMix.social, color: "255, 200, 40" },
+                  { label: "Spiritual", value: layerMix.spiritual, color: "10, 255, 255" },
+                ].map((layer) => (
+                  <div key={layer.label} className="space-y-1">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-foreground/70">{layer.label}</span>
+                      <span className="text-muted-foreground">{layer.value}%</span>
+                    </div>
+                    <div className="h-1.5 bg-transparent rounded-full overflow-visible">
+                      <div className="h-full rounded-full transition-all duration-700" style={{
+                        width: `${layer.value}%`,
+                        background: `rgba(${layer.color}, 0.6)`,
+                        boxShadow: `0 0 6px rgba(${layer.color}, 0.7), 0 0 16px rgba(${layer.color}, 0.35)`,
+                      }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </StepContent>
+
+      <StepFooter>
         <div className="flex gap-2">
           <button onClick={onBack} className="btn-twin btn-twin-ghost flex-1 py-2.5 text-sm">
             Refine
@@ -81,146 +222,14 @@ export const ReviewStep = ({ signature, username, activeModules, onNext, onBack 
             Commit State
           </button>
         </div>
-      }
-    >
-      <div className="w-full space-y-5">
-        {/* Computed Identity Signals */}
-        <div className="space-y-4">
-          {/* Soul Quadrant */}
-          <div className="glass-card !p-4 space-y-2">
-            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Quadrant Position</h3>
-            {quadrant.missing ? (
-              <p className="text-sm text-muted-foreground/50">Incomplete Axis</p>
-            ) : (
-              <div className="space-y-1">
-                <div className="text-2xl font-bold text-foreground">{quadrant.label}</div>
-                <div className="text-xs text-muted-foreground space-y-0.5">
-                  <p>X (Outcome ↔ Experience): {quadrant.X}</p>
-                  <p>Y (Control ↔ Release): {quadrant.Y}</p>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Identity Density */}
-          <div className="glass-card !p-4 space-y-2">
-            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Identity Density</h3>
-            <div className="flex items-end gap-2">
-              <span className="text-3xl font-bold text-foreground">{identityDensity}%</span>
-              <span className="text-xs text-muted-foreground mb-1">of 256 dimensions active</span>
-            </div>
-            <div className="h-1.5 bg-transparent rounded-full overflow-visible">
-              <div className="h-full rounded-full transition-all duration-700" style={{
-                width: `${identityDensity}%`,
-                background: "rgba(10, 255, 255, 0.5)",
-                boxShadow: "0 0 8px rgba(10, 255, 255, 0.6), 0 0 20px rgba(10, 255, 255, 0.3)",
-              }} />
-            </div>
-          </div>
-
-          {/* Layer Mix */}
-          <div className="glass-card !p-4 space-y-2">
-            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Layer Mix</h3>
-            {[
-              { label: "Physical", value: layerMix.physical, color: "255, 60, 100" },
-              { label: "Digital", value: layerMix.digital, color: "60, 180, 255" },
-              { label: "Social", value: layerMix.social, color: "255, 200, 40" },
-              { label: "Spiritual", value: layerMix.spiritual, color: "10, 255, 255" },
-            ].map((layer) => (
-              <div key={layer.label} className="space-y-1">
-                <div className="flex justify-between text-xs">
-                  <span className="text-foreground/70">{layer.label}</span>
-                  <span className="text-muted-foreground">{layer.value}%</span>
-                </div>
-                <div className="h-1.5 bg-transparent rounded-full overflow-visible">
-                  <div className="h-full rounded-full transition-all duration-700" style={{
-                    width: `${layer.value}%`,
-                    background: `rgba(${layer.color}, 0.6)`,
-                    boxShadow: `0 0 6px rgba(${layer.color}, 0.7), 0 0 16px rgba(${layer.color}, 0.35)`,
-                  }} />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Twin Matrix Projection */}
-        <div className="relative">
-          <div className="absolute inset-0 pointer-events-none" style={{
-            background: "radial-gradient(ellipse at center, rgba(10,255,255,0.08) 0%, transparent 70%)",
-          }} />
-          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-3 relative z-10">
-            Twin Matrix Projection (256D)
-          </h3>
-          <div className="overflow-x-auto relative z-10">
-            <div className="flex flex-col min-w-fit">
-              {Array.from({ length: 16 }, (_, row) => {
-                const isTopHalf = row < 8;
-                return (
-                  <div key={row} className={`flex items-center gap-1 ${row === 8 ? "mt-2" : "mb-px"}`}>
-                    <span className="text-[7px] text-muted-foreground/25 font-mono w-7 text-right shrink-0">
-                      {(row * 16).toString(16).toUpperCase().padStart(4, "0")}
-                    </span>
-                    <div className="flex gap-px">
-                      {Array.from({ length: 16 }, (_, col) => {
-                        const isLeftHalf = col < 8;
-                        let sliceIdx: number;
-                        let localRow: number;
-                        let localCol: number;
-                        if (isTopHalf && isLeftHalf) { sliceIdx = 0; localRow = row; localCol = col; }
-                        else if (isTopHalf && !isLeftHalf) { sliceIdx = 1; localRow = row; localCol = col - 8; }
-                        else if (!isTopHalf && isLeftHalf) { sliceIdx = 2; localRow = row - 8; localCol = col; }
-                        else { sliceIdx = 3; localRow = row - 8; localCol = col - 8; }
-                        const slice = SLICES[sliceIdx];
-                        const idx = slice.range[0] + localRow * 8 + localCol;
-                        const val = signature[idx] ?? 0;
-                        const intensity = val / 255;
-                        const isTop = topIndices.has(idx);
-                        const isHovered = hoveredCell === idx;
-                        const cellOpacity = val > 0 ? 0.25 + 0.75 * intensity : 0.03;
-                        return (
-                          <div
-                            key={col}
-                            className={`rounded-sm flex items-center justify-center cursor-default relative transition-transform duration-150 ${col === 8 ? "ml-1" : ""}`}
-                            style={{
-                              width: "1.1rem", height: "1.1rem", aspectRatio: "1",
-                              background: val > 0 ? `rgba(${slice.color}, ${cellOpacity * 0.5})` : "rgba(255, 255, 255, 0.015)",
-                              boxShadow: isTop && val > 0
-                                ? `0 0 8px rgba(${slice.color}, ${cellOpacity * 0.6})`
-                                : val > 120 ? `0 0 6px rgba(${slice.color}, ${cellOpacity * 0.3})` : "none",
-                              transform: isHovered ? "scale(1.15)" : "scale(1)",
-                            }}
-                            onMouseEnter={() => setHoveredCell(idx)}
-                            onMouseLeave={() => setHoveredCell(null)}
-                          >
-                            <span className="text-[5px] font-mono" style={{ color: `rgba(255,255,255, ${0.15 + intensity * 0.55})` }}>
-                              {val.toString(16).toUpperCase().padStart(2, "0")}
-                            </span>
-                            {isHovered && (
-                              <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-foreground/90 text-background text-[8px] px-1.5 py-0.5 rounded whitespace-nowrap z-10">
-                                D{idx}: {val} ({slice.label})
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-
-        <p className="text-xs text-muted-foreground/50">@{username}</p>
-      </div>
+      </StepFooter>
 
       <Dialog open={showWallet} onOpenChange={() => {}}>
         <DialogContent className="max-w-sm border-foreground/10 bg-[#1a1a2e] p-0 overflow-hidden [&>button]:hidden" onPointerDownOutside={e => e.preventDefault()}>
           <WalletAnimation phase={walletPhase} setPhase={setWalletPhase} onComplete={onNext} />
         </DialogContent>
       </Dialog>
-    </SplitStepLayout>
+    </StepLayout>
   );
 };
 
