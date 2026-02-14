@@ -1,10 +1,9 @@
 import { useMemo, useState, useEffect, useCallback } from "react";
 import { computeDensity } from "@/lib/twin-encoder";
-import { StepLayout, StepHeader, StepContent, StepFooter } from '../StepLayout';
+import { SplitStepLayout } from '../StepLayout';
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import lobsterIcon from "@/assets/lobster-icon.png";
 
-// Updated color strategy per spec
 const SLICES = [
   { label: "Physical", range: [0, 63], color: "255, 60, 100" },
   { label: "Digital", range: [64, 127], color: "60, 180, 255" },
@@ -70,27 +69,30 @@ export const ReviewStep = ({ signature, username, activeModules, onNext, onBack 
   }, [signature]);
 
   return (
-    <StepLayout>
-      <StepHeader>
-        <div className="text-center">
-          <h2 className="text-2xl font-bold mb-1">Identity Preview</h2>
-          <p className="text-muted-foreground text-sm">Not yet sealed. Review before recording.</p>
+    <SplitStepLayout
+      title="Identity Preview"
+      subtitle="Not yet sealed. Review before recording."
+      footer={
+        <div className="flex gap-2">
+          <button onClick={onBack} className="btn-twin btn-twin-ghost flex-1 py-2.5 text-sm">
+            Refine
+          </button>
+          <button onClick={() => { setShowWallet(true); setWalletPhase('connect'); }} className="btn-twin btn-twin-primary btn-glow flex-1 py-2.5 text-sm">
+            Commit State
+          </button>
         </div>
-      </StepHeader>
-
-      <StepContent>
-        <div className="w-full max-w-4xl mx-auto space-y-6 animate-fade-in">
-
-      <div className="flex flex-col lg:flex-row gap-6 items-stretch">
-        {/* Left: Computed Identity Signals */}
-        <div className="lg:w-1/2 space-y-5">
+      }
+    >
+      <div className="w-full space-y-5">
+        {/* Computed Identity Signals */}
+        <div className="space-y-4">
           {/* Soul Quadrant */}
-          <div className="glass-card space-y-3">
-            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">Quadrant Position</h3>
+          <div className="glass-card !p-4 space-y-2">
+            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Quadrant Position</h3>
             {quadrant.missing ? (
               <p className="text-sm text-muted-foreground/50">Incomplete Axis</p>
             ) : (
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <div className="text-2xl font-bold text-foreground">{quadrant.label}</div>
                 <div className="text-xs text-muted-foreground space-y-0.5">
                   <p>X (Outcome ↔ Experience): {quadrant.X}</p>
@@ -101,27 +103,24 @@ export const ReviewStep = ({ signature, username, activeModules, onNext, onBack 
           </div>
 
           {/* Identity Density */}
-          <div className="glass-card space-y-3">
-            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">Identity Density</h3>
+          <div className="glass-card !p-4 space-y-2">
+            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Identity Density</h3>
             <div className="flex items-end gap-2">
               <span className="text-3xl font-bold text-foreground">{identityDensity}%</span>
               <span className="text-xs text-muted-foreground mb-1">of 256 dimensions active</span>
             </div>
             <div className="h-1.5 bg-transparent rounded-full overflow-visible">
-              <div
-                className="h-full rounded-full transition-all duration-700"
-                style={{
-                  width: `${identityDensity}%`,
-                  background: "rgba(10, 255, 255, 0.5)",
-                  boxShadow: "0 0 8px rgba(10, 255, 255, 0.6), 0 0 20px rgba(10, 255, 255, 0.3), 0 0 40px rgba(10, 255, 255, 0.1)",
-                }}
-              />
+              <div className="h-full rounded-full transition-all duration-700" style={{
+                width: `${identityDensity}%`,
+                background: "rgba(10, 255, 255, 0.5)",
+                boxShadow: "0 0 8px rgba(10, 255, 255, 0.6), 0 0 20px rgba(10, 255, 255, 0.3)",
+              }} />
             </div>
           </div>
 
           {/* Layer Mix */}
-          <div className="glass-card space-y-3">
-            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">Layer Mix</h3>
+          <div className="glass-card !p-4 space-y-2">
+            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Layer Mix</h3>
             {[
               { label: "Physical", value: layerMix.physical, color: "255, 60, 100" },
               { label: "Digital", value: layerMix.digital, color: "60, 180, 255" },
@@ -134,41 +133,26 @@ export const ReviewStep = ({ signature, username, activeModules, onNext, onBack 
                   <span className="text-muted-foreground">{layer.value}%</span>
                 </div>
                 <div className="h-1.5 bg-transparent rounded-full overflow-visible">
-                  <div
-                    className="h-full rounded-full transition-all duration-700"
-                    style={{
-                      width: `${layer.value}%`,
-                      background: `rgba(${layer.color}, 0.6)`,
-                      boxShadow: `0 0 6px rgba(${layer.color}, 0.7), 0 0 16px rgba(${layer.color}, 0.35), 0 0 32px rgba(${layer.color}, 0.12)`,
-                    }}
-                  />
+                  <div className="h-full rounded-full transition-all duration-700" style={{
+                    width: `${layer.value}%`,
+                    background: `rgba(${layer.color}, 0.6)`,
+                    boxShadow: `0 0 6px rgba(${layer.color}, 0.7), 0 0 16px rgba(${layer.color}, 0.35)`,
+                  }} />
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Right: Twin Matrix Projection — 16×16 square with 4 quadrants */}
-        <div className="lg:w-1/2 flex flex-col items-center justify-center relative">
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background:
-                "radial-gradient(ellipse at center, rgba(10,255,255,0.08) 0%, rgba(10,255,255,0.02) 40%, transparent 70%)",
-            }}
-          />
-          <div
-            className="absolute inset-0 pointer-events-none animate-[field-breathe_5s_ease-in-out_infinite]"
-            style={{
-              background: "radial-gradient(ellipse at center, rgba(10,255,255,0.05) 0%, transparent 60%)",
-            }}
-          />
-
+        {/* Twin Matrix Projection */}
+        <div className="relative">
+          <div className="absolute inset-0 pointer-events-none" style={{
+            background: "radial-gradient(ellipse at center, rgba(10,255,255,0.08) 0%, transparent 70%)",
+          }} />
           <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-3 relative z-10">
             Twin Matrix Projection (256D)
           </h3>
           <div className="overflow-x-auto relative z-10">
-            {/* 16×16 grid: quadrants TL=Physical, TR=Digital, BL=Social, BR=Spiritual */}
             <div className="flex flex-col min-w-fit">
               {Array.from({ length: 16 }, (_, row) => {
                 const isTopHalf = row < 8;
@@ -180,19 +164,13 @@ export const ReviewStep = ({ signature, username, activeModules, onNext, onBack 
                     <div className="flex gap-px">
                       {Array.from({ length: 16 }, (_, col) => {
                         const isLeftHalf = col < 8;
-                        // Map quadrant to slice: TL=Physical, TR=Digital, BL=Social, BR=Spiritual
                         let sliceIdx: number;
                         let localRow: number;
                         let localCol: number;
-                        if (isTopHalf && isLeftHalf) {
-                          sliceIdx = 0; localRow = row; localCol = col;
-                        } else if (isTopHalf && !isLeftHalf) {
-                          sliceIdx = 1; localRow = row; localCol = col - 8;
-                        } else if (!isTopHalf && isLeftHalf) {
-                          sliceIdx = 2; localRow = row - 8; localCol = col;
-                        } else {
-                          sliceIdx = 3; localRow = row - 8; localCol = col - 8;
-                        }
+                        if (isTopHalf && isLeftHalf) { sliceIdx = 0; localRow = row; localCol = col; }
+                        else if (isTopHalf && !isLeftHalf) { sliceIdx = 1; localRow = row; localCol = col - 8; }
+                        else if (!isTopHalf && isLeftHalf) { sliceIdx = 2; localRow = row - 8; localCol = col; }
+                        else { sliceIdx = 3; localRow = row - 8; localCol = col - 8; }
                         const slice = SLICES[sliceIdx];
                         const idx = slice.range[0] + localRow * 8 + localCol;
                         const val = signature[idx] ?? 0;
@@ -205,28 +183,17 @@ export const ReviewStep = ({ signature, username, activeModules, onNext, onBack 
                             key={col}
                             className={`rounded-sm flex items-center justify-center cursor-default relative transition-transform duration-150 ${col === 8 ? "ml-1" : ""}`}
                             style={{
-                              width: "1.25rem",
-                              height: "1.25rem",
-                              aspectRatio: "1",
-                              background:
-                                val > 0
-                                  ? `rgba(${slice.color}, ${cellOpacity * 0.5})`
-                                  : "rgba(255, 255, 255, 0.015)",
-                              boxShadow:
-                                isTop && val > 0
-                                  ? `0 0 8px rgba(${slice.color}, ${cellOpacity * 0.6}), 0 0 16px rgba(${slice.color}, ${cellOpacity * 0.25})`
-                                  : val > 120
-                                    ? `0 0 6px rgba(${slice.color}, ${cellOpacity * 0.3})`
-                                    : "none",
+                              width: "1.1rem", height: "1.1rem", aspectRatio: "1",
+                              background: val > 0 ? `rgba(${slice.color}, ${cellOpacity * 0.5})` : "rgba(255, 255, 255, 0.015)",
+                              boxShadow: isTop && val > 0
+                                ? `0 0 8px rgba(${slice.color}, ${cellOpacity * 0.6})`
+                                : val > 120 ? `0 0 6px rgba(${slice.color}, ${cellOpacity * 0.3})` : "none",
                               transform: isHovered ? "scale(1.15)" : "scale(1)",
                             }}
                             onMouseEnter={() => setHoveredCell(idx)}
                             onMouseLeave={() => setHoveredCell(null)}
                           >
-                            <span
-                              className="text-[6px] font-mono"
-                              style={{ color: `rgba(255,255,255, ${0.15 + intensity * 0.55})` }}
-                            >
+                            <span className="text-[5px] font-mono" style={{ color: `rgba(255,255,255, ${0.15 + intensity * 0.55})` }}>
                               {val.toString(16).toUpperCase().padStart(2, "0")}
                             </span>
                             {isHovered && (
@@ -244,29 +211,16 @@ export const ReviewStep = ({ signature, username, activeModules, onNext, onBack 
             </div>
           </div>
         </div>
+
+        <p className="text-xs text-muted-foreground/50">@{username}</p>
       </div>
-
-          <p className="text-xs text-center text-muted-foreground/50">@{username}</p>
-        </div>
-      </StepContent>
-
-      <StepFooter>
-        <div className="flex gap-2">
-          <button onClick={onBack} className="btn-twin btn-twin-ghost flex-1 py-2.5 text-sm">
-            Refine
-          </button>
-          <button onClick={() => { setShowWallet(true); setWalletPhase('connect'); }} className="btn-twin btn-twin-primary btn-glow flex-1 py-2.5 text-sm">
-            Commit State
-          </button>
-        </div>
-      </StepFooter>
 
       <Dialog open={showWallet} onOpenChange={() => {}}>
         <DialogContent className="max-w-sm border-foreground/10 bg-[#1a1a2e] p-0 overflow-hidden [&>button]:hidden" onPointerDownOutside={e => e.preventDefault()}>
           <WalletAnimation phase={walletPhase} setPhase={setWalletPhase} onComplete={onNext} />
         </DialogContent>
       </Dialog>
-    </StepLayout>
+    </SplitStepLayout>
   );
 };
 
@@ -297,7 +251,6 @@ function WalletAnimation({
 
   return (
     <div className="flex flex-col items-center text-center">
-      {/* Header bar */}
       <div className="w-full flex items-center justify-between px-4 py-3 border-b border-foreground/10">
         <div className="flex items-center gap-2">
           <div className="w-6 h-6 rounded-full overflow-hidden">
@@ -313,23 +266,12 @@ function WalletAnimation({
         </div>
       </div>
 
-      {/* Body */}
       <div className="px-6 py-8 space-y-6">
-        {/* Icon area */}
         <div className="relative w-16 h-16 mx-auto">
-          {/* Outer ring */}
           <div
-            className={`absolute inset-0 rounded-full border-2 ${
-              phase === 'confirmed'
-                ? 'border-green-400/60'
-                : 'border-cyan-400/30 animate-spin'
-            }`}
-            style={{
-              animationDuration: '3s',
-              borderTopColor: phase !== 'confirmed' ? 'rgba(10, 255, 255, 0.8)' : undefined,
-            }}
+            className={`absolute inset-0 rounded-full border-2 ${phase === 'confirmed' ? 'border-green-400/60' : 'border-cyan-400/30 animate-spin'}`}
+            style={{ animationDuration: '3s', borderTopColor: phase !== 'confirmed' ? 'rgba(10, 255, 255, 0.8)' : undefined }}
           />
-          {/* Inner glow */}
           <div
             className="absolute inset-2 rounded-full flex items-center justify-center"
             style={{
@@ -351,7 +293,6 @@ function WalletAnimation({
           </div>
         </div>
 
-        {/* Text */}
         <div className="space-y-2">
           <h3 className="text-base font-semibold text-foreground">
             {phase === 'connect' && 'Committing your identity…'}
@@ -365,7 +306,6 @@ function WalletAnimation({
           </p>
         </div>
 
-        {/* Fake transaction details */}
         {phase !== 'connect' && (
           <div className="animate-fade-in space-y-2 bg-foreground/5 rounded-lg p-3 text-left">
             <div className="flex justify-between text-[10px]">
@@ -383,7 +323,6 @@ function WalletAnimation({
           </div>
         )}
 
-        {/* Progress bar */}
         <div className="h-[2px] w-full bg-foreground/5 rounded-full overflow-hidden">
           <div
             className="h-full rounded-full transition-all ease-linear"
@@ -391,11 +330,11 @@ function WalletAnimation({
               width: phase === 'connect' ? '33%' : phase === 'signing' ? '66%' : '100%',
               transitionDuration: phase === 'connect' ? '1.8s' : phase === 'signing' ? '2.5s' : '0.5s',
               background: phase === 'confirmed'
-                ? 'rgba(74, 222, 128, 0.7)'
-                : 'rgba(10, 255, 255, 0.6)',
+                ? 'linear-gradient(90deg, rgba(74, 222, 128, 0.6), rgba(74, 222, 128, 0.9))'
+                : 'linear-gradient(90deg, rgba(10, 255, 255, 0.5), rgba(10, 255, 255, 0.9))',
               boxShadow: phase === 'confirmed'
-                ? '0 0 10px rgba(74, 222, 128, 0.5)'
-                : '0 0 10px rgba(10, 255, 255, 0.4)',
+                ? '0 0 8px rgba(74, 222, 128, 0.5)'
+                : '0 0 8px rgba(10, 255, 255, 0.5)',
             }}
           />
         </div>

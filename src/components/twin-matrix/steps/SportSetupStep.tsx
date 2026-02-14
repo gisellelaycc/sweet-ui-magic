@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import type { SportSetup } from '@/types/twin-matrix';
-import { StepLayout, StepHeader, StepContent, StepFooter } from '../StepLayout';
-import { AnimatedTitle } from '../AnimatedTitle';
+import { SplitStepLayout } from '../StepLayout';
 
 const FREQ_OPTIONS = [
   { label: '1–2x / week', zone: 'Light Activity' },
@@ -56,24 +55,20 @@ export const SportSetupStep = ({ data, onUpdate, onNext }: Props) => {
   const isValid = setup.frequency !== '' && setup.duration !== '' && setup.dailySteps !== '';
 
   return (
-    <StepLayout>
-      <StepHeader>
-        <AnimatedTitle title="Baseline" subtitle="A quiet calibration of your physical rhythm." />
-      </StepHeader>
-
-      <StepContent>
-        <div className="glass-card space-y-6 w-full max-w-lg mx-auto animate-soft-enter">
-          <SliderSelect label="Exercise Frequency" options={FREQ_OPTIONS} value={setup.frequency} onChange={v => update('frequency', v)} />
-          <SliderSelect label="Session Duration" options={DURATION_OPTIONS} value={setup.duration} onChange={v => update('duration', v)} />
-          <SliderSelect label="Average Daily Steps" options={STEP_OPTIONS} value={setup.dailySteps} onChange={v => update('dailySteps', v)} />
-        </div>
-      </StepContent>
-
-      <StepFooter>
+    <SplitStepLayout
+      title="Baseline"
+      subtitle="A quiet calibration of your physical rhythm."
+      footer={
         <button onClick={onNext} disabled={!isValid} className={`btn-twin btn-twin-primary w-full py-2.5 text-sm disabled:opacity-30 disabled:cursor-not-allowed ${isValid ? 'btn-glow' : ''}`}>
           Proceed
         </button>
-      </StepFooter>
-    </StepLayout>
+      }
+    >
+      <div className="glass-card space-y-6 w-full max-w-lg">
+        <SliderSelect label="Exercise Frequency" options={FREQ_OPTIONS} value={setup.frequency} onChange={v => update('frequency', v)} />
+        <SliderSelect label="Session Duration" options={DURATION_OPTIONS} value={setup.duration} onChange={v => update('duration', v)} />
+        <SliderSelect label="Average Daily Steps" options={STEP_OPTIONS} value={setup.dailySteps} onChange={v => update('dailySteps', v)} />
+      </div>
+    </SplitStepLayout>
   );
 };
