@@ -61,10 +61,10 @@ interface Particle {
 }
 
 const CORNERS = [
-  { xr: 0.15, yr: 0.15 },
-  { xr: 0.75, yr: 0.15 },
-  { xr: 0.15, yr: 0.70 },
-  { xr: 0.75, yr: 0.70 },
+  { xr: 0.02, yr: 0.02 },
+  { xr: 0.82, yr: 0.02 },
+  { xr: 0.02, yr: 0.72 },
+  { xr: 0.82, yr: 0.72 },
 ];
 
 const ParticleCanvas = ({ width, height }: { width: number; height: number }) => {
@@ -99,14 +99,14 @@ const ParticleCanvas = ({ width, height }: { width: number; height: number }) =>
       ty: cy + py * scale,
       ox: Math.random() * width,
       oy: Math.random() * height,
-      size: 1.2 + Math.random() * 1.2,
-      opacity: 0.15 + Math.random() * 0.25,
+      size: 2.5 + Math.random() * 2,
+      opacity: 0.08 + Math.random() * 0.14,
     }));
 
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 30; i++) {
       const x = Math.random() * width;
       const y = Math.random() * height;
-      particles.push({ x, y, tx: x, ty: y, ox: x, oy: y, size: 0.5 + Math.random() * 0.8, opacity: 0.05 + Math.random() * 0.1 });
+      particles.push({ x, y, tx: x, ty: y, ox: x, oy: y, size: 1.5 + Math.random() * 2, opacity: 0.02 + Math.random() * 0.05 });
     }
 
     particlesRef.current = particles;
@@ -157,16 +157,14 @@ const ParticleCanvas = ({ width, height }: { width: number; height: number }) =>
         }
 
         const phase = t < GATHER ? 'gather' : t < GATHER + HOLD ? 'hold' : 'scatter';
-        const glowOpacity = phase === 'hold' ? p.opacity * 1.5 : p.opacity;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        const glowOpacity = phase === 'hold' ? p.opacity * 1.2 : p.opacity;
+        // Square pixel block style
+        const s = p.size;
         ctx.fillStyle = `rgba(54, 230, 255, ${glowOpacity})`;
-        ctx.fill();
+        ctx.fillRect(Math.round(p.x - s / 2), Math.round(p.y - s / 2), s, s);
         if (phase === 'hold') {
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.size * 2.5, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(54, 230, 255, ${glowOpacity * 0.15})`;
-          ctx.fill();
+          ctx.fillStyle = `rgba(54, 230, 255, ${glowOpacity * 0.1})`;
+          ctx.fillRect(Math.round(p.x - s * 1.5), Math.round(p.y - s * 1.5), s * 3, s * 3);
         }
       }
       raf = requestAnimationFrame(animate);
@@ -175,7 +173,7 @@ const ParticleCanvas = ({ width, height }: { width: number; height: number }) =>
     return () => cancelAnimationFrame(raf);
   }, [width, height, initParticles, setTargetsToCorner]);
 
-  return <canvas ref={canvasRef} width={width} height={height} className="absolute inset-0 pointer-events-none" style={{ opacity: 0.5 }} />;
+  return <canvas ref={canvasRef} width={width} height={height} className="absolute inset-0 pointer-events-none" style={{ opacity: 0.35 }} />;
 };
 
 /* ── Constants ── */
