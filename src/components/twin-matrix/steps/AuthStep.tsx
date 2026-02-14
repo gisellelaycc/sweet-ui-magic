@@ -293,18 +293,14 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
   const isCustomDuration = permission.authorizationDuration === 'Custom';
 
   return (
-    <div ref={containerRef} className="relative animate-fade-in overflow-hidden h-full flex flex-col">
+    <div ref={containerRef} className="relative animate-fade-in overflow-hidden h-full flex flex-col agent-ambient">
       {/* Particle lobster background */}
       {dims.w > 0 && <ParticleCanvas width={dims.w} height={dims.h} />}
 
       <div className="relative z-10 flex-1 min-h-0 overflow-y-auto scrollbar-hide">
         <div className="min-h-full flex flex-col items-center px-8 py-4">
           <div className="w-full max-w-[760px] space-y-6">
-        {/* Header — always visible */}
-        <div className="text-center">
-          <h2 className="text-2xl font-bold mb-1">Activate an Agent</h2>
-          <p className="text-muted-foreground text-sm">Let this identity act on your behalf.</p>
-        </div>
+        {/* Header removed per design */}
 
         {/* ═══ Sub-step: LIST (shows saved agents + create new) ═══ */}
         {subStep === 'list' && (
@@ -313,7 +309,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
               <div className="space-y-2">
                 <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Your Agents</h3>
                 {savedAgents.map(sa => (
-                  <div key={sa.id} className="glass-card !p-4 flex items-center justify-between">
+                  <div key={sa.id} className="glass-card glass-card-agent !p-4 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <img src={lobsterIcon} alt="" className="w-6 h-6" style={{
                         filter: 'drop-shadow(0 0 4px rgba(242, 68, 85, 0.4))',
@@ -339,7 +335,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
 
                 {/* Expanded view of selected agent */}
                 {viewingAgent && (
-                  <div className="glass-card !p-5 space-y-3 animate-fade-in">
+                  <div className="glass-card glass-card-agent !p-5 space-y-3 animate-fade-in">
                     <div className="flex items-center justify-between">
                       <h4 className="text-sm font-semibold text-foreground">{viewingAgent.name}</h4>
                       <span className={`text-[10px] ${viewingAgent.status === 'ACTIVE' ? 'text-[#F24455]' : 'text-muted-foreground'}`}>
@@ -379,7 +375,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
 
             <button
               onClick={() => { setAgentName(''); setSubStep('create'); }}
-              className="btn-twin btn-twin-primary btn-glow w-full py-3"
+              className="btn-twin btn-twin-primary btn-glow-red w-full py-3"
             >
               <Plus className="w-4 h-4" /> Create New Agent
             </button>
@@ -398,7 +394,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
               </button>
             )}
 
-            <div className="glass-card space-y-5">
+            <div className="glass-card glass-card-agent space-y-5">
               <div className="flex items-center gap-3">
                 <img src={lobsterIcon} alt="" className="w-10 h-10" style={{
                   filter: 'drop-shadow(0 0 6px rgba(242, 68, 85, 0.4))',
@@ -422,7 +418,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
               <button
                 onClick={handleCreateAgent}
                 disabled={!agentName.trim()}
-                className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${agentName.trim() ? 'btn-glow' : ''}`}
+                className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${agentName.trim() ? 'btn-glow-red' : ''}`}
               >
                 Create Agent
               </button>
@@ -433,7 +429,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
         {/* ═══ Sub-step B: CONFIG ═══ */}
         {subStep === 'config' && (
           <div className="space-y-4 animate-fade-in">
-            <div className="glass-card">
+            <div className="glass-card glass-card-agent">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* LEFT — Behavior Builder */}
                 <div className="space-y-5">
@@ -593,7 +589,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
             </div>
 
             <button onClick={handleSaveConfig} disabled={!canSaveConfig}
-              className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${canSaveConfig ? 'btn-glow' : ''}`}>
+              className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${canSaveConfig ? 'btn-glow-red' : ''}`}>
               Save Configuration
             </button>
           </div>
@@ -602,7 +598,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
         {/* ═══ Sub-step C: TELEGRAM ═══ */}
         {subStep === 'telegram' && (
           <div className="space-y-6 animate-fade-in max-w-md mx-auto">
-            <div className="glass-card space-y-5 text-center">
+            <div className="glass-card glass-card-agent space-y-5 text-center">
               <img src={lobsterIcon} alt="" className="w-14 h-14 mx-auto" style={{
                 filter: 'drop-shadow(0 0 8px rgba(242, 68, 85, 0.5))',
               }} />
@@ -612,7 +608,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
               </div>
 
               {!telegramConnected ? (
-                <button onClick={handleConnectTelegram} className="btn-twin btn-twin-primary btn-glow w-full py-3">
+                <button onClick={handleConnectTelegram} className="btn-twin btn-twin-primary btn-glow-red w-full py-3">
                   🔗 Connect Telegram
                 </button>
               ) : (
@@ -634,7 +630,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
               Your agent is now operating under your committed identity.
             </p>
 
-            <div className="glass-card space-y-3 text-left">
+            <div className="glass-card glass-card-agent space-y-3 text-left">
               <div className="flex items-center justify-between">
                 <span className="text-xs text-muted-foreground">Agent</span>
                 <span className="text-sm font-medium text-foreground flex items-center gap-1.5">
@@ -653,7 +649,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
             </div>
 
             <div className="space-y-3">
-              <button onClick={onDashboard} className="btn-twin btn-twin-primary btn-glow w-full py-3">
+              <button onClick={onDashboard} className="btn-twin btn-twin-primary btn-glow-red w-full py-3">
                 Return to Dashboard
               </button>
               <button onClick={handleCreateAnother} className="btn-twin btn-twin-ghost w-full py-2.5 text-sm">
