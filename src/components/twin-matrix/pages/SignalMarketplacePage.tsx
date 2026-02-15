@@ -1,9 +1,29 @@
 import { useState, useRef } from 'react';
-import { ChevronLeft, ChevronRight, DollarSign, Clock } from 'lucide-react';
+import { ChevronLeft, ChevronRight, DollarSign, Clock, X } from 'lucide-react';
 import { useI18n } from '@/lib/i18n';
 
 const DEMO_SIGNALS = [
-  { id: '1', type: 'passive' as const, brand: 'Nike Running', brandInitial: 'N', agentId: 'nike-run-0x3f', title: 'New Pegasus 42 release + City Marathon registration open', matchReasons: ['Running affinity: High', 'Performance orientation'], scope: 'soul.sports.running', quota: 12, validDays: 30, layer: 'Soul' },
+  {
+    id: '1',
+    type: 'task' as const,
+    brand: 'Nike Running',
+    brandInitial: 'N',
+    agentId: 'nike-run-0x3f',
+    title: 'Upload Smartwatch Activity Records (1 month)',
+    reward: '3 USDT',
+    deadline: 'March 14, 2026',
+    matchReasons: ['Running affinity: High', 'Performance-oriented training style', 'Consistent activity patterns'],
+    scope: 'skill.sports.running',
+    quota: 12,
+    validDays: 30,
+    layer: 'Skill',
+    taskDescription: `We're collecting real-world running activity records to evaluate training patterns and product fit for upcoming Nike Running initiatives.\n\nIf you regularly run with a smartwatch or fitness tracker, this task invites you to securely upload a short window of your recent activity history. Your data will be used in aggregate for internal research and will never be sold or shared externally.`,
+    whatYoullDo: [
+      'Upload 7 days of running activity records from your smartwatch or fitness tracker',
+    ],
+    supportedData: ['Distance', 'Duration', 'Pace', 'Heart rate (optional)', 'Timestamp (date-level, no exact location required)'],
+    fileNote: 'Raw files (e.g. GPX / FIT / CSV) are accepted.\nExact routes or GPS traces are not required.',
+  },
   { id: '2', type: 'task' as const, brand: 'Adidas Training', brandInitial: 'A', agentId: 'adidas-train-0xa1', title: '7-day training feedback task for Ultraboost GTX prototype', reward: '85 USDT', deadline: 'Feb 28, 2026', matchReasons: ['Gym affinity: High', 'Discipline motivation'], scope: 'skill.sports.gym', quota: 1, validDays: 14, layer: 'Skill' },
   { id: '3', type: 'passive' as const, brand: 'Spotify', brandInitial: 'S', agentId: 'spotify-disc-0x7b', title: 'Curated workout playlist based on your rhythm profile', matchReasons: ['Music affinity: Medium', 'High-tempo preference'], scope: 'soul.music.listening', quota: 8, validDays: 30, layer: 'Soul' },
   { id: '4', type: 'passive' as const, brand: 'Under Armour', brandInitial: 'U', agentId: 'ua-fit-0xc2', title: 'Recovery tracker integration for post-workout analysis', matchReasons: ['Fitness tracking: High', 'Recovery focus'], scope: 'core.health.recovery', quota: 5, validDays: 60, layer: 'Physical' },
@@ -25,6 +45,7 @@ export const SignalMarketplacePage = () => {
   const { t } = useI18n();
   const [activeTab, setActiveTab] = useState<Tab>('all');
   const [activeLayer, setActiveLayer] = useState<LayerFilter>('all');
+  const [reviewSignal, setReviewSignal] = useState<typeof DEMO_SIGNALS[0] | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const TABS: { id: Tab; label: string }[] = [
@@ -140,10 +161,17 @@ export const SignalMarketplacePage = () => {
                 </div>
                 <p className="text-sm text-foreground/80 leading-relaxed">{signal.title}</p>
                 {signal.type === 'task' && (
-                  <div className="flex gap-3">
-                    <span className="inline-flex items-center gap-1.5 text-xs text-foreground/70"><DollarSign className="w-3 h-3 text-muted-foreground" />{signal.reward}</span>
-                    <span className="inline-flex items-center gap-1.5 text-xs text-foreground/70"><Clock className="w-3 h-3 text-muted-foreground" />{signal.deadline}</span>
-                  </div>
+                  <>
+                    <div className="space-y-2">
+                      <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Reward</p>
+                      <p className="text-sm text-foreground/80">💰 {signal.reward}</p>
+                      <p className="text-[10px] text-muted-foreground/50">Payment is released upon successful review and task completion.</p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Deadline</p>
+                      <p className="text-sm text-foreground/80">{signal.deadline}</p>
+                    </div>
+                  </>
                 )}
                 <div className="space-y-2">
                   <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{t('marketplace.whyMatch')}</p>
@@ -151,9 +179,13 @@ export const SignalMarketplacePage = () => {
                     {signal.matchReasons.map(r => (<p key={r} className="text-xs text-foreground/60">• {r}</p>))}
                   </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono px-2.5 py-1 rounded-full" style={{ background: 'rgba(10,255,255,0.08)', color: 'rgba(10,255,255,0.7)' }}>{signal.scope}</span>
-                  <span className="text-[10px] text-muted-foreground">{signal.quota} {t('marketplace.uses')} · {signal.validDays}d</span>
+                <div className="space-y-2">
+                  <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Authorized Scope</p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono px-2.5 py-1 rounded-full" style={{ background: 'rgba(10,255,255,0.08)', color: 'rgba(10,255,255,0.7)' }}>{signal.scope}</span>
+                    <span className="text-[10px] text-muted-foreground">{signal.quota} {t('marketplace.uses')} · {signal.validDays}d</span>
+                  </div>
+                  <p className="text-[9px] text-muted-foreground/40">(Access limited to this scope only)</p>
                 </div>
                 <div className="h-px" style={{ background: 'rgba(255,255,255,0.04)' }} />
                 <div className="flex items-center gap-3">
@@ -164,20 +196,92 @@ export const SignalMarketplacePage = () => {
                     </>
                   ) : (
                     <>
-                      <button className="text-xs text-foreground/70 hover:text-foreground transition-colors">{t('marketplace.reviewDetails')}</button>
-                      <button className="text-xs text-foreground/70 hover:text-foreground transition-colors">{t('marketplace.accept')}</button>
+                      <button onClick={() => setReviewSignal(signal)} className="text-xs text-foreground/70 hover:text-foreground transition-colors">{t('marketplace.reviewDetails')}</button>
                       <button className="text-xs text-muted-foreground/50 hover:text-muted-foreground transition-colors">{t('marketplace.decline')}</button>
                     </>
                   )}
                 </div>
                 <p className="text-[9px] text-muted-foreground/30">
-                  {signal.type === 'passive' ? t('marketplace.viewConsumes') : t('marketplace.acceptLocks')}
+                  {signal.type === 'passive' ? t('marketplace.viewConsumes') : 'Accept locks 1 quota · Payment on completion'}
                 </p>
               </div>
             ))}
           </div>
         </div>
       </div>
+
+      {/* Review Details Dialog */}
+      {reviewSignal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/80" onClick={() => setReviewSignal(null)} />
+          <div className="relative z-10 w-full max-w-lg max-h-[80vh] overflow-y-auto scrollbar-hide rounded-2xl border border-foreground/10 bg-background p-6 space-y-5 shadow-2xl mx-4">
+            {/* Close */}
+            <button onClick={() => setReviewSignal(null)} className="absolute right-4 top-4 text-muted-foreground hover:text-foreground transition-colors">
+              <X className="w-4 h-4" />
+            </button>
+
+            {/* Header */}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-foreground/8 flex items-center justify-center text-sm font-semibold text-foreground/60">{reviewSignal.brandInitial}</div>
+              <div>
+                <p className="font-semibold">{reviewSignal.brand}</p>
+                <p className="text-[10px] text-muted-foreground/50">{t('marketplace.verifiedAgent')} · {reviewSignal.agentId}</p>
+              </div>
+            </div>
+
+            <ThinDivider />
+
+            {/* Task Description */}
+            {'taskDescription' in reviewSignal && reviewSignal.taskDescription && (
+              <div className="space-y-2">
+                <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">Task Description</p>
+                <p className="text-sm text-foreground/80 leading-relaxed whitespace-pre-line">{reviewSignal.taskDescription}</p>
+              </div>
+            )}
+
+            {/* What You'll Do */}
+            {'whatYoullDo' in reviewSignal && reviewSignal.whatYoullDo && (
+              <div className="space-y-2">
+                <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">What You'll Do</p>
+                <ul className="space-y-1">
+                  {reviewSignal.whatYoullDo.map((item: string, i: number) => (
+                    <li key={i} className="text-sm text-foreground/80">• {item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Supported data types */}
+            {'supportedData' in reviewSignal && reviewSignal.supportedData && (
+              <div className="space-y-2">
+                <p className="text-[11px] text-muted-foreground/60">Supported data types include:</p>
+                <ul className="space-y-0.5 pl-4">
+                  {reviewSignal.supportedData.map((item: string, i: number) => (
+                    <li key={i} className="text-xs text-foreground/60">• {item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* File note */}
+            {'fileNote' in reviewSignal && reviewSignal.fileNote && (
+              <p className="text-xs text-muted-foreground/50 whitespace-pre-line">{reviewSignal.fileNote}</p>
+            )}
+
+            <ThinDivider />
+
+            {/* Actions */}
+            <div className="flex items-center gap-3 pt-1">
+              <button className="btn-twin btn-twin-primary py-2.5 px-5 text-sm flex-1">
+                Accept (locks quota · payment on completion)
+              </button>
+              <button onClick={() => setReviewSignal(null)} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Decline (free)
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
