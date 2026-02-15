@@ -26,6 +26,7 @@ import { ActiveAuthorizationsPage } from './pages/ActiveAuthorizationsPage';
 import { MissionsPage } from './pages/MissionsPage';
 import { SignalMarketplacePage } from './pages/SignalMarketplacePage';
 import { SettingsPage } from './pages/SettingsPage';
+import { Footer } from './Footer';
 
 const TOTAL_STEPS = 9;
 
@@ -156,6 +157,10 @@ export const WizardLayout = () => {
           </>
         )}
       </main>
+
+      {(activePage === 'identity' || activePage === 'agent' || activePage === 'missions' || activePage === 'auth') && (
+        <Footer />
+      )}
 
       <MainMenu open={menuOpen} onClose={() => setMenuOpen(false)} onNavigate={handleMenuNavigate} hasIdentity={hasIdentity} />
     </div>
