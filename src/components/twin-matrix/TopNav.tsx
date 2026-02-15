@@ -11,6 +11,7 @@ interface Props {
   isWalletConnected: boolean;
   walletAddress?: string;
   onConnectWallet: () => void;
+  onDisconnectWallet: () => void;
 }
 
 const NAV_KEYS: { id: NavPage; key: string }[] = [
@@ -20,19 +21,30 @@ const NAV_KEYS: { id: NavPage; key: string }[] = [
   { id: 'auth', key: 'nav.records' },
 ];
 
-export const TopNav = ({ activePage, onNavigate, hasIdentity, isWalletConnected, walletAddress, onConnectWallet }: Props) => {
+export const TopNav = ({
+  activePage,
+  onNavigate,
+  hasIdentity,
+  isWalletConnected,
+  walletAddress,
+  onConnectWallet,
+  onDisconnectWallet,
+}: Props) => {
   const { lang, setLang, t, langLabels } = useI18n();
   const [langOpen, setLangOpen] = useState(false);
+  const [walletMenuOpen, setWalletMenuOpen] = useState(false);
   const popRef = useRef<HTMLDivElement>(null);
+  const walletRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!langOpen) return;
+    if (!langOpen && !walletMenuOpen) return;
     const handler = (e: MouseEvent) => {
       if (popRef.current && !popRef.current.contains(e.target as Node)) setLangOpen(false);
+      if (walletRef.current && !walletRef.current.contains(e.target as Node)) setWalletMenuOpen(false);
     };
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
-  }, [langOpen]);
+  }, [langOpen, walletMenuOpen]);
 
   const langs: Lang[] = ['en', 'zh', 'ja', 'ko'];
 
@@ -108,8 +120,36 @@ export const TopNav = ({ activePage, onNavigate, hasIdentity, isWalletConnected,
         </div>
 
         {isWalletConnected && walletAddress ? (
-          <div className="px-3 py-1.5 rounded-lg text-xs font-mono text-foreground/90 bg-foreground/5 border border-foreground/8">
-            {walletAddress}
+          <div className="relative" ref={walletRef}>
+            <button
+              onClick={() => setWalletMenuOpen((v) => !v)}
+              className="px-3 py-1.5 rounded-lg text-xs font-mono text-foreground/90 bg-foreground/5 border border-foreground/8 hover:bg-foreground/10 transition-colors flex items-center gap-1.5"
+            >
+              <span>{walletAddress}</span>
+              <span className="text-[10px] text-muted-foreground">▾</span>
+            </button>
+
+            {walletMenuOpen && (
+              <div
+                className="absolute right-0 top-full mt-2 py-1.5 rounded-xl z-50 min-w-[160px] animate-fade-in"
+                style={{
+                  background: 'rgba(20, 22, 26, 0.92)',
+                  backdropFilter: 'blur(20px)',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
+                }}
+              >
+                <button
+                  onClick={() => {
+                    setWalletMenuOpen(false);
+                    onDisconnectWallet();
+                  }}
+                  className="w-full text-left px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-foreground/5 transition-colors"
+                >
+                  Disconnect
+                </button>
+              </div>
+            )}
           </div>
         ) : (
           <button

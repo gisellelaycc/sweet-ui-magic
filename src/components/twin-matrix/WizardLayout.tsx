@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { BaseError } from 'viem';
 import { toast } from 'sonner';
-import { useAccount, useChainId, usePublicClient, useSwitchChain, useWriteContract } from 'wagmi';
+import { useAccount, useChainId, useDisconnect, usePublicClient, useSwitchChain, useWriteContract } from 'wagmi';
 import type { WizardState } from '@/types/twin-matrix';
 import { validateBaseline } from '@/lib/twin-encoder';
 import {
@@ -67,6 +67,7 @@ export const WizardLayout = () => {
   const { address, isConnected } = useAccount();
   const chainId = useChainId();
   const { openConnectModal } = useConnectModal();
+  const { disconnect } = useDisconnect();
   const publicClient = usePublicClient({ chainId: BSC_TESTNET_CHAIN_ID });
   const { switchChain, isPending: isSwitchingNetwork } = useSwitchChain();
   const { writeContractAsync } = useWriteContract();
@@ -330,6 +331,7 @@ export const WizardLayout = () => {
         isWalletConnected={isConnected}
         walletAddress={walletAddress}
         onConnectWallet={() => openConnectModal?.()}
+        onDisconnectWallet={() => disconnect()}
       />
 
       <main className="flex-1 min-h-0 px-4 py-4 flex flex-col relative z-10">
