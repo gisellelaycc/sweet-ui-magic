@@ -88,7 +88,7 @@ export const IdentityDashboard = ({ username, signature, activeModules, onNaviga
 
   return (
     <div className="animate-fade-in h-full overflow-y-auto scrollbar-hide">
-      <div className="max-w-5xl mx-auto px-6 py-6">
+      <div className="max-w-3xl mx-auto px-6 py-6">
         <section>
           <div className="flex items-center justify-between mb-4">
             <div>

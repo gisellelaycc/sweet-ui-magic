@@ -15,7 +15,8 @@ export const SettingsPage = () => {
   const walletAddress = useMemo(() => generateWalletAddress(), []);
 
   return (
-    <div className="animate-fade-in space-y-6 max-w-lg mx-auto">
+    <div className="animate-fade-in h-full overflow-y-auto scrollbar-hide">
+      <div className="max-w-3xl mx-auto px-6 py-6 space-y-6">
       <div>
         <h2 className="text-2xl font-bold mb-1">{t('settings.title')}</h2>
         <p className="text-muted-foreground text-sm">{t('settings.subtitle')}</p>
@@ -65,6 +66,7 @@ export const SettingsPage = () => {
       </div>
 
       <p className="text-[10px] text-muted-foreground/30 text-center">Twin Matrix v0.1 — Demo</p>
+      </div>
     </div>
   );
 };
