@@ -83,7 +83,7 @@ export const WizardLayout = () => {
   const showPageBack = activePage !== null;
 
   return (
-    <div className={`h-full flex flex-col relative z-10 ${state.step >= 9 ? 'agent-ambient' : ''}`}>
+    <div className={`h-full flex flex-col relative ${state.step >= 9 ? 'agent-ambient' : ''}`} style={{ zIndex: 10 }}>
       <ParticleBackground color={state.step >= 9 ? 'red' : 'cyan'} />
 
       <TopNav activePage={activePage} onNavigate={(id) => {
