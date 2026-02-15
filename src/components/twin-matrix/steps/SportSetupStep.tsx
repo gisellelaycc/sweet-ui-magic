@@ -1,25 +1,27 @@
 import { useState } from 'react';
 import type { SportSetup } from '@/types/twin-matrix';
-import { StepLayout, StepContent, StepFooter } from '../StepLayout';
+import { StepLayout, StepContent } from '../StepLayout';
 import { useI18n } from '@/lib/i18n';
 
+// Internal values stay as-is (English labels like "1–2x / week")
+// Zone display is translated
 const FREQ_OPTIONS = [
-  { label: '1–2x / week', zone: 'Light Activity' },
-  { label: '3–4x / week', zone: 'Moderate Training' },
-  { label: '5+ / week', zone: 'High-Frequency Training' },
-  { label: 'Occasionally', zone: 'Casual' },
+  { label: '1–2x / week', zoneKey: 'zone.lightActivity' },
+  { label: '3–4x / week', zoneKey: 'zone.moderateTraining' },
+  { label: '5+ / week', zoneKey: 'zone.highFrequency' },
+  { label: 'Occasionally', zoneKey: 'zone.casual' },
 ];
 const DURATION_OPTIONS = [
-  { label: '< 30 min', zone: 'Quick Session' },
-  { label: '30–60 min', zone: 'Standard Session' },
-  { label: '60–90 min', zone: 'Extended Session' },
-  { label: '90+ min', zone: 'Endurance Session' },
+  { label: '< 30 min', zoneKey: 'zone.quickSession' },
+  { label: '30–60 min', zoneKey: 'zone.standardSession' },
+  { label: '60–90 min', zoneKey: 'zone.extendedSession' },
+  { label: '90+ min', zoneKey: 'zone.enduranceSession' },
 ];
 const STEP_OPTIONS = [
-  { label: '< 3,000', zone: 'Sedentary' },
-  { label: '3,000–7,000', zone: 'Lightly Active' },
-  { label: '7,000–12,000', zone: 'Active' },
-  { label: '12,000+', zone: 'Highly Active' },
+  { label: '< 3,000', zoneKey: 'zone.sedentary' },
+  { label: '3,000–7,000', zoneKey: 'zone.lightlyActive' },
+  { label: '7,000–12,000', zoneKey: 'zone.active' },
+  { label: '12,000+', zoneKey: 'zone.highlyActive' },
 ];
 
 interface Props {
@@ -28,9 +30,9 @@ interface Props {
   onNext: () => void;
 }
 
-const SliderSelect = ({ label, options, value, onChange }: { label: string; options: { label: string; zone: string }[]; value: string; onChange: (v: string) => void }) => {
+const SliderSelect = ({ label, options, value, onChange, t }: { label: string; options: { label: string; zoneKey: string }[]; value: string; onChange: (v: string) => void; t: (k: string) => string }) => {
   const idx = options.findIndex(o => o.label === value);
-  const zone = idx >= 0 ? options[idx].zone : null;
+  const zone = idx >= 0 ? t(options[idx].zoneKey) : null;
   return (
     <div className="space-y-3">
       <label className="text-sm text-muted-foreground">{label}</label>
@@ -41,7 +43,7 @@ const SliderSelect = ({ label, options, value, onChange }: { label: string; opti
           </button>
         ))}
       </div>
-      {zone && <div className="text-xs text-center py-1.5 px-3 rounded-full bg-foreground/5 text-foreground/60 inline-block">Zone: {zone}</div>}
+      {zone && <div className="text-xs text-center py-1.5 px-3 rounded-full bg-foreground/5 text-foreground/60 inline-block">{t('zone.label')} {zone}</div>}
     </div>
   );
 };
@@ -70,9 +72,9 @@ export const SportSetupStep = ({ data, onUpdate, onNext }: Props) => {
           </div>
 
           <div className="glass-card space-y-6 w-full max-w-lg">
-            <SliderSelect label={t('sportSetup.frequency')} options={FREQ_OPTIONS} value={setup.frequency} onChange={v => update('frequency', v)} />
-            <SliderSelect label={t('sportSetup.duration')} options={DURATION_OPTIONS} value={setup.duration} onChange={v => update('duration', v)} />
-            <SliderSelect label={t('sportSetup.steps')} options={STEP_OPTIONS} value={setup.dailySteps} onChange={v => update('dailySteps', v)} />
+            <SliderSelect label={t('sportSetup.frequency')} options={FREQ_OPTIONS} value={setup.frequency} onChange={v => update('frequency', v)} t={t} />
+            <SliderSelect label={t('sportSetup.duration')} options={DURATION_OPTIONS} value={setup.duration} onChange={v => update('duration', v)} t={t} />
+            <SliderSelect label={t('sportSetup.steps')} options={STEP_OPTIONS} value={setup.dailySteps} onChange={v => update('dailySteps', v)} t={t} />
           </div>
 
           <div className="w-full max-w-lg mt-6">

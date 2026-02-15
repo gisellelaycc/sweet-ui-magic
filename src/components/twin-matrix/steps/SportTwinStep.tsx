@@ -3,16 +3,33 @@ import type { SportTwin } from '@/types/twin-matrix';
 import { StepLayout, StepContent } from '../StepLayout';
 import { useI18n } from '@/lib/i18n';
 
+// Internal IDs stay English — used for backend storage
 const SPORTS = [
-  'Running', 'Cycling', 'Long-distance Swimming', 'Trail / Off-road Running',
-  'Strength Training', 'Yoga & Pilates', 'Team Sports', 'Combat Sports',
-  'Racquet Sports', 'Climbing', 'Golf',
+  { id: 'Running', key: 'sport.running' },
+  { id: 'Cycling', key: 'sport.cycling' },
+  { id: 'Long-distance Swimming', key: 'sport.swimming' },
+  { id: 'Trail / Off-road Running', key: 'sport.trail' },
+  { id: 'Strength Training', key: 'sport.strength' },
+  { id: 'Yoga & Pilates', key: 'sport.yoga' },
+  { id: 'Team Sports', key: 'sport.team' },
+  { id: 'Combat Sports', key: 'sport.combat' },
+  { id: 'Racquet Sports', key: 'sport.racquet' },
+  { id: 'Climbing', key: 'sport.climbing' },
+  { id: 'Golf', key: 'sport.golf' },
 ];
 const OUTFIT_STYLES = [
-  'Minimal Functional', 'Streetwear Athletic', 'Pro Competition', 'Casual Comfort',
-  'Premium Athletic', 'Retro Sports', 'Outdoor Technical', 'Tight Performance',
-  'Vivid & Energetic', 'Brand Centric',
+  { id: 'Minimal Functional', key: 'outfit.minimalFunctional' },
+  { id: 'Streetwear Athletic', key: 'outfit.streetwear' },
+  { id: 'Pro Competition', key: 'outfit.proCompetition' },
+  { id: 'Casual Comfort', key: 'outfit.casualComfort' },
+  { id: 'Premium Athletic', key: 'outfit.premiumAthletic' },
+  { id: 'Retro Sports', key: 'outfit.retroSports' },
+  { id: 'Outdoor Technical', key: 'outfit.outdoorTechnical' },
+  { id: 'Tight Performance', key: 'outfit.tightPerformance' },
+  { id: 'Vivid & Energetic', key: 'outfit.vividEnergetic' },
+  { id: 'Brand Centric', key: 'outfit.brandCentric' },
 ];
+// Brands stay in English (brand names)
 const BRANDS = ['Nike', 'Adidas', 'Under Armour', 'Lululemon', 'New Balance', 'ASICS', 'Puma', 'Reebok', 'On', 'Hoka'];
 
 interface Props {
@@ -25,19 +42,19 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
   const { t } = useI18n();
   const [twin, setTwin] = useState(data);
 
-  const toggleSport = (s: string) => {
-    const list = twin.sportRanking.includes(s)
-      ? twin.sportRanking.filter(x => x !== s)
-      : twin.sportRanking.length < 10 ? [...twin.sportRanking, s] : twin.sportRanking;
+  const toggleSport = (id: string) => {
+    const list = twin.sportRanking.includes(id)
+      ? twin.sportRanking.filter(x => x !== id)
+      : twin.sportRanking.length < 10 ? [...twin.sportRanking, id] : twin.sportRanking;
     const next = { ...twin, sportRanking: list };
     setTwin(next);
     onUpdate(next);
   };
 
-  const toggleStyle = (s: string) => {
-    const list = twin.outfitStyle.includes(s)
-      ? twin.outfitStyle.filter(x => x !== s)
-      : [...twin.outfitStyle, s];
+  const toggleStyle = (id: string) => {
+    const list = twin.outfitStyle.includes(id)
+      ? twin.outfitStyle.filter(x => x !== id)
+      : [...twin.outfitStyle, id];
     const next = { ...twin, outfitStyle: list };
     setTwin(next);
     onUpdate(next);
@@ -78,12 +95,12 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
               )}
               <div className="flex flex-wrap gap-1.5">
                 {SPORTS.map(s => {
-                  const rank = twin.sportRanking.indexOf(s);
+                  const rank = twin.sportRanking.indexOf(s.id);
                   const isSelected = rank >= 0;
                   return (
-                    <button key={s} onClick={() => toggleSport(s)}
+                    <button key={s.id} onClick={() => toggleSport(s.id)}
                       className={`chip !text-xs !py-1.5 !px-3 relative ${isSelected ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}>
-                      {s}
+                      {t(s.key)}
                       {isSelected && (
                         <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-foreground text-background text-[9px] flex items-center justify-center font-bold">
                           {rank + 1}
@@ -102,9 +119,9 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {OUTFIT_STYLES.map(s => (
-                  <button key={s} onClick={() => toggleStyle(s)}
-                    className={`chip !text-xs !py-1.5 !px-3 ${twin.outfitStyle.includes(s) ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}>
-                    {s}
+                  <button key={s.id} onClick={() => toggleStyle(s.id)}
+                    className={`chip !text-xs !py-1.5 !px-3 ${twin.outfitStyle.includes(s.id) ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}>
+                    {t(s.key)}
                   </button>
                 ))}
               </div>

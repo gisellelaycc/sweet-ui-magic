@@ -49,6 +49,26 @@ const T: Translations = {
   'category.andMore': { en: 'And more', zh: '更多', ja: 'その他', ko: '더 보기' },
   'category.minted': { en: 'minted', zh: '已鑄造', ja: 'ミント済み', ko: '민트됨' },
 
+  // ── Signal Labels & Descriptions ──
+  'signal.sport': { en: 'Sport', zh: '運動', ja: 'スポーツ', ko: '스포츠' },
+  'signal.sport.desc': { en: 'Physical signal · competitive state', zh: '身體信號 · 競技狀態', ja: 'フィジカルシグナル · 競技状態', ko: '신체 시그널 · 경쟁 상태' },
+  'signal.music': { en: 'Music', zh: '音樂', ja: '音楽', ko: '음악' },
+  'signal.music.desc': { en: 'Rhythm signal · listening state', zh: '節奏信號 · 聆聽狀態', ja: 'リズムシグナル · リスニング状態', ko: '리듬 시그널 · 청취 상태' },
+  'signal.art': { en: 'Art', zh: '藝術', ja: 'アート', ko: '아트' },
+  'signal.art.desc': { en: 'Aesthetic signal · creative state', zh: '美學信號 · 創意狀態', ja: '美的シグナル · 創造状態', ko: '미학 시그널 · 창작 상태' },
+  'signal.reading': { en: 'Reading', zh: '閱讀', ja: '読書', ko: '독서' },
+  'signal.reading.desc': { en: 'Knowledge signal · absorption state', zh: '知識信號 · 吸收狀態', ja: '知識シグナル · 吸収状態', ko: '지식 시그널 · 흡수 상태' },
+  'signal.food': { en: 'Food', zh: '美食', ja: 'フード', ko: '음식' },
+  'signal.food.desc': { en: 'Lifestyle signal · dietary state', zh: '生活信號 · 飲食狀態', ja: 'ライフスタイルシグナル · 食事状態', ko: '라이프스타일 시그널 · 식이 상태' },
+  'signal.travel': { en: 'Travel', zh: '旅行', ja: 'トラベル', ko: '여행' },
+  'signal.travel.desc': { en: 'Mobility signal · exploration state', zh: '移動信號 · 探索狀態', ja: 'モビリティシグナル · 探索状態', ko: '이동 시그널 · 탐험 상태' },
+  'signal.finance': { en: 'Finance', zh: '金融', ja: 'ファイナンス', ko: '금융' },
+  'signal.finance.desc': { en: 'Risk signal · asset state', zh: '風險信號 · 資產狀態', ja: 'リスクシグナル · 資産状態', ko: '리스크 시그널 · 자산 상태' },
+  'signal.gaming': { en: 'Gaming', zh: '遊戲', ja: 'ゲーミング', ko: '게이밍' },
+  'signal.gaming.desc': { en: 'Strategic signal · competitive state', zh: '策略信號 · 競技狀態', ja: '戦略シグナル · 競技状態', ko: '전략 시그널 · 경쟁 상태' },
+  'signal.learning': { en: 'Learning', zh: '學習', ja: 'ラーニング', ko: '학습' },
+  'signal.learning.desc': { en: 'Growth signal · focus state', zh: '成長信號 · 專注狀態', ja: '成長シグナル · 集中状態', ko: '성장 시그널 · 집중 상태' },
+
   // ── Sport Setup Step ──
   'sportSetup.title': { en: 'Baseline', zh: '基線校準', ja: 'ベースライン', ko: '베이스라인' },
   'sportSetup.subtitle': { en: 'A quiet calibration of your physical rhythm.', zh: '一次安靜的身體節奏校準。', ja: '身体リズムの静かなキャリブレーション。', ko: '신체 리듬의 조용한 교정.' },
@@ -56,6 +76,20 @@ const T: Translations = {
   'sportSetup.duration': { en: 'Session Duration', zh: '運動時長', ja: 'セッション時間', ko: '세션 시간' },
   'sportSetup.steps': { en: 'Average Daily Steps', zh: '日均步數', ja: '平均日歩数', ko: '일일 평균 걸음수' },
   'sportSetup.proceed': { en: 'Proceed', zh: '繼續', ja: '続行', ko: '계속' },
+  // Zone labels
+  'zone.lightActivity': { en: 'Light Activity', zh: '輕度活動', ja: '軽い活動', ko: '가벼운 활동' },
+  'zone.moderateTraining': { en: 'Moderate Training', zh: '中度訓練', ja: '中程度のトレーニング', ko: '중간 훈련' },
+  'zone.highFrequency': { en: 'High-Frequency Training', zh: '高頻訓練', ja: '高頻度トレーニング', ko: '고빈도 훈련' },
+  'zone.casual': { en: 'Casual', zh: '休閒', ja: 'カジュアル', ko: '캐주얼' },
+  'zone.quickSession': { en: 'Quick Session', zh: '快速練習', ja: 'クイックセッション', ko: '빠른 세션' },
+  'zone.standardSession': { en: 'Standard Session', zh: '標準練習', ja: 'スタンダードセッション', ko: '표준 세션' },
+  'zone.extendedSession': { en: 'Extended Session', zh: '延長練習', ja: '延長セッション', ko: '연장 세션' },
+  'zone.enduranceSession': { en: 'Endurance Session', zh: '耐力練習', ja: '持久力セッション', ko: '지구력 세션' },
+  'zone.sedentary': { en: 'Sedentary', zh: '久坐', ja: '座りがち', ko: '비활동적' },
+  'zone.lightlyActive': { en: 'Lightly Active', zh: '輕度活躍', ja: '軽度アクティブ', ko: '가볍게 활동적' },
+  'zone.active': { en: 'Active', zh: '活躍', ja: 'アクティブ', ko: '활동적' },
+  'zone.highlyActive': { en: 'Highly Active', zh: '高度活躍', ja: '高度アクティブ', ko: '매우 활동적' },
+  'zone.label': { en: 'Zone:', zh: 'Zone:', ja: 'Zone:', ko: 'Zone:' },
 
   // ── Sport Twin Step ──
   'sportTwin.title': { en: 'Most frequent activities', zh: '最常進行的活動', ja: '最も頻繁な活動', ko: '가장 자주 하는 활동' },
@@ -69,12 +103,50 @@ const T: Translations = {
   'sportTwin.brandsHint': { en: "Brands you've worn most in the past year.", zh: '過去一年最常穿的品牌。', ja: '過去1年で最も着用したブランド。', ko: '지난 1년간 가장 많이 착용한 브랜드.' },
   'sportTwin.commit': { en: 'Commit Layer', zh: '提交層', ja: 'レイヤーを確定', ko: '레이어 확정' },
 
+  // Sport activities
+  'sport.running': { en: 'Running', zh: '跑步', ja: 'ランニング', ko: '러닝' },
+  'sport.cycling': { en: 'Cycling', zh: '騎行', ja: 'サイクリング', ko: '사이클링' },
+  'sport.swimming': { en: 'Long-distance Swimming', zh: '長距離游泳', ja: '長距離水泳', ko: '장거리 수영' },
+  'sport.trail': { en: 'Trail / Off-road Running', zh: '越野跑', ja: 'トレイルランニング', ko: '트레일 러닝' },
+  'sport.strength': { en: 'Strength Training', zh: '重量訓練', ja: 'ストレングストレーニング', ko: '근력 훈련' },
+  'sport.yoga': { en: 'Yoga & Pilates', zh: '瑜伽 & 皮拉提斯', ja: 'ヨガ & ピラティス', ko: '요가 & 필라테스' },
+  'sport.team': { en: 'Team Sports', zh: '團體運動', ja: 'チームスポーツ', ko: '팀 스포츠' },
+  'sport.combat': { en: 'Combat Sports', zh: '格鬥運動', ja: '格闘技', ko: '격투기' },
+  'sport.racquet': { en: 'Racquet Sports', zh: '球拍運動', ja: 'ラケットスポーツ', ko: '라켓 스포츠' },
+  'sport.climbing': { en: 'Climbing', zh: '攀岩', ja: 'クライミング', ko: '클라이밍' },
+  'sport.golf': { en: 'Golf', zh: '高爾夫', ja: 'ゴルフ', ko: '골프' },
+
+  // Outfit styles
+  'outfit.minimalFunctional': { en: 'Minimal Functional', zh: '極簡機能', ja: 'ミニマル機能派', ko: '미니멀 기능성' },
+  'outfit.streetwear': { en: 'Streetwear Athletic', zh: '街頭運動', ja: 'ストリート アスレチック', ko: '스트리트 애슬레틱' },
+  'outfit.proCompetition': { en: 'Pro Competition', zh: '專業競技', ja: 'プロ コンペティション', ko: '프로 경기용' },
+  'outfit.casualComfort': { en: 'Casual Comfort', zh: '休閒舒適', ja: 'カジュアル コンフォート', ko: '캐주얼 컴포트' },
+  'outfit.premiumAthletic': { en: 'Premium Athletic', zh: '高端運動', ja: 'プレミアム アスレチック', ko: '프리미엄 애슬레틱' },
+  'outfit.retroSports': { en: 'Retro Sports', zh: '復古運動', ja: 'レトロ スポーツ', ko: '레트로 스포츠' },
+  'outfit.outdoorTechnical': { en: 'Outdoor Technical', zh: '戶外機能', ja: 'アウトドア テクニカル', ko: '아웃도어 테크니컬' },
+  'outfit.tightPerformance': { en: 'Tight Performance', zh: '緊身性能', ja: 'タイト パフォーマンス', ko: '타이트 퍼포먼스' },
+  'outfit.vividEnergetic': { en: 'Vivid & Energetic', zh: '鮮豔活力', ja: 'ビビッド & エナジェティック', ko: '비비드 & 에너제틱' },
+  'outfit.brandCentric': { en: 'Brand Centric', zh: '品牌導向', ja: 'ブランドセントリック', ko: '브랜드 중심' },
+
   // ── Soul Step ──
   'soul.title': { en: 'Soul Layer', zh: '靈魂層', ja: 'ソウルレイヤー', ko: '소울 레이어' },
   'soul.subtitle': { en: 'Balance intention and instinct.', zh: '平衡意圖與直覺。', ja: '意図と本能のバランス。', ko: '의도와 본능의 균형.' },
   'soul.why': { en: 'Why do you train?', zh: '你為什麼訓練？', ja: 'なぜトレーニングするのか？', ko: '왜 훈련하나요?' },
   'soul.signature': { en: 'Soul Signature', zh: '靈魂簽名', ja: 'ソウルシグネチャー', ko: '소울 시그니처' },
   'soul.cta': { en: 'Review Your State →', zh: '檢視你的狀態 →', ja: '状態を確認 →', ko: '상태 확인 →' },
+  // Soul bar labels
+  'soul.bar.performanceOrientation': { en: 'Performance Orientation', zh: '表現導向', ja: 'パフォーマンス志向', ko: '성과 지향' },
+  'soul.bar.performanceLeft': { en: 'I train to improve performance', zh: '我訓練是為了提升表現', ja: 'パフォーマンス向上のために訓練', ko: '성과 향상을 위해 훈련합니다' },
+  'soul.bar.performanceRight': { en: 'I train for the experience', zh: '我訓練是為了體驗', ja: '体験のために訓練', ko: '경험을 위해 훈련합니다' },
+  'soul.bar.structurePreference': { en: 'Structure Preference', zh: '結構偏好', ja: '構造の好み', ko: '구조 선호도' },
+  'soul.bar.structureLeft': { en: 'I prefer structured training', zh: '我偏好結構化訓練', ja: '構造化されたトレーニングが好き', ko: '체계적인 훈련을 선호합니다' },
+  'soul.bar.structureRight': { en: 'I prefer spontaneous movement', zh: '我偏好自由活動', ja: '自発的な動きが好き', ko: '즉흥적인 움직임을 선호합니다' },
+  'soul.bar.socialPreference': { en: 'Social Preference', zh: '社交偏好', ja: 'ソーシャルの好み', ko: '사교 선호도' },
+  'soul.bar.socialLeft': { en: 'I prefer training alone', zh: '我偏好獨自訓練', ja: '一人でのトレーニングが好き', ko: '혼자 훈련하는 것을 선호합니다' },
+  'soul.bar.socialRight': { en: 'I prefer training with others', zh: '我偏好和他人一起訓練', ja: '他者とのトレーニングが好き', ko: '다른 사람과 함께 훈련하는 것을 선호합니다' },
+  'soul.bar.engagementMode': { en: 'Engagement Mode', zh: '參與模式', ja: 'エンゲージメントモード', ko: '참여 모드' },
+  'soul.bar.engagementLeft': { en: 'I mostly consume sports content', zh: '我主要觀看運動內容', ja: 'スポーツコンテンツを主に視聴', ko: '주로 스포츠 콘텐츠를 소비합니다' },
+  'soul.bar.engagementRight': { en: 'I actively track or share my activity', zh: '我主動追蹤或分享活動', ja: '積極的に活動を追跡・共有', ko: '적극적으로 활동을 추적하거나 공유합니다' },
 
   // ── Generate Step ──
   'generate.signalNorm': { en: 'Signal Normalization', zh: '信號正規化', ja: 'シグナル正規化', ko: '시그널 정규화' },
@@ -132,8 +204,8 @@ const T: Translations = {
   'agent.createAgent': { en: 'Create Agent', zh: '建立代理', ja: 'エージェント作成', ko: '에이전트 생성' },
   'agent.viewExisting': { en: 'View existing agents', zh: '查看現有代理', ja: '既存のエージェントを表示', ko: '기존 에이전트 보기' },
   'agent.behavior': { en: 'Behavior', zh: '行為模式', ja: '行動', ko: '행동' },
-  'agent.active': { en: 'Active', zh: '主動', ja: 'アクティブ', ko: '액티브' },
-  'agent.passive': { en: 'Passive', zh: '被動', ja: 'パッシブ', ko: '패시브' },
+  'agent.activeMode': { en: 'Active', zh: '主動搜尋', ja: 'アクティブ', ko: '능동 탐색' },
+  'agent.passiveMode': { en: 'Passive', zh: '被動接收', ja: 'パッシブ', ko: '수동 수신' },
   'agent.matchingStrategy': { en: 'Matching Strategy', zh: '匹配策略', ja: 'マッチング戦略', ko: '매칭 전략' },
   'agent.scope': { en: 'Scope', zh: '範圍', ja: 'スコープ', ko: '범위' },
   'agent.scopeHint': { en: 'Grants structured summary access only — no raw values exposed.', zh: '僅授予結構化摘要存取權限 — 不公開原始值。', ja: '構造化サマリーアクセスのみ — 生の値は公開されません。', ko: '구조화된 요약 접근만 허용 — 원시 값은 노출되지 않습니다.' },
@@ -154,6 +226,19 @@ const T: Translations = {
   'agent.telegram': { en: 'Telegram', zh: 'Telegram', ja: 'Telegram', ko: 'Telegram' },
   'agent.connected': { en: '✓ Connected', zh: '✓ 已連接', ja: '✓ 接続済み', ko: '✓ 연결됨' },
   'agent.notConnected': { en: 'Not connected', zh: '未連接', ja: '未接続', ko: '연결 안됨' },
+  // Matching strategy chips (display)
+  'match.basedOnSkill': { en: 'Based on Skill', zh: '基於技能', ja: 'スキルベース', ko: '스킬 기반' },
+  'match.basedOnBrand': { en: 'Based on Brand', zh: '基於品牌', ja: 'ブランドベース', ko: '브랜드 기반' },
+  'match.basedOnSoul': { en: 'Based on Soul', zh: '基於靈魂', ja: 'ソウルベース', ko: '소울 기반' },
+  'match.basedOnCore': { en: 'Based on Core', zh: '基於核心', ja: 'コアベース', ko: '코어 기반' },
+  // Trading options
+  'trading.manualOnly': { en: 'Manual Only', zh: '僅手動', ja: '手動のみ', ko: '수동만' },
+  'trading.autoApprove': { en: 'Auto-Approve under threshold', zh: '閾值內自動核准', ja: '閾値以下で自動承認', ko: '임계값 이하 자동 승인' },
+  'trading.fullAuto': { en: 'Full Auto', zh: '全自動', ja: 'フルオート', ko: '풀 오토' },
+  // Duration options
+  'duration.7days': { en: '7 days', zh: '7 天', ja: '7日', ko: '7일' },
+  'duration.30days': { en: '30 days', zh: '30 天', ja: '30日', ko: '30일' },
+  'duration.custom': { en: 'Custom', zh: '自訂', ja: 'カスタム', ko: '사용자 정의' },
 
   // ── Telegram Sub-step ──
   'telegram.title': { en: 'Connect Channel', zh: '連結頻道', ja: 'チャネルを接続', ko: '채널 연결' },
@@ -202,22 +287,30 @@ const T: Translations = {
   'agentStudio.totalEarnings': { en: 'Total Earnings:', zh: '總收入：', ja: '総収益:', ko: '총 수익:' },
   'agentStudio.newAgent': { en: '+ New Agent', zh: '+ 新建代理', ja: '+ 新規エージェント', ko: '+ 새 에이전트' },
   'agentStudio.editAgent': { en: 'Edit Agent', zh: '編輯代理', ja: 'エージェント編集', ko: '에이전트 편집' },
+  'agentStudio.verifiedAgent': { en: 'Verified Agent', zh: '已驗證代理', ja: '認証済みエージェント', ko: '인증된 에이전트' },
   'agentStudio.taskTypes': { en: 'Task Types', zh: '任務類型', ja: 'タスクタイプ', ko: '작업 유형' },
   'agentStudio.channels': { en: 'Channels', zh: '頻道', ja: 'チャネル', ko: '채널' },
   'agentStudio.noChannels': { en: 'No channels connected', zh: '尚未連接頻道', ja: 'チャネル未接続', ko: '연결된 채널 없음' },
   'agentStudio.configure': { en: 'Configure', zh: '設定', ja: '設定', ko: '설정' },
   'agentStudio.pause': { en: 'Pause', zh: '暫停', ja: '一時停止', ko: '일시정지' },
   'agentStudio.continueSetup': { en: 'Continue Setup', zh: '繼續設定', ja: 'セットアップ続行', ko: '설정 계속' },
+  'agentStudio.tasks': { en: 'Tasks:', zh: '任務：', ja: 'タスク:', ko: '작업:' },
+  'agentStudio.earned': { en: 'Earned:', zh: '已賺取：', ja: '獲得:', ko: '획득:' },
+  'agentStudio.created': { en: 'Created:', zh: '建立於：', ja: '作成:', ko: '생성:' },
 
   // ── Records (Active Authorizations) Page ──
   'records.title': { en: 'Issued Tokens', zh: '已發行 Tokens', ja: '発行済みトークン', ko: '발행된 토큰' },
   'records.subtitle': { en: 'All scoped access tokens.', zh: '所有範圍存取 Token。', ja: 'すべてのスコープ付きアクセストークン。', ko: '모든 범위 지정 액세스 토큰.' },
+  'records.scope': { en: 'Scope', zh: '範圍', ja: 'スコープ', ko: '범위' },
   'records.remaining': { en: 'Remaining', zh: '剩餘', ja: '残り', ko: '남은 수' },
   'records.expires': { en: 'Expires', zh: '過期', ja: '有効期限', ko: '만료' },
   'records.expired': { en: 'Expired', zh: '已過期', ja: '期限切れ', ko: '만료됨' },
   'records.revoke': { en: 'Revoke', zh: '撤銷', ja: '取り消し', ko: '취소' },
   'records.viewDetails': { en: 'View Details', zh: '檢視詳情', ja: '詳細を表示', ko: '상세 보기' },
   'records.renew': { en: 'Renew', zh: '續期', ja: '更新', ko: '갱신' },
+  'records.view': { en: 'View', zh: '檢視', ja: '表示', ko: '보기' },
+  'records.active': { en: 'Active', zh: '啟用中', ja: 'アクティブ', ko: '활성' },
+  'records.consumed': { en: 'Consumed', zh: '已消耗', ja: '消費済み', ko: '소비됨' },
 
   // ── Signal Marketplace Page ──
   'marketplace.title': { en: 'Signal Marketplace', zh: '信號市場', ja: 'シグナルマーケットプレイス', ko: '시그널 마켓플레이스' },
@@ -242,11 +335,14 @@ const T: Translations = {
   'marketplace.reviewDetails': { en: 'Review Details', zh: '檢視詳情', ja: '詳細を確認', ko: '상세 확인' },
   'marketplace.accept': { en: 'Accept', zh: '接受', ja: '承認', ko: '수락' },
   'marketplace.decline': { en: 'Decline', zh: '拒絕', ja: '辞退', ko: '거절' },
+  'marketplace.verifiedAgent': { en: 'Verified Agent', zh: '已驗證代理', ja: '認証済みエージェント', ko: '인증된 에이전트' },
+  'marketplace.uses': { en: 'uses', zh: '次', ja: '回', ko: '회' },
 
   // ── Settings Page ──
   'settings.title': { en: 'Settings', zh: '設定', ja: '設定', ko: '설정' },
   'settings.subtitle': { en: 'Sovereign configuration & on-chain state', zh: '主權設定與鏈上狀態', ja: 'ソブリン設定とオンチェーン状態', ko: '소버린 설정 및 온체인 상태' },
   'settings.wallet': { en: 'Wallet', zh: '錢包', ja: 'ウォレット', ko: '지갑' },
+  'settings.status': { en: 'Status', zh: '狀態', ja: 'ステータス', ko: '상태' },
   'settings.statusConnected': { en: '● Connected', zh: '● 已連接', ja: '● 接続済み', ko: '● 연결됨' },
   'settings.address': { en: 'Address', zh: '地址', ja: 'アドレス', ko: '주소' },
   'settings.market': { en: 'Market', zh: '市場', ja: 'マーケット', ko: '마켓' },
@@ -267,6 +363,18 @@ const T: Translations = {
   'update.noTags': { en: 'No signal tags committed', zh: '尚未提交信號標籤', ja: 'シグナルタグ未確定', ko: '커밋된 시그널 태그 없음' },
   'update.remint': { en: 'Re-mint State', zh: '重新鑄造狀態', ja: '状態を再ミント', ko: '상태 리민트' },
 
+  // ── My Identity Page ──
+  'myIdentity.title': { en: 'Identity State', zh: '身份狀態', ja: 'アイデンティティ状態', ko: '아이덴티티 상태' },
+  'myIdentity.subtitle': { en: 'Your minted sovereign state', zh: '你已鑄造的主權狀態', ja: 'ミント済みのソブリン状態', ko: '민트된 소버린 상태' },
+  'myIdentity.layers': { en: 'Layers', zh: '層', ja: 'レイヤー', ko: '레이어' },
+  'myIdentity.active': { en: 'active', zh: '啟用', ja: 'アクティブ', ko: '활성' },
+  'myIdentity.signalStrength': { en: 'Signal Strength', zh: '信號強度', ja: 'シグナル強度', ko: '시그널 강도' },
+  'myIdentity.layerComposition': { en: 'Layer Composition', zh: '層組成', ja: 'レイヤー構成', ko: '레이어 구성' },
+  'myIdentity.twinMatrix': { en: '🧬 Twin Matrix Grid (256D)', zh: '🧬 Twin Matrix 網格 (256D)', ja: '🧬 Twin Matrix グリッド (256D)', ko: '🧬 Twin Matrix 그리드 (256D)' },
+  'myIdentity.dimension': { en: 'Dimension', zh: '維度', ja: '次元', ko: '차원' },
+  'myIdentity.strength': { en: 'Strength', zh: '強度', ja: '強度', ko: '강도' },
+  'myIdentity.updateState': { en: 'Update State', zh: '更新狀態', ja: '状態を更新', ko: '상태 업데이트' },
+
   // ── Risk Controls ──
   'risk.pauseCap': { en: 'Pause when daily cap reached', zh: '達到每日上限時暫停', ja: '日次上限到達時に一時停止', ko: '일일 한도 도달 시 일시정지' },
   'risk.switchManual': { en: 'Switch to Manual after cap reached', zh: '達到上限後切換為手動', ja: '上限到達後に手動に切替', ko: '한도 도달 후 수동으로 전환' },
@@ -286,6 +394,13 @@ const T: Translations = {
   'missions.viewConsumes': { en: 'View consumes 1 usage quota · Dismiss is free', zh: '檢視消耗 1 次使用額度 · 忽略免費', ja: '表示で1使用クォータ消費 · 却下は無料', ko: '보기는 1 사용 할당 소모 · 무시는 무료' },
   'missions.acceptLocks': { en: 'Accept locks 1 usage quota · Payment releases on completion', zh: '接受鎖定 1 配額 · 完成後付款', ja: '承認で1クォータロック · 完了時に支払い', ko: '수락 시 1 할당 잠금 · 완료 시 결제' },
 
+  // ── Main Menu ──
+  'menu.identityState': { en: 'Identity State', zh: '身份狀態', ja: 'アイデンティティ状態', ko: '아이덴티티 상태' },
+  'menu.refineState': { en: 'Refine State', zh: '精煉狀態', ja: '状態を調整', ko: '상태 조정' },
+  'menu.issuedRecords': { en: 'Issued Records', zh: '已發行紀錄', ja: '発行済みレコード', ko: '발행된 기록' },
+  'menu.signalRequests': { en: 'Signal Requests', zh: '信號請求', ja: 'シグナルリクエスト', ko: '시그널 요청' },
+  'menu.preferences': { en: 'Preferences', zh: '偏好設定', ja: '設定', ko: '환경설정' },
+
   // ── Common ──
   'common.status': { en: 'Status', zh: '狀態', ja: 'ステータス', ko: '상태' },
   'common.tasks': { en: 'Tasks:', zh: '任務：', ja: 'タスク:', ko: '작업:' },
@@ -295,6 +410,9 @@ const T: Translations = {
   'common.digital': { en: 'Digital', zh: '數位', ja: 'デジタル', ko: '디지털' },
   'common.social': { en: 'Social', zh: '社交', ja: 'ソーシャル', ko: '소셜' },
   'common.spiritual': { en: 'Spiritual', zh: '靈性', ja: 'スピリチュアル', ko: '스피리추얼' },
+  'common.core': { en: 'Core', zh: '核心', ja: 'コア', ko: '코어' },
+  'common.topic': { en: 'Topic', zh: '主題', ja: 'トピック', ko: '토픽' },
+  'common.soul': { en: 'Soul', zh: '靈魂', ja: 'ソウル', ko: '소울' },
 };
 
 interface I18nContextType {

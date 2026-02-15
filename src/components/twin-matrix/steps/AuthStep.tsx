@@ -4,6 +4,7 @@ import { Plus } from 'lucide-react';
 import type { AgentSetup, AgentDefinition, AgentPermission } from '@/types/twin-matrix';
 import { TaskCapabilitySection } from './TaskCapabilitySection';
 import lobsterIcon from '@/assets/lobster-icon.png';
+import { useI18n } from '@/lib/i18n';
 
 /* ── Saved Agent Record ── */
 interface SavedAgent {
@@ -161,6 +162,7 @@ interface Props {
 }
 
 export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
+  const { t } = useI18n();
   const [savedAgents, setSavedAgents] = useState<SavedAgent[]>([]);
   const [subStep, setSubStep] = useState<SubStep>('create');
   const [agentName, setAgentName] = useState('');
@@ -251,8 +253,8 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
           {subStep === 'list' && (
             <div className="animate-fade-in space-y-0">
               <div className="text-center pb-6">
-                <h2 className="text-2xl font-bold mb-1">Your Agents</h2>
-                <p className="text-sm text-muted-foreground">Manage and create agents.</p>
+                <h2 className="text-2xl font-bold mb-1">{t('agent.yourAgents')}</h2>
+                <p className="text-sm text-muted-foreground">{t('agent.manageCreate')}</p>
               </div>
 
               <ThinDivider />
@@ -284,10 +286,10 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                   {viewingAgentId === sa.id && viewingAgent && (
                     <div className="pb-4 space-y-3 text-[11px] animate-fade-in">
                       <div className="space-y-2">
-                        <div className="flex justify-between"><span className="text-muted-foreground">Behavior</span><span className="text-foreground/70">{viewingAgent.agent.behaviorMode}</span></div>
-                        <div className="flex justify-between"><span className="text-muted-foreground">Autonomy</span><span className="text-foreground/70">{viewingAgent.permission.tradingAuthority}</span></div>
-                        <div className="flex justify-between"><span className="text-muted-foreground">Scope</span><span className="text-foreground/70">{(viewingAgent.permission.identityScopes || []).join(', ')}</span></div>
-                        <div className="flex justify-between"><span className="text-muted-foreground">Telegram</span><span className={viewingAgent.telegramConnected ? 'text-[#F24455]' : 'text-muted-foreground/40'}>{viewingAgent.telegramConnected ? '✓ Connected' : 'Not connected'}</span></div>
+                        <div className="flex justify-between"><span className="text-muted-foreground">{t('agent.behavior')}</span><span className="text-foreground/70">{viewingAgent.agent.behaviorMode}</span></div>
+                        <div className="flex justify-between"><span className="text-muted-foreground">{t('agent.autonomy')}</span><span className="text-foreground/70">{viewingAgent.permission.tradingAuthority}</span></div>
+                        <div className="flex justify-between"><span className="text-muted-foreground">{t('agent.scope')}</span><span className="text-foreground/70">{(viewingAgent.permission.identityScopes || []).join(', ')}</span></div>
+                        <div className="flex justify-between"><span className="text-muted-foreground">{t('agent.telegram')}</span><span className={viewingAgent.telegramConnected ? 'text-[#F24455]' : 'text-muted-foreground/40'}>{viewingAgent.telegramConnected ? t('agent.connected') : t('agent.notConnected')}</span></div>
                       </div>
                       <button
                         onClick={(e) => {
@@ -303,7 +305,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                         }}
                         className="w-full text-[11px] py-2 rounded-lg border border-foreground/10 text-foreground/60 hover:text-foreground hover:border-foreground/20 transition-colors"
                       >
-                        Edit Authorization
+                        {t('agent.editAuth')}
                       </button>
                     </div>
                   )}
@@ -314,7 +316,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
 
               <div className="pt-6">
                 <button onClick={() => { setAgentName(''); setSubStep('create'); }} className="btn-twin btn-twin-primary btn-glow w-full py-3">
-                  <Plus className="w-4 h-4" /> Create New Agent
+                  <Plus className="w-4 h-4" /> {t('agent.createNew')}
                 </button>
               </div>
             </div>
@@ -332,8 +334,8 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
               )}
 
               <div className="text-center pb-8">
-                <h2 className="text-2xl font-bold mb-1">Activate Your Agent</h2>
-                <p className="text-sm text-muted-foreground">Let this identity act on your behalf.</p>
+                <h2 className="text-2xl font-bold mb-1">{t('agent.activate')}</h2>
+                <p className="text-sm text-muted-foreground">{t('agent.activateDesc')}</p>
               </div>
 
               <ThinDivider />
@@ -341,7 +343,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
               {/* Agent Name — editable when not yet created, read-only after */}
               {!currentAgentId ? (
                 <div className="py-6 space-y-4">
-                  <label className="text-xs text-muted-foreground uppercase tracking-widest">Agent Name</label>
+                  <label className="text-xs text-muted-foreground uppercase tracking-widest">{t('agent.name')}</label>
                   <input
                     type="text"
                     value={agentName}
@@ -356,7 +358,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                       disabled={!agentName.trim()}
                       className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${agentName.trim() ? 'btn-glow' : ''}`}
                     >
-                      Create Agent
+                      {t('agent.createAgent')}
                     </button>
                   </div>
                 </div>
@@ -378,7 +380,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                   <div className="animate-fade-in">
                     {/* Behavior */}
                     <div className="py-5 space-y-3">
-                      <label className="text-xs text-muted-foreground uppercase tracking-widest">Behavior</label>
+                      <label className="text-xs text-muted-foreground uppercase tracking-widest">{t('agent.behavior')}</label>
                       <div className="space-y-2">
                         {['Active search', 'Passive receive only'].map((mode) => (
                           <div key={mode} className="flex items-center gap-3 cursor-pointer" onClick={() => setAgent((a) => ({ ...a, behaviorMode: mode }))}>
@@ -386,7 +388,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                               style={{ borderColor: agent.behaviorMode === mode ? '#F24455' : 'rgba(255,255,255,0.15)' }}>
                               {agent.behaviorMode === mode && <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#F24455' }} />}
                             </span>
-                            <span className="text-sm text-foreground/80">{mode === 'Active search' ? 'Active' : 'Passive'}</span>
+                            <span className="text-sm text-foreground/80">{mode === 'Active search' ? t('agent.activeMode') : t('agent.passiveMode')}</span>
                           </div>
                         ))}
                       </div>
@@ -396,7 +398,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
 
                     {/* Matching Strategy */}
                     <div className="py-5 space-y-3">
-                      <label className="text-xs text-muted-foreground uppercase tracking-widest">Matching Strategy</label>
+                      <label className="text-xs text-muted-foreground uppercase tracking-widest">{t('agent.matchingStrategy')}</label>
                       <div className="flex gap-2 flex-nowrap overflow-x-auto scrollbar-hide">
                         {MATCH_STRATEGIES.map((s) => {
                           const selected = agent.matchingStrategy.includes(s);
@@ -415,8 +417,8 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
 
                     {/* Scope */}
                     <div className="py-5 space-y-3">
-                      <label className="text-xs text-muted-foreground uppercase tracking-widest">Scope</label>
-                      <p className="text-[10px] text-muted-foreground/50">Grants structured summary access only — no raw values exposed.</p>
+                      <label className="text-xs text-muted-foreground uppercase tracking-widest">{t('agent.scope')}</label>
+                      <p className="text-[10px] text-muted-foreground/50">{t('agent.scopeHint')}</p>
                       <div className="flex gap-2">
                         {IDENTITY_SCOPES.map((s) => {
                           const scopes = permission.identityScopes || ['Core'];
@@ -439,7 +441,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
 
                     {/* Trading Authority */}
                     <div className="py-5 space-y-3">
-                      <label className="text-xs text-muted-foreground uppercase tracking-widest">Trading Authority</label>
+                      <label className="text-xs text-muted-foreground uppercase tracking-widest">{t('agent.tradingAuth')}</label>
                       <div className="space-y-2">
                         {TRADING_OPTIONS.map((mode) => (
                           <div key={mode} className="flex items-center gap-3 cursor-pointer" onClick={() => { setPermission((p) => ({ ...p, tradingAuthority: mode })); if (mode !== 'Full Auto') setFullAutoConfirm(false); }}>
@@ -453,10 +455,10 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                       </div>
                       {permission.tradingAuthority === 'Auto-Approve under threshold' && (
                         <div className="animate-fade-in pt-2 space-y-3">
-                          <p className="text-[10px] text-muted-foreground/50">Set spend limits for auto-approved tasks.</p>
+                          <p className="text-[10px] text-muted-foreground/50">{t('agent.spendLimits')}</p>
                           {(['maxPerTask', 'dailyCap', 'weeklyCap'] as const).map((field) => (
                             <div key={field} className="flex items-center gap-3">
-                              <span className="text-[11px] text-muted-foreground w-20">{field === 'maxPerTask' ? 'Max / task' : field === 'dailyCap' ? 'Daily cap' : 'Weekly cap'}</span>
+                              <span className="text-[11px] text-muted-foreground w-20">{field === 'maxPerTask' ? t('agent.maxPerTask') : field === 'dailyCap' ? t('agent.dailyCap') : t('agent.weeklyCap')}</span>
                               <input type="text" value={permission[field]}
                                 onChange={(e) => setPermission((p) => ({ ...p, [field]: e.target.value }))}
                                 placeholder="$"
@@ -469,7 +471,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                         <div className="animate-fade-in pt-1">
                           <label className="flex items-center gap-2 text-xs cursor-pointer">
                             <Checkbox checked={fullAutoConfirm} onCheckedChange={() => setFullAutoConfirm(!fullAutoConfirm)} />
-                            <span className="text-muted-foreground">⚠ I understand Full Auto grants unrestricted trading authority</span>
+                            <span className="text-muted-foreground">{t('agent.fullAutoWarning')}</span>
                           </label>
                         </div>
                       )}
@@ -479,7 +481,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
 
                     {/* Authorization Duration */}
                     <div className="py-5 space-y-3">
-                      <label className="text-xs text-muted-foreground uppercase tracking-widest">Authorization Duration</label>
+                      <label className="text-xs text-muted-foreground uppercase tracking-widest">{t('agent.authDuration')}</label>
                       <div className="space-y-2">
                         {DURATION_OPTIONS.map((d) => (
                           <div key={d} className="flex items-center gap-3 cursor-pointer" onClick={() => setPermission((p) => ({ ...p, authorizationDuration: d, customDurationDays: d === 'Custom' ? p.customDurationDays : '' }))}>
@@ -493,7 +495,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                       </div>
                       {permission.authorizationDuration === 'Custom' && (
                         <div className="animate-fade-in flex items-center gap-2 pt-1">
-                          <span className="text-[11px] text-muted-foreground">Days:</span>
+                          <span className="text-[11px] text-muted-foreground">{t('agent.days')}</span>
                           <input type="number" min="1" value={permission.customDurationDays}
                             onChange={(e) => setPermission((p) => ({ ...p, customDurationDays: e.target.value.replace(/[^0-9]/g, '') }))}
                             placeholder="e.g. 14"
@@ -504,8 +506,8 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
 
                     <ThinDivider />
                     <div className="py-5 space-y-3">
-                      <label className="text-xs text-muted-foreground uppercase tracking-widest">Risk Controls</label>
-                      <p className="text-[10px] text-muted-foreground/50">Reduce financial and operational exposure.</p>
+                      <label className="text-xs text-muted-foreground uppercase tracking-widest">{t('agent.riskControls')}</label>
+                      <p className="text-[10px] text-muted-foreground/50">{t('agent.riskHint')}</p>
                       <div className="space-y-2">
                         {RISK_CONTROLS.map((rc) => {
                           const checked = permission.spendResetPolicy.includes(rc.key);
@@ -526,11 +528,11 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                       <button onClick={handleSaveConfig}
                         disabled={permission.tradingAuthority === 'Full Auto' && !fullAutoConfirm}
                         className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${!(permission.tradingAuthority === 'Full Auto' && !fullAutoConfirm) ? 'btn-glow' : ''}`}>
-                        Save Configuration →
+                        {t('agent.saveConfig')}
                       </button>
                       <button onClick={handleSaveDraft}
                         className="w-full py-2.5 text-xs text-muted-foreground hover:text-foreground transition-colors">
-                        Save to Draft
+                        {t('agent.saveDraft')}
                       </button>
                     </div>
                   </div>
@@ -543,8 +545,8 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
           {subStep === 'telegram' && (
             <div className="animate-fade-in space-y-0">
               <div className="text-center pb-8">
-                <h2 className="text-2xl font-bold mb-1">Connect Channel</h2>
-                <p className="text-sm text-muted-foreground">Link Telegram to activate your agent.</p>
+                <h2 className="text-2xl font-bold mb-1">{t('telegram.title')}</h2>
+                <p className="text-sm text-muted-foreground">{t('telegram.subtitle')}</p>
               </div>
 
               <ThinDivider />
@@ -553,7 +555,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                 <img src={lobsterIcon} alt="" className="w-12 h-12 mx-auto" style={{ filter: 'drop-shadow(0 0 8px rgba(242,68,85,0.5))', opacity: 0.8 }} />
                 <div>
                   <p className="text-sm font-medium">{currentSavedAgent?.name || agent.name}</p>
-                  <p className="text-[10px] text-muted-foreground/50 mt-1">Status: DRAFT — Connect Telegram to activate.</p>
+                  <p className="text-[10px] text-muted-foreground/50 mt-1">{t('telegram.statusDraft')}</p>
                 </div>
               </div>
 
@@ -562,12 +564,12 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
               <div className="pt-6">
                 {!telegramConnected ? (
                   <button onClick={handleConnectTelegram} className="btn-twin btn-twin-primary btn-glow w-full py-3">
-                    🔗 Connect Telegram
+                    🔗 {t('telegram.connect')}
                   </button>
                 ) : (
-                  <p className="text-sm text-center" style={{ color: '#F24455' }}>✓ Telegram Connected</p>
+                  <p className="text-sm text-center" style={{ color: '#F24455' }}>{t('telegram.connectedLabel')}</p>
                 )}
-                <p className="text-[9px] text-muted-foreground/40 text-center mt-3">Required for agent notifications and task dispatch.</p>
+                <p className="text-[9px] text-muted-foreground/40 text-center mt-3">{t('telegram.hint')}</p>
               </div>
             </div>
           )}
@@ -576,8 +578,8 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
           {subStep === 'activated' && (
             <div className="animate-fade-in space-y-0">
               <div className="text-center pb-8">
-                <h2 className="text-2xl font-bold mb-1">Agent Activated</h2>
-                <p className="text-sm text-muted-foreground">Your agent is now operating under your committed identity.</p>
+                <h2 className="text-2xl font-bold mb-1">{t('activated.title')}</h2>
+                <p className="text-sm text-muted-foreground">{t('activated.subtitle')}</p>
               </div>
 
               <ThinDivider />
@@ -590,18 +592,18 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
 
               <div className="py-4 space-y-2 text-[11px]">
                 <div className="flex justify-between py-1">
-                  <span className="text-muted-foreground">Agent</span>
+                  <span className="text-muted-foreground">{t('activated.agent')}</span>
                   <span className="text-foreground/80 flex items-center gap-1.5">
                     <img src={lobsterIcon} alt="" className="w-3.5 h-3.5" style={{ filter: 'drop-shadow(0 0 4px rgba(242,68,85,0.4))', opacity: 0.8 }} />
                     {currentSavedAgent?.name || agent.name}
                   </span>
                 </div>
                 <div className="flex justify-between py-1">
-                  <span className="text-muted-foreground">Status</span>
+                  <span className="text-muted-foreground">{t('activated.status')}</span>
                   <span className="font-medium" style={{ color: '#F24455' }}>● Active</span>
                 </div>
                 <div className="flex justify-between py-1">
-                  <span className="text-muted-foreground">Telegram</span>
+                  <span className="text-muted-foreground">{t('agent.telegram')}</span>
                   <span style={{ color: '#F24455' }}>✓ Connected</span>
                 </div>
               </div>
@@ -610,10 +612,10 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
 
               <div className="pt-6 space-y-3">
                 <button onClick={onDashboard} className="btn-twin btn-twin-primary btn-glow w-full py-3">
-                  Return to Dashboard
+                  {t('activated.returnDashboard')}
                 </button>
                 <button onClick={handleCreateAnother} className="btn-twin btn-twin-ghost w-full py-2.5 text-sm">
-                  Create Another Agent
+                  {t('activated.createAnother')}
                 </button>
               </div>
             </div>
