@@ -302,10 +302,10 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
             </div>
           )}
 
-          {/* ═══ Sub-step A: CREATE ═══ */}
-          {subStep === 'create' && (
+          {/* ═══ Sub-step A+B: CREATE & CONFIG (single continuous page) ═══ */}
+          {(subStep === 'create' || subStep === 'config') && (
             <div className="animate-fade-in space-y-0">
-              {savedAgents.length > 0 && (
+              {savedAgents.length > 0 && !currentAgentId && (
                 <div className="pb-4">
                   <button onClick={() => setSubStep('list')} className="text-xs text-muted-foreground hover:text-foreground transition-colors">
                     ← View existing agents ({savedAgents.length})
@@ -320,210 +320,204 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
 
               <ThinDivider />
 
-              <div className="py-6 space-y-4">
-                <label className="text-xs text-muted-foreground uppercase tracking-widest">Agent Name</label>
-                <input
-                  type="text"
-                  value={agentName}
-                  onChange={(e) => setAgentName(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleCreateAgent()}
-                  placeholder="e.g. Lobster-01"
-                  className="w-full bg-transparent border-b border-foreground/10 px-0 py-2 text-sm text-foreground placeholder:text-muted-foreground/30 focus:outline-none focus:border-foreground/30 transition-colors"
-                />
-              </div>
-
-              <ThinDivider />
-
-              <div className="pt-6">
-                <button
-                  onClick={handleCreateAgent}
-                  disabled={!agentName.trim()}
-                  className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${agentName.trim() ? 'btn-glow' : ''}`}
-                >
-                  Create Agent
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* ═══ Sub-step B: CONFIG ═══ */}
-          {subStep === 'config' && (
-            <div className="animate-fade-in space-y-0">
-              <div className="text-center pb-8">
-                <h2 className="text-2xl font-bold mb-1">Activate Your Agent</h2>
-                <p className="text-sm text-muted-foreground">Let this identity act on your behalf.</p>
-              </div>
-
-              <ThinDivider />
-
-              {/* Agent Name (read-only) */}
-              <div className="py-5 flex items-center justify-between">
-                <span className="text-xs text-muted-foreground uppercase tracking-widest">Agent</span>
-                <span className="text-sm text-foreground/80 flex items-center gap-2">
-                  <img src={lobsterIcon} alt="" className="w-4 h-4" style={{ filter: 'drop-shadow(0 0 4px rgba(242,68,85,0.4))', opacity: 0.8 }} />
-                  {agent.name}
-                </span>
-              </div>
-
-              <ThinDivider />
-
-              {/* Behavior */}
-              <div className="py-5 space-y-3">
-                <label className="text-xs text-muted-foreground uppercase tracking-widest">Behavior</label>
-                <div className="space-y-2">
-                  {['Active search', 'Passive receive only'].map((mode) => (
-                    <div key={mode} className="flex items-center gap-3 cursor-pointer" onClick={() => setAgent((a) => ({ ...a, behaviorMode: mode }))}>
-                      <span className="w-3.5 h-3.5 rounded-full border flex items-center justify-center flex-shrink-0"
-                        style={{ borderColor: agent.behaviorMode === mode ? '#F24455' : 'rgba(255,255,255,0.15)' }}>
-                        {agent.behaviorMode === mode && <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#F24455' }} />}
-                      </span>
-                      <span className="text-sm text-foreground/80">{mode === 'Active search' ? 'Active' : 'Passive'}</span>
-                    </div>
-                  ))}
+              {/* Agent Name — editable when not yet created, read-only after */}
+              {!currentAgentId ? (
+                <div className="py-6 space-y-4">
+                  <label className="text-xs text-muted-foreground uppercase tracking-widest">Agent Name</label>
+                  <input
+                    type="text"
+                    value={agentName}
+                    onChange={(e) => setAgentName(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleCreateAgent()}
+                    placeholder="e.g. Brand Tracker"
+                    className="w-full bg-transparent border-b border-foreground/10 px-0 py-2 text-sm text-foreground placeholder:text-muted-foreground/30 focus:outline-none focus:border-foreground/30 transition-colors"
+                  />
+                  <div className="pt-2">
+                    <button
+                      onClick={handleCreateAgent}
+                      disabled={!agentName.trim()}
+                      className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${agentName.trim() ? 'btn-glow' : ''}`}
+                    >
+                      Create Agent
+                    </button>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <>
 
-              <ThinDivider />
+                  {/* Agent Name (read-only) */}
+                  <div className="py-5 flex items-center justify-between">
+                    <span className="text-xs text-muted-foreground uppercase tracking-widest">Agent</span>
+                    <span className="text-sm text-foreground/80 flex items-center gap-2">
+                      <img src={lobsterIcon} alt="" className="w-4 h-4" style={{ filter: 'drop-shadow(0 0 4px rgba(242,68,85,0.4))', opacity: 0.8 }} />
+                      {agent.name}
+                    </span>
+                  </div>
 
-              {/* Matching Strategy */}
-              <div className="py-5 space-y-3">
-                <label className="text-xs text-muted-foreground uppercase tracking-widest">Matching Strategy</label>
-                <div className="flex gap-2 flex-nowrap overflow-x-auto scrollbar-hide">
-                  {MATCH_STRATEGIES.map((s) => {
-                    const selected = agent.matchingStrategy.includes(s);
-                    return (
-                      <button key={s} onClick={() => setAgent((a) => ({ ...a, matchingStrategy: toggleArrayItem(a.matchingStrategy, s) }))}
-                        className={`text-xs px-4 py-1.5 rounded-full transition-all ${selected ? 'text-foreground border' : 'text-muted-foreground/50 border border-foreground/10 hover:border-foreground/20'}`}
-                        style={selected ? { borderColor: 'rgba(242,68,85,0.4)', background: 'rgba(242,68,85,0.08)', color: 'rgba(242,68,85,0.9)' } : {}}>
-                        {s}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
+                  <ThinDivider />
 
-              <ThinDivider />
-
-              {/* Scope */}
-              <div className="py-5 space-y-3">
-                <label className="text-xs text-muted-foreground uppercase tracking-widest">Scope</label>
-                <p className="text-[10px] text-muted-foreground/50">Grants structured summary access only — no raw values exposed.</p>
-                <div className="flex gap-2">
-                  {IDENTITY_SCOPES.map((s) => {
-                    const scopes = permission.identityScopes || ['Core'];
-                    const selected = scopes.includes(s);
-                    return (
-                      <button key={s} onClick={() => {
-                          const next = selected ? scopes.filter((x) => x !== s) : [...scopes, s];
-                          setPermission((p) => ({ ...p, identityScopes: next, identityScope: next[0] || '' }));
-                        }}
-                        className={`text-xs px-4 py-1.5 rounded-full transition-all ${selected ? 'text-foreground border' : 'text-muted-foreground/50 border border-foreground/10 hover:border-foreground/20'}`}
-                        style={selected ? { borderColor: 'rgba(242,68,85,0.4)', background: 'rgba(242,68,85,0.08)', color: 'rgba(242,68,85,0.9)' } : {}}>
-                        {s}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <ThinDivider />
-
-              {/* Autonomy / Trading Authority */}
-              <div className="py-5 space-y-3">
-                <label className="text-xs text-muted-foreground uppercase tracking-widest">Trading Authority</label>
-                <div className="space-y-2">
-                  {TRADING_OPTIONS.map((mode) => (
-                    <div key={mode} className="flex items-center gap-3 cursor-pointer" onClick={() => { setPermission((p) => ({ ...p, tradingAuthority: mode })); if (mode !== 'Full Auto') setFullAutoConfirm(false); }}>
-                      <span className="w-3.5 h-3.5 rounded-full border flex items-center justify-center flex-shrink-0"
-                        style={{ borderColor: permission.tradingAuthority === mode ? '#F24455' : 'rgba(255,255,255,0.15)' }}>
-                        {permission.tradingAuthority === mode && <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#F24455' }} />}
-                      </span>
-                      <span className="text-sm text-foreground/80">{mode}</span>
-                    </div>
-                  ))}
-                </div>
-                {permission.tradingAuthority === 'Auto-Approve under threshold' && (
-                  <div className="animate-fade-in pt-2 space-y-3">
-                    <p className="text-[10px] text-muted-foreground/50">Set spend limits for auto-approved tasks.</p>
-                    {(['maxPerTask', 'dailyCap', 'weeklyCap'] as const).map((field) => (
-                      <div key={field} className="flex items-center gap-3">
-                        <span className="text-[11px] text-muted-foreground w-20">{field === 'maxPerTask' ? 'Max / task' : field === 'dailyCap' ? 'Daily cap' : 'Weekly cap'}</span>
-                        <input type="text" value={permission[field]}
-                          onChange={(e) => setPermission((p) => ({ ...p, [field]: e.target.value }))}
-                          placeholder="$"
-                          className="flex-1 bg-transparent border-b border-foreground/10 px-0 py-1.5 text-xs text-foreground focus:outline-none focus:border-foreground/30 transition-colors" />
+                  {/* ── Config section (appears inline after agent created) ── */}
+                  <div className="animate-fade-in">
+                    {/* Behavior */}
+                    <div className="py-5 space-y-3">
+                      <label className="text-xs text-muted-foreground uppercase tracking-widest">Behavior</label>
+                      <div className="space-y-2">
+                        {['Active search', 'Passive receive only'].map((mode) => (
+                          <div key={mode} className="flex items-center gap-3 cursor-pointer" onClick={() => setAgent((a) => ({ ...a, behaviorMode: mode }))}>
+                            <span className="w-3.5 h-3.5 rounded-full border flex items-center justify-center flex-shrink-0"
+                              style={{ borderColor: agent.behaviorMode === mode ? '#F24455' : 'rgba(255,255,255,0.15)' }}>
+                              {agent.behaviorMode === mode && <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#F24455' }} />}
+                            </span>
+                            <span className="text-sm text-foreground/80">{mode === 'Active search' ? 'Active' : 'Passive'}</span>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                )}
-                {permission.tradingAuthority === 'Full Auto' && (
-                  <div className="animate-fade-in pt-1">
-                    <label className="flex items-center gap-2 text-xs cursor-pointer">
-                      <Checkbox checked={fullAutoConfirm} onCheckedChange={() => setFullAutoConfirm(!fullAutoConfirm)} />
-                      <span className="text-muted-foreground">⚠ I understand Full Auto grants unrestricted trading authority</span>
-                    </label>
-                  </div>
-                )}
-              </div>
-
-              <ThinDivider />
-
-              {/* Authorization Duration */}
-              <div className="py-5 space-y-3">
-                <label className="text-xs text-muted-foreground uppercase tracking-widest">Authorization Duration</label>
-                <div className="space-y-2">
-                  {DURATION_OPTIONS.map((d) => (
-                    <div key={d} className="flex items-center gap-3 cursor-pointer" onClick={() => setPermission((p) => ({ ...p, authorizationDuration: d, customDurationDays: d === 'Custom' ? p.customDurationDays : '' }))}>
-                      <span className="w-3.5 h-3.5 rounded-full border flex items-center justify-center flex-shrink-0"
-                        style={{ borderColor: permission.authorizationDuration === d ? '#F24455' : 'rgba(255,255,255,0.15)' }}>
-                        {permission.authorizationDuration === d && <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#F24455' }} />}
-                      </span>
-                      <span className="text-sm text-foreground/80">{d}</span>
                     </div>
-                  ))}
-                </div>
-                {permission.authorizationDuration === 'Custom' && (
-                  <div className="animate-fade-in flex items-center gap-2 pt-1">
-                    <span className="text-[11px] text-muted-foreground">Days:</span>
-                    <input type="number" min="1" value={permission.customDurationDays}
-                      onChange={(e) => setPermission((p) => ({ ...p, customDurationDays: e.target.value.replace(/[^0-9]/g, '') }))}
-                      placeholder="e.g. 14"
-                      className="flex-1 bg-transparent border-b border-foreground/10 px-0 py-1.5 text-xs text-foreground focus:outline-none focus:border-foreground/30 transition-colors" />
+
+                    <ThinDivider />
+
+                    {/* Matching Strategy */}
+                    <div className="py-5 space-y-3">
+                      <label className="text-xs text-muted-foreground uppercase tracking-widest">Matching Strategy</label>
+                      <div className="flex gap-2 flex-nowrap overflow-x-auto scrollbar-hide">
+                        {MATCH_STRATEGIES.map((s) => {
+                          const selected = agent.matchingStrategy.includes(s);
+                          return (
+                            <button key={s} onClick={() => setAgent((a) => ({ ...a, matchingStrategy: toggleArrayItem(a.matchingStrategy, s) }))}
+                              className={`text-xs px-4 py-1.5 rounded-full transition-all ${selected ? 'text-foreground border' : 'text-muted-foreground/50 border border-foreground/10 hover:border-foreground/20'}`}
+                              style={selected ? { borderColor: 'rgba(242,68,85,0.4)', background: 'rgba(242,68,85,0.08)', color: 'rgba(242,68,85,0.9)' } : {}}>
+                              {s}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <ThinDivider />
+
+                    {/* Scope */}
+                    <div className="py-5 space-y-3">
+                      <label className="text-xs text-muted-foreground uppercase tracking-widest">Scope</label>
+                      <p className="text-[10px] text-muted-foreground/50">Grants structured summary access only — no raw values exposed.</p>
+                      <div className="flex gap-2">
+                        {IDENTITY_SCOPES.map((s) => {
+                          const scopes = permission.identityScopes || ['Core'];
+                          const selected = scopes.includes(s);
+                          return (
+                            <button key={s} onClick={() => {
+                                const next = selected ? scopes.filter((x) => x !== s) : [...scopes, s];
+                                setPermission((p) => ({ ...p, identityScopes: next, identityScope: next[0] || '' }));
+                              }}
+                              className={`text-xs px-4 py-1.5 rounded-full transition-all ${selected ? 'text-foreground border' : 'text-muted-foreground/50 border border-foreground/10 hover:border-foreground/20'}`}
+                              style={selected ? { borderColor: 'rgba(242,68,85,0.4)', background: 'rgba(242,68,85,0.08)', color: 'rgba(242,68,85,0.9)' } : {}}>
+                              {s}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <ThinDivider />
+
+                    {/* Trading Authority */}
+                    <div className="py-5 space-y-3">
+                      <label className="text-xs text-muted-foreground uppercase tracking-widest">Trading Authority</label>
+                      <div className="space-y-2">
+                        {TRADING_OPTIONS.map((mode) => (
+                          <div key={mode} className="flex items-center gap-3 cursor-pointer" onClick={() => { setPermission((p) => ({ ...p, tradingAuthority: mode })); if (mode !== 'Full Auto') setFullAutoConfirm(false); }}>
+                            <span className="w-3.5 h-3.5 rounded-full border flex items-center justify-center flex-shrink-0"
+                              style={{ borderColor: permission.tradingAuthority === mode ? '#F24455' : 'rgba(255,255,255,0.15)' }}>
+                              {permission.tradingAuthority === mode && <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#F24455' }} />}
+                            </span>
+                            <span className="text-sm text-foreground/80">{mode}</span>
+                          </div>
+                        ))}
+                      </div>
+                      {permission.tradingAuthority === 'Auto-Approve under threshold' && (
+                        <div className="animate-fade-in pt-2 space-y-3">
+                          <p className="text-[10px] text-muted-foreground/50">Set spend limits for auto-approved tasks.</p>
+                          {(['maxPerTask', 'dailyCap', 'weeklyCap'] as const).map((field) => (
+                            <div key={field} className="flex items-center gap-3">
+                              <span className="text-[11px] text-muted-foreground w-20">{field === 'maxPerTask' ? 'Max / task' : field === 'dailyCap' ? 'Daily cap' : 'Weekly cap'}</span>
+                              <input type="text" value={permission[field]}
+                                onChange={(e) => setPermission((p) => ({ ...p, [field]: e.target.value }))}
+                                placeholder="$"
+                                className="flex-1 bg-transparent border-b border-foreground/10 px-0 py-1.5 text-xs text-foreground focus:outline-none focus:border-foreground/30 transition-colors" />
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      {permission.tradingAuthority === 'Full Auto' && (
+                        <div className="animate-fade-in pt-1">
+                          <label className="flex items-center gap-2 text-xs cursor-pointer">
+                            <Checkbox checked={fullAutoConfirm} onCheckedChange={() => setFullAutoConfirm(!fullAutoConfirm)} />
+                            <span className="text-muted-foreground">⚠ I understand Full Auto grants unrestricted trading authority</span>
+                          </label>
+                        </div>
+                      )}
+                    </div>
+
+                    <ThinDivider />
+
+                    {/* Authorization Duration */}
+                    <div className="py-5 space-y-3">
+                      <label className="text-xs text-muted-foreground uppercase tracking-widest">Authorization Duration</label>
+                      <div className="space-y-2">
+                        {DURATION_OPTIONS.map((d) => (
+                          <div key={d} className="flex items-center gap-3 cursor-pointer" onClick={() => setPermission((p) => ({ ...p, authorizationDuration: d, customDurationDays: d === 'Custom' ? p.customDurationDays : '' }))}>
+                            <span className="w-3.5 h-3.5 rounded-full border flex items-center justify-center flex-shrink-0"
+                              style={{ borderColor: permission.authorizationDuration === d ? '#F24455' : 'rgba(255,255,255,0.15)' }}>
+                              {permission.authorizationDuration === d && <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#F24455' }} />}
+                            </span>
+                            <span className="text-sm text-foreground/80">{d}</span>
+                          </div>
+                        ))}
+                      </div>
+                      {permission.authorizationDuration === 'Custom' && (
+                        <div className="animate-fade-in flex items-center gap-2 pt-1">
+                          <span className="text-[11px] text-muted-foreground">Days:</span>
+                          <input type="number" min="1" value={permission.customDurationDays}
+                            onChange={(e) => setPermission((p) => ({ ...p, customDurationDays: e.target.value.replace(/[^0-9]/g, '') }))}
+                            placeholder="e.g. 14"
+                            className="flex-1 bg-transparent border-b border-foreground/10 px-0 py-1.5 text-xs text-foreground focus:outline-none focus:border-foreground/30 transition-colors" />
+                        </div>
+                      )}
+                    </div>
+
+                    <ThinDivider />
+                    <div className="py-5 space-y-3">
+                      <label className="text-xs text-muted-foreground uppercase tracking-widest">Risk Controls</label>
+                      <p className="text-[10px] text-muted-foreground/50">Reduce financial and operational exposure.</p>
+                      <div className="space-y-2">
+                        {RISK_CONTROLS.map((rc) => {
+                          const checked = permission.spendResetPolicy.includes(rc.key);
+                          return (
+                            <label key={rc.key} className="flex items-center gap-3 text-[11px] cursor-pointer">
+                              <Checkbox checked={checked} onCheckedChange={() => setPermission((p) => ({ ...p, spendResetPolicy: toggleArrayItem(p.spendResetPolicy, rc.key) }))} />
+                              <span className="text-foreground/70">{rc.label}</span>
+                            </label>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <ThinDivider />
+
+                    {/* Actions */}
+                    <div className="pt-6 space-y-3">
+                      <button onClick={handleSaveConfig}
+                        disabled={permission.tradingAuthority === 'Full Auto' && !fullAutoConfirm}
+                        className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${!(permission.tradingAuthority === 'Full Auto' && !fullAutoConfirm) ? 'btn-glow' : ''}`}>
+                        Save Configuration →
+                      </button>
+                      <button onClick={handleSaveDraft}
+                        className="w-full py-2.5 text-xs text-muted-foreground hover:text-foreground transition-colors">
+                        Save to Draft
+                      </button>
+                    </div>
                   </div>
-                )}
-              </div>
-
-              <ThinDivider />
-              <div className="py-5 space-y-3">
-                <label className="text-xs text-muted-foreground uppercase tracking-widest">Risk Controls</label>
-                <p className="text-[10px] text-muted-foreground/50">Reduce financial and operational exposure.</p>
-                <div className="space-y-2">
-                  {RISK_CONTROLS.map((rc) => {
-                    const checked = permission.spendResetPolicy.includes(rc.key);
-                    return (
-                      <label key={rc.key} className="flex items-center gap-3 text-[11px] cursor-pointer">
-                        <Checkbox checked={checked} onCheckedChange={() => setPermission((p) => ({ ...p, spendResetPolicy: toggleArrayItem(p.spendResetPolicy, rc.key) }))} />
-                        <span className="text-foreground/70">{rc.label}</span>
-                      </label>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <ThinDivider />
-
-              {/* Actions */}
-              <div className="pt-6 space-y-3">
-                <button onClick={handleSaveConfig}
-                  disabled={permission.tradingAuthority === 'Full Auto' && !fullAutoConfirm}
-                  className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${!(permission.tradingAuthority === 'Full Auto' && !fullAutoConfirm) ? 'btn-glow' : ''}`}>
-                  Save Configuration →
-                </button>
-                <button onClick={handleSaveDraft}
-                  className="w-full py-2.5 text-xs text-muted-foreground hover:text-foreground transition-colors">
-                  Save to Draft
-                </button>
-              </div>
+                </>
+              )}
             </div>
           )}
 
