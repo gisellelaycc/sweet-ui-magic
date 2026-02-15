@@ -2,11 +2,11 @@ import { BaseError, ContractFunctionRevertedError, type Address, type Hex } from
 
 const twinMatrixSbtAddress = (import.meta.env.TWIN_MATRIX_SBT_ADDRESS ?? '').trim();
 
-if (!/^0x[a-fA-F0-9]{40}$/.test(twinMatrixSbtAddress)) {
-  throw new Error('Missing or invalid TWIN_MATRIX_SBT_ADDRESS in .env');
-}
+const isValidAddress = /^0x[a-fA-F0-9]{40}$/.test(twinMatrixSbtAddress);
 
-export const TWIN_MATRIX_SBT_ADDRESS: Address = twinMatrixSbtAddress as Address;
+export const TWIN_MATRIX_SBT_ADDRESS: Address = (isValidAddress ? twinMatrixSbtAddress : '0x0000000000000000000000000000000000000000') as Address;
+
+export const isSbtConfigured = isValidAddress;
 
 export const twinMatrixSbtAbi = [
   { type: 'error', name: 'TokenNotFound', inputs: [] },
