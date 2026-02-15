@@ -242,7 +242,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
   const viewingAgent = viewingAgentId ? savedAgents.find((a) => a.id === viewingAgentId) : null;
 
   return (
-    <div ref={containerRef} className="relative h-full agent-ambient">
+    <div ref={containerRef} className="relative h-full">
 
       <div className="relative z-10 h-full overflow-y-auto scrollbar-hide">
         <div className="max-w-lg mx-auto px-6 py-10 space-y-0">

@@ -89,8 +89,8 @@ export const ParticleBackground = ({ color = 'cyan' }: ParticleBackgroundProps) 
         x: Math.random() * w, y: Math.random() * h,
         tx: cx + px * scale, ty: cy + py * scale,
         ox: Math.random() * w, oy: Math.random() * h,
-        size: 2.5 + Math.random() * 2,
-        baseOpacity: 0.12 + Math.random() * 0.18,
+        size: 3 + Math.random() * 2.5,
+        baseOpacity: 0.35 + Math.random() * 0.35,
         phase: Math.random() * Math.PI * 2,
         isLobster: true,
         speed: 0, angle: 0, radius: 0, jitter: 0,
@@ -102,8 +102,8 @@ export const ParticleBackground = ({ color = 'cyan' }: ParticleBackgroundProps) 
       particles.push({
         x: Math.random() * w, y: Math.random() * h,
         tx: 0, ty: 0, ox: 0, oy: 0,
-        size: 0.8 + Math.random() * 1.8,
-        baseOpacity: 0.04 + Math.random() * 0.12,
+        size: 1 + Math.random() * 2.2,
+        baseOpacity: 0.12 + Math.random() * 0.22,
         phase: Math.random() * Math.PI * 2,
         isLobster: false,
         speed: 0.0001 + Math.random() * 0.0004,
@@ -241,8 +241,8 @@ export const ParticleBackground = ({ color = 'cyan' }: ParticleBackgroundProps) 
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none z-0"
-      style={{ opacity: 0.7 }}
+      className="fixed inset-0 w-full h-full pointer-events-none"
+      style={{ opacity: 0.85, zIndex: 0 }}
     />
   );
 };
