@@ -9,7 +9,6 @@ const SLICES = [
 ];
 
 interface Props {
-  username: string;
   signature: number[];
   activeModules: string[];
   onNavigate: (id: string) => void;
@@ -28,7 +27,7 @@ const ThinDivider = () => (
   <div className="w-full h-px my-6" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)' }} />
 );
 
-export const IdentityDashboard = ({ username, signature, activeModules, onNavigate }: Props) => {
+export const IdentityDashboard = ({ signature, activeModules, onNavigate }: Props) => {
   const { t } = useI18n();
   const identityHash = useMemo(() => generateHash(signature), [signature]);
   const sbtId = useMemo(() => generateSBTId(), []);
@@ -93,7 +92,7 @@ export const IdentityDashboard = ({ username, signature, activeModules, onNaviga
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="text-2xl font-bold">{t('dashboard.identityState')}</h2>
-              <p className="text-xs text-muted-foreground">@{username || 'unnamed'} · <span style={{ color: 'rgba(10,255,255,0.7)' }}>{t('dashboard.sealed')}</span></p>
+              <p className="text-xs text-muted-foreground"><span style={{ color: 'rgba(10,255,255,0.7)' }}>{t('dashboard.sealed')}</span></p>
             </div>
             <p className="text-[10px] text-muted-foreground/50">{t('dashboard.lastSealed')}</p>
           </div>

@@ -21,7 +21,6 @@ const SLICES = [
 ];
 
 interface Props {
-  username: string;
   signature: number[];
   agentName: string;
   onActivateAgent: () => void;
@@ -66,7 +65,7 @@ const GlowDivider = ({ vertical = false }: { vertical?: boolean }) => (
   </div>
 );
 
-export const CompleteStep = ({ username, signature, onActivateAgent, onDashboard }: Props) => {
+export const CompleteStep = ({ signature, onActivateAgent, onDashboard }: Props) => {
   const { t } = useI18n();
   const walletAddress = useMemo(() => generateWalletAddress(), []);
   const identityHash = useMemo(() => generateHash(signature), [signature]);

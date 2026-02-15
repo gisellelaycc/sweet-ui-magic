@@ -1,26 +1,6 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useI18n } from '@/lib/i18n';
-
-const DEMO_AGENTS = [
-  {
-    id: 'agent-001', name: 'OpenClaw Agent #01', agentId: 'openclaw-0x3a',
-    status: 'active' as const, connectedChannels: ['Telegram'],
-    taskTypes: ['Signal Matching', 'Brand Offers'], createdAt: '2026-02-10',
-    tasksCompleted: 14, earnings: '120 USDT',
-  },
-  {
-    id: 'agent-002', name: 'Telegram Bot Alpha', agentId: 'tg-bot-0xf1',
-    status: 'active' as const, connectedChannels: ['Telegram'],
-    taskTypes: ['Auto-respond', 'Data Sync'], createdAt: '2026-02-12',
-    tasksCompleted: 7, earnings: '45 USDT',
-  },
-  {
-    id: 'agent-003', name: 'Research Bot', agentId: 'research-0x82',
-    status: 'draft' as const, connectedChannels: [],
-    taskTypes: ['Survey', 'Feedback'], createdAt: '2026-02-14',
-    tasksCompleted: 0, earnings: '0 USDT',
-  },
-];
+import type { OnchainBoundAgent } from '@/lib/contracts/twin-matrix-sbt';
 
 const statusColor: Record<string, string> = {
   active: 'rgba(10, 255, 255, 0.8)',
@@ -32,17 +12,33 @@ const ThinDivider = () => (
 );
 
 interface Props {
+  boundAgents: OnchainBoundAgent[];
   onCreateAgent: () => void;
   onEditAgent: () => void;
 }
 
-export const AgentStudioPage = ({ onCreateAgent, onEditAgent }: Props) => {
+export const AgentStudioPage = ({ boundAgents, onCreateAgent, onEditAgent }: Props) => {
   const { t } = useI18n();
   const [selectedAgent, setSelectedAgent] = useState<string | null>(null);
 
-  const activeCount = DEMO_AGENTS.filter(a => a.status === 'active').length;
-  const draftCount = DEMO_AGENTS.filter(a => a.status === 'draft').length;
-  const totalEarnings = '165 USDT';
+  const studioAgents = useMemo(() => (
+    boundAgents.map((agent, index) => ({
+      id: agent.address,
+      name: agent.name,
+      tokenId: agent.tokenId,
+      scopeGranted: agent.scopeGranted,
+      status: agent.active ? 'active' : 'draft' as const,
+      connectedChannels: ['Telegram'],
+      taskTypes: ['Signal Matching', 'Brand Offers'],
+      createdAt: `2026-02-${String(10 + (index % 10)).padStart(2, '0')}`,
+      tasksCompleted: 3 + (index % 9),
+      earnings: `${15 + index * 8} USDT`,
+    }))
+  ), [boundAgents]);
+
+  const activeCount = studioAgents.filter(a => a.status === 'active').length;
+  const draftCount = studioAgents.filter(a => a.status === 'draft').length;
+  const totalEarnings = `${studioAgents.reduce((sum, agent) => sum + Number(agent.earnings.split(' ')[0]), 0)} USDT`;
 
   return (
     <div className="animate-fade-in h-full overflow-y-auto scrollbar-hide">
@@ -87,7 +83,10 @@ export const AgentStudioPage = ({ onCreateAgent, onEditAgent }: Props) => {
         <ThinDivider />
 
         <div className="space-y-0">
-          {DEMO_AGENTS.map((agent, idx) => (
+          {studioAgents.length === 0 && (
+            <p className="text-sm text-muted-foreground">No bound agents found on-chain yet.</p>
+          )}
+          {studioAgents.map((agent, idx) => (
             <div key={agent.id}>
               <div
                 className={`py-5 space-y-3 cursor-pointer transition-colors ${selectedAgent === agent.id ? 'bg-foreground/[0.02]' : ''}`}
@@ -102,7 +101,11 @@ export const AgentStudioPage = ({ onCreateAgent, onEditAgent }: Props) => {
                       }} />
                     <div>
                       <p className="font-semibold text-sm">{agent.name}</p>
-                      <p className="text-[10px] text-muted-foreground/50">{t('agentStudio.verifiedAgent')} · {agent.agentId}</p>
+                      <p className="text-[10px] text-muted-foreground/50">
+                        {t('agentStudio.verifiedAgent')}
+                        {' · '}
+                        tokenId: {agent.tokenId !== null ? agent.tokenId.toString() : '-'}
+                      </p>
                     </div>
                   </div>
                   <span className="text-[10px] font-medium" style={{ color: statusColor[agent.status] }}>
@@ -111,6 +114,12 @@ export const AgentStudioPage = ({ onCreateAgent, onEditAgent }: Props) => {
                 </div>
 
                 <div className="flex items-center gap-6 text-xs text-muted-foreground/60">
+                  <span>
+                    Scope Granted{' '}
+                    <span className="text-foreground/70">
+                      {agent.scopeGranted.length > 0 ? agent.scopeGranted.join(', ') : 'None'}
+                    </span>
+                  </span>
                   <span>{t('agentStudio.tasks')} <span className="text-foreground/70">{agent.tasksCompleted}</span></span>
                   <span>{t('agentStudio.earned')} <span className="text-foreground/70">{agent.earnings}</span></span>
                   <span>{t('agentStudio.created')} <span className="text-foreground/70">{agent.createdAt}</span></span>
@@ -162,7 +171,7 @@ export const AgentStudioPage = ({ onCreateAgent, onEditAgent }: Props) => {
                   </div>
                 )}
               </div>
-              {idx < DEMO_AGENTS.length - 1 && <ThinDivider />}
+              {idx < studioAgents.length - 1 && <ThinDivider />}
             </div>
           ))}
         </div>

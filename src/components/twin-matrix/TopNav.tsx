@@ -8,7 +8,9 @@ interface Props {
   activePage: NavPage;
   onNavigate: (page: NavPage) => void;
   hasIdentity: boolean;
+  isWalletConnected: boolean;
   walletAddress?: string;
+  onConnectWallet: () => void;
 }
 
 const NAV_KEYS: { id: NavPage; key: string }[] = [
@@ -18,7 +20,7 @@ const NAV_KEYS: { id: NavPage; key: string }[] = [
   { id: 'auth', key: 'nav.records' },
 ];
 
-export const TopNav = ({ activePage, onNavigate, hasIdentity, walletAddress = '0x12…A9' }: Props) => {
+export const TopNav = ({ activePage, onNavigate, hasIdentity, isWalletConnected, walletAddress, onConnectWallet }: Props) => {
   const { lang, setLang, t, langLabels } = useI18n();
   const [langOpen, setLangOpen] = useState(false);
   const popRef = useRef<HTMLDivElement>(null);
@@ -105,9 +107,18 @@ export const TopNav = ({ activePage, onNavigate, hasIdentity, walletAddress = '0
           )}
         </div>
 
-        <div className="px-3 py-1.5 rounded-lg text-xs font-mono text-muted-foreground bg-foreground/5 border border-foreground/8">
-          {walletAddress}
-        </div>
+        {isWalletConnected && walletAddress ? (
+          <div className="px-3 py-1.5 rounded-lg text-xs font-mono text-foreground/90 bg-foreground/5 border border-foreground/8">
+            {walletAddress}
+          </div>
+        ) : (
+          <button
+            onClick={onConnectWallet}
+            className="btn-twin btn-twin-primary py-2 px-3 text-xs"
+          >
+            Connect Wallet
+          </button>
+        )}
       </div>
     </header>
   );

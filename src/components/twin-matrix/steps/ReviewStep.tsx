@@ -1,7 +1,6 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import { computeDensity } from "@/lib/twin-encoder";
-import { StepLayout, StepContent, StepFooter } from '../StepLayout';
-import { Dialog, DialogPortal, DialogOverlay, DialogContent } from "@/components/ui/dialog";
+import { StepLayout, StepContent } from '../StepLayout';
 import { useI18n } from '@/lib/i18n';
 
 const SLICES = [
@@ -13,18 +12,36 @@ const SLICES = [
 
 interface Props {
   signature: number[];
-  username: string;
   tags: string[];
   activeModules: string[];
   onNext: () => void;
   onBack: () => void;
+  primaryActionLabel?: string;
+  onPrimaryAction?: () => void;
+  primaryActionLoading?: boolean;
+  primaryActionDisabled?: boolean;
+  networkMismatch?: boolean;
+  expectedNetworkLabel?: string;
+  onSwitchNetwork?: () => void;
+  switchingNetwork?: boolean;
 }
 
-export const ReviewStep = ({ signature, username, activeModules, onNext, onBack }: Props) => {
+export const ReviewStep = ({
+  signature,
+  activeModules,
+  onNext,
+  onBack,
+  primaryActionLabel,
+  onPrimaryAction,
+  primaryActionLoading = false,
+  primaryActionDisabled = false,
+  networkMismatch = false,
+  expectedNetworkLabel = 'BSC Testnet (97)',
+  onSwitchNetwork,
+  switchingNetwork = false,
+}: Props) => {
   const { t } = useI18n();
   const [hoveredCell, setHoveredCell] = useState<number | null>(null);
-  const [showWallet, setShowWallet] = useState(false);
-  const [walletPhase, setWalletPhase] = useState<'connect' | 'signing' | 'confirmed'>('connect');
 
   const identityDensity = useMemo(() => computeDensity(signature), [signature]);
 
@@ -147,7 +164,6 @@ export const ReviewStep = ({ signature, username, activeModules, onNext, onBack 
                     })}
                   </div>
                 </div>
-                <p className="text-xs text-muted-foreground/50 mt-3">@{username}</p>
               </div>
             </div>
 
@@ -217,136 +233,34 @@ export const ReviewStep = ({ signature, username, activeModules, onNext, onBack 
           </div>
 
           {/* CTA centered */}
+          {networkMismatch && (
+            <div className="max-w-[520px] mx-auto mt-6 mb-3 rounded-xl border border-amber-400/30 bg-amber-400/10 px-4 py-3">
+              <p className="text-xs text-amber-200">
+                Wrong network detected. Switch to {expectedNetworkLabel} before minting/updating matrix.
+              </p>
+              <button
+                onClick={onSwitchNetwork}
+                disabled={!onSwitchNetwork || switchingNetwork}
+                className="mt-2 btn-twin btn-twin-ghost py-1.5 px-3 text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {switchingNetwork ? 'Switching...' : `Switch to ${expectedNetworkLabel}`}
+              </button>
+            </div>
+          )}
           <div className="flex gap-2 max-w-[420px] mx-auto mt-8">
             <button onClick={onBack} className="btn-twin btn-twin-ghost flex-1 py-2.5 text-sm">
               {t('review.refine')}
             </button>
-            <button onClick={() => { setShowWallet(true); setWalletPhase('connect'); }} className="btn-twin btn-twin-primary btn-glow flex-1 py-2.5 text-sm">
-              {t('review.commitState')}
+            <button
+              onClick={onPrimaryAction ?? onNext}
+              disabled={primaryActionLoading || primaryActionDisabled}
+              className="btn-twin btn-twin-primary btn-glow flex-1 py-2.5 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {primaryActionLoading ? 'Pending...' : (primaryActionLabel ?? t('review.commitState'))}
             </button>
           </div>
         </div>
       </StepContent>
-
-      <Dialog open={showWallet} onOpenChange={() => {}}>
-        <DialogPortal>
-          <DialogOverlay
-            className="bg-transparent"
-            style={{
-              background: 'rgba(0, 0, 0, 0.55)',
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)',
-            }}
-          />
-          <div
-            className="fixed left-[50%] top-[50%] z-50 w-full max-w-sm translate-x-[-50%] translate-y-[-50%] overflow-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95"
-            style={{
-              background: 'rgba(20, 22, 26, 0.65)',
-              backdropFilter: 'blur(20px)',
-              WebkitBackdropFilter: 'blur(20px)',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
-              borderRadius: '20px',
-            }}
-          >
-            <WalletAnimation phase={walletPhase} setPhase={setWalletPhase} onComplete={onNext} />
-          </div>
-        </DialogPortal>
-      </Dialog>
     </StepLayout>
   );
 };
-
-/* ─── Wallet Signature Animation Component ─── */
-function WalletAnimation({
-  phase,
-  setPhase,
-  onComplete,
-}: {
-  phase: 'connect' | 'signing' | 'confirmed';
-  setPhase: (p: 'connect' | 'signing' | 'confirmed') => void;
-  onComplete: () => void;
-}) {
-  const { t } = useI18n();
-  useEffect(() => {
-    if (phase === 'connect') {
-      const timer = setTimeout(() => setPhase('signing'), 1800);
-      return () => clearTimeout(timer);
-    }
-    if (phase === 'signing') {
-      const timer = setTimeout(() => setPhase('confirmed'), 2500);
-      return () => clearTimeout(timer);
-    }
-    if (phase === 'confirmed') {
-      const timer = setTimeout(() => onComplete(), 1500);
-      return () => clearTimeout(timer);
-    }
-  }, [phase, setPhase, onComplete]);
-
-  return (
-    <div className="flex flex-col items-center text-center px-6 py-8 space-y-6">
-      <div className="space-y-2">
-        <h3 className="text-base font-semibold text-white">
-          {phase === 'connect' && t('review.committing')}
-          {phase === 'signing' && t('review.awaiting')}
-          {phase === 'confirmed' && t('review.committed')}
-        </h3>
-        <p className="text-xs text-white/40 leading-relaxed">
-          {phase === 'connect' && t('review.preparing')}
-          {phase === 'signing' && t('review.confirmSig')}
-          {phase === 'confirmed' && t('review.sealed')}
-        </p>
-      </div>
-
-      {/* Icon + Loading Ring */}
-      <div className="relative w-14 h-14 mx-auto">
-        <div
-          className={`absolute inset-0 rounded-full border ${phase === 'confirmed' ? 'border-white/20' : 'border-white/10 animate-spin'}`}
-          style={{ animationDuration: '3s', borderTopColor: phase !== 'confirmed' ? 'rgba(255,255,255,0.5)' : undefined }}
-        />
-        <div className="absolute inset-2 rounded-full flex items-center justify-center">
-          {phase === 'confirmed' ? (
-            <svg className="w-7 h-7 text-white animate-scale-in" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <polyline points="20 6 9 17 4 12" />
-            </svg>
-          ) : (
-            <svg className="w-6 h-6 text-white/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <rect x="3" y="11" width="18" height="11" rx="2" />
-              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-            </svg>
-          )}
-        </div>
-      </div>
-
-      {/* Info rows — no card wrapper */}
-      {phase !== 'connect' && (
-        <div className="animate-fade-in space-y-2.5 w-full text-left">
-          <div className="flex justify-between text-[11px]">
-            <span className="text-white/30">{t('review.network')}</span>
-            <span className="text-white/60">Twin3 Sovereign Layer</span>
-          </div>
-          <div className="flex justify-between text-[11px]">
-            <span className="text-white/30">{t('review.action')}</span>
-            <span className="text-white/60 font-mono">commitIdentityState()</span>
-          </div>
-          <div className="flex justify-between text-[11px]">
-            <span className="text-white/30">{t('review.gas')}</span>
-            <span className="text-white/60">0.00 (Gasless)</span>
-          </div>
-        </div>
-      )}
-
-      {/* Thin progress line */}
-      <div className="h-[1px] w-full bg-white/5 rounded-full overflow-hidden">
-        <div
-          className="h-full rounded-full transition-all ease-linear"
-          style={{
-            width: phase === 'connect' ? '33%' : phase === 'signing' ? '66%' : '100%',
-            transitionDuration: phase === 'connect' ? '1.8s' : phase === 'signing' ? '2.5s' : '0.5s',
-            background: 'linear-gradient(90deg, rgba(10,255,255,0.4), rgba(10,255,255,0.8))',
-            boxShadow: '0 0 6px rgba(10,255,255,0.4)',
-          }}
-        />
-      </div>
-    </div>
-  );
-}
