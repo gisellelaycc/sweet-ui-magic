@@ -2,17 +2,18 @@ import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import type { UserProfile } from '@/types/twin-matrix';
 import { StepLayout, StepContent } from '../StepLayout';
+import { useI18n } from '@/lib/i18n';
 
-const FIELDS: { key: keyof UserProfile; label: string; options: string[] }[] = [
-  { key: 'ageBin', label: 'Age?', options: ['18–24', '25–34', '35–44', '45–54', '55–64', '65+'] },
-  { key: 'gender', label: 'Gender?', options: ['Male', 'Female', 'Non-binary', 'Prefer not to say'] },
-  { key: 'heightBin', label: 'Height?', options: ['< 160 cm', '160–170', '170–180', '> 180 cm'] },
-  { key: 'weightBin', label: 'Weight?', options: ['< 50 kg', '50–65', '65–80', '> 80 kg'] },
-  { key: 'education', label: 'Education?', options: ['High School', "Bachelor's", "Master's", 'Doctorate', 'Other', 'Prefer not to say'] },
-  { key: 'income', label: 'Income?', options: ['< $30k', '$30k–60k', '$60k–100k', '$100k+', 'Prefer not to say'] },
-  { key: 'maritalStatus', label: 'Status?', options: ['Single', 'In a relationship', 'Married', 'N/A', 'Prefer not to say'] },
-  { key: 'occupation', label: 'Work?', options: ['Student', 'Employee', 'Self-employed', 'Freelancer', 'Other'] },
-  { key: 'livingType', label: 'Living?', options: ['Urban', 'Suburban', 'Rural', 'Prefer not to say'] },
+const FIELDS: { key: keyof UserProfile; i18nKey: string; options: string[] }[] = [
+  { key: 'ageBin', i18nKey: 'identity.age', options: ['18–24', '25–34', '35–44', '45–54', '55–64', '65+'] },
+  { key: 'gender', i18nKey: 'identity.gender', options: ['Male', 'Female', 'Non-binary', 'Prefer not to say'] },
+  { key: 'heightBin', i18nKey: 'identity.height', options: ['< 160 cm', '160–170', '170–180', '> 180 cm'] },
+  { key: 'weightBin', i18nKey: 'identity.weight', options: ['< 50 kg', '50–65', '65–80', '> 80 kg'] },
+  { key: 'education', i18nKey: 'identity.education', options: ['High School', "Bachelor's", "Master's", 'Doctorate', 'Other', 'Prefer not to say'] },
+  { key: 'income', i18nKey: 'identity.income', options: ['< $30k', '$30k–60k', '$60k–100k', '$100k+', 'Prefer not to say'] },
+  { key: 'maritalStatus', i18nKey: 'identity.status', options: ['Single', 'In a relationship', 'Married', 'N/A', 'Prefer not to say'] },
+  { key: 'occupation', i18nKey: 'identity.work', options: ['Student', 'Employee', 'Self-employed', 'Freelancer', 'Other'] },
+  { key: 'livingType', i18nKey: 'identity.living', options: ['Urban', 'Suburban', 'Rural', 'Prefer not to say'] },
 ];
 
 interface Props {
@@ -22,6 +23,7 @@ interface Props {
 }
 
 export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
+  const { t } = useI18n();
   const [profile, setProfile] = useState(data);
   const [openKey, setOpenKey] = useState<string | null>(null);
 
@@ -44,17 +46,15 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
     <StepLayout>
       <StepContent>
         <div className="flex flex-col items-center">
-          {/* Title centered */}
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] tracking-tight mb-2">
-              Core Identity
+              {t('identity.title')}
             </h2>
             <p className="text-muted-foreground text-base md:text-lg">
-              Optional signals. Nothing exposed.
+              {t('identity.subtitle')}
             </p>
           </div>
 
-          {/* 3-3-3 chip grid centered */}
           <div className="flex flex-col items-center gap-6 mb-12">
             {rows.map((row, rowIdx) => (
               <div key={rowIdx} className="flex flex-wrap justify-center gap-3">
@@ -83,7 +83,7 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
                             : { background: 'rgba(255, 255, 255, 0.04)' }
                         }
                       >
-                        <span className="font-medium">{f.label}</span>
+                        <span className="font-medium">{t(f.i18nKey)}</span>
                         {isAnswered && <span className="text-xs text-foreground/60 ml-0.5">{profile[f.key]}</span>}
                         <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''} ${isAnswered ? 'text-foreground/40' : 'text-foreground/30'}`} />
                       </button>
@@ -117,10 +117,9 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
             ))}
           </div>
 
-          {/* CTA centered */}
           <div className="w-full max-w-[420px]">
             <button onClick={onNext} className="btn-twin btn-twin-primary w-full py-2.5 text-sm btn-glow">
-              Commit Core Layer
+              {t('identity.cta')}
             </button>
           </div>
         </div>

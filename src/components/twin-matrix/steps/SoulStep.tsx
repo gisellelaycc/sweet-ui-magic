@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { Slider } from '@/components/ui/slider';
 import type { SoulData, SoulBar } from '@/types/twin-matrix';
 import { StepLayout, StepContent } from '../StepLayout';
+import { useI18n } from '@/lib/i18n';
 
 const DEFAULT_BARS: SoulBar[] = [
   { id: 'BAR_OUTCOME_EXPERIENCE', label: 'Performance Orientation', left: 'I train to improve performance', right: 'I train for the experience', value: null },
@@ -22,6 +23,7 @@ interface Props {
 }
 
 export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
+  const { t } = useI18n();
   const [bars, setBars] = useState<SoulBar[]>(
     data.bars?.length === 4 ? data.bars : DEFAULT_BARS
   );
@@ -39,22 +41,19 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
     <StepLayout>
       <StepContent>
         <div className="w-full flex flex-col">
-          {/* Title */}
           <div className="mb-8">
             <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] tracking-tight mb-2">
-              Soul Layer
+              {t('soul.title')}
             </h2>
             <p className="text-muted-foreground text-base md:text-lg">
-              Balance intention and instinct.
+              {t('soul.subtitle')}
             </p>
           </div>
 
-          {/* Sliders + Soul Signature row — signature bottom-aligns with sliders bottom */}
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-end">
-            {/* Left: Sliders */}
             <div className="flex-1 min-w-0">
               <div className="space-y-8">
-                <p className="text-xs text-muted-foreground uppercase tracking-widest">Why do you train?</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-widest">{t('soul.why')}</p>
 
                 {bars.map((bar, idx) => (
                   <div key={bar.id} className="space-y-3">
@@ -72,23 +71,16 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
                           }}
                         />
                       )}
-                      <Slider
-                        value={[bar.value ?? 50]}
-                        onValueChange={([v]) => handleSlider(idx, v)}
-                        max={100}
-                        step={1}
-                        className="relative z-10"
-                      />
+                      <Slider value={[bar.value ?? 50]} onValueChange={([v]) => handleSlider(idx, v)} max={100} step={1} className="relative z-10" />
                     </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Right: Soul Signature — bottom aligns with last slider */}
             {hasInteracted && (
               <div className="lg:w-[220px] shrink-0 animate-fade-in">
-                <p className="text-xs text-muted-foreground uppercase tracking-widest mb-4">Soul Signature</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-widest mb-4">{t('soul.signature')}</p>
                 <div className="space-y-6">
                   {bars.map(bar => {
                     const raw = getBarRaw(bar.value);
@@ -108,14 +100,13 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
             )}
           </div>
 
-          {/* CTA below — Soul Signature bottom aligns with this top edge */}
           <div className="mt-8">
             <button
               onClick={onNext}
               disabled={!hasInteracted}
               className={`btn-twin btn-twin-primary w-full py-2.5 text-sm disabled:opacity-30 disabled:cursor-not-allowed ${hasInteracted ? 'btn-glow' : ''}`}
             >
-              Review Your State →
+              {t('soul.cta')}
             </button>
           </div>
         </div>

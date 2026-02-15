@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { SportTwin } from '@/types/twin-matrix';
 import { StepLayout, StepContent } from '../StepLayout';
+import { useI18n } from '@/lib/i18n';
 
 const SPORTS = [
   'Running', 'Cycling', 'Long-distance Swimming', 'Trail / Off-road Running',
@@ -21,6 +22,7 @@ interface Props {
 }
 
 export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
+  const { t } = useI18n();
   const [twin, setTwin] = useState(data);
 
   const toggleSport = (s: string) => {
@@ -56,36 +58,31 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
     <StepLayout>
       <StepContent>
         <div className="flex flex-col items-center">
-          {/* Title centered */}
           <div className="text-center mb-8">
             <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] tracking-tight mb-2">
-              Most frequent activities
+              {t('sportTwin.title')}
             </h2>
             <p className="text-muted-foreground text-base md:text-lg">
-              Order what feels essential.
+              {t('sportTwin.subtitle')}
             </p>
           </div>
 
-          {/* 3 cards horizontal */}
           <div className="flex flex-col md:flex-row gap-4 w-full">
             <div className="glass-card !p-4 space-y-2 flex-1 min-w-0">
               <div>
-                <label className="text-sm font-medium text-foreground">Select your most frequent activities</label>
-                <p className="text-xs text-muted-foreground mt-0.5">Order reflects priority (up to 10).</p>
+                <label className="text-sm font-medium text-foreground">{t('sportTwin.activities')}</label>
+                <p className="text-xs text-muted-foreground mt-0.5">{t('sportTwin.activitiesHint')}</p>
               </div>
               {twin.sportRanking.length > 0 && (
-                <p className="text-xs text-muted-foreground">Selected {twin.sportRanking.length} / 10</p>
+                <p className="text-xs text-muted-foreground">{t('sportTwin.selected')} {twin.sportRanking.length} / 10</p>
               )}
               <div className="flex flex-wrap gap-1.5">
                 {SPORTS.map(s => {
                   const rank = twin.sportRanking.indexOf(s);
                   const isSelected = rank >= 0;
                   return (
-                    <button
-                      key={s}
-                      onClick={() => toggleSport(s)}
-                      className={`chip !text-xs !py-1.5 !px-3 relative ${isSelected ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}
-                    >
+                    <button key={s} onClick={() => toggleSport(s)}
+                      className={`chip !text-xs !py-1.5 !px-3 relative ${isSelected ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}>
                       {s}
                       {isSelected && (
                         <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-foreground text-background text-[9px] flex items-center justify-center font-bold">
@@ -100,16 +97,13 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
 
             <div className="glass-card !p-4 space-y-2 flex-1 min-w-0">
               <div>
-                <label className="text-sm font-medium text-foreground">Outfit Style</label>
-                <p className="text-xs text-muted-foreground mt-0.5">Select styles that best represent your athletic expression.</p>
+                <label className="text-sm font-medium text-foreground">{t('sportTwin.outfitStyle')}</label>
+                <p className="text-xs text-muted-foreground mt-0.5">{t('sportTwin.outfitHint')}</p>
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {OUTFIT_STYLES.map(s => (
-                  <button
-                    key={s}
-                    onClick={() => toggleStyle(s)}
-                    className={`chip !text-xs !py-1.5 !px-3 ${twin.outfitStyle.includes(s) ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}
-                  >
+                  <button key={s} onClick={() => toggleStyle(s)}
+                    className={`chip !text-xs !py-1.5 !px-3 ${twin.outfitStyle.includes(s) ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}>
                     {s}
                   </button>
                 ))}
@@ -118,16 +112,13 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
 
             <div className="glass-card !p-4 space-y-2 flex-1 min-w-0">
               <div>
-                <label className="text-sm font-medium text-foreground">Brand Preferences</label>
-                <p className="text-xs text-muted-foreground mt-0.5">Brands you've worn most in the past year.</p>
+                <label className="text-sm font-medium text-foreground">{t('sportTwin.brands')}</label>
+                <p className="text-xs text-muted-foreground mt-0.5">{t('sportTwin.brandsHint')}</p>
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {BRANDS.map(b => (
-                  <button
-                    key={b}
-                    onClick={() => toggleBrand(b)}
-                    className={`chip !text-xs !py-1.5 !px-3 ${twin.brands.includes(b) ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}
-                  >
+                  <button key={b} onClick={() => toggleBrand(b)}
+                    className={`chip !text-xs !py-1.5 !px-3 ${twin.brands.includes(b) ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}>
                     {b}
                   </button>
                 ))}
@@ -135,10 +126,9 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
             </div>
           </div>
 
-          {/* CTA centered */}
           <div className="w-full max-w-md mx-auto mt-6">
             <button onClick={onNext} disabled={!isValid} className="btn-twin btn-twin-primary w-full py-2.5 text-sm disabled:opacity-30 disabled:cursor-not-allowed">
-              Commit Layer
+              {t('sportTwin.commit')}
             </button>
           </div>
         </div>

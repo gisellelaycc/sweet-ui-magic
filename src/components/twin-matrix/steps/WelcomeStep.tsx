@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
 import logo from '@/assets/twin3-logo.svg';
 import { StepLayout, StepContent } from '../StepLayout';
+import { useI18n } from '@/lib/i18n';
 
 interface Props {
   username: string;
@@ -41,6 +42,7 @@ const ScanGlowTitle = ({ text, visible }: { text: string; visible: boolean }) =>
 );
 
 export const WelcomeStep = ({ username, onUpdateUsername, onNext }: Props) => {
+  const { t } = useI18n();
   const [value, setValue] = useState(username);
   const isValid = value.trim().length > 0;
 
@@ -64,7 +66,6 @@ export const WelcomeStep = ({ username, onUpdateUsername, onNext }: Props) => {
       <StepContent>
         <div className="relative flex flex-col items-center justify-center text-center min-h-[70vh] px-4">
           <div className="relative z-10 flex flex-col items-center">
-            {/* Logo */}
             <img
               src={logo}
               alt="Twin Matrix"
@@ -75,7 +76,7 @@ export const WelcomeStep = ({ username, onUpdateUsername, onNext }: Props) => {
               }}
             />
 
-            <ScanGlowTitle text="Bring your 256D self to life." visible={titleVisible} />
+            <ScanGlowTitle text={t('welcome.title')} visible={titleVisible} />
 
             <p
               className="text-muted-foreground text-lg md:text-xl max-w-md mx-auto leading-relaxed mt-5"
@@ -85,10 +86,9 @@ export const WelcomeStep = ({ username, onUpdateUsername, onNext }: Props) => {
                 transition: 'opacity 600ms ease-out 400ms, transform 600ms ease-out 400ms',
               }}
             >
-              Build an OpenClaw agent that thinks like you.
+              {t('welcome.subtitle')}
             </p>
 
-            {/* Input + Arrow merged in one row */}
             <div
               className="mt-10 w-full max-w-sm mx-auto"
               style={{
@@ -97,13 +97,12 @@ export const WelcomeStep = ({ username, onUpdateUsername, onNext }: Props) => {
                 transition: 'opacity 600ms ease-out, transform 600ms ease-out',
               }}
             >
-              {/* Inline input with arrow */}
               <div className="relative flex items-center pb-0">
                 <input
                   value={value}
                   onChange={e => setValue(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && handleConfirm()}
-                  placeholder="Your name"
+                  placeholder={t('welcome.placeholder')}
                   className="flex-1 bg-transparent border-none px-0 py-1 text-xl text-foreground placeholder:text-muted-foreground/40 focus:outline-none"
                 />
                 <button
@@ -119,12 +118,10 @@ export const WelcomeStep = ({ username, onUpdateUsername, onNext }: Props) => {
                 </button>
               </div>
 
-              {/* Glow divider — tight to input */}
               <GlowLine />
 
-              {/* Subtitle below divider */}
               <p className="text-muted-foreground/50 text-xs text-center -mt-3">
-                Shape your 256D space in 2 min.
+                {t('welcome.hint')}
               </p>
             </div>
           </div>

@@ -2,6 +2,7 @@ import { useMemo, useState, useEffect } from "react";
 import { computeDensity } from "@/lib/twin-encoder";
 import { StepLayout, StepContent, StepFooter } from '../StepLayout';
 import { Dialog, DialogPortal, DialogOverlay, DialogContent } from "@/components/ui/dialog";
+import { useI18n } from '@/lib/i18n';
 
 const SLICES = [
   { label: "Physical", range: [0, 63], color: "255, 60, 100" },
@@ -20,6 +21,7 @@ interface Props {
 }
 
 export const ReviewStep = ({ signature, username, activeModules, onNext, onBack }: Props) => {
+  const { t } = useI18n();
   const [hoveredCell, setHoveredCell] = useState<number | null>(null);
   const [showWallet, setShowWallet] = useState(false);
   const [walletPhase, setWalletPhase] = useState<'connect' | 'signing' | 'confirmed'>('connect');
@@ -70,10 +72,10 @@ export const ReviewStep = ({ signature, username, activeModules, onNext, onBack 
           {/* Title */}
           <div className="mb-6">
             <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] tracking-tight mb-2">
-              Identity Preview
+              {t('review.title')}
             </h2>
             <p className="text-muted-foreground text-base md:text-lg">
-              Not yet sealed. Review before recording.
+              {t('review.subtitle')}
             </p>
           </div>
 
@@ -85,7 +87,7 @@ export const ReviewStep = ({ signature, username, activeModules, onNext, onBack 
                   background: "radial-gradient(ellipse at center, rgba(10,255,255,0.08) 0%, transparent 70%)",
                 }} />
                 <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-3 relative z-10">
-                  Twin Matrix Projection (256D)
+                  {t('review.projection')}
                 </h3>
                 <div className="overflow-x-auto relative z-10">
                   <div className="flex flex-col min-w-fit">
@@ -153,9 +155,9 @@ export const ReviewStep = ({ signature, username, activeModules, onNext, onBack 
             <div className="lg:w-[40%] space-y-6">
               {/* Soul Quadrant */}
               <div className="space-y-2">
-                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Quadrant Position</h3>
+                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">{t('review.quadrant')}</h3>
                 {quadrant.missing ? (
-                  <p className="text-sm text-muted-foreground/50">Incomplete Axis</p>
+                  <p className="text-sm text-muted-foreground/50">{t('review.incompleteAxis')}</p>
                 ) : (
                   <div className="space-y-1">
                     <div className="text-2xl font-bold text-foreground">{quadrant.label}</div>
@@ -171,10 +173,10 @@ export const ReviewStep = ({ signature, username, activeModules, onNext, onBack 
 
               {/* Identity Density */}
               <div className="space-y-2">
-                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Identity Density</h3>
+                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">{t('review.density')}</h3>
                 <div className="flex items-end gap-2">
                   <span className="text-3xl font-bold text-foreground">{identityDensity}%</span>
-                  <span className="text-xs text-muted-foreground mb-1">of 256 dimensions active</span>
+                  <span className="text-xs text-muted-foreground mb-1">{t('review.densityOf')}</span>
                 </div>
                 <div className="h-[3px] bg-transparent rounded-full overflow-visible">
                   <div className="h-full rounded-full transition-all duration-700" style={{
@@ -189,7 +191,7 @@ export const ReviewStep = ({ signature, username, activeModules, onNext, onBack 
 
               {/* Layer Mix */}
               <div className="space-y-2">
-                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Layer Mix</h3>
+                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">{t('review.layerMix')}</h3>
                 {[
                   { label: "Physical", value: layerMix.physical, color: "255, 60, 100" },
                   { label: "Digital", value: layerMix.digital, color: "60, 180, 255" },
@@ -217,10 +219,10 @@ export const ReviewStep = ({ signature, username, activeModules, onNext, onBack 
           {/* CTA centered */}
           <div className="flex gap-2 max-w-[420px] mx-auto mt-8">
             <button onClick={onBack} className="btn-twin btn-twin-ghost flex-1 py-2.5 text-sm">
-              Refine
+              {t('review.refine')}
             </button>
             <button onClick={() => { setShowWallet(true); setWalletPhase('connect'); }} className="btn-twin btn-twin-primary btn-glow flex-1 py-2.5 text-sm">
-              Commit State
+              {t('review.commitState')}
             </button>
           </div>
         </div>
@@ -264,34 +266,34 @@ function WalletAnimation({
   setPhase: (p: 'connect' | 'signing' | 'confirmed') => void;
   onComplete: () => void;
 }) {
+  const { t } = useI18n();
   useEffect(() => {
     if (phase === 'connect') {
-      const t = setTimeout(() => setPhase('signing'), 1800);
-      return () => clearTimeout(t);
+      const timer = setTimeout(() => setPhase('signing'), 1800);
+      return () => clearTimeout(timer);
     }
     if (phase === 'signing') {
-      const t = setTimeout(() => setPhase('confirmed'), 2500);
-      return () => clearTimeout(t);
+      const timer = setTimeout(() => setPhase('confirmed'), 2500);
+      return () => clearTimeout(timer);
     }
     if (phase === 'confirmed') {
-      const t = setTimeout(() => onComplete(), 1500);
-      return () => clearTimeout(t);
+      const timer = setTimeout(() => onComplete(), 1500);
+      return () => clearTimeout(timer);
     }
   }, [phase, setPhase, onComplete]);
 
   return (
     <div className="flex flex-col items-center text-center px-6 py-8 space-y-6">
-      {/* Title + Subtitle */}
       <div className="space-y-2">
         <h3 className="text-base font-semibold text-white">
-          {phase === 'connect' && 'Committing your identity…'}
-          {phase === 'signing' && 'Awaiting wallet signature'}
-          {phase === 'confirmed' && 'Identity Committed'}
+          {phase === 'connect' && t('review.committing')}
+          {phase === 'signing' && t('review.awaiting')}
+          {phase === 'confirmed' && t('review.committed')}
         </h3>
         <p className="text-xs text-white/40 leading-relaxed">
-          {phase === 'connect' && 'Preparing state for on-chain commitment.'}
-          {phase === 'signing' && 'Please confirm the signature request.'}
-          {phase === 'confirmed' && 'Your identity state has been sealed.'}
+          {phase === 'connect' && t('review.preparing')}
+          {phase === 'signing' && t('review.confirmSig')}
+          {phase === 'confirmed' && t('review.sealed')}
         </p>
       </div>
 
@@ -319,15 +321,15 @@ function WalletAnimation({
       {phase !== 'connect' && (
         <div className="animate-fade-in space-y-2.5 w-full text-left">
           <div className="flex justify-between text-[11px]">
-            <span className="text-white/30">Network</span>
+            <span className="text-white/30">{t('review.network')}</span>
             <span className="text-white/60">Twin3 Sovereign Layer</span>
           </div>
           <div className="flex justify-between text-[11px]">
-            <span className="text-white/30">Action</span>
+            <span className="text-white/30">{t('review.action')}</span>
             <span className="text-white/60 font-mono">commitIdentityState()</span>
           </div>
           <div className="flex justify-between text-[11px]">
-            <span className="text-white/30">Gas</span>
+            <span className="text-white/30">{t('review.gas')}</span>
             <span className="text-white/60">0.00 (Gasless)</span>
           </div>
         </div>
