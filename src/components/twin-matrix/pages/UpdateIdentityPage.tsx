@@ -1,7 +1,6 @@
 import { useI18n } from '@/lib/i18n';
 
 interface Props {
-  username: string;
   activeModules: string[];
   tags: string[];
   onNavigate: (id: string) => void;
@@ -19,7 +18,7 @@ const ALL_MODULES = [
   { id: 'learning', icon: '🧠' },
 ];
 
-export const UpdateIdentityPage = ({ username, activeModules, tags }: Props) => {
+export const UpdateIdentityPage = ({ activeModules, tags }: Props) => {
   const { t } = useI18n();
 
   return (
@@ -34,10 +33,7 @@ export const UpdateIdentityPage = ({ username, activeModules, tags }: Props) => 
           <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">{t('update.coreLayer')}</h3>
           <button className="text-xs text-muted-foreground/50 hover:text-foreground transition-colors">{t('update.edit')}</button>
         </div>
-        <div className="text-sm text-foreground/80">
-          <p>@{username || 'unnamed'}</p>
-          <p className="text-[11px] text-muted-foreground mt-1">{t('update.editHint')}</p>
-        </div>
+        <p className="text-[11px] text-muted-foreground mt-1">{t('update.editHint')}</p>
       </div>
 
       <div className="glass-card space-y-3">

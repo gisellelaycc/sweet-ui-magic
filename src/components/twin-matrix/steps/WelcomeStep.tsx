@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
-import { ArrowRight } from 'lucide-react';
 import logo from '@/assets/twin3-logo.svg';
 import { StepLayout, StepContent } from '../StepLayout';
 import { useI18n } from '@/lib/i18n';
 
 interface Props {
-  username: string;
-  onUpdateUsername: (name: string) => void;
   onNext: () => void;
+  locked?: boolean;
+  onRequestConnect?: () => void;
 }
 
 /* ── Glowing divider line (white, shimmering) ── */
@@ -41,10 +40,8 @@ const ScanGlowTitle = ({ text, visible }: { text: string; visible: boolean }) =>
   </h1>
 );
 
-export const WelcomeStep = ({ username, onUpdateUsername, onNext }: Props) => {
+export const WelcomeStep = ({ onNext, locked = false, onRequestConnect }: Props) => {
   const { t } = useI18n();
-  const [value, setValue] = useState(username);
-  const isValid = value.trim().length > 0;
 
   const [titleVisible, setTitleVisible] = useState(false);
   const [contentVisible, setContentVisible] = useState(false);
@@ -56,8 +53,7 @@ export const WelcomeStep = ({ username, onUpdateUsername, onNext }: Props) => {
   }, []);
 
   const handleConfirm = () => {
-    if (!isValid) return;
-    onUpdateUsername(value.trim());
+    if (locked) return;
     onNext();
   };
 
@@ -90,39 +86,38 @@ export const WelcomeStep = ({ username, onUpdateUsername, onNext }: Props) => {
             </p>
 
             <div
-              className="mt-10 w-full max-w-sm mx-auto"
+              className="mt-10 w-full max-w-sm mx-auto relative"
               style={{
                 opacity: contentVisible ? 1 : 0,
                 transform: contentVisible ? 'translateY(0)' : 'translateY(16px)',
                 transition: 'opacity 600ms ease-out, transform 600ms ease-out',
               }}
             >
-              <div className="relative flex items-center pb-0">
-                <input
-                  value={value}
-                  onChange={e => setValue(e.target.value)}
-                  onKeyDown={e => e.key === 'Enter' && handleConfirm()}
-                  placeholder={t('welcome.placeholder')}
-                  className="flex-1 bg-transparent border-none px-0 py-1 text-xl text-foreground placeholder:text-muted-foreground/40 focus:outline-none"
-                />
-                <button
-                  onClick={handleConfirm}
-                  disabled={!isValid}
-                  className={`ml-2 w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all ${
-                    isValid
-                      ? 'text-foreground hover:bg-foreground/10'
-                      : 'text-muted-foreground/30 cursor-not-allowed'
-                  }`}
-                >
-                  <ArrowRight className="w-4 h-4" />
-                </button>
+              <button
+                onClick={handleConfirm}
+                disabled={locked}
+                className="btn-twin btn-twin-primary btn-glow w-full py-3 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {t('welcome.start')}
+              </button>
+
+              <div className="mt-4">
+                <GlowLine />
               </div>
 
-              <GlowLine />
-
-              <p className="text-muted-foreground/50 text-xs text-center -mt-3">
-                {t('welcome.hint')}
-              </p>
+              {locked && (
+                <div className="absolute inset-0 rounded-xl bg-background/70 backdrop-blur-sm border border-foreground/10 flex flex-col items-center justify-center gap-4 px-4 py-6 min-h-[120px]">
+                  <p className="text-xs text-muted-foreground text-center">
+                    Connect wallet to continue.
+                  </p>
+                  <button
+                    onClick={onRequestConnect}
+                    className="btn-twin btn-twin-primary py-2 px-3 text-xs"
+                  >
+                    Connect Wallet
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

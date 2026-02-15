@@ -9,13 +9,12 @@ const DIMENSION_LABELS = [
 ];
 
 interface Props {
-  username: string;
   activeModules: string[];
   signature: number[];
   onNavigate: (id: string) => void;
 }
 
-export const MyIdentityPage = ({ username, activeModules, signature, onNavigate }: Props) => {
+export const MyIdentityPage = ({ activeModules, signature, onNavigate }: Props) => {
   const { t } = useI18n();
   const [hoveredCell, setHoveredCell] = useState<number | null>(null);
 
@@ -63,10 +62,7 @@ export const MyIdentityPage = ({ username, activeModules, signature, onNavigate 
 
       <div className="glass-card space-y-4">
         <div className="flex items-center justify-between">
-          <div>
-            <p className="font-semibold">@{username || 'unnamed'}</p>
-            <p className="text-xs" style={{ color: '#F24455' }}>● {t('records.active')}</p>
-          </div>
+          <p className="text-xs" style={{ color: '#F24455' }}>● {t('records.active')}</p>
           <div className="text-right">
             <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{t('myIdentity.layers')}</p>
             <p className="text-sm font-medium">{activeModules.length} {t('myIdentity.active')}</p>

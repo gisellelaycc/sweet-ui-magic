@@ -22,6 +22,7 @@ const T: Translations = {
   // ── Welcome Step ──
   'welcome.title': { en: 'Bring your 256D self to life.', zh: '喚醒你的 256D 自我。', ja: '256Dの自分を呼び覚まそう。', ko: '256D 자아를 깨우세요.' },
   'welcome.subtitle': { en: 'Build an OpenClaw agent that thinks like you.', zh: '打造一個與你思維同步的 OpenClaw 代理。', ja: 'あなたのように考える OpenClaw エージェントを構築。', ko: '당신처럼 생각하는 OpenClaw 에이전트를 만드세요.' },
+  'welcome.start': { en: 'Start', zh: '開始', ja: '開始', ko: '시작' },
   'welcome.placeholder': { en: 'Your name', zh: '你的名字', ja: 'あなたの名前', ko: '이름을 입력하세요' },
   'welcome.hint': { en: 'Shape your 256D space in 2 min.', zh: '2 分鐘塑造你的 256D 空間。', ja: '2分で256D空間を形成。', ko: '2분 만에 256D 공간을 만드세요.' },
 
