@@ -564,7 +564,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
               <div className="pt-6">
                 {!telegramConnected ? (
                   <button onClick={handleConnectTelegram} className="btn-twin btn-twin-primary btn-glow w-full py-3">
-                    🔗 {t('telegram.connect')}
+                    {t('telegram.connect')}
                   </button>
                 ) : (
                   <p className="text-sm text-center" style={{ color: '#F24455' }}>{t('telegram.connectedLabel')}</p>
