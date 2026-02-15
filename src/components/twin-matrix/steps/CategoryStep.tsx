@@ -154,7 +154,13 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
                     onClick={() => {
                       if (isMore) return;
                       if (isSoon) { showSoonTooltip(chip.id); return; }
-                      selectSignal(chip.id);
+                      setSelected(chip.id);
+                      // Toggle activation directly on chip click
+                      const next = activated.includes(chip.id)
+                        ? activated.filter(m => m !== chip.id)
+                        : [...activated, chip.id];
+                      setActivated(next);
+                      onUpdate(next);
                     }}
                     onMouseEnter={() => { if (isSoon) showSoonTooltip(chip.id); }}
                     onMouseLeave={() => { if (isSoon) setSoonTooltip(null); }}
