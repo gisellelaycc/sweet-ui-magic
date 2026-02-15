@@ -214,7 +214,7 @@ export const IdentityDashboard = ({ username, signature, activeModules, onNaviga
           <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-3">{t('dashboard.manageState')}</h3>
           <div className="flex gap-4 flex-wrap">
             {[
-              { labelKey: 'dashboard.refineState', action: () => onNavigate('update') },
+              { labelKey: 'dashboard.refineState', action: () => onNavigate('refine') },
               { labelKey: 'dashboard.reseal', action: () => {} },
               { labelKey: 'dashboard.exportVector', action: () => {} },
               { labelKey: 'dashboard.shareSnapshot', action: () => {} },
