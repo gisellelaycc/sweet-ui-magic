@@ -37,7 +37,8 @@ const DEMO_MISSIONS = [
 
 export const MissionsPage = () => {
   return (
-    <div className="animate-fade-in space-y-6 max-w-lg mx-auto">
+    <div className="animate-fade-in h-full overflow-y-auto scrollbar-hide">
+      <div className="max-w-3xl mx-auto px-6 py-6 space-y-6">
       <div>
         <h2 className="text-2xl font-bold mb-1">Signal Requests</h2>
         <p className="text-muted-foreground text-sm">Scoped opportunities from brands & agents</p>
@@ -133,6 +134,7 @@ export const MissionsPage = () => {
             </p>
           </div>
         ))}
+      </div>
       </div>
     </div>
   );

@@ -46,7 +46,7 @@ export const AgentStudioPage = ({ onCreateAgent, onEditAgent }: Props) => {
 
   return (
     <div className="animate-fade-in h-full overflow-y-auto scrollbar-hide">
-      <div className="max-w-5xl mx-auto px-6 py-6 space-y-6">
+      <div className="max-w-3xl mx-auto px-6 py-6 space-y-6">
         <div>
           <h2 className="text-2xl font-bold mb-1">{t('agentStudio.title')}</h2>
           <p className="text-muted-foreground text-sm">{t('agentStudio.subtitle')}</p>
