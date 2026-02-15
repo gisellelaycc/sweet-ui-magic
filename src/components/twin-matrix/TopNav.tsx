@@ -44,12 +44,12 @@ export const TopNav = ({ activePage, onNavigate, hasIdentity, walletAddress = '0
         <span className="font-semibold tracking-tight text-sm">Twin Matrix</span>
       </button>
 
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-0">
         {NAV_KEYS.map(item => (
           <button
             key={item.id}
             onClick={() => onNavigate(item.id)}
-            className={`relative text-sm py-2 transition-colors group ${
+            className={`relative text-sm py-2 px-4 transition-colors group ${
               activePage === item.id
                 ? 'text-foreground'
                 : 'text-muted-foreground hover:text-foreground'
