@@ -4,11 +4,12 @@ import type { SoulData, SoulBar } from '@/types/twin-matrix';
 import { StepLayout, StepContent } from '../StepLayout';
 import { useI18n } from '@/lib/i18n';
 
-const DEFAULT_BARS: SoulBar[] = [
-  { id: 'BAR_OUTCOME_EXPERIENCE', label: 'Performance Orientation', left: 'I train to improve performance', right: 'I train for the experience', value: null },
-  { id: 'BAR_CONTROL_RELEASE', label: 'Structure Preference', left: 'I prefer structured training', right: 'I prefer spontaneous movement', value: null },
-  { id: 'BAR_SOLO_GROUP', label: 'Social Preference', left: 'I prefer training alone', right: 'I prefer training with others', value: null },
-  { id: 'BAR_PASSIVE_ACTIVE', label: 'Engagement Mode', left: 'I mostly consume sports content', right: 'I actively track or share my activity', value: null },
+// Internal IDs stay English, display uses i18n keys
+const BAR_DEFS = [
+  { id: 'BAR_OUTCOME_EXPERIENCE', labelKey: 'soul.bar.performanceOrientation', leftKey: 'soul.bar.performanceLeft', rightKey: 'soul.bar.performanceRight' },
+  { id: 'BAR_CONTROL_RELEASE', labelKey: 'soul.bar.structurePreference', leftKey: 'soul.bar.structureLeft', rightKey: 'soul.bar.structureRight' },
+  { id: 'BAR_SOLO_GROUP', labelKey: 'soul.bar.socialPreference', leftKey: 'soul.bar.socialLeft', rightKey: 'soul.bar.socialRight' },
+  { id: 'BAR_PASSIVE_ACTIVE', labelKey: 'soul.bar.engagementMode', leftKey: 'soul.bar.engagementLeft', rightKey: 'soul.bar.engagementRight' },
 ];
 
 function getBarRaw(value: number | null): number {
@@ -25,7 +26,9 @@ interface Props {
 export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
   const { t } = useI18n();
   const [bars, setBars] = useState<SoulBar[]>(
-    data.bars?.length === 4 ? data.bars : DEFAULT_BARS
+    data.bars?.length === 4 ? data.bars : BAR_DEFS.map(d => ({
+      id: d.id, label: d.labelKey, left: d.leftKey, right: d.rightKey, value: null,
+    }))
   );
 
   const handleSlider = useCallback((idx: number, value: number) => {
@@ -36,6 +39,12 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
 
   const touchedCount = bars.filter(b => b.value !== null).length;
   const hasInteracted = touchedCount > 0;
+
+  // Get display text — if the bar stores i18n keys, translate; otherwise show raw
+  const displayText = (key: string) => {
+    const translated = t(key);
+    return translated !== key ? translated : key;
+  };
 
   return (
     <StepLayout>
@@ -58,8 +67,8 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
                 {bars.map((bar, idx) => (
                   <div key={bar.id} className="space-y-3">
                     <div className="flex justify-between text-xs text-muted-foreground">
-                      <span className="max-w-[45%] text-left leading-tight">{bar.left}</span>
-                      <span className="max-w-[45%] text-right leading-tight">{bar.right}</span>
+                      <span className="max-w-[45%] text-left leading-tight">{displayText(bar.left)}</span>
+                      <span className="max-w-[45%] text-right leading-tight">{displayText(bar.right)}</span>
                     </div>
                     <div className="relative group">
                       {bar.value !== null && (
@@ -86,7 +95,7 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
                     const raw = getBarRaw(bar.value);
                     return (
                       <div key={bar.id}>
-                        <span className="text-[11px] text-foreground/60 block">{bar.label}</span>
+                        <span className="text-[11px] text-foreground/60 block">{displayText(bar.label)}</span>
                         {bar.value !== null ? (
                           <span className="text-[10px] text-muted-foreground font-mono">{raw} / 255</span>
                         ) : (

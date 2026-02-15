@@ -54,9 +54,13 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
 
   useEffect(() => () => clearTimeout(tooltipTimer.current), []);
 
+  // Display translated label/description, internal id stays English
+  const getLabel = (id: string) => t(`signal.${id}`);
+  const getDesc = (id: string) => t(`signal.${id}.desc`);
+
   const chipItems = [
-    ...SIGNALS.map(s => ({ id: s.id, icon: s.icon, label: s.label, description: s.description, soon: !!s.soon })),
-    { id: '_more', icon: '→', label: t('category.andMore'), description: 'More signals coming', soon: false },
+    ...SIGNALS.map(s => ({ id: s.id, icon: s.icon, soon: !!s.soon })),
+    { id: '_more', icon: '→', soon: false },
   ];
 
   return (
@@ -95,11 +99,11 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
                 }}
               >
                 <span className="text-5xl mb-4">{current.icon}</span>
-                <h3 className="text-xl font-semibold text-foreground mb-1">{current.label}</h3>
+                <h3 className="text-xl font-semibold text-foreground mb-1">{getLabel(current.id)}</h3>
                 {isMinted && (
                   <span className="text-[10px] px-3 py-0.5 rounded-full bg-green-400/10 text-green-400 mb-2">{t('category.minted')}</span>
                 )}
-                <p className="text-sm text-muted-foreground/70 max-w-xs">{current.description}</p>
+                <p className="text-sm text-muted-foreground/70 max-w-xs">{getDesc(current.id)}</p>
                 <p className="text-xs text-muted-foreground/40 mt-4">
                   {isActivated ? t('category.tapDeactivate') : t('category.tapActivate')}
                 </p>
@@ -165,11 +169,11 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
                     <span className="text-lg shrink-0">{chip.icon}</span>
                     <div className="min-w-0">
                       <span className={`text-sm font-medium block ${isChipSelected ? 'text-foreground' : 'text-foreground/70'}`}>
-                        {chip.label}
+                        {isMore ? t('category.andMore') : getLabel(chip.id)}
                       </span>
                       {!isMore && (
                         <span className="text-[10px] text-muted-foreground/50 block leading-tight mt-0.5">
-                          {chip.description}
+                          {getDesc(chip.id)}
                         </span>
                       )}
                     </div>

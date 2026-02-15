@@ -1,3 +1,5 @@
+import { useI18n } from '@/lib/i18n';
+
 interface Props {
   username: string;
   activeModules: string[];
@@ -6,40 +8,40 @@ interface Props {
 }
 
 const ALL_MODULES = [
-  { id: 'sport', icon: '🏃', label: 'Sport' },
-  { id: 'music', icon: '🎵', label: 'Music' },
-  { id: 'art', icon: '🎨', label: 'Art' },
-  { id: 'reading', icon: '📚', label: 'Reading' },
-  { id: 'food', icon: '🍳', label: 'Food' },
-  { id: 'travel', icon: '✈️', label: 'Travel' },
-  { id: 'finance', icon: '💰', label: 'Finance' },
-  { id: 'gaming', icon: '🎮', label: 'Gaming' },
-  { id: 'learning', icon: '🧠', label: 'Learning' },
+  { id: 'sport', icon: '🏃' },
+  { id: 'music', icon: '🎵' },
+  { id: 'art', icon: '🎨' },
+  { id: 'reading', icon: '📚' },
+  { id: 'food', icon: '🍳' },
+  { id: 'travel', icon: '✈️' },
+  { id: 'finance', icon: '💰' },
+  { id: 'gaming', icon: '🎮' },
+  { id: 'learning', icon: '🧠' },
 ];
 
 export const UpdateIdentityPage = ({ username, activeModules, tags }: Props) => {
+  const { t } = useI18n();
+
   return (
     <div className="animate-fade-in space-y-6 max-w-lg mx-auto">
       <div>
-        <h2 className="text-2xl font-bold mb-1">Update State</h2>
-        <p className="text-muted-foreground text-sm">Modify your identity layers and configuration</p>
+        <h2 className="text-2xl font-bold mb-1">{t('update.title')}</h2>
+        <p className="text-muted-foreground text-sm">{t('update.subtitle')}</p>
       </div>
 
-      {/* Core Identity */}
       <div className="glass-card space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Core Layer</h3>
-          <button className="text-xs text-muted-foreground/50 hover:text-foreground transition-colors">✏️ Edit</button>
+          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">{t('update.coreLayer')}</h3>
+          <button className="text-xs text-muted-foreground/50 hover:text-foreground transition-colors">{t('update.edit')}</button>
         </div>
         <div className="text-sm text-foreground/80">
           <p>@{username || 'unnamed'}</p>
-          <p className="text-[11px] text-muted-foreground mt-1">Edit to modify biological & social layers</p>
+          <p className="text-[11px] text-muted-foreground mt-1">{t('update.editHint')}</p>
         </div>
       </div>
 
-      {/* Module List */}
       <div className="glass-card space-y-3">
-        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Signal Layers</h3>
+        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">{t('update.signalLayers')}</h3>
         <div className="space-y-2">
           {ALL_MODULES.map(mod => {
             const isActive = activeModules.includes(mod.id);
@@ -47,15 +49,15 @@ export const UpdateIdentityPage = ({ username, activeModules, tags }: Props) => 
               <div key={mod.id} className="flex items-center justify-between py-2 px-1">
                 <div className="flex items-center gap-3">
                   <span className="text-lg">{mod.icon}</span>
-                  <span className="text-sm">{mod.label}</span>
+                  <span className="text-sm">{t(`signal.${mod.id}`)}</span>
                 </div>
                 {isActive ? (
                   <button className="text-[11px] px-3 py-1 rounded-lg bg-foreground/10 text-foreground/70 hover:bg-foreground/15 transition-colors">
-                    Edit
+                    {t('update.edit')}
                   </button>
                 ) : (
                   <button className="text-[11px] px-3 py-1 rounded-lg bg-foreground/5 text-muted-foreground hover:bg-foreground/10 transition-colors">
-                    Activate
+                    {t('update.activate')}
                   </button>
                 )}
               </div>
@@ -64,25 +66,24 @@ export const UpdateIdentityPage = ({ username, activeModules, tags }: Props) => 
         </div>
       </div>
 
-      {/* Soul */}
       <div className="glass-card space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Soul Layer</h3>
-          <button className="text-xs text-muted-foreground/50 hover:text-foreground transition-colors">✏️ Edit</button>
+          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">{t('update.soulLayer')}</h3>
+          <button className="text-xs text-muted-foreground/50 hover:text-foreground transition-colors">{t('update.edit')}</button>
         </div>
         {tags.length > 0 ? (
           <div className="flex flex-wrap gap-1.5">
-            {tags.map(t => (
-              <span key={t} className="chip text-xs !py-1 !px-3 !bg-foreground/8 !text-foreground/70">#{t}</span>
+            {tags.map(tg => (
+              <span key={tg} className="chip text-xs !py-1 !px-3 !bg-foreground/8 !text-foreground/70">#{tg}</span>
             ))}
           </div>
         ) : (
-          <p className="text-xs text-muted-foreground">No signal tags committed</p>
+          <p className="text-xs text-muted-foreground">{t('update.noTags')}</p>
         )}
       </div>
 
       <button className="btn-twin btn-twin-primary w-full py-3 btn-glow">
-        Re-mint State
+        {t('update.remint')}
       </button>
     </div>
   );

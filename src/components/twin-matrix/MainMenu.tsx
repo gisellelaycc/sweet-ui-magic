@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import logo from '@/assets/twin3-logo.svg';
+import { useI18n } from '@/lib/i18n';
 
 const MENU_ITEMS = [
-  { id: 'identity', icon: '◈', label: 'Identity State' },
-  { id: 'update', icon: '✏️', label: 'Refine State' },
-  { id: 'auth', icon: '🔐', label: 'Issued Records' },
-  { id: 'missions', icon: '🎯', label: 'Signal Requests' },
-  { id: 'settings', icon: '⚙️', label: 'Preferences' },
+  { id: 'identity', icon: '◈', labelKey: 'menu.identityState' },
+  { id: 'update', icon: '✏️', labelKey: 'menu.refineState' },
+  { id: 'auth', icon: '🔐', labelKey: 'menu.issuedRecords' },
+  { id: 'missions', icon: '🎯', labelKey: 'menu.signalRequests' },
+  { id: 'settings', icon: '⚙️', labelKey: 'menu.preferences' },
 ];
 
 interface Props {
@@ -17,6 +18,7 @@ interface Props {
 }
 
 export const MainMenu = ({ open, onClose, onNavigate, hasIdentity }: Props) => {
+  const { t } = useI18n();
   const [active, setActive] = useState('identity');
 
   if (!open) return null;
@@ -56,7 +58,7 @@ export const MainMenu = ({ open, onClose, onNavigate, hasIdentity }: Props) => {
                 }`}
               >
                 <span className="text-base">{item.icon}</span>
-                <span>{item.label}</span>
+                <span>{t(item.labelKey)}</span>
                 {disabled && <span className="ml-auto text-[9px] text-muted-foreground/30">locked</span>}
               </button>
             );
