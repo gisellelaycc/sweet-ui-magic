@@ -76,7 +76,14 @@ export const WizardLayout = () => {
   const hasIdentity = state.step >= 9;
 
   const handleMenuNavigate = (id: string) => setActivePage(id as MenuPage);
-  const handlePageNavigate = (id: string) => setActivePage(id as MenuPage);
+  const handlePageNavigate = (id: string) => {
+    if (id === 'refine') {
+      setActivePage(null);
+      setState(s => ({ ...s, step: 2 }));
+    } else {
+      setActivePage(id as MenuPage);
+    }
+  };
 
   const showIndicator = !activePage && state.step > 0 && state.step < 9;
   const showBack = !activePage && state.step > 0 && state.step < 6;
