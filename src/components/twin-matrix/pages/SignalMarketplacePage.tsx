@@ -1,11 +1,37 @@
 import { useState, useRef } from 'react';
-import { ChevronLeft, ChevronRight, DollarSign, Clock, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { useI18n } from '@/lib/i18n';
 
-const DEMO_SIGNALS = [
+interface SignalDetail {
+  taskDescription?: string;
+  whatYoullDo?: string[];
+  supportedData?: string[];
+  fileNote?: string;
+  passiveDescription?: string;
+  features?: string[];
+}
+
+interface Signal {
+  id: string;
+  type: 'passive' | 'task';
+  brand: string;
+  brandInitial: string;
+  agentId: string;
+  title: string;
+  reward?: string;
+  deadline?: string;
+  matchReasons: string[];
+  scope: string;
+  quota: number;
+  validDays: number;
+  layer: string;
+  detail: SignalDetail;
+}
+
+const DEMO_SIGNALS: Signal[] = [
   {
     id: '1',
-    type: 'task' as const,
+    type: 'task',
     brand: 'Nike Running',
     brandInitial: 'N',
     agentId: 'nike-run-0x3f',
@@ -17,16 +43,80 @@ const DEMO_SIGNALS = [
     quota: 12,
     validDays: 30,
     layer: 'Skill',
-    taskDescription: `We're collecting real-world running activity records to evaluate training patterns and product fit for upcoming Nike Running initiatives.\n\nIf you regularly run with a smartwatch or fitness tracker, this task invites you to securely upload a short window of your recent activity history. Your data will be used in aggregate for internal research and will never be sold or shared externally.`,
-    whatYoullDo: [
-      'Upload 7 days of running activity records from your smartwatch or fitness tracker',
-    ],
-    supportedData: ['Distance', 'Duration', 'Pace', 'Heart rate (optional)', 'Timestamp (date-level, no exact location required)'],
-    fileNote: 'Raw files (e.g. GPX / FIT / CSV) are accepted.\nExact routes or GPS traces are not required.',
+    detail: {
+      taskDescription: `We're collecting real-world running activity records to evaluate training patterns and product fit for upcoming Nike Running initiatives.\n\nIf you regularly run with a smartwatch or fitness tracker, this task invites you to securely upload a short window of your recent activity history. Your data will be used in aggregate for internal research and will never be sold or shared externally.`,
+      whatYoullDo: ['Upload 7 days of running activity records from your smartwatch or fitness tracker'],
+      supportedData: ['Distance', 'Duration', 'Pace', 'Heart rate (optional)', 'Timestamp (date-level, no exact location required)'],
+      fileNote: 'Raw files (e.g. GPX / FIT / CSV) are accepted.\nExact routes or GPS traces are not required.',
+    },
   },
-  { id: '2', type: 'task' as const, brand: 'Adidas Training', brandInitial: 'A', agentId: 'adidas-train-0xa1', title: '7-day training feedback task for Ultraboost GTX prototype', reward: '85 USDT', deadline: 'Feb 28, 2026', matchReasons: ['Gym affinity: High', 'Discipline motivation'], scope: 'skill.sports.gym', quota: 1, validDays: 14, layer: 'Skill' },
-  { id: '3', type: 'passive' as const, brand: 'Spotify', brandInitial: 'S', agentId: 'spotify-disc-0x7b', title: 'Curated workout playlist based on your rhythm profile', matchReasons: ['Music affinity: Medium', 'High-tempo preference'], scope: 'soul.music.listening', quota: 8, validDays: 30, layer: 'Soul' },
-  { id: '4', type: 'passive' as const, brand: 'Under Armour', brandInitial: 'U', agentId: 'ua-fit-0xc2', title: 'Recovery tracker integration for post-workout analysis', matchReasons: ['Fitness tracking: High', 'Recovery focus'], scope: 'core.health.recovery', quota: 5, validDays: 60, layer: 'Physical' },
+  {
+    id: '2',
+    type: 'task',
+    brand: 'Adidas Training',
+    brandInitial: 'A',
+    agentId: 'adidas-train-0xa1',
+    title: '7-day training feedback task for Ultraboost GTX prototype',
+    reward: '2 USDT',
+    deadline: 'Feb 28, 2026',
+    matchReasons: ['Gym affinity: High', 'Discipline motivation'],
+    scope: 'skill.sports.gym',
+    quota: 1,
+    validDays: 14,
+    layer: 'Skill',
+    detail: {
+      taskDescription: `Adidas is looking for dedicated gym-goers to test and provide structured feedback on the upcoming Ultraboost GTX prototype. Your training insights will directly shape the next generation of performance footwear.\n\nAll feedback is collected anonymously and used solely for product development.`,
+      whatYoullDo: [
+        'Wear the Ultraboost GTX prototype during 7 consecutive training sessions',
+        'Complete a daily feedback form rating comfort, support, and performance',
+        'Submit a final summary with overall impressions and improvement suggestions',
+      ],
+    },
+  },
+  {
+    id: '3',
+    type: 'passive',
+    brand: 'Spotify',
+    brandInitial: 'S',
+    agentId: 'spotify-disc-0x7b',
+    title: 'Curated workout playlist based on your rhythm profile',
+    matchReasons: ['Music affinity: Medium', 'High-tempo preference'],
+    scope: 'soul.music.listening',
+    quota: 8,
+    validDays: 30,
+    layer: 'Soul',
+    detail: {
+      passiveDescription: `Based on your soul profile's music and rhythm preferences, Spotify has generated a personalized workout playlist optimized for your training intensity and tempo preferences.\n\nThis is a passive signal — no action is required. Viewing this signal lets Spotify's agent access your rhythm profile within the authorized scope to curate better recommendations over time.`,
+      features: [
+        'Personalized BPM matching for your workout intensity',
+        'Genre mix based on your soul music affinity scores',
+        'Weekly auto-refresh based on listening patterns',
+        'No personal data leaves the authorized scope',
+      ],
+    },
+  },
+  {
+    id: '4',
+    type: 'passive',
+    brand: 'Under Armour',
+    brandInitial: 'U',
+    agentId: 'ua-fit-0xc2',
+    title: 'Recovery tracker integration for post-workout analysis',
+    matchReasons: ['Fitness tracking: High', 'Recovery focus'],
+    scope: 'core.health.recovery',
+    quota: 5,
+    validDays: 60,
+    layer: 'Physical',
+    detail: {
+      passiveDescription: `Under Armour's recovery agent uses your physical profile to provide personalized post-workout recovery insights. This includes sleep quality correlation, muscle group recovery estimates, and optimal rest period suggestions.\n\nAll analysis happens within the scoped authorization. Your raw health data is never exported or stored externally.`,
+      features: [
+        'Post-workout muscle recovery timeline',
+        'Sleep quality impact on performance',
+        'Personalized rest day recommendations',
+        'Integration with existing fitness trackers',
+      ],
+    },
+  },
 ];
 
 type Tab = 'all' | 'passive' | 'task' | 'rewards';
@@ -45,7 +135,7 @@ export const SignalMarketplacePage = () => {
   const { t } = useI18n();
   const [activeTab, setActiveTab] = useState<Tab>('all');
   const [activeLayer, setActiveLayer] = useState<LayerFilter>('all');
-  const [reviewSignal, setReviewSignal] = useState<typeof DEMO_SIGNALS[0] | null>(null);
+  const [viewSignal, setViewSignal] = useState<Signal | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const TABS: { id: Tab; label: string }[] = [
@@ -78,6 +168,14 @@ export const SignalMarketplacePage = () => {
 
   const totalQuota = DEMO_SIGNALS.reduce((sum, s) => sum + s.quota, 0);
   const totalEarned = 85;
+
+  const glassDialogStyle: React.CSSProperties = {
+    background: 'rgba(255, 255, 255, 0.03)',
+    backdropFilter: 'blur(24px)',
+    WebkitBackdropFilter: 'blur(24px)',
+    border: '1px solid rgba(255, 255, 255, 0.08)',
+    boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.04), 0 25px 60px -12px rgba(0, 0, 0, 0.5)',
+  };
 
   return (
     <div className="animate-fade-in h-full overflow-y-auto scrollbar-hide">
@@ -191,12 +289,12 @@ export const SignalMarketplacePage = () => {
                 <div className="flex items-center gap-3">
                   {signal.type === 'passive' ? (
                     <>
-                      <button className="text-xs text-foreground/70 hover:text-foreground transition-colors">{t('marketplace.view')}</button>
+                      <button onClick={() => setViewSignal(signal)} className="text-xs text-foreground/70 hover:text-foreground transition-colors">{t('marketplace.view')}</button>
                       <button className="text-xs text-muted-foreground/50 hover:text-muted-foreground transition-colors">{t('marketplace.dismiss')}</button>
                     </>
                   ) : (
                     <>
-                      <button onClick={() => setReviewSignal(signal)} className="text-xs text-foreground/70 hover:text-foreground transition-colors">{t('marketplace.reviewDetails')}</button>
+                      <button onClick={() => setViewSignal(signal)} className="text-xs text-foreground/70 hover:text-foreground transition-colors">{t('marketplace.reviewDetails')}</button>
                       <button className="text-xs text-muted-foreground/50 hover:text-muted-foreground transition-colors">{t('marketplace.decline')}</button>
                     </>
                   )}
@@ -210,75 +308,123 @@ export const SignalMarketplacePage = () => {
         </div>
       </div>
 
-      {/* Review Details Dialog */}
-      {reviewSignal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="absolute inset-0 bg-black/80" onClick={() => setReviewSignal(null)} />
-          <div className="relative z-10 w-full max-w-lg max-h-[80vh] overflow-y-auto scrollbar-hide rounded-2xl border border-foreground/10 bg-background p-6 space-y-5 shadow-2xl mx-4">
+      {/* Signal Detail Dialog */}
+      {viewSignal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center animate-fade-in">
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setViewSignal(null)} />
+          <div
+            className="relative z-10 w-full max-w-lg max-h-[80vh] overflow-y-auto scrollbar-hide rounded-[20px] p-8 space-y-5 mx-4"
+            style={glassDialogStyle}
+          >
             {/* Close */}
-            <button onClick={() => setReviewSignal(null)} className="absolute right-4 top-4 text-muted-foreground hover:text-foreground transition-colors">
+            <button onClick={() => setViewSignal(null)} className="absolute right-5 top-5 text-muted-foreground/60 hover:text-foreground transition-colors">
               <X className="w-4 h-4" />
             </button>
 
             {/* Header */}
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-foreground/8 flex items-center justify-center text-sm font-semibold text-foreground/60">{reviewSignal.brandInitial}</div>
+              <div className="w-10 h-10 rounded-full bg-foreground/8 flex items-center justify-center text-sm font-semibold text-foreground/60">{viewSignal.brandInitial}</div>
               <div>
-                <p className="font-semibold">{reviewSignal.brand}</p>
-                <p className="text-[10px] text-muted-foreground/50">{t('marketplace.verifiedAgent')} · {reviewSignal.agentId}</p>
+                <p className="font-semibold">{viewSignal.brand}</p>
+                <p className="text-[10px] text-muted-foreground/50">{t('marketplace.verifiedAgent')} · {viewSignal.agentId}</p>
               </div>
             </div>
 
             <ThinDivider />
 
-            {/* Task Description */}
-            {'taskDescription' in reviewSignal && reviewSignal.taskDescription && (
+            {/* Title */}
+            <p className="text-sm font-medium text-foreground/90">{viewSignal.title}</p>
+
+            {/* Task-specific: reward + deadline */}
+            {viewSignal.type === 'task' && viewSignal.reward && (
+              <div className="flex gap-4">
+                <div className="space-y-1">
+                  <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Reward</p>
+                  <p className="text-sm text-foreground/80">💰 {viewSignal.reward}</p>
+                </div>
+                {viewSignal.deadline && (
+                  <div className="space-y-1">
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Deadline</p>
+                    <p className="text-sm text-foreground/80">{viewSignal.deadline}</p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Description */}
+            {viewSignal.detail.taskDescription && (
               <div className="space-y-2">
                 <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">Task Description</p>
-                <p className="text-sm text-foreground/80 leading-relaxed whitespace-pre-line">{reviewSignal.taskDescription}</p>
+                <p className="text-sm text-foreground/70 leading-relaxed whitespace-pre-line">{viewSignal.detail.taskDescription}</p>
+              </div>
+            )}
+            {viewSignal.detail.passiveDescription && (
+              <div className="space-y-2">
+                <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">About This Signal</p>
+                <p className="text-sm text-foreground/70 leading-relaxed whitespace-pre-line">{viewSignal.detail.passiveDescription}</p>
               </div>
             )}
 
             {/* What You'll Do */}
-            {'whatYoullDo' in reviewSignal && reviewSignal.whatYoullDo && (
+            {viewSignal.detail.whatYoullDo && (
               <div className="space-y-2">
                 <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">What You'll Do</p>
                 <ul className="space-y-1">
-                  {reviewSignal.whatYoullDo.map((item: string, i: number) => (
-                    <li key={i} className="text-sm text-foreground/80">• {item}</li>
+                  {viewSignal.detail.whatYoullDo.map((item, i) => (
+                    <li key={i} className="text-sm text-foreground/70">• {item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Features (passive) */}
+            {viewSignal.detail.features && (
+              <div className="space-y-2">
+                <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">What's Included</p>
+                <ul className="space-y-1">
+                  {viewSignal.detail.features.map((item, i) => (
+                    <li key={i} className="text-sm text-foreground/70">• {item}</li>
                   ))}
                 </ul>
               </div>
             )}
 
             {/* Supported data types */}
-            {'supportedData' in reviewSignal && reviewSignal.supportedData && (
+            {viewSignal.detail.supportedData && (
               <div className="space-y-2">
                 <p className="text-[11px] text-muted-foreground/60">Supported data types include:</p>
                 <ul className="space-y-0.5 pl-4">
-                  {reviewSignal.supportedData.map((item: string, i: number) => (
-                    <li key={i} className="text-xs text-foreground/60">• {item}</li>
+                  {viewSignal.detail.supportedData.map((item, i) => (
+                    <li key={i} className="text-xs text-foreground/50">• {item}</li>
                   ))}
                 </ul>
               </div>
             )}
 
             {/* File note */}
-            {'fileNote' in reviewSignal && reviewSignal.fileNote && (
-              <p className="text-xs text-muted-foreground/50 whitespace-pre-line">{reviewSignal.fileNote}</p>
+            {viewSignal.detail.fileNote && (
+              <p className="text-xs text-muted-foreground/40 whitespace-pre-line">{viewSignal.detail.fileNote}</p>
             )}
+
+            {/* Scope */}
+            <div className="flex items-center justify-between px-4 py-2.5 rounded-xl" style={{ background: 'rgba(255,255,255,0.02)' }}>
+              <span className="text-[10px] font-mono" style={{ color: 'rgba(10,255,255,0.7)' }}>{viewSignal.scope}</span>
+              <span className="text-[10px] text-muted-foreground">{viewSignal.quota} uses · {viewSignal.validDays}d</span>
+            </div>
 
             <ThinDivider />
 
-            {/* Actions */}
-            <div className="flex items-center gap-3 pt-1">
-              <button className="btn-twin btn-twin-primary py-2.5 px-5 text-sm flex-1">
-                Accept (locks quota · payment on completion)
-              </button>
-              <button onClick={() => setReviewSignal(null)} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                Decline (free)
-              </button>
-            </div>
+            {/* Actions: task = Accept + Decline CTA, passive = no CTA */}
+            {viewSignal.type === 'task' && (
+              <div className="flex items-center gap-3 pt-1">
+                <button className="btn-twin btn-twin-primary btn-glow py-2.5 px-5 text-sm flex-1">
+                  Accept (locks quota · payment on completion)
+                </button>
+                <button onClick={() => setViewSignal(null)} className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap">
+                  Decline (free)
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
