@@ -1,6 +1,12 @@
 import { BaseError, ContractFunctionRevertedError, type Address, type Hex } from 'viem';
 
-export const TWIN_MATRIX_SBT_ADDRESS: Address = '0x4fb8181903E9D0034bbA4B1Dca3a282335E84978';
+const twinMatrixSbtAddress = (import.meta.env.TWIN_MATRIX_SBT_ADDRESS ?? '').trim();
+
+if (!/^0x[a-fA-F0-9]{40}$/.test(twinMatrixSbtAddress)) {
+  throw new Error('Missing or invalid TWIN_MATRIX_SBT_ADDRESS in .env');
+}
+
+export const TWIN_MATRIX_SBT_ADDRESS: Address = twinMatrixSbtAddress as Address;
 
 export const twinMatrixSbtAbi = [
   { type: 'error', name: 'TokenNotFound', inputs: [] },

@@ -19,6 +19,7 @@ export default defineConfig(({ mode }) => {
     define: {
       "import.meta.env.RPC_URL": JSON.stringify(env.RPC_URL ?? ""),
       "import.meta.env.ERC8004_CONTRACT_ADDRESS": JSON.stringify(env.ERC8004_CONTRACT_ADDRESS ?? ""),
+      "import.meta.env.TWIN_MATRIX_SBT_ADDRESS": JSON.stringify(env.TWIN_MATRIX_SBT_ADDRESS ?? ""),
     },
     resolve: {
       alias: {
