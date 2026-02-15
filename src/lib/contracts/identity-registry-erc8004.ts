@@ -83,12 +83,12 @@ export async function resolveAgentProfileFromErc8004(
     const tokenId = latestLog.args.agentId;
     if (tokenId === undefined) return null;
 
-    const tokenUri = await (publicClient as any).readContract({
+    const tokenUri = await publicClient.readContract({
       address: ERC8004_CONTRACT_ADDRESS,
       abi: identityRegistryErc8004Abi,
       functionName: 'tokenURI',
       args: [tokenId],
-    }) as string;
+    });
 
     const metadata = parseMetadataFromTokenUri(tokenUri);
     const name = metadata?.name?.trim() || null;

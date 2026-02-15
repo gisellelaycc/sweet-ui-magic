@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { BaseError, type Address, type Hex } from 'viem';
+import { BaseError } from 'viem';
 import { toast } from 'sonner';
 import { useAccount, useChainId, useDisconnect, usePublicClient, useSwitchChain, useWriteContract } from 'wagmi';
 import type { WizardState } from '@/types/twin-matrix';
@@ -110,43 +110,43 @@ export const WizardLayout = () => {
     setIsCheckingToken(true);
     setContractError(null);
     try {
-      const currentTokenId = await (publicClient as any).readContract({
+      const currentTokenId = await publicClient.readContract({
         address: TWIN_MATRIX_SBT_ADDRESS,
         abi: twinMatrixSbtAbi,
         functionName: 'tokenIdOf',
         args: [address],
-      }) as bigint;
+      });
 
-      const versionCountRaw = await (publicClient as any).readContract({
+      const versionCountRaw = await publicClient.readContract({
         address: TWIN_MATRIX_SBT_ADDRESS,
         abi: twinMatrixSbtAbi,
         functionName: 'getVersionCount',
         args: [currentTokenId],
-      }) as bigint;
+      });
       const versionCount = Number(versionCountRaw);
 
-      const latestVersionRaw = await (publicClient as any).readContract({
+      const latestVersionRaw = await publicClient.readContract({
         address: TWIN_MATRIX_SBT_ADDRESS,
         abi: twinMatrixSbtAbi,
         functionName: 'latestVersion',
         args: [currentTokenId],
-      }) as number;
+      });
       const latestVersionNumber = Number(latestVersionRaw);
 
       const versionRows: OnchainVersion[] = [];
       for (let version = versionCount; version >= 1; version--) {
-        const [digest, blockNumber] = await (publicClient as any).readContract({
+        const [digest, blockNumber] = await publicClient.readContract({
           address: TWIN_MATRIX_SBT_ADDRESS,
           abi: twinMatrixSbtAbi,
           functionName: 'getVersionMeta',
           args: [currentTokenId, version],
-        }) as [Hex, bigint];
-        const matrixAtVersion = await (publicClient as any).readContract({
+        });
+        const matrixAtVersion = await publicClient.readContract({
           address: TWIN_MATRIX_SBT_ADDRESS,
           abi: twinMatrixSbtAbi,
           functionName: 'getMatrixAtVersion',
           args: [currentTokenId, version],
-        }) as readonly Hex[];
+        });
         versionRows.push({
           version,
           blockNumber: Number(blockNumber),
@@ -155,22 +155,22 @@ export const WizardLayout = () => {
         });
       }
 
-      const boundAgentAddresses = await (publicClient as any).readContract({
+      const boundAgentAddresses = await publicClient.readContract({
         address: TWIN_MATRIX_SBT_ADDRESS,
         abi: twinMatrixSbtAbi,
         functionName: 'getBoundAgents',
         args: [currentTokenId],
-      }) as Address[];
+      });
 
       const boundAgentRows: OnchainBoundAgent[] = await Promise.all(
         boundAgentAddresses.map(async (agentAddress) => {
           const [permissionMask, profile] = await Promise.all([
-            (publicClient as any).readContract({
+            publicClient.readContract({
               address: TWIN_MATRIX_SBT_ADDRESS,
               abi: twinMatrixSbtAbi,
               functionName: 'permissionMaskOf',
               args: [currentTokenId, agentAddress],
-            }) as Promise<bigint>,
+            }),
             resolveAgentProfileFromErc8004(publicClient, agentAddress),
           ]);
 
@@ -231,12 +231,12 @@ export const WizardLayout = () => {
 
     try {
       setTxAction('mint');
-      const hash = await (writeContractAsync as any)({
+      const hash = await writeContractAsync({
         address: TWIN_MATRIX_SBT_ADDRESS,
         abi: twinMatrixSbtAbi,
         functionName: 'mint',
         chainId: BSC_TESTNET_CHAIN_ID,
-      }) as Hex;
+      });
       toast.info('Mint transaction submitted. Waiting for confirmation...');
       await publicClient.waitForTransactionReceipt({ hash });
       await refreshOnchainState();
@@ -275,13 +275,13 @@ export const WizardLayout = () => {
     try {
       setTxAction('update');
       const matrix = encodeSignatureToMatrix(state.signature);
-      const hash = await (writeContractAsync as any)({
+      const hash = await writeContractAsync({
         address: TWIN_MATRIX_SBT_ADDRESS,
         abi: twinMatrixSbtAbi,
         functionName: 'updateMatrix',
         args: [tokenId, matrix],
         chainId: BSC_TESTNET_CHAIN_ID,
-      }) as Hex;
+      });
       toast.info('Update transaction submitted. Waiting for confirmation...');
       await publicClient.waitForTransactionReceipt({ hash });
       await refreshOnchainState();
