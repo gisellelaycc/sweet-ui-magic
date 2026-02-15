@@ -1,28 +1,53 @@
 import { useEffect, useRef, useCallback } from 'react';
 
-/* ── Lobster silhouette (16×16 grid) ── */
+/* ── Lobster/shrimp silhouette (20×24 grid, more detailed) ── */
 const LOBSTER_PIXELS = [
-  [6,1],[7,1],[9,1],[10,1],
-  [5,2],[6,2],[8,2],[9,2],[10,2],[11,2],
-  [4,3],[5,3],[6,3],[7,3],[8,3],[9,3],[10,3],[11,3],
-  [3,4],[4,4],[5,4],[6,4],[7,4],[8,4],[9,4],[10,4],[11,4],[12,4],
-  [4,5],[5,5],[6,5],[7,5],[8,5],[9,5],[10,5],[11,5],
-  [5,6],[6,6],[7,6],[8,6],[9,6],[10,6],
-  [4,7],[5,7],[6,7],[7,7],[8,7],[9,7],[10,7],[11,7],
-  [3,8],[4,8],[5,8],[6,8],[7,8],[8,8],[9,8],[10,8],[11,8],[12,8],
-  [2,9],[3,9],[5,9],[6,9],[7,9],[8,9],[9,9],[10,9],[12,9],[13,9],
-  [1,10],[2,10],[6,10],[7,10],[8,10],[9,10],[13,10],[14,10],
-  [5,11],[6,11],[7,11],[8,11],[9,11],[10,11],
-  [4,12],[5,12],[7,12],[8,12],[10,12],[11,12],
-  [3,13],[4,13],[11,13],[12,13],
+  // Antennae (long, thin)
+  [3,0],[2,1],[1,2],[17,0],[18,1],[19,2],
+  [4,1],[3,2],[16,1],[17,2],
+  // Head
+  [8,3],[9,3],[10,3],[11,3],[12,3],
+  [7,4],[8,4],[9,4],[10,4],[11,4],[12,4],[13,4],
+  [7,5],[8,5],[9,5],[10,5],[11,5],[12,5],[13,5],
+  // Claws (left)
+  [4,5],[5,5],[3,6],[4,6],[5,6],[6,6],
+  [3,7],[4,7],[5,7],
+  // Claws (right)
+  [15,5],[16,5],[14,6],[15,6],[16,6],[17,6],
+  [15,7],[16,7],[17,7],
+  // Body segments
+  [7,6],[8,6],[9,6],[10,6],[11,6],[12,6],[13,6],
+  [7,7],[8,7],[9,7],[10,7],[11,7],[12,7],[13,7],
+  [8,8],[9,8],[10,8],[11,8],[12,8],
+  [8,9],[9,9],[10,9],[11,9],[12,9],
+  [8,10],[9,10],[10,10],[11,10],[12,10],
+  [9,11],[10,11],[11,11],
+  [9,12],[10,12],[11,12],
+  // Tail segments
+  [9,13],[10,13],[11,13],
+  [8,14],[9,14],[10,14],[11,14],[12,14],
+  // Tail fan
+  [7,15],[8,15],[9,15],[10,15],[11,15],[12,15],[13,15],
+  [6,16],[7,16],[9,16],[10,16],[11,16],[13,16],[14,16],
+  // Legs (small, subtle)
+  [7,8],[13,8],[6,9],[14,9],[6,10],[14,10],[7,11],[13,11],
 ];
 
-const CORNERS = [
-  { xr: 0.12, yr: 0.10 },
-  { xr: 0.72, yr: 0.08 },
-  { xr: 0.10, yr: 0.62 },
-  { xr: 0.72, yr: 0.60 },
-];
+/* ── Random position avoiding center content zone ── */
+const pickLobsterPosition = (w: number, h: number) => {
+  // Avoid center band (30%-70% x, 10%-60% y) where content sits
+  const zones = [
+    { xMin: 0.02, xMax: 0.25, yMin: 0.05, yMax: 0.85 },  // left edge
+    { xMin: 0.75, xMax: 0.95, yMin: 0.05, yMax: 0.85 },  // right edge
+    { xMin: 0.02, xMax: 0.95, yMin: 0.65, yMax: 0.90 },  // bottom
+    { xMin: 0.02, xMax: 0.95, yMin: 0.02, yMax: 0.08 },  // top edge
+  ];
+  const zone = zones[Math.floor(Math.random() * zones.length)];
+  return {
+    x: w * (zone.xMin + Math.random() * (zone.xMax - zone.xMin)),
+    y: h * (zone.yMin + Math.random() * (zone.yMax - zone.yMin)),
+  };
+};
 
 interface CyanParticle {
   angle: number;
@@ -71,26 +96,23 @@ export const ParticleBackground = ({ color = 'cyan' }: ParticleBackgroundProps) 
   const raf = useRef(0);
   const colorRef = useRef(color);
   const timerRef = useRef(0);
-  const cornerIdxRef = useRef(Math.floor(Math.random() * 4));
   const redInitedRef = useRef(false);
   colorRef.current = color;
 
   const initRedParticles = useCallback((w: number, h: number) => {
-    const scale = Math.min(w, h) * 0.022;
-    const ci = cornerIdxRef.current;
-    const cx = w * CORNERS[ci].xr;
-    const cy = h * CORNERS[ci].yr;
+    const scale = Math.min(w, h) * 0.018;
+    const pos = pickLobsterPosition(w, h);
 
     const particles: RedParticle[] = [];
 
-    // Lobster formation particles
+    // Lobster formation particles — subtle, ghostly
     for (const [px, py] of LOBSTER_PIXELS) {
       particles.push({
         x: Math.random() * w, y: Math.random() * h,
-        tx: cx + px * scale, ty: cy + py * scale,
+        tx: pos.x + px * scale, ty: pos.y + py * scale,
         ox: Math.random() * w, oy: Math.random() * h,
-        size: 3 + Math.random() * 2.5,
-        baseOpacity: 0.35 + Math.random() * 0.35,
+        size: 2 + Math.random() * 1.5,
+        baseOpacity: 0.08 + Math.random() * 0.12,
         phase: Math.random() * Math.PI * 2,
         isLobster: true,
         speed: 0, angle: 0, radius: 0, jitter: 0,
@@ -103,7 +125,7 @@ export const ParticleBackground = ({ color = 'cyan' }: ParticleBackgroundProps) 
         x: Math.random() * w, y: Math.random() * h,
         tx: 0, ty: 0, ox: 0, oy: 0,
         size: 1 + Math.random() * 2.2,
-        baseOpacity: 0.12 + Math.random() * 0.22,
+        baseOpacity: 0.10 + Math.random() * 0.18,
         phase: Math.random() * Math.PI * 2,
         isLobster: false,
         speed: 0.0001 + Math.random() * 0.0004,
@@ -118,18 +140,15 @@ export const ParticleBackground = ({ color = 'cyan' }: ParticleBackgroundProps) 
     redInitedRef.current = true;
   }, []);
 
-  const setLobsterTargets = useCallback((w: number, h: number, ci: number) => {
-    const scale = Math.min(w, h) * 0.022;
-    const cx = w * CORNERS[ci].xr;
-    const cy = h * CORNERS[ci].yr;
-    for (const p of redParticles.current) {
-      if (!p.isLobster) continue;
-      const idx = redParticles.current.filter(pp => pp.isLobster).indexOf(p);
-      if (idx >= 0 && idx < LOBSTER_PIXELS.length) {
-        p.ox = p.x; p.oy = p.y;
-        p.tx = cx + LOBSTER_PIXELS[idx][0] * scale;
-        p.ty = cy + LOBSTER_PIXELS[idx][1] * scale;
-      }
+  const setLobsterTargets = useCallback((w: number, h: number) => {
+    const scale = Math.min(w, h) * 0.018;
+    const pos = pickLobsterPosition(w, h);
+    const lobsters = redParticles.current.filter(pp => pp.isLobster);
+    for (let i = 0; i < lobsters.length && i < LOBSTER_PIXELS.length; i++) {
+      lobsters[i].ox = lobsters[i].x;
+      lobsters[i].oy = lobsters[i].y;
+      lobsters[i].tx = pos.x + LOBSTER_PIXELS[i][0] * scale;
+      lobsters[i].ty = pos.y + LOBSTER_PIXELS[i][1] * scale;
     }
   }, []);
 
@@ -169,14 +188,13 @@ export const ParticleBackground = ({ color = 'cyan' }: ParticleBackgroundProps) 
       if (!redInitedRef.current) initRedParticles(w, h);
 
       timerRef.current++;
-      const GATHER = 240, HOLD = 150, SCATTER = 240;
+      const GATHER = 420, HOLD = 200, SCATTER = 400;
       const TOTAL = GATHER + HOLD + SCATTER;
       const t = timerRef.current % TOTAL;
 
-      // Rotate corner on cycle reset
+      // Pick new random position on cycle reset
       if (t === 0) {
-        cornerIdxRef.current = (cornerIdxRef.current + 1) % 4;
-        setLobsterTargets(w, h, cornerIdxRef.current);
+        setLobsterTargets(w, h);
       }
 
       const cx = w / 2;
@@ -202,15 +220,15 @@ export const ParticleBackground = ({ color = 'cyan' }: ParticleBackgroundProps) 
           }
 
           const phase = t < GATHER ? 'gather' : t < GATHER + HOLD ? 'hold' : 'scatter';
-          const glowOpacity = phase === 'hold' ? p.baseOpacity * 1.4 : p.baseOpacity;
+          const glowOpacity = phase === 'hold' ? p.baseOpacity * 1.1 : p.baseOpacity;
           const s = p.size;
 
           // Square pixel-block rendering
           ctx.fillStyle = `rgba(242, 68, 85, ${glowOpacity})`;
           ctx.fillRect(Math.round(p.x - s / 2), Math.round(p.y - s / 2), s, s);
           if (phase === 'hold') {
-            ctx.fillStyle = `rgba(242, 68, 85, ${glowOpacity * 0.12})`;
-            ctx.fillRect(Math.round(p.x - s * 1.5), Math.round(p.y - s * 1.5), s * 3, s * 3);
+            ctx.fillStyle = `rgba(242, 68, 85, ${glowOpacity * 0.06})`;
+            ctx.fillRect(Math.round(p.x - s * 1.2), Math.round(p.y - s * 1.2), s * 2.4, s * 2.4);
           }
         } else {
           // Floating ambient particles
