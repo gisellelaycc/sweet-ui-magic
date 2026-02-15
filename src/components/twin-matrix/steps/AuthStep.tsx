@@ -282,11 +282,29 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                   </div>
 
                   {viewingAgentId === sa.id && viewingAgent && (
-                    <div className="pb-4 space-y-2 text-[11px] animate-fade-in">
-                      <div className="flex justify-between"><span className="text-muted-foreground">Behavior</span><span className="text-foreground/70">{viewingAgent.agent.behaviorMode}</span></div>
-                      <div className="flex justify-between"><span className="text-muted-foreground">Autonomy</span><span className="text-foreground/70">{viewingAgent.permission.tradingAuthority}</span></div>
-                      <div className="flex justify-between"><span className="text-muted-foreground">Scope</span><span className="text-foreground/70">{(viewingAgent.permission.identityScopes || []).join(', ')}</span></div>
-                      <div className="flex justify-between"><span className="text-muted-foreground">Telegram</span><span className={viewingAgent.telegramConnected ? 'text-[#F24455]' : 'text-muted-foreground/40'}>{viewingAgent.telegramConnected ? '✓ Connected' : 'Not connected'}</span></div>
+                    <div className="pb-4 space-y-3 text-[11px] animate-fade-in">
+                      <div className="space-y-2">
+                        <div className="flex justify-between"><span className="text-muted-foreground">Behavior</span><span className="text-foreground/70">{viewingAgent.agent.behaviorMode}</span></div>
+                        <div className="flex justify-between"><span className="text-muted-foreground">Autonomy</span><span className="text-foreground/70">{viewingAgent.permission.tradingAuthority}</span></div>
+                        <div className="flex justify-between"><span className="text-muted-foreground">Scope</span><span className="text-foreground/70">{(viewingAgent.permission.identityScopes || []).join(', ')}</span></div>
+                        <div className="flex justify-between"><span className="text-muted-foreground">Telegram</span><span className={viewingAgent.telegramConnected ? 'text-[#F24455]' : 'text-muted-foreground/40'}>{viewingAgent.telegramConnected ? '✓ Connected' : 'Not connected'}</span></div>
+                      </div>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setCurrentAgentId(sa.id);
+                          setAgent({ ...viewingAgent.agent });
+                          setPermission({ ...viewingAgent.permission });
+                          setAgentName(viewingAgent.name);
+                          setTelegramConnected(viewingAgent.telegramConnected);
+                          setFullAutoConfirm(false);
+                          setViewingAgentId(null);
+                          setSubStep('config');
+                        }}
+                        className="w-full text-[11px] py-2 rounded-lg border border-foreground/10 text-foreground/60 hover:text-foreground hover:border-foreground/20 transition-colors"
+                      >
+                        Edit Authorization
+                      </button>
                     </div>
                   )}
 
