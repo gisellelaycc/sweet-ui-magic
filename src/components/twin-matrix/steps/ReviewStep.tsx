@@ -1,8 +1,7 @@
 import { useMemo, useState, useEffect } from "react";
 import { computeDensity } from "@/lib/twin-encoder";
 import { StepLayout, StepContent, StepFooter } from '../StepLayout';
-import { Dialog, DialogContent } from "@/components/ui/dialog";
-import lobsterIcon from "@/assets/lobster-icon.png";
+import { Dialog, DialogPortal, DialogOverlay, DialogContent } from "@/components/ui/dialog";
 
 const SLICES = [
   { label: "Physical", range: [0, 63], color: "255, 60, 100" },
@@ -228,9 +227,28 @@ export const ReviewStep = ({ signature, username, activeModules, onNext, onBack 
       </StepContent>
 
       <Dialog open={showWallet} onOpenChange={() => {}}>
-        <DialogContent className="max-w-sm border-foreground/10 bg-[#1a1a2e] p-0 overflow-hidden [&>button]:hidden" onPointerDownOutside={e => e.preventDefault()}>
-          <WalletAnimation phase={walletPhase} setPhase={setWalletPhase} onComplete={onNext} />
-        </DialogContent>
+        <DialogPortal>
+          <DialogOverlay
+            className="bg-transparent"
+            style={{
+              background: 'rgba(0, 0, 0, 0.55)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+            }}
+          />
+          <div
+            className="fixed left-[50%] top-[50%] z-50 w-full max-w-sm translate-x-[-50%] translate-y-[-50%] overflow-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95"
+            style={{
+              background: 'rgba(20, 22, 26, 0.65)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              borderRadius: '20px',
+            }}
+          >
+            <WalletAnimation phase={walletPhase} setPhase={setWalletPhase} onComplete={onNext} />
+          </div>
+        </DialogPortal>
       </Dialog>
     </StepLayout>
   );
@@ -262,94 +280,70 @@ function WalletAnimation({
   }, [phase, setPhase, onComplete]);
 
   return (
-    <div className="flex flex-col items-center text-center">
-      <div className="w-full flex items-center justify-between px-4 py-3 border-b border-foreground/10">
-        <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-full overflow-hidden">
-            <img src={lobsterIcon} alt="wallet" className="w-full h-full object-cover" />
-          </div>
-          <span className="text-xs font-medium text-foreground/80">Twin3 Wallet</span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <div className={`w-2 h-2 rounded-full ${phase === 'confirmed' ? 'bg-[#F24455]' : 'bg-[#F24455]/60 animate-pulse'}`} />
-          <span className="text-[10px] text-foreground/50">
-            {phase === 'connect' ? 'Connecting…' : phase === 'signing' ? 'Awaiting…' : 'Connected'}
-          </span>
+    <div className="flex flex-col items-center text-center px-6 py-8 space-y-6">
+      {/* Title + Subtitle */}
+      <div className="space-y-2">
+        <h3 className="text-base font-semibold text-white">
+          {phase === 'connect' && 'Committing your identity…'}
+          {phase === 'signing' && 'Awaiting wallet signature'}
+          {phase === 'confirmed' && 'Identity Committed'}
+        </h3>
+        <p className="text-xs text-white/40 leading-relaxed">
+          {phase === 'connect' && 'Preparing state for on-chain commitment.'}
+          {phase === 'signing' && 'Please confirm the signature request.'}
+          {phase === 'confirmed' && 'Your identity state has been sealed.'}
+        </p>
+      </div>
+
+      {/* Icon + Loading Ring */}
+      <div className="relative w-14 h-14 mx-auto">
+        <div
+          className={`absolute inset-0 rounded-full border ${phase === 'confirmed' ? 'border-white/20' : 'border-white/10 animate-spin'}`}
+          style={{ animationDuration: '3s', borderTopColor: phase !== 'confirmed' ? 'rgba(255,255,255,0.5)' : undefined }}
+        />
+        <div className="absolute inset-2 rounded-full flex items-center justify-center">
+          {phase === 'confirmed' ? (
+            <svg className="w-7 h-7 text-white animate-scale-in" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          ) : (
+            <svg className="w-6 h-6 text-white/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <rect x="3" y="11" width="18" height="11" rx="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+          )}
         </div>
       </div>
 
-      <div className="px-6 py-8 space-y-6">
-        <div className="relative w-16 h-16 mx-auto">
-          <div
-            className={`absolute inset-0 rounded-full border-2 ${phase === 'confirmed' ? 'border-[#F24455]/60' : 'border-[#F24455]/30 animate-spin'}`}
-            style={{ animationDuration: '3s', borderTopColor: phase !== 'confirmed' ? 'rgba(242, 68, 85, 0.8)' : undefined }}
-          />
-          <div
-            className="absolute inset-2 rounded-full flex items-center justify-center"
-            style={{
-              background: phase === 'confirmed'
-                ? 'radial-gradient(circle, rgba(242, 68, 85, 0.2) 0%, transparent 70%)'
-                : 'radial-gradient(circle, rgba(242, 68, 85, 0.15) 0%, transparent 70%)',
-            }}
-          >
-            {phase === 'confirmed' ? (
-              <svg className="w-8 h-8 text-[#F24455] animate-scale-in" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-            ) : (
-              <svg className="w-7 h-7 text-[#F24455]/70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <rect x="3" y="11" width="18" height="11" rx="2" />
-                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-              </svg>
-            )}
+      {/* Info rows — no card wrapper */}
+      {phase !== 'connect' && (
+        <div className="animate-fade-in space-y-2.5 w-full text-left">
+          <div className="flex justify-between text-[11px]">
+            <span className="text-white/30">Network</span>
+            <span className="text-white/60">Twin3 Sovereign Layer</span>
+          </div>
+          <div className="flex justify-between text-[11px]">
+            <span className="text-white/30">Action</span>
+            <span className="text-white/60 font-mono">commitIdentityState()</span>
+          </div>
+          <div className="flex justify-between text-[11px]">
+            <span className="text-white/30">Gas</span>
+            <span className="text-white/60">0.00 (Gasless)</span>
           </div>
         </div>
+      )}
 
-        <div className="space-y-2">
-          <h3 className="text-base font-semibold text-foreground">
-            {phase === 'connect' && 'Committing your identity…'}
-            {phase === 'signing' && 'Awaiting wallet signature'}
-            {phase === 'confirmed' && 'Identity Committed'}
-          </h3>
-          <p className="text-xs text-foreground/40 leading-relaxed">
-            {phase === 'connect' && 'Preparing state for on-chain commitment.'}
-            {phase === 'signing' && 'Please confirm the signature request.'}
-            {phase === 'confirmed' && 'Your identity state has been sealed.'}
-          </p>
-        </div>
-
-        {phase !== 'connect' && (
-          <div className="animate-fade-in space-y-2 bg-foreground/5 rounded-lg p-3 text-left">
-            <div className="flex justify-between text-[10px]">
-              <span className="text-foreground/30">Network</span>
-              <span className="text-foreground/60">Twin3 Sovereign Layer</span>
-            </div>
-            <div className="flex justify-between text-[10px]">
-              <span className="text-foreground/30">Action</span>
-              <span className="text-foreground/60">commitIdentityState()</span>
-            </div>
-            <div className="flex justify-between text-[10px]">
-              <span className="text-foreground/30">Gas</span>
-              <span className="text-foreground/60">0.00 (Gasless)</span>
-            </div>
-          </div>
-        )}
-
-        <div className="h-[2px] w-full bg-foreground/5 rounded-full overflow-hidden">
-          <div
-            className="h-full rounded-full transition-all ease-linear"
-            style={{
-              width: phase === 'connect' ? '33%' : phase === 'signing' ? '66%' : '100%',
-              transitionDuration: phase === 'connect' ? '1.8s' : phase === 'signing' ? '2.5s' : '0.5s',
-              background: phase === 'confirmed'
-                ? 'linear-gradient(90deg, rgba(242, 68, 85, 0.6), rgba(242, 68, 85, 0.9))'
-                : 'linear-gradient(90deg, rgba(242, 68, 85, 0.5), rgba(242, 68, 85, 0.9))',
-              boxShadow: phase === 'confirmed'
-                ? '0 0 8px rgba(242, 68, 85, 0.5)'
-                : '0 0 8px rgba(242, 68, 85, 0.5)',
-            }}
-          />
-        </div>
+      {/* Thin progress line */}
+      <div className="h-[1px] w-full bg-white/5 rounded-full overflow-hidden">
+        <div
+          className="h-full rounded-full transition-all ease-linear"
+          style={{
+            width: phase === 'connect' ? '33%' : phase === 'signing' ? '66%' : '100%',
+            transitionDuration: phase === 'connect' ? '1.8s' : phase === 'signing' ? '2.5s' : '0.5s',
+            background: 'linear-gradient(90deg, rgba(10,255,255,0.4), rgba(10,255,255,0.8))',
+            boxShadow: '0 0 6px rgba(10,255,255,0.4)',
+          }}
+        />
       </div>
     </div>
   );
