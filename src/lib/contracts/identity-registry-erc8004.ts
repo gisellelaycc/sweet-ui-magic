@@ -88,7 +88,7 @@ export async function resolveAgentProfileFromErc8004(
       abi: identityRegistryErc8004Abi,
       functionName: 'tokenURI',
       args: [tokenId],
-    } as any) as string;
+    });
 
     const metadata = parseMetadataFromTokenUri(tokenUri);
     const name = metadata?.name?.trim() || null;
