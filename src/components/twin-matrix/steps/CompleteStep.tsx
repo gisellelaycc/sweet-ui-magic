@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { StepLayout, StepContent, StepFooter } from '../StepLayout';
+import { useI18n } from '@/lib/i18n';
 
 const DIMENSION_MAP: Record<number, { layer: string; name: string }> = {
   206: { layer: 'Spiritual', name: 'Outcome' },
@@ -66,6 +67,7 @@ const GlowDivider = ({ vertical = false }: { vertical?: boolean }) => (
 );
 
 export const CompleteStep = ({ username, signature, onActivateAgent, onDashboard }: Props) => {
+  const { t } = useI18n();
   const walletAddress = useMemo(() => generateWalletAddress(), []);
   const identityHash = useMemo(() => generateHash(signature), [signature]);
   const sbtId = useMemo(() => generateSBTId(), []);
@@ -92,9 +94,9 @@ export const CompleteStep = ({ username, signature, onActivateAgent, onDashboard
       <StepContent>
         <div className="flex flex-col items-center text-center px-4">
           <div className="text-6xl mb-6">✨</div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-2">Identity State Sealed.</h2>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-2">{t('complete.title')}</h2>
           <p className="text-muted-foreground mb-8 max-w-sm">
-            Your 256D imprint is now recorded.
+            {t('complete.subtitle')}
           </p>
 
           {/* Top row: Identity Hash (left) + Minted SBT ID (right) */}
@@ -102,7 +104,7 @@ export const CompleteStep = ({ username, signature, onActivateAgent, onDashboard
             <div className="flex items-start">
               {/* Identity Hash */}
               <div className="flex-1 text-left space-y-1">
-                <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Identity Hash</p>
+                <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{t('complete.hash')}</p>
                 <p className="text-xs font-mono text-foreground/70 break-all">{identityHash}</p>
               </div>
 
@@ -110,10 +112,10 @@ export const CompleteStep = ({ username, signature, onActivateAgent, onDashboard
 
               {/* Minted SBT ID */}
               <div className="flex-1 text-left space-y-1">
-                <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Minted SBT ID</p>
+                <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{t('complete.sbtId')}</p>
                 <p className="text-sm font-mono text-foreground">{sbtId}</p>
                 <div className="space-y-1 mt-2">
-                  <p className="text-xs" style={{ color: '#F24455' }}>✓ Bound to sovereign wallet</p>
+                  <p className="text-xs" style={{ color: '#F24455' }}>{t('complete.boundWallet')}</p>
                   <p className="text-[10px] text-muted-foreground font-mono break-all">{walletAddress}</p>
                 </div>
               </div>
@@ -125,7 +127,7 @@ export const CompleteStep = ({ username, signature, onActivateAgent, onDashboard
             <div className="flex items-start">
               {/* Dominant Dimensions */}
               <div className="flex-1 text-left space-y-2.5">
-                <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Dominant Dimensions</p>
+                <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{t('complete.dominantDim')}</p>
                 <div className="space-y-1.5">
                   {dominantDimensions.map(d => (
                     <div key={d.idx} className="flex items-center justify-between pr-4">
@@ -144,8 +146,8 @@ export const CompleteStep = ({ username, signature, onActivateAgent, onDashboard
 
               {/* Vector Imprint */}
               <div className="flex-1 text-left space-y-2">
-                <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Vector Imprint</p>
-                <p className="text-[9px] text-muted-foreground/50">256D Snapshot at Mint Time</p>
+                <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{t('complete.vectorImprint')}</p>
+                <p className="text-[9px] text-muted-foreground/50">{t('complete.snapshot')}</p>
                 <div className="space-y-3">
                   {SLICES.map(slice => {
                     const sliceData = signature.slice(slice.range[0], slice.range[1] + 1);
@@ -188,10 +190,10 @@ export const CompleteStep = ({ username, signature, onActivateAgent, onDashboard
       <StepFooter>
         <div className="space-y-2">
           <button onClick={onActivateAgent} className="btn-twin btn-twin-primary btn-glow w-full py-2.5 text-sm">
-            Activate an Agent →
+            {t('complete.activateAgent')}
           </button>
           <button onClick={onDashboard} className="btn-twin btn-twin-ghost w-full py-2 text-xs">
-            Return to Dashboard
+            {t('complete.returnDashboard')}
           </button>
         </div>
       </StepFooter>

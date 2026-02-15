@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Lock } from 'lucide-react';
 import type { IdentityModule } from '@/types/twin-matrix';
 import { StepLayout, StepContent } from '../StepLayout';
+import { useI18n } from '@/lib/i18n';
 
 const SIGNALS: (IdentityModule & { soon?: boolean })[] = [
   { id: 'sport', icon: '🏃', label: 'Sport', description: 'Physical signal · competitive state', active: true },
@@ -24,6 +25,7 @@ interface Props {
 }
 
 export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
+  const { t } = useI18n();
   const [selected, setSelected] = useState(SIGNALS[0].id);
   const [activated, setActivated] = useState<string[]>(activeModules);
   const [transitioning, setTransitioning] = useState(false);
@@ -34,17 +36,6 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
   const isActivated = activated.includes(selected);
   const isMinted = MINTED_MODULES.includes(selected);
   const hasActive = activated.length > 0;
-
-  const selectSignal = (id: string) => {
-    const sig = SIGNALS.find(s => s.id === id);
-    if (!sig || sig.soon) return;
-    if (id === selected) return;
-    setTransitioning(true);
-    setTimeout(() => {
-      setSelected(id);
-      setTimeout(() => setTransitioning(false), 30);
-    }, 150);
-  };
 
   const toggleActive = () => {
     if (current.soon) return;
@@ -65,33 +56,28 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
 
   const chipItems = [
     ...SIGNALS.map(s => ({ id: s.id, icon: s.icon, label: s.label, description: s.description, soon: !!s.soon })),
-    { id: '_more', icon: '→', label: 'And more', description: 'More signals coming', soon: false },
+    { id: '_more', icon: '→', label: t('category.andMore'), description: 'More signals coming', soon: false },
   ];
 
   return (
     <StepLayout>
       <StepContent>
         <div className="w-full flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
-          {/* Left column: title + big card + CTA */}
           <div className="flex-1 min-w-0 flex flex-col items-center lg:items-start">
-            {/* Title */}
             <div className="mb-8 w-full">
               <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] tracking-tight mb-2">
-                Signal Layers
+                {t('category.title')}
               </h2>
               <p className="text-muted-foreground text-base md:text-lg">
-                Choose which aspects of yourself shape this state.
+                {t('category.subtitle')}
               </p>
             </div>
 
-            {/* Main Card — glowing entity */}
             <div
               onClick={toggleActive}
               className="relative cursor-pointer w-full"
               style={{
-                maxWidth: '520px',
-                height: '260px',
-                borderRadius: '28px',
+                maxWidth: '520px', height: '260px', borderRadius: '28px',
                 background: 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 60%, transparent 100%)',
                 backdropFilter: 'blur(16px) saturate(160%)',
                 boxShadow: `0 0 60px -20px rgba(10, 255, 255, ${isActivated ? '0.15' : '0.05'}), 0 0 120px -40px rgba(173, 255, 255, ${isActivated ? '0.08' : '0.02'})`,
@@ -111,11 +97,11 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
                 <span className="text-5xl mb-4">{current.icon}</span>
                 <h3 className="text-xl font-semibold text-foreground mb-1">{current.label}</h3>
                 {isMinted && (
-                  <span className="text-[10px] px-3 py-0.5 rounded-full bg-green-400/10 text-green-400 mb-2">minted</span>
+                  <span className="text-[10px] px-3 py-0.5 rounded-full bg-green-400/10 text-green-400 mb-2">{t('category.minted')}</span>
                 )}
                 <p className="text-sm text-muted-foreground/70 max-w-xs">{current.description}</p>
                 <p className="text-xs text-muted-foreground/40 mt-4">
-                  {isActivated ? '✓ Active — tap to deactivate' : 'Tap to activate this signal'}
+                  {isActivated ? t('category.tapDeactivate') : t('category.tapActivate')}
                 </p>
               </div>
 
@@ -130,16 +116,14 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
               )}
             </div>
 
-            {/* CTA below big card */}
             <div className="w-full mt-6" style={{ maxWidth: '520px' }}>
               <button onClick={onNext} disabled={!hasActive}
                 className={`btn-twin btn-twin-primary w-full py-2.5 text-sm disabled:opacity-30 disabled:cursor-not-allowed ${hasActive ? 'btn-glow' : ''}`}>
-                Proceed
+                {t('category.proceed')}
               </button>
             </div>
           </div>
 
-          {/* Right column: vertical chip list */}
           <div className="lg:w-[280px] shrink-0 flex flex-col gap-2">
             {chipItems.map(chip => {
               const isMore = chip.id === '_more';
@@ -155,7 +139,6 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
                       if (isMore) return;
                       if (isSoon) { showSoonTooltip(chip.id); return; }
                       setSelected(chip.id);
-                      // Toggle activation directly on chip click
                       const next = activated.includes(chip.id)
                         ? activated.filter(m => m !== chip.id)
                         : [...activated, chip.id];
@@ -195,7 +178,7 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
                   {soonTooltip === chip.id && (
                     <div className="absolute -top-9 left-1/2 -translate-x-1/2 z-30 px-3 py-1.5 rounded-lg text-[11px] text-foreground/70 whitespace-nowrap animate-fade-in"
                       style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.08)' }}>
-                      Coming soon
+                      {t('category.comingSoon')}
                     </div>
                   )}
                 </div>

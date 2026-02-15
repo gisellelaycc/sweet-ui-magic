@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { SportSetup } from '@/types/twin-matrix';
 import { StepLayout, StepContent, StepFooter } from '../StepLayout';
+import { useI18n } from '@/lib/i18n';
 
 const FREQ_OPTIONS = [
   { label: '1–2x / week', zone: 'Light Activity' },
@@ -46,6 +47,7 @@ const SliderSelect = ({ label, options, value, onChange }: { label: string; opti
 };
 
 export const SportSetupStep = ({ data, onUpdate, onNext }: Props) => {
+  const { t } = useI18n();
   const [setup, setSetup] = useState(data);
   const update = (key: keyof SportSetup, val: string) => {
     const next = { ...setup, [key]: val };
@@ -58,27 +60,24 @@ export const SportSetupStep = ({ data, onUpdate, onNext }: Props) => {
     <StepLayout>
       <StepContent>
         <div className="flex flex-col items-center">
-          {/* Title top-left aligned */}
           <div className="w-full max-w-lg mb-8">
             <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] tracking-tight mb-2">
-              Baseline
+              {t('sportSetup.title')}
             </h2>
             <p className="text-muted-foreground text-base md:text-lg">
-              A quiet calibration of your physical rhythm.
+              {t('sportSetup.subtitle')}
             </p>
           </div>
 
-          {/* Card centered */}
           <div className="glass-card space-y-6 w-full max-w-lg">
-            <SliderSelect label="Exercise Frequency" options={FREQ_OPTIONS} value={setup.frequency} onChange={v => update('frequency', v)} />
-            <SliderSelect label="Session Duration" options={DURATION_OPTIONS} value={setup.duration} onChange={v => update('duration', v)} />
-            <SliderSelect label="Average Daily Steps" options={STEP_OPTIONS} value={setup.dailySteps} onChange={v => update('dailySteps', v)} />
+            <SliderSelect label={t('sportSetup.frequency')} options={FREQ_OPTIONS} value={setup.frequency} onChange={v => update('frequency', v)} />
+            <SliderSelect label={t('sportSetup.duration')} options={DURATION_OPTIONS} value={setup.duration} onChange={v => update('duration', v)} />
+            <SliderSelect label={t('sportSetup.steps')} options={STEP_OPTIONS} value={setup.dailySteps} onChange={v => update('dailySteps', v)} />
           </div>
 
-          {/* CTA centered with card */}
           <div className="w-full max-w-lg mt-6">
             <button onClick={onNext} disabled={!isValid} className={`btn-twin btn-twin-primary w-full py-2.5 text-sm disabled:opacity-30 disabled:cursor-not-allowed ${isValid ? 'btn-glow' : ''}`}>
-              Proceed
+              {t('sportSetup.proceed')}
             </button>
           </div>
         </div>

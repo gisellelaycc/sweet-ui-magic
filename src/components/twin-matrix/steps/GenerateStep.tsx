@@ -2,29 +2,25 @@ import { useEffect, useState, useMemo, useRef } from 'react';
 import type { WizardState } from '@/types/twin-matrix';
 import { encodeIdentityVector } from '@/lib/twin-encoder';
 import { StepLayout, StepContent } from '../StepLayout';
+import { useI18n } from '@/lib/i18n';
 
 interface Props {
   wizardState: WizardState;
   onComplete: (signature: number[]) => void;
 }
 
-const PHASES = [
-  { label: 'Signal Normalization', desc: 'Integrating and standardizing your identity signals.' },
-  { label: 'Dimension Projection', desc: 'Projecting signals into a 256-dimensional identity space.' },
-  { label: 'Weight Aggregation', desc: 'Calculating dimension intensity and layer distribution.' },
-  { label: 'Matrix Encoding', desc: 'Encoding into 0–255 vector format.' },
-  { label: 'Vector Finalization', desc: 'A distilled expression of this moment.' },
-  { label: 'Soul Signature', desc: 'A distilled expression of this moment.' },
-];
-
-function generateGridState(phase: number, progress: number): number[] {
-  const grid = new Array(256).fill(0);
-  const filled = Math.floor((progress / 100) * 256);
-  for (let i = 0; i < filled; i++) grid[i] = Math.floor(Math.random() * 256);
-  return grid;
-}
-
 export const GenerateStep = ({ wizardState, onComplete }: Props) => {
+  const { t } = useI18n();
+
+  const PHASES = useMemo(() => [
+    { label: t('generate.signalNorm'), desc: t('generate.signalNormDesc') },
+    { label: t('generate.dimProj'), desc: t('generate.dimProjDesc') },
+    { label: t('generate.weightAgg'), desc: t('generate.weightAggDesc') },
+    { label: t('generate.matrixEnc'), desc: t('generate.matrixEncDesc') },
+    { label: t('generate.vectorFin'), desc: t('generate.vectorFinDesc') },
+    { label: t('generate.soulSig'), desc: t('generate.vectorFinDesc') },
+  ], [t]);
+
   const [activePhase, setActivePhase] = useState(0);
   const [progress, setProgress] = useState(0);
   const [gridValues, setGridValues] = useState<number[]>(new Array(256).fill(0));
@@ -60,14 +56,16 @@ export const GenerateStep = ({ wizardState, onComplete }: Props) => {
   useEffect(() => {
     if (activePhase === displayPhase) return;
     setPhaseVisible(false);
-    const t = setTimeout(() => { setDisplayPhase(activePhase); setPhaseVisible(true); }, 400);
-    return () => clearTimeout(t);
+    const tt = setTimeout(() => { setDisplayPhase(activePhase); setPhaseVisible(true); }, 400);
+    return () => clearTimeout(tt);
   }, [activePhase, displayPhase]);
 
   useEffect(() => {
     if (finalSignature) return;
     const interval = setInterval(() => {
-      const newGrid = generateGridState(activePhase, progress);
+      const newGrid = new Array(256).fill(0);
+      const filled = Math.floor((progress / 100) * 256);
+      for (let i = 0; i < filled; i++) newGrid[i] = Math.floor(Math.random() * 256);
       const changed = new Set<number>();
       for (let i = 0; i < 256; i++) { if (newGrid[i] !== prevGridRef.current[i] && newGrid[i] > 0) changed.add(i); }
       prevGridRef.current = newGrid; setChangedCells(changed); setGridValues(newGrid);
@@ -77,8 +75,8 @@ export const GenerateStep = ({ wizardState, onComplete }: Props) => {
 
   useEffect(() => {
     if (changedCells.size === 0) return;
-    const t = setTimeout(() => setChangedCells(new Set()), 400);
-    return () => clearTimeout(t);
+    const tt = setTimeout(() => setChangedCells(new Set()), 400);
+    return () => clearTimeout(tt);
   }, [changedCells]);
 
   const isDone = progress >= 100;
