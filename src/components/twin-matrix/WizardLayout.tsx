@@ -29,6 +29,7 @@ import { SportTwinStep } from './steps/SportTwinStep';
 import { SoulStep } from './steps/SoulStep';
 import { GenerateStep } from './steps/GenerateStep';
 import { ReviewStep } from './steps/ReviewStep';
+import { AuthStep } from './steps/AuthStep';
 import { AgentStudioPage } from './pages/AgentStudioPage';
 import { UpdateIdentityPage } from './pages/UpdateIdentityPage';
 import { ActiveAuthorizationsPage } from './pages/ActiveAuthorizationsPage';
@@ -38,6 +39,7 @@ import { OnchainIdentityStatePage } from './pages/OnchainIdentityStatePage';
 
 type MenuPage = 'identity' | 'update' | 'auth' | 'agent' | 'missions' | 'settings';
 type TxAction = 'mint' | 'update' | null;
+type AuthView = 'records' | 'form';
 
 const EMPTY_SIGNATURE = Array.from({ length: 256 }, () => 0);
 
@@ -84,6 +86,7 @@ export const WizardLayout = () => {
   const [contractError, setContractError] = useState<string | null>(null);
   const [needsMatrixUpdate, setNeedsMatrixUpdate] = useState(false);
   const [showAgentNudge, setShowAgentNudge] = useState(false);
+  const [authView, setAuthView] = useState<AuthView>('records');
 
   const walletAddress = address ? `${address.slice(0, 6)}…${address.slice(-4)}` : undefined;
   const hasMintedSbt = tokenId !== null;
@@ -326,7 +329,12 @@ export const WizardLayout = () => {
 
       <TopNav
         activePage={activePage}
-        onNavigate={(id) => setActivePage((id ?? 'identity') as MenuPage)}
+        onNavigate={(id) => {
+          const nextPage = (id ?? 'identity') as MenuPage;
+          setActivePage(nextPage);
+          if (nextPage === 'auth') setAuthView('records');
+          if (nextPage === 'agent') setAuthView('records');
+        }}
         hasIdentity={hasMintedSbt}
         isWalletConnected={isConnected}
         walletAddress={walletAddress}
@@ -458,11 +466,31 @@ export const WizardLayout = () => {
           <UpdateIdentityPage activeModules={state.activeModules} tags={[]} onNavigate={(id) => setActivePage(id as MenuPage)} />
         )}
         {isConnected && activePage === 'agent' && (
-          <AgentStudioPage
-            boundAgents={boundAgents}
-            onCreateAgent={() => setActivePage('auth')}
-            onEditAgent={() => setActivePage('auth')}
-          />
+          <>
+            {authView === 'form' ? (
+              <AuthStep
+                data={state.agentSetup}
+                onUpdate={(d) => setState((s) => ({ ...s, agentSetup: d }))}
+                onNext={() => {}}
+                onDashboard={() => {
+                  setAuthView('records');
+                  setActivePage('agent');
+                }}
+              />
+            ) : (
+              <AgentStudioPage
+                boundAgents={boundAgents}
+                onCreateAgent={() => {
+                  setAuthView('form');
+                  setActivePage('agent');
+                }}
+                onEditAgent={() => {
+                  setAuthView('form');
+                  setActivePage('agent');
+                }}
+              />
+            )}
+          </>
         )}
         {isConnected && activePage === 'auth' && <ActiveAuthorizationsPage />}
         {isConnected && activePage === 'missions' && <SignalMarketplacePage />}
