@@ -14,12 +14,20 @@ export default defineConfig(({ mode }) => {
       hmr: {
         overlay: false,
       },
+      proxy: {
+        "/api": {
+          target: env.VITE_DEV_PROXY_TARGET || "http://agent.twin3.ai",
+          changeOrigin: true,
+          secure: false,
+        },
+      },
     },
     plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
     define: {
       "import.meta.env.RPC_URL": JSON.stringify(env.RPC_URL ?? ""),
       "import.meta.env.ERC8004_CONTRACT_ADDRESS": JSON.stringify(env.ERC8004_CONTRACT_ADDRESS ?? ""),
       "import.meta.env.TWIN_MATRIX_SBT_ADDRESS": JSON.stringify(env.TWIN_MATRIX_SBT_ADDRESS ?? ""),
+      "import.meta.env.USDT_CONTRACT_ADDRESS": JSON.stringify(env.USDT_CONTRACT_ADDRESS ?? ""),
     },
     resolve: {
       alias: {

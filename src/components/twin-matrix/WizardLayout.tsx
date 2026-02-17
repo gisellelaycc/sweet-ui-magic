@@ -7,6 +7,7 @@ import type { WizardState } from '@/types/twin-matrix';
 import { validateBaseline } from '@/lib/twin-encoder';
 import {
   decodeMatrixToSignature,
+  erc20BalanceAbi,
   encodeSignatureToMatrix,
   isTokenNotFoundError,
   permissionMaskToBinary256,
@@ -31,6 +32,7 @@ import { GenerateStep } from './steps/GenerateStep';
 import { ReviewStep } from './steps/ReviewStep';
 import { AuthStep } from './steps/AuthStep';
 import { AgentStudioPage } from './pages/AgentStudioPage';
+import { AgentPermissionEditPage } from './pages/AgentPermissionEditPage';
 import { UpdateIdentityPage } from './pages/UpdateIdentityPage';
 import { ActiveAuthorizationsPage } from './pages/ActiveAuthorizationsPage';
 import { SignalMarketplacePage } from './pages/SignalMarketplacePage';
@@ -39,9 +41,11 @@ import { OnchainIdentityStatePage } from './pages/OnchainIdentityStatePage';
 
 type MenuPage = 'identity' | 'update' | 'auth' | 'agent' | 'missions' | 'settings';
 type TxAction = 'mint' | 'update' | null;
-type AuthView = 'records' | 'form';
+type AuthView = 'records' | 'form' | 'editPermission';
 
 const EMPTY_SIGNATURE = Array.from({ length: 256 }, () => 0);
+const usdtContractAddress = (import.meta.env.USDT_CONTRACT_ADDRESS ?? '').trim();
+const hasValidUsdtAddress = /^0x[a-fA-F0-9]{40}$/.test(usdtContractAddress);
 
 const initialState: WizardState = {
   step: 0,
@@ -61,7 +65,7 @@ const initialState: WizardState = {
   signature: [],
   agentSetup: {
     agent: { name: '', taskTypes: [], matchingStrategy: [], behaviorMode: 'Active search' },
-    permission: { identityScope: 'Core', tradingAuthority: 'Manual Only', authorizationDuration: '', customDurationDays: '', maxPerTask: '', dailyCap: '', weeklyCap: '', spendResetPolicy: [], taskTypeBound: false, brandRestriction: false },
+    permission: { identityScope: 'Physical', tradingAuthority: 'Manual Only', authorizationDuration: '', customDurationDays: '', maxPerTask: '', dailyCap: '', weeklyCap: '', spendResetPolicy: [], taskTypeBound: false, brandRestriction: false },
   },
 };
 
@@ -87,6 +91,7 @@ export const WizardLayout = () => {
   const [needsMatrixUpdate, setNeedsMatrixUpdate] = useState(false);
   const [showAgentNudge, setShowAgentNudge] = useState(false);
   const [authView, setAuthView] = useState<AuthView>('records');
+  const [editingAgentAddress, setEditingAgentAddress] = useState<string | null>(null);
 
   const walletAddress = address ? `${address.slice(0, 6)}…${address.slice(-4)}` : undefined;
   const hasMintedSbt = tokenId !== null;
@@ -167,14 +172,28 @@ export const WizardLayout = () => {
 
       const boundAgentRows: OnchainBoundAgent[] = await Promise.all(
         boundAgentAddresses.map(async (agentAddress) => {
-          const [permissionMask, profile] = await Promise.all([
+          const [permissionMask, permissionExpiry, profile, usdtBalanceWei] = await Promise.all([
             publicClient.readContract({
               address: TWIN_MATRIX_SBT_ADDRESS,
               abi: twinMatrixSbtAbi,
               functionName: 'permissionMaskOf',
               args: [currentTokenId, agentAddress],
             }),
+            publicClient.readContract({
+              address: TWIN_MATRIX_SBT_ADDRESS,
+              abi: twinMatrixSbtAbi,
+              functionName: 'permissionExpiryOf',
+              args: [currentTokenId, agentAddress],
+            }),
             resolveAgentProfileFromErc8004(publicClient, agentAddress),
+            hasValidUsdtAddress
+              ? publicClient.readContract({
+                  address: usdtContractAddress as `0x${string}`,
+                  abi: erc20BalanceAbi,
+                  functionName: 'balanceOf',
+                  args: [agentAddress],
+                })
+              : Promise.resolve(null),
           ]);
 
           const short = `${agentAddress.slice(0, 6)}…${agentAddress.slice(-4)}`;
@@ -184,6 +203,8 @@ export const WizardLayout = () => {
             address: agentAddress,
             tokenId: profile?.tokenId ?? null,
             permissionMask,
+            permissionExpiry,
+            usdtBalanceWei,
             permissionMaskBinary256: permissionMaskToBinary256(permissionMask),
             scopeGranted,
             active: permissionMask > 0n,
@@ -332,8 +353,10 @@ export const WizardLayout = () => {
         onNavigate={(id) => {
           const nextPage = (id ?? 'identity') as MenuPage;
           setActivePage(nextPage);
-          if (nextPage === 'auth') setAuthView('records');
-          if (nextPage === 'agent') setAuthView('records');
+          if (nextPage === 'auth' || nextPage === 'agent') {
+            setAuthView('records');
+            setEditingAgentAddress(null);
+          }
         }}
         hasIdentity={hasMintedSbt}
         isWalletConnected={isConnected}
@@ -473,19 +496,65 @@ export const WizardLayout = () => {
                 onUpdate={(d) => setState((s) => ({ ...s, agentSetup: d }))}
                 onNext={() => {}}
                 onDashboard={() => {
+                  void refreshOnchainState();
                   setAuthView('records');
                   setActivePage('agent');
                 }}
+                ownerAddress={address}
+                tokenId={tokenId}
               />
+            ) : authView === 'editPermission' && editingAgentAddress && tokenId !== null ? (
+              (() => {
+                const editingAgent = boundAgents.find((item) => item.address.toLowerCase() === editingAgentAddress.toLowerCase());
+                if (!editingAgent) {
+                  return (
+                    <div className="max-w-3xl mx-auto w-full mt-8">
+                      <p className="text-sm text-muted-foreground">Selected agent not found. Please retry.</p>
+                    </div>
+                  );
+                }
+                return (
+                  <AgentPermissionEditPage
+                    tokenId={tokenId}
+                    agent={editingAgent}
+                    isWrongNetwork={isWrongNetwork}
+                    isSwitchingNetwork={isSwitchingNetwork}
+                    onSwitchNetwork={handleSwitchToBscTestnet}
+                    onBack={() => {
+                      setAuthView('records');
+                      setEditingAgentAddress(null);
+                    }}
+                    onUpdated={() => {
+                      void refreshOnchainState();
+                      setAuthView('records');
+                      setEditingAgentAddress(null);
+                    }}
+                  />
+                );
+              })()
             ) : (
               <AgentStudioPage
                 boundAgents={boundAgents}
                 onCreateAgent={() => {
+                  if (!hasMintedSbt || tokenId === null) {
+                    toast.error('Please mint SBT first. Agent must be bound to your SBT.');
+                    return;
+                  }
                   setAuthView('form');
                   setActivePage('agent');
                 }}
-                onEditAgent={() => {
-                  setAuthView('form');
+                onEditAgent={(agentAddress?: string) => {
+                  if (!hasMintedSbt || tokenId === null) {
+                    toast.error('Please mint SBT first. Agent must be bound to your SBT.');
+                    return;
+                  }
+                  const targetAddress = agentAddress ?? boundAgents[0]?.address;
+                  if (!targetAddress) {
+                    toast.error('No bound agent found to edit.');
+                    return;
+                  }
+                  setEditingAgentAddress(targetAddress);
+                  setAuthView('editPermission');
                   setActivePage('agent');
                 }}
               />

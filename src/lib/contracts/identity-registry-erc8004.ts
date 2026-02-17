@@ -21,6 +21,17 @@ const identityRegistryErc8004Abi = [
     anonymous: false,
   },
   {
+    type: 'event',
+    name: 'MetadataSet',
+    inputs: [
+      { indexed: true, name: 'agentId', type: 'uint256' },
+      { indexed: true, name: 'indexedMetadataKey', type: 'string' },
+      { indexed: false, name: 'metadataKey', type: 'string' },
+      { indexed: false, name: 'metadataValue', type: 'bytes' },
+    ],
+    anonymous: false,
+  },
+  {
     type: 'function',
     name: 'tokenURI',
     stateMutability: 'view',
@@ -61,6 +72,15 @@ function parseMetadataFromTokenUri(tokenUri: string): Erc8004TokenMetadata | nul
   }
 }
 
+function parseAddressFromBytes(value: `0x${string}`): Address | null {
+  if (!value || value === '0x') return null;
+  const raw = value.toLowerCase().replace(/^0x/, '');
+  if (raw.length < 40) return null;
+  const tail = raw.slice(-40);
+  const candidate = `0x${tail}`;
+  return /^0x[a-f0-9]{40}$/.test(candidate) ? (candidate as Address) : null;
+}
+
 export async function resolveAgentProfileFromErc8004(
   publicClient: PublicClient,
   agentAddress: Address,
@@ -77,10 +97,36 @@ export async function resolveAgentProfileFromErc8004(
       toBlock: 'latest',
     });
 
-    if (registeredEvents.length === 0) return null;
+    let tokenId: bigint | undefined;
+    if (registeredEvents.length > 0) {
+      const latestLog = registeredEvents[registeredEvents.length - 1];
+      tokenId = latestLog.args.agentId;
+    }
 
-    const latestLog = registeredEvents[registeredEvents.length - 1];
-    const tokenId = latestLog.args.agentId;
+    // Fallback path: resolve tokenId from MetadataSet(agentWallet) events.
+    if (tokenId === undefined) {
+      const metadataEvents = await publicClient.getContractEvents({
+        address: ERC8004_CONTRACT_ADDRESS,
+        abi: identityRegistryErc8004Abi,
+        eventName: 'MetadataSet',
+        args: { indexedMetadataKey: 'agentWallet' },
+        fromBlock: 0n,
+        toBlock: 'latest',
+      });
+
+      for (let i = metadataEvents.length - 1; i >= 0; i--) {
+        const event = metadataEvents[i];
+        const value = event.args.metadataValue;
+        if (!value) continue;
+        const wallet = parseAddressFromBytes(value);
+        if (!wallet) continue;
+        if (wallet.toLowerCase() === agentAddress.toLowerCase()) {
+          tokenId = event.args.agentId;
+          break;
+        }
+      }
+    }
+
     if (tokenId === undefined) return null;
 
     const tokenUri = await publicClient.readContract({

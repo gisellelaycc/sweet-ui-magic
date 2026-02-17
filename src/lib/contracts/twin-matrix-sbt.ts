@@ -16,6 +16,8 @@ export const twinMatrixSbtAbi = [
   { type: 'error', name: 'AgentNotBound', inputs: [] },
   { type: 'error', name: 'InvalidAgent', inputs: [] },
   { type: 'error', name: 'EmptyPermission', inputs: [] },
+  { type: 'error', name: 'InvalidExpiry', inputs: [] },
+  { type: 'error', name: 'PermissionExpired', inputs: [{ name: 'expiry', type: 'uint64' }] },
   {
     type: 'function',
     name: 'mint',
@@ -101,6 +103,50 @@ export const twinMatrixSbtAbi = [
     ],
     outputs: [{ type: 'uint256' }],
   },
+  {
+    type: 'function',
+    name: 'permissionExpiryOf',
+    stateMutability: 'view',
+    inputs: [
+      { name: 'tokenId', type: 'uint256' },
+      { name: 'agent', type: 'address' },
+    ],
+    outputs: [{ type: 'uint64' }],
+  },
+  {
+    type: 'function',
+    name: 'bindAgentAndGrantPermission',
+    stateMutability: 'nonpayable',
+    inputs: [
+      { name: 'tokenId', type: 'uint256' },
+      { name: 'agent', type: 'address' },
+      { name: 'newMask', type: 'uint256' },
+      { name: 'expiry', type: 'uint64' },
+    ],
+    outputs: [],
+  },
+  {
+    type: 'function',
+    name: 'setPermission',
+    stateMutability: 'nonpayable',
+    inputs: [
+      { name: 'tokenId', type: 'uint256' },
+      { name: 'agent', type: 'address' },
+      { name: 'newMask', type: 'uint256' },
+      { name: 'expiry', type: 'uint64' },
+    ],
+    outputs: [],
+  },
+] as const;
+
+export const erc20BalanceAbi = [
+  {
+    type: 'function',
+    name: 'balanceOf',
+    stateMutability: 'view',
+    inputs: [{ name: 'account', type: 'address' }],
+    outputs: [{ type: 'uint256' }],
+  },
 ] as const;
 
 export interface OnchainVersion {
@@ -115,10 +161,20 @@ export interface OnchainBoundAgent {
   address: Address;
   tokenId: bigint | null;
   permissionMask: bigint;
+  permissionExpiry: bigint;
+  usdtBalanceWei: bigint | null;
   permissionMaskBinary256: string;
   scopeGranted: number[];
   active: boolean;
 }
+
+const MASK_64 = (1n << 64n) - 1n;
+const QUADRANT_MASKS = {
+  Physical: MASK_64 << 0n,      // bits 0..63
+  Digital: MASK_64 << 64n,      // bits 64..127
+  Social: MASK_64 << 128n,      // bits 128..191
+  Spiritual: MASK_64 << 192n,   // bits 192..255
+} as const;
 
 export function permissionMaskToBinary256(mask: bigint): string {
   return mask.toString(2).padStart(256, '0');
@@ -129,6 +185,15 @@ export function permissionMaskToGrantedScope(mask: bigint): number[] {
   for (let bit = 0; bit < 256; bit++) {
     if (((mask >> BigInt(bit)) & 1n) === 1n) granted.push(bit);
   }
+  return granted;
+}
+
+export function permissionMaskToGrantedQuadrants(mask: bigint): string[] {
+  const granted: string[] = [];
+  if ((mask & QUADRANT_MASKS.Physical) !== 0n) granted.push('Physical');
+  if ((mask & QUADRANT_MASKS.Digital) !== 0n) granted.push('Digital');
+  if ((mask & QUADRANT_MASKS.Social) !== 0n) granted.push('Social');
+  if ((mask & QUADRANT_MASKS.Spiritual) !== 0n) granted.push('Spiritual');
   return granted;
 }
 

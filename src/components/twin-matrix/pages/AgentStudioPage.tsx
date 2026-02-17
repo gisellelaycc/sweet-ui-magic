@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useI18n } from '@/lib/i18n';
-import type { OnchainBoundAgent } from '@/lib/contracts/twin-matrix-sbt';
+import { permissionMaskToGrantedQuadrants, type OnchainBoundAgent } from '@/lib/contracts/twin-matrix-sbt';
 
 const statusColor: Record<string, string> = {
   active: 'rgba(10, 255, 255, 0.8)',
@@ -14,31 +14,45 @@ const ThinDivider = () => (
 interface Props {
   boundAgents: OnchainBoundAgent[];
   onCreateAgent: () => void;
-  onEditAgent: () => void;
+  onEditAgent: (agentAddress?: string) => void;
 }
 
 export const AgentStudioPage = ({ boundAgents, onCreateAgent, onEditAgent }: Props) => {
   const { t } = useI18n();
   const [selectedAgent, setSelectedAgent] = useState<string | null>(null);
+  const [isChoosingEditTarget, setIsChoosingEditTarget] = useState(false);
 
   const studioAgents = useMemo(() => (
-    boundAgents.map((agent, index) => ({
+    boundAgents.map((agent) => ({
       id: agent.address,
       name: agent.name,
       tokenId: agent.tokenId,
-      scopeGranted: agent.scopeGranted,
+      address: agent.address,
+      permissionExpiry: agent.permissionExpiry,
+      usdtBalanceWei: agent.usdtBalanceWei,
+      scopeGranted: permissionMaskToGrantedQuadrants(agent.permissionMask),
       status: agent.active ? 'active' : 'draft' as const,
       connectedChannels: ['Telegram'],
       taskTypes: ['Signal Matching', 'Brand Offers'],
-      createdAt: `2026-02-${String(10 + (index % 10)).padStart(2, '0')}`,
-      tasksCompleted: 3 + (index % 9),
-      earnings: `${15 + index * 8} USDT`,
     }))
   ), [boundAgents]);
 
-  const activeCount = studioAgents.filter(a => a.status === 'active').length;
-  const draftCount = studioAgents.filter(a => a.status === 'draft').length;
-  const totalEarnings = `${studioAgents.reduce((sum, agent) => sum + Number(agent.earnings.split(' ')[0]), 0)} USDT`;
+  const formatExpiry = (expiry: bigint): string => {
+    if (expiry === 0n) return 'N/A';
+    return new Date(Number(expiry) * 1000).toLocaleString();
+  };
+
+  const formatUsdtBalance = (balanceWei: bigint | null): string => {
+    if (balanceWei === null) return '-';
+    const base = 10n ** 18n;
+    const whole = balanceWei / base;
+    const fraction = balanceWei % base;
+    const fractionStr = (fraction + base).toString().slice(1).replace(/0+$/, '').slice(0, 6);
+    const wholeStr = whole.toLocaleString();
+    return `${fractionStr ? `${wholeStr}.${fractionStr}` : wholeStr} USDT`;
+  };
+
+  const formatAddressPreview = (address: string): string => `${address.slice(0, 6)}...${address.slice(-4)}`;
 
   return (
     <div className="animate-fade-in h-full overflow-y-auto scrollbar-hide">
@@ -50,35 +64,50 @@ export const AgentStudioPage = ({ boundAgents, onCreateAgent, onEditAgent }: Pro
 
         <ThinDivider />
 
-        <div className="flex items-center gap-6 text-xs text-muted-foreground/70">
-          <span>
-            <span style={{ color: 'rgba(10, 255, 255, 0.8)' }}>{t('agentStudio.active')}</span>{' '}
-            <span className="text-foreground/80">{activeCount}</span>
-          </span>
-          <span>·</span>
-          <span>
-            {t('agentStudio.drafts')}{' '}
-            <span className="text-foreground/80">{draftCount}</span>
-          </span>
-          <span>·</span>
-          <span>
-            {t('agentStudio.totalEarnings')}{' '}
-            <span className="text-foreground/80">{totalEarnings}</span>
-          </span>
-        </div>
-
-        <ThinDivider />
-
         <div className="flex items-center gap-3">
           <button onClick={onCreateAgent}
             className="text-xs px-4 py-2 border border-foreground/10 rounded-lg text-foreground/80 hover:bg-foreground/5 hover:text-foreground transition-colors">
             {t('agentStudio.newAgent')}
           </button>
-          <button onClick={onEditAgent}
+          <button
+            onClick={() => {
+              if (studioAgents.length === 0) return;
+              setIsChoosingEditTarget(true);
+            }}
             className="text-xs px-4 py-2 border border-foreground/10 rounded-lg text-muted-foreground hover:bg-foreground/5 hover:text-foreground transition-colors">
             {t('agentStudio.editAgent')}
           </button>
         </div>
+
+        {isChoosingEditTarget && (
+          <>
+            <ThinDivider />
+            <div className="space-y-3 animate-fade-in">
+              <p className="text-xs text-muted-foreground uppercase tracking-widest">Select Agent to Edit</p>
+              <div className="space-y-2">
+                {studioAgents.map((agent) => (
+                  <button
+                    key={`edit-target-${agent.id}`}
+                    onClick={() => {
+                      setIsChoosingEditTarget(false);
+                      onEditAgent(agent.address);
+                    }}
+                    className="w-full text-left px-3 py-2 rounded-lg border border-foreground/10 hover:bg-foreground/[0.03] transition-colors"
+                  >
+                    <p className="text-sm text-foreground/80">{agent.name}</p>
+                    <p className="text-[10px] text-muted-foreground/60 font-mono">{formatAddressPreview(agent.address)}</p>
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={() => setIsChoosingEditTarget(false)}
+                className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </>
+        )}
 
         <ThinDivider />
 
@@ -89,7 +118,7 @@ export const AgentStudioPage = ({ boundAgents, onCreateAgent, onEditAgent }: Pro
           {studioAgents.map((agent, idx) => (
             <div key={agent.id}>
               <div
-                className={`py-5 space-y-3 cursor-pointer transition-colors ${selectedAgent === agent.id ? 'bg-foreground/[0.02]' : ''}`}
+                className={`px-5 py-5 space-y-3 cursor-pointer transition-colors ${selectedAgent === agent.id ? 'bg-foreground/[0.02]' : ''}`}
                 onClick={() => setSelectedAgent(selectedAgent === agent.id ? null : agent.id)}
               >
                 <div className="flex items-start justify-between">
@@ -115,18 +144,32 @@ export const AgentStudioPage = ({ boundAgents, onCreateAgent, onEditAgent }: Pro
 
                 <div className="flex items-center gap-6 text-xs text-muted-foreground/60">
                   <span>
-                    Scope Granted{' '}
-                    <span className="text-foreground/70">
-                      {agent.scopeGranted.length > 0 ? agent.scopeGranted.join(', ') : 'None'}
-                    </span>
+                    USDT Balance <span className="text-foreground/70">{formatUsdtBalance(agent.usdtBalanceWei)}</span>
                   </span>
-                  <span>{t('agentStudio.tasks')} <span className="text-foreground/70">{agent.tasksCompleted}</span></span>
-                  <span>{t('agentStudio.earned')} <span className="text-foreground/70">{agent.earnings}</span></span>
-                  <span>{t('agentStudio.created')} <span className="text-foreground/70">{agent.createdAt}</span></span>
+                  <span>
+                    Agent Wallet <span className="text-foreground/70 font-mono">{formatAddressPreview(agent.address)}</span>
+                  </span>
                 </div>
 
                 {selectedAgent === agent.id && (
                   <div className="pt-2 space-y-3 animate-fade-in">
+                    <div className="space-y-1 text-xs text-muted-foreground/60">
+                      <p>
+                        agentAddress{' '}
+                        <span className="text-foreground/70 font-mono break-all">{agent.address}</span>
+                      </p>
+                      <p>
+                        Scope Granted{' '}
+                        <span className="text-foreground/70">
+                          {agent.scopeGranted.length > 0 ? agent.scopeGranted.join(', ') : 'None'}
+                        </span>
+                      </p>
+                      <p>
+                        Expiry of granted scope permission{' '}
+                        <span className="text-foreground/70">{formatExpiry(agent.permissionExpiry)}</span>
+                      </p>
+                    </div>
+
                     <div className="space-y-1.5">
                       <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{t('agentStudio.taskTypes')}</p>
                       <div className="flex gap-2">
@@ -151,18 +194,12 @@ export const AgentStudioPage = ({ boundAgents, onCreateAgent, onEditAgent }: Pro
                       </div>
                     </div>
                     <div className="flex gap-3 pt-1">
-                      <button onClick={(e) => { e.stopPropagation(); onEditAgent(); }}
+                      <button onClick={(e) => { e.stopPropagation(); onEditAgent(agent.address); }}
                         className="text-[11px] text-foreground/70 hover:text-foreground transition-colors">
                         {t('agentStudio.configure')}
                       </button>
-                      {agent.status === 'active' && (
-                        <button onClick={(e) => e.stopPropagation()}
-                          className="text-[11px] text-muted-foreground/50 hover:text-muted-foreground transition-colors">
-                          {t('agentStudio.pause')}
-                        </button>
-                      )}
                       {agent.status === 'draft' && (
-                        <button onClick={(e) => { e.stopPropagation(); onEditAgent(); }}
+                        <button onClick={(e) => { e.stopPropagation(); onEditAgent(agent.address); }}
                           className="text-[11px] text-foreground/70 hover:text-foreground transition-colors">
                           {t('agentStudio.continueSetup')}
                         </button>

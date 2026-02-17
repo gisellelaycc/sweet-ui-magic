@@ -1,10 +1,14 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Plus } from 'lucide-react';
+import { toast } from 'sonner';
+import { BaseError, isAddress, type Address } from 'viem';
+import { useChainId, usePublicClient, useSwitchChain, useWriteContract } from 'wagmi';
 import type { AgentSetup, AgentDefinition, AgentPermission } from '@/types/twin-matrix';
 import { TaskCapabilitySection } from './TaskCapabilitySection';
 import lobsterIcon from '@/assets/lobster-icon.png';
 import { useI18n } from '@/lib/i18n';
+import { BSC_TESTNET_CHAIN_ID } from '@/lib/wallet/config';
+import { TWIN_MATRIX_SBT_ADDRESS, twinMatrixSbtAbi } from '@/lib/contracts/twin-matrix-sbt';
 
 /* ── Saved Agent Record ── */
 interface SavedAgent {
@@ -14,6 +18,9 @@ interface SavedAgent {
   agent: AgentDefinition;
   permission: AgentPermission;
   telegramConnected: boolean;
+  backendAgentId?: string;
+  deepLink?: string;
+  agentAddress?: string;
 }
 
 /* ── Particle Canvas (lobster silhouette) ── */
@@ -134,44 +141,86 @@ const ThinDivider = () => (
 );
 
 /* ── Constants ── */
-const MATCH_STRATEGIES = ['Based on Skill', 'Based on Brand', 'Based on Soul', 'Based on Core'];
-const IDENTITY_SCOPES = ['Core', 'Skill', 'Soul'];
-const TRADING_OPTIONS = ['Manual Only', 'Auto-Approve under threshold', 'Full Auto'];
+const IDENTITY_SCOPES = ['Physical', 'Digital', 'Social', 'Spiritual'];
 const DURATION_OPTIONS = ['7 days', '30 days', 'Custom'];
-const RISK_CONTROLS = [
-  { key: 'pauseCap', label: 'Pause when daily cap reached' },
-  { key: 'switchManual', label: 'Switch to Manual after cap reached' },
-  { key: 'restrictTask', label: 'Restrict to selected task types' },
-  { key: 'restrictBrand', label: 'Restrict to approved brands' },
-];
 
 const defaultAgent: AgentDefinition = { name: '', taskTypes: [], matchingStrategy: [], behaviorMode: 'Active search', capabilities: {} };
 const defaultPermission: AgentPermission = {
-  identityScope: 'Core', identityScopes: ['Core'], tradingAuthority: 'Manual Only',
+  identityScope: 'Physical', identityScopes: ['Physical'], tradingAuthority: 'Manual Only',
   authorizationDuration: '', customDurationDays: '',
   maxPerTask: '', dailyCap: '', weeklyCap: '', spendResetPolicy: [], taskTypeBound: false, brandRestriction: false
 };
 
-type SubStep = 'list' | 'create' | 'config' | 'telegram' | 'activated';
+type SubStep = 'list' | 'create' | 'config' | 'telegram' | 'resolving' | 'activated';
+
+const QUADRANT_RANGES: Record<string, [number, number]> = {
+  Physical: [0, 63],
+  Digital: [64, 127],
+  Social: [128, 191],
+  Spiritual: [192, 255],
+};
+
+function getAgentApiBase(): string {
+  const baseEnv = (import.meta.env.VITE_BACKEND_API_BASE_URL ?? '').trim().replace(/\/+$/, '');
+  return baseEnv || '/api';
+}
+
+function buildPermissionMaskFromQuadrants(scopes: string[]): bigint {
+  let mask = 0n;
+  for (const scope of scopes) {
+    const range = QUADRANT_RANGES[scope];
+    if (!range) continue;
+    const [start, end] = range;
+    const bitLength = BigInt(end - start + 1);
+    const segment = ((1n << bitLength) - 1n) << BigInt(start);
+    mask |= segment;
+  }
+  return mask;
+}
+
+function resolveExpirySeconds(permission: AgentPermission): number | null {
+  if (permission.authorizationDuration === '7 days') return 7 * 24 * 60 * 60;
+  if (permission.authorizationDuration === '30 days') return 30 * 24 * 60 * 60;
+  if (permission.authorizationDuration === 'Custom') {
+    const days = Number.parseInt(permission.customDurationDays, 10);
+    if (!Number.isFinite(days) || days <= 0) return null;
+    return days * 24 * 60 * 60;
+  }
+  return null;
+}
 
 interface Props {
   data: AgentSetup;
   onUpdate: (d: AgentSetup) => void;
   onNext: () => void;
   onDashboard: () => void;
+  ownerAddress?: string;
+  tokenId?: bigint | null;
 }
 
-export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
+export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, tokenId }: Props) => {
   const { t } = useI18n();
+  const chainId = useChainId();
+  const publicClient = usePublicClient({ chainId: BSC_TESTNET_CHAIN_ID });
+  const { switchChain, isPending: isSwitchingNetwork } = useSwitchChain();
+  const { writeContractAsync } = useWriteContract();
   const [savedAgents, setSavedAgents] = useState<SavedAgent[]>([]);
   const [subStep, setSubStep] = useState<SubStep>('create');
   const [agentName, setAgentName] = useState('');
   const [currentAgentId, setCurrentAgentId] = useState<string | null>(null);
   const [agent, setAgent] = useState<AgentDefinition>({ ...defaultAgent });
-  const [permission, setPermission] = useState<AgentPermission>({ ...defaultPermission, identityScopes: ['Core'] });
-  const [fullAutoConfirm, setFullAutoConfirm] = useState(false);
+  const [permission, setPermission] = useState<AgentPermission>({ ...defaultPermission, identityScopes: ['Physical'] });
   const [telegramConnected, setTelegramConnected] = useState(false);
   const [viewingAgentId, setViewingAgentId] = useState<string | null>(null);
+  const [isRegistering, setIsRegistering] = useState(false);
+  const [resolveError, setResolveError] = useState<string | null>(null);
+  const [resolveStatusText, setResolveStatusText] = useState<string>('Waiting for Telegram confirmation...');
+  const [isBindingAgent, setIsBindingAgent] = useState(false);
+  const [bindTxHash, setBindTxHash] = useState<string | null>(null);
+  const [bindCompleted, setBindCompleted] = useState(false);
+  const canCreateAgent = tokenId !== null && tokenId !== undefined;
+  const isWrongNetwork = chainId !== BSC_TESTNET_CHAIN_ID;
+  const resolveSessionRef = useRef(0);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [dims, setDims] = useState({ w: 0, h: 0 });
@@ -184,60 +233,212 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
   }, []);
 
   const generateId = () => `agent-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
-  const toggleArrayItem = (arr: string[], item: string) =>
-    arr.includes(item) ? arr.filter((x) => x !== item) : [...arr, item];
-
   const handleCreateAgent = () => {
+    if (!canCreateAgent) {
+      toast.error('Please mint SBT first. Agent must be bound to your SBT.');
+      return;
+    }
     if (!agentName.trim()) return;
     const id = generateId();
     const newAgent: SavedAgent = {
       id, name: agentName.trim(), status: 'DRAFT',
       agent: { ...defaultAgent, name: agentName.trim() },
-      permission: { ...defaultPermission, identityScopes: ['Core'] },
+      permission: { ...defaultPermission, identityScopes: ['Physical'] },
       telegramConnected: false
     };
     setSavedAgents((prev) => [...prev, newAgent]);
     setCurrentAgentId(id);
     setAgent({ ...defaultAgent, name: agentName.trim() });
-    setPermission({ ...defaultPermission, identityScopes: ['Core'] });
-    setFullAutoConfirm(false);
+    setPermission({ ...defaultPermission, identityScopes: ['Physical'] });
     setTelegramConnected(false);
     setSubStep('config');
   };
 
-  const handleSaveDraft = () => {
+  const handleSaveConfig = async () => {
     if (!currentAgentId) return;
-    setSavedAgents((prev) => prev.map((a) =>
-      a.id === currentAgentId ? { ...a, agent: { ...agent }, permission: { ...permission }, status: 'DRAFT' } : a
-    ));
-    onUpdate({ agent, permission });
-    setSubStep('list');
-  };
-
-  const handleSaveConfig = () => {
-    if (!currentAgentId) return;
-    setSavedAgents((prev) => prev.map((a) =>
-      a.id === currentAgentId ? { ...a, agent: { ...agent }, permission: { ...permission } } : a
-    ));
-    onUpdate({ agent, permission });
-    setSubStep('telegram');
-  };
-
-  const handleConnectTelegram = () => {
-    setTelegramConnected(true);
-    if (currentAgentId) {
-      setSavedAgents((prev) => prev.map((a) =>
-        a.id === currentAgentId ? { ...a, status: 'ACTIVE', telegramConnected: true } : a
-      ));
+    if (!ownerAddress || tokenId === null || tokenId === undefined) {
+      toast.error('Wallet or tokenId is missing. Please reconnect wallet and refresh identity state.');
+      return;
     }
-    setTimeout(() => setSubStep('activated'), 600);
+
+    try {
+      setIsRegistering(true);
+      const baseUrl = getAgentApiBase();
+      const endpoint = `${baseUrl}/v1/agent/register`;
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          ownerAddress,
+          tokenId: tokenId.toString(),
+          agentName: agent.name || agentName,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || `HTTP ${response.status}`);
+      }
+
+      const payload = await response.json() as { agentId?: string; deepLink?: string };
+      if (!payload.agentId || !payload.deepLink) {
+        throw new Error('Register API response missing agentId or deepLink.');
+      }
+
+      setSavedAgents((prev) => prev.map((a) =>
+        a.id === currentAgentId
+          ? {
+              ...a,
+              agent: { ...agent },
+              permission: { ...permission },
+              backendAgentId: payload.agentId,
+              deepLink: payload.deepLink,
+            }
+          : a
+      ));
+      onUpdate({ agent, permission });
+      setSubStep('telegram');
+      toast.success('Agent registered. Continue to connect Telegram.');
+    } catch (error) {
+      toast.error(`Failed to register agent: ${String(error)}`);
+    } finally {
+      setIsRegistering(false);
+    }
+  };
+
+  const handleConnectTelegram = async () => {
+    if (!currentSavedAgent?.deepLink || !currentSavedAgent.backendAgentId) {
+      toast.error('Missing Telegram deepLink. Please create agent again.');
+      return;
+    }
+
+    window.open(currentSavedAgent.deepLink, '_blank', 'noopener,noreferrer');
+    setTelegramConnected(true);
+    setResolveError(null);
+    setResolveStatusText('Waiting for Telegram confirmation...');
+    setSubStep('resolving');
+
+    const baseUrl = getAgentApiBase();
+    const resolveEndpoint = `${baseUrl}/v1/agent/resolve?agentId=${encodeURIComponent(currentSavedAgent.backendAgentId)}`;
+    const sessionId = ++resolveSessionRef.current;
+    try {
+      const maxAttempts = 120;
+      for (let attempt = 0; attempt < maxAttempts; attempt++) {
+        if (resolveSessionRef.current !== sessionId) return;
+
+        const response = await fetch(resolveEndpoint, { method: 'GET' });
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(errorText || `HTTP ${response.status}`);
+        }
+
+        const payload = await response.json() as {
+          status?: string;
+          agentAddress?: string;
+          updatedAt?: string;
+        };
+
+        const agentAddress = (payload.agentAddress ?? '').trim();
+        if (agentAddress) {
+          if (currentAgentId) {
+            setSavedAgents((prev) => prev.map((a) =>
+              a.id === currentAgentId
+                ? { ...a, status: 'ACTIVE', telegramConnected: true, agentAddress }
+                : a
+            ));
+          }
+          setSubStep('activated');
+          toast.success('Agent wallet resolved on-chain.');
+          return;
+        }
+
+        setResolveStatusText(`Polling backend... (${attempt + 1}/${maxAttempts})`);
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+      }
+
+      throw new Error('Timed out while waiting for agentAddress.');
+    } catch (error) {
+      const message = String(error);
+      setResolveError(message);
+      setTelegramConnected(false);
+      setSubStep('telegram');
+      toast.error(`Failed to resolve agentAddress: ${message}`);
+    }
   };
 
   const handleCreateAnother = () => {
+    resolveSessionRef.current += 1;
     setAgentName('');
     setCurrentAgentId(null);
     setViewingAgentId(null);
+    setBindTxHash(null);
+    setBindCompleted(false);
+    setResolveError(null);
     setSubStep('list');
+  };
+
+  const handleBindAgentPermission = async () => {
+    if (!publicClient || tokenId === null || tokenId === undefined) {
+      toast.error('Missing tokenId. Please refresh identity state and try again.');
+      return;
+    }
+
+    if (isWrongNetwork) {
+      toast.error('Please switch to BSC testnet (97) before binding agent permission.');
+      return;
+    }
+
+    const agentAddress = currentSavedAgent?.agentAddress;
+    if (!agentAddress || !isAddress(agentAddress)) {
+      toast.error('Invalid or missing agentAddress from resolve API.');
+      return;
+    }
+
+    const scopes = permission.identityScopes || [];
+    const newMask = buildPermissionMaskFromQuadrants(scopes);
+    if (newMask === 0n) {
+      toast.error('Please select at least one permission quadrant.');
+      return;
+    }
+
+    const expiryOffset = resolveExpirySeconds(permission);
+    if (!expiryOffset) {
+      toast.error('Please select a valid authorization duration.');
+      return;
+    }
+    const expiry = BigInt(Math.floor(Date.now() / 1000) + expiryOffset);
+
+    try {
+      setIsBindingAgent(true);
+      const hash = await writeContractAsync({
+        address: TWIN_MATRIX_SBT_ADDRESS,
+        abi: twinMatrixSbtAbi,
+        functionName: 'bindAgentAndGrantPermission',
+        args: [tokenId, agentAddress as Address, newMask, expiry],
+        chainId: BSC_TESTNET_CHAIN_ID,
+      });
+      setBindTxHash(hash);
+      toast.info('Binding transaction submitted. Waiting for confirmation...');
+      await publicClient.waitForTransactionReceipt({ hash });
+      setBindCompleted(true);
+      toast.success('Agent bound and permission granted.', {
+        description: (
+          <a
+            href={`https://testnet.bscscan.com/tx/${hash}`}
+            target="_blank"
+            rel="noreferrer"
+            className="underline"
+          >
+            View tx on BscScan
+          </a>
+        ),
+      });
+    } catch (error) {
+      const message = error instanceof BaseError ? error.shortMessage : String(error);
+      toast.error(`Bind permission failed: ${message}`);
+    } finally {
+      setIsBindingAgent(false);
+    }
   };
 
   const currentSavedAgent = currentAgentId ? savedAgents.find((a) => a.id === currentAgentId) : null;
@@ -286,8 +487,6 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                   {viewingAgentId === sa.id && viewingAgent && (
                     <div className="pb-4 space-y-3 text-[11px] animate-fade-in">
                       <div className="space-y-2">
-                        <div className="flex justify-between"><span className="text-muted-foreground">{t('agent.behavior')}</span><span className="text-foreground/70">{viewingAgent.agent.behaviorMode}</span></div>
-                        <div className="flex justify-between"><span className="text-muted-foreground">{t('agent.autonomy')}</span><span className="text-foreground/70">{viewingAgent.permission.tradingAuthority}</span></div>
                         <div className="flex justify-between"><span className="text-muted-foreground">{t('agent.scope')}</span><span className="text-foreground/70">{(viewingAgent.permission.identityScopes || []).join(', ')}</span></div>
                         <div className="flex justify-between"><span className="text-muted-foreground">{t('agent.telegram')}</span><span className={viewingAgent.telegramConnected ? 'text-[#F24455]' : 'text-muted-foreground/40'}>{viewingAgent.telegramConnected ? t('agent.connected') : t('agent.notConnected')}</span></div>
                       </div>
@@ -299,7 +498,6 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                           setPermission({ ...viewingAgent.permission });
                           setAgentName(viewingAgent.name);
                           setTelegramConnected(viewingAgent.telegramConnected);
-                          setFullAutoConfirm(false);
                           setViewingAgentId(null);
                           setSubStep('config');
                         }}
@@ -355,7 +553,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                   <div className="pt-2">
                     <button
                       onClick={handleCreateAgent}
-                      disabled={!agentName.trim()}
+                      disabled={!canCreateAgent || !agentName.trim()}
                       className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${agentName.trim() ? 'btn-glow' : ''}`}
                     >
                       {t('agent.createAgent')}
@@ -378,50 +576,13 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
 
                   {/* ── Config section (appears inline after agent created) ── */}
                   <div className="animate-fade-in">
-                    {/* Behavior */}
-                    <div className="py-5 space-y-3">
-                      <label className="text-xs text-muted-foreground uppercase tracking-widest">{t('agent.behavior')}</label>
-                      <div className="space-y-2">
-                        {['Active search', 'Passive receive only'].map((mode) => (
-                          <div key={mode} className="flex items-center gap-3 cursor-pointer" onClick={() => setAgent((a) => ({ ...a, behaviorMode: mode }))}>
-                            <span className="w-3.5 h-3.5 rounded-full border flex items-center justify-center flex-shrink-0"
-                              style={{ borderColor: agent.behaviorMode === mode ? '#F24455' : 'rgba(255,255,255,0.15)' }}>
-                              {agent.behaviorMode === mode && <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#F24455' }} />}
-                            </span>
-                            <span className="text-sm text-foreground/80">{mode === 'Active search' ? t('agent.activeMode') : t('agent.passiveMode')}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <ThinDivider />
-
-                    {/* Matching Strategy */}
-                    <div className="py-5 space-y-3">
-                      <label className="text-xs text-muted-foreground uppercase tracking-widest">{t('agent.matchingStrategy')}</label>
-                      <div className="flex gap-2 flex-nowrap overflow-x-auto scrollbar-hide">
-                        {MATCH_STRATEGIES.map((s) => {
-                          const selected = agent.matchingStrategy.includes(s);
-                          return (
-                            <button key={s} onClick={() => setAgent((a) => ({ ...a, matchingStrategy: toggleArrayItem(a.matchingStrategy, s) }))}
-                              className={`text-xs px-4 py-1.5 rounded-full transition-all ${selected ? 'text-foreground border' : 'text-muted-foreground/50 border border-foreground/10 hover:border-foreground/20'}`}
-                              style={selected ? { borderColor: 'rgba(242,68,85,0.4)', background: 'rgba(242,68,85,0.08)', color: 'rgba(242,68,85,0.9)' } : {}}>
-                              {s}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    <ThinDivider />
-
                     {/* Scope */}
                     <div className="py-5 space-y-3">
                       <label className="text-xs text-muted-foreground uppercase tracking-widest">{t('agent.scope')}</label>
                       <p className="text-[10px] text-muted-foreground/50">{t('agent.scopeHint')}</p>
                       <div className="flex gap-2">
                         {IDENTITY_SCOPES.map((s) => {
-                          const scopes = permission.identityScopes || ['Core'];
+                          const scopes = permission.identityScopes || ['Physical'];
                           const selected = scopes.includes(s);
                           return (
                             <button key={s} onClick={() => {
@@ -435,46 +596,6 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                           );
                         })}
                       </div>
-                    </div>
-
-                    <ThinDivider />
-
-                    {/* Trading Authority */}
-                    <div className="py-5 space-y-3">
-                      <label className="text-xs text-muted-foreground uppercase tracking-widest">{t('agent.tradingAuth')}</label>
-                      <div className="space-y-2">
-                        {TRADING_OPTIONS.map((mode) => (
-                          <div key={mode} className="flex items-center gap-3 cursor-pointer" onClick={() => { setPermission((p) => ({ ...p, tradingAuthority: mode })); if (mode !== 'Full Auto') setFullAutoConfirm(false); }}>
-                            <span className="w-3.5 h-3.5 rounded-full border flex items-center justify-center flex-shrink-0"
-                              style={{ borderColor: permission.tradingAuthority === mode ? '#F24455' : 'rgba(255,255,255,0.15)' }}>
-                              {permission.tradingAuthority === mode && <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#F24455' }} />}
-                            </span>
-                            <span className="text-sm text-foreground/80">{mode}</span>
-                          </div>
-                        ))}
-                      </div>
-                      {permission.tradingAuthority === 'Auto-Approve under threshold' && (
-                        <div className="animate-fade-in pt-2 space-y-3">
-                          <p className="text-[10px] text-muted-foreground/50">{t('agent.spendLimits')}</p>
-                          {(['maxPerTask', 'dailyCap', 'weeklyCap'] as const).map((field) => (
-                            <div key={field} className="flex items-center gap-3">
-                              <span className="text-[11px] text-muted-foreground w-20">{field === 'maxPerTask' ? t('agent.maxPerTask') : field === 'dailyCap' ? t('agent.dailyCap') : t('agent.weeklyCap')}</span>
-                              <input type="text" value={permission[field]}
-                                onChange={(e) => setPermission((p) => ({ ...p, [field]: e.target.value }))}
-                                placeholder="$"
-                                className="flex-1 bg-transparent border-b border-foreground/10 px-0 py-1.5 text-xs text-foreground focus:outline-none focus:border-foreground/30 transition-colors" />
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                      {permission.tradingAuthority === 'Full Auto' && (
-                        <div className="animate-fade-in pt-1">
-                          <label className="flex items-center gap-2 text-xs cursor-pointer">
-                            <Checkbox checked={fullAutoConfirm} onCheckedChange={() => setFullAutoConfirm(!fullAutoConfirm)} />
-                            <span className="text-muted-foreground">{t('agent.fullAutoWarning')}</span>
-                          </label>
-                        </div>
-                      )}
                     </div>
 
                     <ThinDivider />
@@ -505,34 +626,13 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                     </div>
 
                     <ThinDivider />
-                    <div className="py-5 space-y-3">
-                      <label className="text-xs text-muted-foreground uppercase tracking-widest">{t('agent.riskControls')}</label>
-                      <p className="text-[10px] text-muted-foreground/50">{t('agent.riskHint')}</p>
-                      <div className="space-y-2">
-                        {RISK_CONTROLS.map((rc) => {
-                          const checked = permission.spendResetPolicy.includes(rc.key);
-                          return (
-                            <label key={rc.key} className="flex items-center gap-3 text-[11px] cursor-pointer">
-                              <Checkbox checked={checked} onCheckedChange={() => setPermission((p) => ({ ...p, spendResetPolicy: toggleArrayItem(p.spendResetPolicy, rc.key) }))} />
-                              <span className="text-foreground/70">{rc.label}</span>
-                            </label>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    <ThinDivider />
 
                     {/* Actions */}
                     <div className="pt-6 space-y-3">
                       <button onClick={handleSaveConfig}
-                        disabled={permission.tradingAuthority === 'Full Auto' && !fullAutoConfirm}
-                        className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${!(permission.tradingAuthority === 'Full Auto' && !fullAutoConfirm) ? 'btn-glow' : ''}`}>
-                        {t('agent.saveConfig')}
-                      </button>
-                      <button onClick={handleSaveDraft}
-                        className="w-full py-2.5 text-xs text-muted-foreground hover:text-foreground transition-colors">
-                        {t('agent.saveDraft')}
+                        disabled={isRegistering || !ownerAddress || tokenId === null || tokenId === undefined}
+                        className="btn-twin btn-twin-primary btn-glow w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed">
+                        {isRegistering ? 'Creating...' : t('agent.createAgent')}
                       </button>
                     </div>
                   </div>
@@ -563,18 +663,58 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
 
               <div className="pt-6">
                 {!telegramConnected ? (
-                  <button onClick={handleConnectTelegram} className="btn-twin btn-twin-primary btn-glow w-full py-3">
+                  <button onClick={() => { void handleConnectTelegram(); }} className="btn-twin btn-twin-primary btn-glow w-full py-3">
                     {t('telegram.connect')}
                   </button>
                 ) : (
                   <p className="text-sm text-center" style={{ color: '#F24455' }}>{t('telegram.connectedLabel')}</p>
+                )}
+                {resolveError && (
+                  <p className="text-[10px] text-destructive text-center mt-3 break-all">{resolveError}</p>
                 )}
                 <p className="text-[9px] text-muted-foreground/40 text-center mt-3">{t('telegram.hint')}</p>
               </div>
             </div>
           )}
 
-          {/* ═══ Sub-step D: ACTIVATED ═══ */}
+          {/* ═══ Sub-step D: RESOLVING ═══ */}
+          {subStep === 'resolving' && (
+            <div className="animate-fade-in space-y-0">
+              <div className="text-center pb-8">
+                <h2 className="text-2xl font-bold mb-1">Waiting for Agent Wallet</h2>
+                <p className="text-sm text-muted-foreground">Telegram confirmed. We are waiting for backend to return agentAddress.</p>
+              </div>
+
+              <ThinDivider />
+
+              <div className="py-8 text-center space-y-4">
+                <div className="w-10 h-10 mx-auto rounded-full border border-[#F24455]/30 border-t-[#F24455] animate-spin" />
+                <p className="text-xs text-muted-foreground">{resolveStatusText}</p>
+                {currentSavedAgent?.backendAgentId && (
+                  <p className="text-[10px] text-muted-foreground/60 font-mono break-all">
+                    Agent ID: {currentSavedAgent.backendAgentId}
+                  </p>
+                )}
+              </div>
+
+              <ThinDivider />
+
+              <div className="pt-6">
+                <button
+                  onClick={() => {
+                    resolveSessionRef.current += 1;
+                    setTelegramConnected(false);
+                    setSubStep('telegram');
+                  }}
+                  className="btn-twin btn-twin-ghost w-full py-2.5 text-sm"
+                >
+                  Back
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* ═══ Sub-step E: ACTIVATED ═══ */}
           {subStep === 'activated' && (
             <div className="animate-fade-in space-y-0">
               <div className="text-center pb-8">
@@ -606,17 +746,78 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard }: Props) => {
                   <span className="text-muted-foreground">{t('agent.telegram')}</span>
                   <span style={{ color: '#F24455' }}>✓ Connected</span>
                 </div>
+                <div className="flex justify-between py-1 gap-4">
+                  <span className="text-muted-foreground">Agent Address</span>
+                  <span className="text-foreground/80 font-mono text-right break-all">
+                    {currentSavedAgent?.agentAddress || '-'}
+                  </span>
+                </div>
+                <div className="flex justify-between py-1 gap-4">
+                  <span className="text-muted-foreground">Authorization Scope</span>
+                  <span className="text-foreground/80 text-right">
+                    {(permission.identityScopes || []).join(', ') || '-'}
+                  </span>
+                </div>
+                <div className="flex justify-between py-1 gap-4">
+                  <span className="text-muted-foreground">Authorization Duration</span>
+                  <span className="text-foreground/80 text-right">
+                    {permission.authorizationDuration === 'Custom'
+                      ? `${permission.customDurationDays || '-'} days`
+                      : (permission.authorizationDuration || '-')}
+                  </span>
+                </div>
+                {bindTxHash && (
+                  <div className="pt-2">
+                    <a
+                      href={`https://testnet.bscscan.com/tx/${bindTxHash}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-[11px] text-[#F24455] underline break-all"
+                    >
+                      {bindTxHash}
+                    </a>
+                  </div>
+                )}
               </div>
 
               <ThinDivider />
 
               <div className="pt-6 space-y-3">
-                <button onClick={onDashboard} className="btn-twin btn-twin-primary btn-glow w-full py-3">
-                  {t('activated.returnDashboard')}
-                </button>
-                <button onClick={handleCreateAnother} className="btn-twin btn-twin-ghost w-full py-2.5 text-sm">
-                  {t('activated.createAnother')}
-                </button>
+                {!bindCompleted && (
+                  <>
+                    {isWrongNetwork && (
+                      <div className="rounded-lg border border-yellow-400/35 bg-yellow-400/10 px-3 py-2">
+                        <p className="text-[11px] text-yellow-200 mb-2">
+                          Wrong network detected. Switch to BSC Testnet (97) before binding.
+                        </p>
+                        <button
+                          onClick={() => switchChain({ chainId: BSC_TESTNET_CHAIN_ID })}
+                          className="btn-twin btn-twin-primary py-1.5 px-3 text-xs"
+                          disabled={isSwitchingNetwork}
+                        >
+                          {isSwitchingNetwork ? 'Switching...' : 'Switch to BSC Testnet (97)'}
+                        </button>
+                      </div>
+                    )}
+                    <button
+                      onClick={() => { void handleBindAgentPermission(); }}
+                      disabled={isBindingAgent || isWrongNetwork || !currentSavedAgent?.agentAddress}
+                      className="btn-twin btn-twin-primary btn-glow w-full py-3 disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                      {isBindingAgent ? 'Binding...' : 'Bind your agent and grant permission scope'}
+                    </button>
+                  </>
+                )}
+                {bindCompleted && (
+                  <>
+                    <p className="text-sm text-center text-[#F24455]">
+                      Bind agent and grant permission completed.
+                    </p>
+                    <button onClick={onDashboard} className="btn-twin btn-twin-primary btn-glow w-full py-3">
+                      {t('activated.returnDashboard')}
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           )}

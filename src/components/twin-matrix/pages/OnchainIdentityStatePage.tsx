@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import type { OnchainBoundAgent, OnchainVersion } from '@/lib/contracts/twin-matrix-sbt';
+import { permissionMaskToGrantedQuadrants, type OnchainBoundAgent, type OnchainVersion } from '@/lib/contracts/twin-matrix-sbt';
 import { SPEC_REGISTRY } from '@/lib/twin-encoder/spec-registry';
 
 interface Props {
@@ -153,120 +153,121 @@ export const OnchainIdentityStatePage = ({
 
         <ThinDivider />
 
-        <div>
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Twin Matrix Projection (256D)</h3>
-            <span className="text-xs text-muted-foreground">Viewing v{activeVersion?.version ?? '-'}</span>
-          </div>
-          {activeVersion ? (
-            <div className="relative">
-              <div
-                className="absolute inset-0 pointer-events-none"
-                style={{ background: 'radial-gradient(ellipse at center, rgba(10,255,255,0.08) 0%, transparent 70%)' }}
-              />
-              <div className="overflow-x-auto relative z-10">
-                <div className="flex flex-col min-w-fit">
-                  {Array.from({ length: 16 }, (_, row) => {
-                    const isTopHalf = row < 8;
-                    return (
-                      <div key={row} className={`flex items-center gap-1 ${row === 8 ? 'mt-2' : 'mb-px'}`}>
-                        <span className="text-[7px] text-muted-foreground/25 font-mono w-7 text-right shrink-0">
-                          {(row * 16).toString(16).toUpperCase().padStart(4, '0')}
-                        </span>
-                        <div className="flex gap-px">
-                          {Array.from({ length: 16 }, (_, col) => {
-                            const isLeftHalf = col < 8;
-                            let sliceIdx: number;
-                            let localRow: number;
-                            let localCol: number;
-                            if (isTopHalf && isLeftHalf) {
-                              sliceIdx = 0;
-                              localRow = row;
-                              localCol = col;
-                            } else if (isTopHalf && !isLeftHalf) {
-                              sliceIdx = 1;
-                              localRow = row;
-                              localCol = col - 8;
-                            } else if (!isTopHalf && isLeftHalf) {
-                              sliceIdx = 2;
-                              localRow = row - 8;
-                              localCol = col;
-                            } else {
-                              sliceIdx = 3;
-                              localRow = row - 8;
-                              localCol = col - 8;
-                            }
+        <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,560px)_minmax(0,1fr)] gap-6 xl:gap-10 items-start">
+          <div className="w-fit max-w-[560px]">
+            <div className="mb-3">
+              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Twin Matrix Projection (256D)</h3>
+            </div>
+            {activeVersion ? (
+              <div className="relative max-w-[560px]">
+                <div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{ background: 'radial-gradient(ellipse at center, rgba(10,255,255,0.08) 0%, transparent 70%)' }}
+                />
+                <div className="overflow-x-auto relative z-10 pr-1">
+                  <div className="flex flex-col min-w-fit">
+                    {Array.from({ length: 16 }, (_, row) => {
+                      const isTopHalf = row < 8;
+                      return (
+                        <div key={row} className={`flex items-center gap-1 ${row === 8 ? 'mt-2' : 'mb-px'}`}>
+                          <span className="text-[7px] text-muted-foreground/25 font-mono w-7 text-right shrink-0">
+                            {(row * 16).toString(16).toUpperCase().padStart(4, '0')}
+                          </span>
+                          <div className="flex gap-px">
+                            {Array.from({ length: 16 }, (_, col) => {
+                              const isLeftHalf = col < 8;
+                              let sliceIdx: number;
+                              let localRow: number;
+                              let localCol: number;
+                              if (isTopHalf && isLeftHalf) {
+                                sliceIdx = 0;
+                                localRow = row;
+                                localCol = col;
+                              } else if (isTopHalf && !isLeftHalf) {
+                                sliceIdx = 1;
+                                localRow = row;
+                                localCol = col - 8;
+                              } else if (!isTopHalf && isLeftHalf) {
+                                sliceIdx = 2;
+                                localRow = row - 8;
+                                localCol = col;
+                              } else {
+                                sliceIdx = 3;
+                                localRow = row - 8;
+                                localCol = col - 8;
+                              }
 
-                            const slice = LAYERS[sliceIdx];
-                            const idx = slice.range[0] + localRow * 8 + localCol;
-                            const value = activeVersion.matrix[idx] ?? 0;
-                            const intensity = value / 255;
-                            const isTop = topIndices.has(idx);
-                            const isHovered = hoveredCell === idx;
-                            const cellOpacity = value > 0 ? 0.25 + 0.75 * intensity : 0.03;
+                              const slice = LAYERS[sliceIdx];
+                              const idx = slice.range[0] + localRow * 8 + localCol;
+                              const value = activeVersion.matrix[idx] ?? 0;
+                              const intensity = value / 255;
+                              const isTop = topIndices.has(idx);
+                              const isHovered = hoveredCell === idx;
+                              const cellOpacity = value > 0 ? 0.25 + 0.75 * intensity : 0.03;
 
-                            return (
-                              <div
-                                key={col}
-                                className={`rounded-sm flex items-center justify-center cursor-default relative transition-transform duration-150 ${col === 8 ? 'ml-1' : ''}`}
-                                style={{
-                                  width: '1.25rem',
-                                  height: '1.25rem',
-                                  aspectRatio: '1',
-                                  background: value > 0 ? `rgba(${slice.color}, ${cellOpacity * 0.5})` : 'rgba(255, 255, 255, 0.015)',
-                                  boxShadow: isTop && value > 0
-                                    ? `0 0 8px rgba(${slice.color}, ${cellOpacity * 0.6})`
-                                    : value > 120
-                                      ? `0 0 6px rgba(${slice.color}, ${cellOpacity * 0.3})`
-                                      : 'none',
-                                  transform: isHovered ? 'scale(1.15)' : 'scale(1)',
-                                }}
-                                onMouseEnter={() => setHoveredCell(idx)}
-                                onMouseLeave={() => setHoveredCell(null)}
-                                title={`D${idx}: ${value}`}
-                              >
-                                <span className="text-[5px] font-mono" style={{ color: `rgba(255,255,255, ${0.15 + intensity * 0.55})` }}>
-                                  {value.toString(16).toUpperCase().padStart(2, '0')}
-                                </span>
-                                {isHovered && (
-                                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-foreground/90 text-background text-[8px] px-1.5 py-0.5 rounded whitespace-nowrap z-10">
-                                    D{idx}: {value} ({slice.label})
-                                  </div>
-                                )}
-                              </div>
-                            );
-                          })}
+                              return (
+                                <div
+                                  key={col}
+                                  className={`rounded-sm flex items-center justify-center cursor-default relative transition-transform duration-150 ${col === 8 ? 'ml-1' : ''}`}
+                                  style={{
+                                    width: '1.25rem',
+                                    height: '1.25rem',
+                                    aspectRatio: '1',
+                                    background: value > 0 ? `rgba(${slice.color}, ${cellOpacity * 0.5})` : 'rgba(255, 255, 255, 0.015)',
+                                    boxShadow: isTop && value > 0
+                                      ? `0 0 8px rgba(${slice.color}, ${cellOpacity * 0.6})`
+                                      : value > 120
+                                        ? `0 0 6px rgba(${slice.color}, ${cellOpacity * 0.3})`
+                                        : 'none',
+                                    transform: isHovered ? 'scale(1.15)' : 'scale(1)',
+                                  }}
+                                  onMouseEnter={() => setHoveredCell(idx)}
+                                  onMouseLeave={() => setHoveredCell(null)}
+                                  title={`D${idx}: ${value}`}
+                                >
+                                  <span className="text-[5px] font-mono" style={{ color: `rgba(255,255,255, ${0.15 + intensity * 0.55})` }}>
+                                    {value.toString(16).toUpperCase().padStart(2, '0')}
+                                  </span>
+                                  {isHovered && (
+                                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-foreground/90 text-background text-[8px] px-1.5 py-0.5 rounded whitespace-nowrap z-10">
+                                      D{idx}: {value} ({slice.label})
+                                    </div>
+                                  )}
+                                </div>
+                              );
+                            })}
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
-            </div>
-          ) : (
-            <p className="text-sm text-muted-foreground">No matrix versions available.</p>
-          )}
-        </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">No matrix versions available.</p>
+            )}
+          </div>
 
-        <ThinDivider />
-
-        <div className="space-y-0">
-          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2">Version History</h3>
-          {versions.map((item, idx) => (
-            <div key={item.version}>
-              <button
-                onClick={() => setSelectedVersion(item.version)}
-                className={`w-full text-left py-3 transition-colors ${activeVersion?.version === item.version ? 'bg-foreground/[0.02]' : ''}`}
-              >
-                <div className="flex items-center justify-between gap-3">
-                  <span className="text-sm font-mono">v{item.version}</span>
-                  <span className="text-xs text-muted-foreground">Block {item.blockNumber}</span>
+          <div className="space-y-0 min-w-0 xl:pl-2">
+            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2">Version History</h3>
+            <div className="border border-foreground/10 rounded-xl px-3 py-3">
+              {versions.map((item, idx) => (
+                <div key={item.version}>
+                  <button
+                    onClick={() => setSelectedVersion(item.version)}
+                    className={`w-full text-left px-3 py-3 rounded-xl transition-colors ${activeVersion?.version === item.version ? 'bg-foreground/[0.06]' : ''}`}
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="text-sm font-mono">v{item.version}</span>
+                      <span className="text-xs text-muted-foreground">Block {item.blockNumber}</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground font-mono mt-1">digest: {shortDigest(item.digest)}</p>
+                  </button>
+                  {idx < versions.length - 1 && <ThinDivider />}
                 </div>
-                <p className="text-xs text-muted-foreground font-mono mt-1">digest: {shortDigest(item.digest)}</p>
-              </button>
-              {idx < versions.length - 1 && <ThinDivider />}
+              ))}
             </div>
-          ))}
+          </div>
         </div>
 
         <ThinDivider />
@@ -286,11 +287,11 @@ export const OnchainIdentityStatePage = ({
                     </span>
                   </div>
                   <p className="text-xs font-mono text-muted-foreground mt-1 break-all">{agent.address}</p>
-                  <p className="text-[10px] font-mono text-muted-foreground/70 mt-1">
+                  <p className="text-[10px] font-mono text-muted-foreground mt-1">
                     ERC8004 Token ID: {agent.tokenId !== null ? agent.tokenId.toString() : '-'}
                   </p>
-                  <p className="text-[10px] font-mono text-muted-foreground/70 mt-1">
-                    Scope Granted: {agent.scopeGranted.length > 0 ? agent.scopeGranted.join(', ') : 'None'}
+                  <p className="text-[10px] font-mono text-muted-foreground mt-1">
+                    Scope Granted: {permissionMaskToGrantedQuadrants(agent.permissionMask).join(', ') || 'None'}
                   </p>
                 </div>
                 {idx < boundAgents.length - 1 && <ThinDivider />}
