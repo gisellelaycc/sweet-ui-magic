@@ -4,16 +4,68 @@ import type { UserProfile } from '@/types/twin-matrix';
 import { StepLayout, StepContent } from '../StepLayout';
 import { useI18n } from '@/lib/i18n';
 
-const FIELDS: { key: keyof UserProfile; i18nKey: string; options: string[] }[] = [
-  { key: 'ageBin', i18nKey: 'identity.age', options: ['18–24', '25–34', '35–44', '45–54', '55–64', '65+'] },
-  { key: 'gender', i18nKey: 'identity.gender', options: ['Male', 'Female', 'Non-binary', 'Prefer not to say'] },
-  { key: 'heightBin', i18nKey: 'identity.height', options: ['< 160 cm', '160–170', '170–180', '> 180 cm'] },
-  { key: 'weightBin', i18nKey: 'identity.weight', options: ['< 50 kg', '50–65', '65–80', '> 80 kg'] },
-  { key: 'education', i18nKey: 'identity.education', options: ['High School', "Bachelor's", "Master's", 'Doctorate', 'Other', 'Prefer not to say'] },
-  { key: 'income', i18nKey: 'identity.income', options: ['< $30k', '$30k–60k', '$60k–100k', '$100k+', 'Prefer not to say'] },
-  { key: 'maritalStatus', i18nKey: 'identity.status', options: ['Single', 'In a relationship', 'Married', 'N/A', 'Prefer not to say'] },
-  { key: 'occupation', i18nKey: 'identity.work', options: ['Student', 'Employee', 'Self-employed', 'Freelancer', 'Other'] },
-  { key: 'livingType', i18nKey: 'identity.living', options: ['Urban', 'Suburban', 'Rural', 'Prefer not to say'] },
+const FIELDS: { key: keyof UserProfile; i18nKey: string; options: { value: string; key: string }[] }[] = [
+  { key: 'ageBin', i18nKey: 'identity.age', options: [
+    { value: '18–24', key: 'identity.opt.age.18_24' },
+    { value: '25–34', key: 'identity.opt.age.25_34' },
+    { value: '35–44', key: 'identity.opt.age.35_44' },
+    { value: '45–54', key: 'identity.opt.age.45_54' },
+    { value: '55–64', key: 'identity.opt.age.55_64' },
+    { value: '65+', key: 'identity.opt.age.65_plus' },
+  ] },
+  { key: 'gender', i18nKey: 'identity.gender', options: [
+    { value: 'Male', key: 'identity.opt.gender.male' },
+    { value: 'Female', key: 'identity.opt.gender.female' },
+    { value: 'Non-binary', key: 'identity.opt.gender.non_binary' },
+    { value: 'Prefer not to say', key: 'identity.opt.common.prefer_not' },
+  ] },
+  { key: 'heightBin', i18nKey: 'identity.height', options: [
+    { value: '< 160 cm', key: 'identity.opt.height.lt160' },
+    { value: '160–170', key: 'identity.opt.height.160_170' },
+    { value: '170–180', key: 'identity.opt.height.170_180' },
+    { value: '> 180 cm', key: 'identity.opt.height.gt180' },
+  ] },
+  { key: 'weightBin', i18nKey: 'identity.weight', options: [
+    { value: '< 50 kg', key: 'identity.opt.weight.lt50' },
+    { value: '50–65', key: 'identity.opt.weight.50_65' },
+    { value: '65–80', key: 'identity.opt.weight.65_80' },
+    { value: '> 80 kg', key: 'identity.opt.weight.gt80' },
+  ] },
+  { key: 'education', i18nKey: 'identity.education', options: [
+    { value: 'High School', key: 'identity.opt.education.high_school' },
+    { value: "Bachelor's", key: 'identity.opt.education.bachelor' },
+    { value: "Master's", key: 'identity.opt.education.master' },
+    { value: 'Doctorate', key: 'identity.opt.education.doctorate' },
+    { value: 'Other', key: 'identity.opt.common.other' },
+    { value: 'Prefer not to say', key: 'identity.opt.common.prefer_not' },
+  ] },
+  { key: 'income', i18nKey: 'identity.income', options: [
+    { value: '< $30k', key: 'identity.opt.income.lt30' },
+    { value: '$30k–60k', key: 'identity.opt.income.30_60' },
+    { value: '$60k–100k', key: 'identity.opt.income.60_100' },
+    { value: '$100k+', key: 'identity.opt.income.gt100' },
+    { value: 'Prefer not to say', key: 'identity.opt.common.prefer_not' },
+  ] },
+  { key: 'maritalStatus', i18nKey: 'identity.status', options: [
+    { value: 'Single', key: 'identity.opt.marital.single' },
+    { value: 'In a relationship', key: 'identity.opt.marital.relationship' },
+    { value: 'Married', key: 'identity.opt.marital.married' },
+    { value: 'N/A', key: 'identity.opt.marital.na' },
+    { value: 'Prefer not to say', key: 'identity.opt.common.prefer_not' },
+  ] },
+  { key: 'occupation', i18nKey: 'identity.work', options: [
+    { value: 'Student', key: 'identity.opt.occupation.student' },
+    { value: 'Employee', key: 'identity.opt.occupation.employee' },
+    { value: 'Self-employed', key: 'identity.opt.occupation.self_employed' },
+    { value: 'Freelancer', key: 'identity.opt.occupation.freelancer' },
+    { value: 'Other', key: 'identity.opt.common.other' },
+  ] },
+  { key: 'livingType', i18nKey: 'identity.living', options: [
+    { value: 'Urban', key: 'identity.opt.living.urban' },
+    { value: 'Suburban', key: 'identity.opt.living.suburban' },
+    { value: 'Rural', key: 'identity.opt.living.rural' },
+    { value: 'Prefer not to say', key: 'identity.opt.common.prefer_not' },
+  ] },
 ];
 
 interface Props {
@@ -36,6 +88,10 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
 
   const toggle = (key: string) => setOpenKey(prev => (prev === key ? null : key));
   const answered = (key: keyof UserProfile) => !!profile[key];
+  const getOptionLabel = (field: (typeof FIELDS)[number], value: string) => {
+    const matched = field.options.find((option) => option.value === value);
+    return matched ? t(matched.key) : value;
+  };
 
   const rows: typeof FIELDS[] = [];
   for (let i = 0; i < FIELDS.length; i += 3) {
@@ -84,7 +140,7 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
                         }
                       >
                         <span className="font-medium">{t(f.i18nKey)}</span>
-                        {isAnswered && <span className="text-xs text-foreground/60 ml-0.5">{profile[f.key]}</span>}
+                        {isAnswered && <span className="text-xs text-foreground/60 ml-0.5">{getOptionLabel(f, profile[f.key])}</span>}
                         <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''} ${isAnswered ? 'text-foreground/40' : 'text-foreground/30'}`} />
                       </button>
 
@@ -92,20 +148,20 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
                         <div className="animate-fade-in flex flex-wrap items-center gap-1.5">
                           {f.options.map(o => (
                             <button
-                              key={o}
-                              onClick={() => update(f.key, o)}
+                              key={o.value}
+                              onClick={() => update(f.key, o.value)}
                               className={`text-xs px-3 py-1.5 rounded-full border transition-all duration-200 whitespace-nowrap ${
-                                profile[f.key] === o
+                                profile[f.key] === o.value
                                   ? 'border-foreground/20 text-foreground'
                                   : 'border-transparent text-foreground/40 hover:text-foreground/70'
                               }`}
                               style={
-                                profile[f.key] === o
+                                profile[f.key] === o.value
                                   ? { background: 'rgba(10, 255, 255, 0.12)', boxShadow: '0 0 8px rgba(10, 255, 255, 0.25)' }
                                   : { background: 'transparent' }
                               }
                             >
-                              {o}
+                              {t(o.key)}
                             </button>
                           ))}
                         </div>

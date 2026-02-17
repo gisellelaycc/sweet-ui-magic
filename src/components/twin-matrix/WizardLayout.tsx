@@ -19,6 +19,7 @@ import {
 } from '@/lib/contracts/twin-matrix-sbt';
 import { resolveAgentProfileFromErc8004 } from '@/lib/contracts/identity-registry-erc8004';
 import { BSC_TESTNET_CHAIN_ID } from '@/lib/wallet/config';
+import { useI18n } from '@/lib/i18n';
 import { MainMenu } from './MainMenu';
 import { TopNav } from './TopNav';
 import { ParticleBackground } from './ParticleBackground';
@@ -34,8 +35,7 @@ import { AuthStep } from './steps/AuthStep';
 import { AgentStudioPage } from './pages/AgentStudioPage';
 import { AgentPermissionEditPage } from './pages/AgentPermissionEditPage';
 import { UpdateIdentityPage } from './pages/UpdateIdentityPage';
-import { ActiveAuthorizationsPage } from './pages/ActiveAuthorizationsPage';
-import { SignalMarketplacePage } from './pages/SignalMarketplacePage';
+import { SignalRecordsPage } from './pages/SignalRecordsPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { OnchainIdentityStatePage } from './pages/OnchainIdentityStatePage';
 
@@ -55,10 +55,10 @@ const initialState: WizardState = {
   sportTwin: { sportRanking: [], outfitStyle: [], brands: [] },
   soul: {
     bars: [
-      { id: 'BAR_OUTCOME_EXPERIENCE', label: 'Performance Orientation', left: 'I train to improve performance', right: 'I train for the experience', value: null },
-      { id: 'BAR_CONTROL_RELEASE', label: 'Structure Preference', left: 'I prefer structured training', right: 'I prefer spontaneous movement', value: null },
-      { id: 'BAR_SOLO_GROUP', label: 'Social Preference', left: 'I prefer training alone', right: 'I prefer training with others', value: null },
-      { id: 'BAR_PASSIVE_ACTIVE', label: 'Engagement Mode', left: 'I mostly consume sports content', right: 'I actively track or share my activity', value: null },
+      { id: 'BAR_OUTCOME_EXPERIENCE', label: 'soul.bar.performanceOrientation', left: 'soul.bar.performanceLeft', right: 'soul.bar.performanceRight', value: null },
+      { id: 'BAR_CONTROL_RELEASE', label: 'soul.bar.structurePreference', left: 'soul.bar.structureLeft', right: 'soul.bar.structureRight', value: null },
+      { id: 'BAR_SOLO_GROUP', label: 'soul.bar.socialPreference', left: 'soul.bar.socialLeft', right: 'soul.bar.socialRight', value: null },
+      { id: 'BAR_PASSIVE_ACTIVE', label: 'soul.bar.engagementMode', left: 'soul.bar.engagementLeft', right: 'soul.bar.engagementRight', value: null },
     ],
     confirmed: false,
   },
@@ -70,6 +70,7 @@ const initialState: WizardState = {
 };
 
 export const WizardLayout = () => {
+  const { t } = useI18n();
   const { address, isConnected } = useAccount();
   const chainId = useChainId();
   const { openConnectModal } = useConnectModal();
@@ -249,7 +250,7 @@ export const WizardLayout = () => {
   const handleMintSbt = useCallback(async () => {
     if (!publicClient || !isConnected) return;
     if (isWrongNetwork) {
-      toast.error('Please switch to BSC testnet (97) before minting.');
+      toast.error(t('review.wrongNetwork').replace('{network}', 'BSC Testnet (97)'));
       return;
     }
 
@@ -261,11 +262,11 @@ export const WizardLayout = () => {
         functionName: 'mint',
         chainId: BSC_TESTNET_CHAIN_ID,
       });
-      toast.info('Mint transaction submitted. Waiting for confirmation...');
+      toast.info(t('wizard.mintSubmitted'));
       await publicClient.waitForTransactionReceipt({ hash });
       await refreshOnchainState();
       setNeedsMatrixUpdate(true);
-      toast.success('SBT minted successfully.', {
+      toast.success(t('wizard.mintSuccess'), {
         description: (
           <a
             href={`https://testnet.bscscan.com/tx/${hash}`}
@@ -288,11 +289,11 @@ export const WizardLayout = () => {
   const handleUpdateMatrix = useCallback(async () => {
     if (!publicClient || tokenId === null) return;
     if (isWrongNetwork) {
-      toast.error('Please switch to BSC testnet (97) before updating matrix.');
+      toast.error(t('review.wrongNetwork').replace('{network}', 'BSC Testnet (97)'));
       return;
     }
     if (state.signature.length !== 256) {
-      toast.error('Matrix is not ready. Please finish the review flow first.');
+      toast.error(t('wizard.matrixNotReady'));
       return;
     }
 
@@ -306,13 +307,13 @@ export const WizardLayout = () => {
         args: [tokenId, matrix],
         chainId: BSC_TESTNET_CHAIN_ID,
       });
-      toast.info('Update transaction submitted. Waiting for confirmation...');
+      toast.info(t('wizard.updateSubmitted'));
       await publicClient.waitForTransactionReceipt({ hash });
       await refreshOnchainState();
       setNeedsMatrixUpdate(false);
       setState((s) => ({ ...s, step: 0 }));
       setShowAgentNudge(true);
-      toast.success('Matrix updated on-chain.', {
+      toast.success(t('wizard.updateSuccess'), {
         description: (
           <a
             href={`https://testnet.bscscan.com/tx/${hash}`}
@@ -340,9 +341,9 @@ export const WizardLayout = () => {
   const showBack = activePage === 'identity' && showIdentityFlow && state.step > 0 && state.step < 6;
 
   const reviewActionLabel = useMemo(() => {
-    if (needsMatrixUpdate || hasMintedSbt) return 'Update Matrix';
-    return 'Mint SBT';
-  }, [needsMatrixUpdate, hasMintedSbt]);
+    if (needsMatrixUpdate || hasMintedSbt) return t('wizard.updateMatrix');
+    return t('wizard.mintSbt');
+  }, [needsMatrixUpdate, hasMintedSbt, t]);
 
   return (
     <div className="h-full flex flex-col relative" style={{ zIndex: 10 }}>
@@ -379,16 +380,16 @@ export const WizardLayout = () => {
             {isCheckingToken && (
               <div className="glass-card max-w-xl mx-auto w-full text-center mt-12">
                 <p className="text-xs uppercase tracking-widest text-muted-foreground mb-2">TwinMatrixSBT</p>
-                <p className="text-base">Checking on-chain identity state...</p>
+                <p className="text-base">{t('wizard.checkingIdentity')}</p>
               </div>
             )}
 
             {!isCheckingToken && contractError && (
               <div className="glass-card max-w-2xl mx-auto w-full mt-8">
-                <p className="text-sm text-destructive">Failed to fetch contract state</p>
+                <p className="text-sm text-destructive">{t('wizard.failedFetchContract')}</p>
                 <p className="text-xs text-muted-foreground mt-1 break-all">{contractError}</p>
                 <button onClick={() => void refreshOnchainState()} className="btn-twin btn-twin-primary mt-4 py-2 px-3 text-xs">
-                  Retry
+                  {t('wizard.retry')}
                 </button>
               </div>
             )}
@@ -398,14 +399,14 @@ export const WizardLayout = () => {
                 {showAgentNudge && (
                   <div className="max-w-6xl mx-auto w-full mb-4 rounded-xl border border-cyan-300/25 bg-cyan-400/10 px-4 py-3 flex items-center justify-between gap-3">
                     <p className="text-xs text-cyan-100">
-                      Matrix update complete. You can switch to Agent tab and click + New Agent.
+                      {t('wizard.matrixUpdateNudge')}
                     </p>
                     <div className="flex items-center gap-2 shrink-0">
                       <button
                         onClick={() => setShowAgentNudge(false)}
                         className="btn-twin btn-twin-ghost py-1.5 px-3 text-xs"
                       >
-                        Dismiss
+                        {t('wizard.dismiss')}
                       </button>
                       <button
                         onClick={() => {
@@ -414,7 +415,7 @@ export const WizardLayout = () => {
                         }}
                         className="btn-twin btn-twin-primary py-1.5 px-3 text-xs"
                       >
-                        Go to Agent Tab
+                        {t('wizard.goToAgentTab')}
                       </button>
                     </div>
                   </div>
@@ -440,7 +441,7 @@ export const WizardLayout = () => {
                     className="absolute top-6 left-6 z-20 flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
                     <span className="text-lg leading-none">←</span>
-                    <span>Back</span>
+                    <span>{t('common.back')}</span>
                   </button>
                 )}
 
@@ -509,7 +510,7 @@ export const WizardLayout = () => {
                 if (!editingAgent) {
                   return (
                     <div className="max-w-3xl mx-auto w-full mt-8">
-                      <p className="text-sm text-muted-foreground">Selected agent not found. Please retry.</p>
+                      <p className="text-sm text-muted-foreground">{t('agent.selectedNotFound')}</p>
                     </div>
                   );
                 }
@@ -537,7 +538,7 @@ export const WizardLayout = () => {
                 boundAgents={boundAgents}
                 onCreateAgent={() => {
                   if (!hasMintedSbt || tokenId === null) {
-                    toast.error('Please mint SBT first. Agent must be bound to your SBT.');
+                    toast.error(t('wizard.needMintBeforeAgent'));
                     return;
                   }
                   setAuthView('form');
@@ -545,7 +546,7 @@ export const WizardLayout = () => {
                 }}
                 onEditAgent={(agentAddress?: string) => {
                   if (!hasMintedSbt || tokenId === null) {
-                    toast.error('Please mint SBT first. Agent must be bound to your SBT.');
+                    toast.error(t('wizard.needMintBeforeAgent'));
                     return;
                   }
                   const targetAddress = agentAddress ?? boundAgents[0]?.address;
@@ -561,8 +562,8 @@ export const WizardLayout = () => {
             )}
           </>
         )}
-        {isConnected && activePage === 'auth' && <ActiveAuthorizationsPage />}
-        {isConnected && activePage === 'missions' && <SignalMarketplacePage />}
+        {isConnected && activePage === 'auth' && <SignalRecordsPage />}
+        {isConnected && activePage === 'missions' && <SignalRecordsPage />}
         {isConnected && activePage === 'settings' && <SettingsPage />}
       </main>
 

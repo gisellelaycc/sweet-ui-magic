@@ -214,7 +214,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
   const [viewingAgentId, setViewingAgentId] = useState<string | null>(null);
   const [isRegistering, setIsRegistering] = useState(false);
   const [resolveError, setResolveError] = useState<string | null>(null);
-  const [resolveStatusText, setResolveStatusText] = useState<string>('Waiting for Telegram confirmation...');
+  const [resolveStatusText, setResolveStatusText] = useState<string>(t('agent.waitingTelegram'));
   const [isBindingAgent, setIsBindingAgent] = useState(false);
   const [bindTxHash, setBindTxHash] = useState<string | null>(null);
   const [bindCompleted, setBindCompleted] = useState(false);
@@ -235,7 +235,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
   const generateId = () => `agent-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
   const handleCreateAgent = () => {
     if (!canCreateAgent) {
-      toast.error('Please mint SBT first. Agent must be bound to your SBT.');
+      toast.error(t('wizard.needMintBeforeAgent'));
       return;
     }
     if (!agentName.trim()) return;
@@ -257,7 +257,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
   const handleSaveConfig = async () => {
     if (!currentAgentId) return;
     if (!ownerAddress || tokenId === null || tokenId === undefined) {
-      toast.error('Wallet or tokenId is missing. Please reconnect wallet and refresh identity state.');
+      toast.error(t('agent.error.walletTokenMissing'));
       return;
     }
 
@@ -308,14 +308,14 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
 
   const handleConnectTelegram = async () => {
     if (!currentSavedAgent?.deepLink || !currentSavedAgent.backendAgentId) {
-      toast.error('Missing Telegram deepLink. Please create agent again.');
+      toast.error(t('agent.error.missingDeepLink'));
       return;
     }
 
     window.open(currentSavedAgent.deepLink, '_blank', 'noopener,noreferrer');
     setTelegramConnected(true);
     setResolveError(null);
-    setResolveStatusText('Waiting for Telegram confirmation...');
+    setResolveStatusText(t('agent.waitingTelegram'));
     setSubStep('resolving');
 
     const baseUrl = getAgentApiBase();
@@ -379,12 +379,12 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
 
   const handleBindAgentPermission = async () => {
     if (!publicClient || tokenId === null || tokenId === undefined) {
-      toast.error('Missing tokenId. Please refresh identity state and try again.');
+      toast.error(t('agent.error.missingTokenId'));
       return;
     }
 
     if (isWrongNetwork) {
-      toast.error('Please switch to BSC testnet (97) before binding agent permission.');
+      toast.error(t('agent.error.switchBscBeforeBind'));
       return;
     }
 
@@ -397,13 +397,13 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
     const scopes = permission.identityScopes || [];
     const newMask = buildPermissionMaskFromQuadrants(scopes);
     if (newMask === 0n) {
-      toast.error('Please select at least one permission quadrant.');
+      toast.error(t('agent.error.selectScope'));
       return;
     }
 
     const expiryOffset = resolveExpirySeconds(permission);
     if (!expiryOffset) {
-      toast.error('Please select a valid authorization duration.');
+      toast.error(t('agent.error.selectDuration'));
       return;
     }
     const expiry = BigInt(Math.floor(Date.now() / 1000) + expiryOffset);
@@ -418,7 +418,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
         chainId: BSC_TESTNET_CHAIN_ID,
       });
       setBindTxHash(hash);
-      toast.info('Binding transaction submitted. Waiting for confirmation...');
+      toast.info(t('agent.bindingSubmitted'));
       await publicClient.waitForTransactionReceipt({ hash });
       setBindCompleted(true);
       toast.success('Agent bound and permission granted.', {
@@ -547,7 +547,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
                     value={agentName}
                     onChange={(e) => setAgentName(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleCreateAgent()}
-                    placeholder="e.g. Brand Tracker"
+                    placeholder={t('agent.namePlaceholder')}
                     className="w-full bg-transparent border-b border-foreground/10 px-0 py-2 text-sm text-foreground placeholder:text-muted-foreground/30 focus:outline-none focus:border-foreground/30 transition-colors"
                   />
                   <div className="pt-2">
@@ -591,7 +591,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
                               }}
                               className={`text-xs px-4 py-1.5 rounded-full transition-all ${selected ? 'text-foreground border' : 'text-muted-foreground/50 border border-foreground/10 hover:border-foreground/20'}`}
                               style={selected ? { borderColor: 'rgba(242,68,85,0.4)', background: 'rgba(242,68,85,0.08)', color: 'rgba(242,68,85,0.9)' } : {}}>
-                              {s}
+                              {t(`common.${s.toLowerCase()}`)}
                             </button>
                           );
                         })}
@@ -610,7 +610,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
                               style={{ borderColor: permission.authorizationDuration === d ? '#F24455' : 'rgba(255,255,255,0.15)' }}>
                               {permission.authorizationDuration === d && <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#F24455' }} />}
                             </span>
-                            <span className="text-sm text-foreground/80">{d}</span>
+                            <span className="text-sm text-foreground/80">{t(d === '7 days' ? 'duration.7days' : d === '30 days' ? 'duration.30days' : 'duration.custom')}</span>
                           </div>
                         ))}
                       </div>
@@ -619,7 +619,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
                           <span className="text-[11px] text-muted-foreground">{t('agent.days')}</span>
                           <input type="number" min="1" value={permission.customDurationDays}
                             onChange={(e) => setPermission((p) => ({ ...p, customDurationDays: e.target.value.replace(/[^0-9]/g, '') }))}
-                            placeholder="e.g. 14"
+                            placeholder={t('agent.customDaysPlaceholder')}
                             className="flex-1 bg-transparent border-b border-foreground/10 px-0 py-1.5 text-xs text-foreground focus:outline-none focus:border-foreground/30 transition-colors" />
                         </div>
                       )}
@@ -632,7 +632,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
                       <button onClick={handleSaveConfig}
                         disabled={isRegistering || !ownerAddress || tokenId === null || tokenId === undefined}
                         className="btn-twin btn-twin-primary btn-glow w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed">
-                        {isRegistering ? 'Creating...' : t('agent.createAgent')}
+                        {isRegistering ? t('agent.creating') : t('agent.createAgent')}
                       </button>
                     </div>
                   </div>
@@ -681,7 +681,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
           {subStep === 'resolving' && (
             <div className="animate-fade-in space-y-0">
               <div className="text-center pb-8">
-                <h2 className="text-2xl font-bold mb-1">Waiting for Agent Wallet</h2>
+                <h2 className="text-2xl font-bold mb-1">{t('agent.waitingWallet')}</h2>
                 <p className="text-sm text-muted-foreground">Telegram confirmed. We are waiting for backend to return agentAddress.</p>
               </div>
 
@@ -692,7 +692,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
                 <p className="text-xs text-muted-foreground">{resolveStatusText}</p>
                 {currentSavedAgent?.backendAgentId && (
                   <p className="text-[10px] text-muted-foreground/60 font-mono break-all">
-                    Agent ID: {currentSavedAgent.backendAgentId}
+                    {t('agent.agentId')}: {currentSavedAgent.backendAgentId}
                   </p>
                 )}
               </div>
@@ -708,7 +708,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
                   }}
                   className="btn-twin btn-twin-ghost w-full py-2.5 text-sm"
                 >
-                  Back
+                  {t('common.back')}
                 </button>
               </div>
             </div>
@@ -747,7 +747,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
                   <span style={{ color: '#F24455' }}>✓ Connected</span>
                 </div>
                 <div className="flex justify-between py-1 gap-4">
-                  <span className="text-muted-foreground">Agent Address</span>
+                  <span className="text-muted-foreground">{t('agentStudio.agentAddress')}</span>
                   <span className="text-foreground/80 font-mono text-right break-all">
                     {currentSavedAgent?.agentAddress || '-'}
                   </span>
@@ -759,10 +759,10 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
                   </span>
                 </div>
                 <div className="flex justify-between py-1 gap-4">
-                  <span className="text-muted-foreground">Authorization Duration</span>
+                  <span className="text-muted-foreground">{t('agent.authDuration')}</span>
                   <span className="text-foreground/80 text-right">
                     {permission.authorizationDuration === 'Custom'
-                      ? `${permission.customDurationDays || '-'} days`
+                      ? `${permission.customDurationDays || '-'} ${t('agent.days')}`
                       : (permission.authorizationDuration || '-')}
                   </span>
                 </div>
@@ -788,14 +788,14 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
                     {isWrongNetwork && (
                       <div className="rounded-lg border border-yellow-400/35 bg-yellow-400/10 px-3 py-2">
                         <p className="text-[11px] text-yellow-200 mb-2">
-                          Wrong network detected. Switch to BSC Testnet (97) before binding.
+                          {t('review.wrongNetwork').replace('{network}', 'BSC Testnet (97)')}
                         </p>
                         <button
                           onClick={() => switchChain({ chainId: BSC_TESTNET_CHAIN_ID })}
                           className="btn-twin btn-twin-primary py-1.5 px-3 text-xs"
                           disabled={isSwitchingNetwork}
                         >
-                          {isSwitchingNetwork ? 'Switching...' : 'Switch to BSC Testnet (97)'}
+                          {isSwitchingNetwork ? t('review.switching') : t('review.switchTo').replace('{network}', 'BSC Testnet (97)')}
                         </button>
                       </div>
                     )}
@@ -804,7 +804,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
                       disabled={isBindingAgent || isWrongNetwork || !currentSavedAgent?.agentAddress}
                       className="btn-twin btn-twin-primary btn-glow w-full py-3 disabled:opacity-40 disabled:cursor-not-allowed"
                     >
-                      {isBindingAgent ? 'Binding...' : 'Bind your agent and grant permission scope'}
+                      {isBindingAgent ? t('agent.binding') : t('agent.bindPermission')}
                     </button>
                   </>
                 )}

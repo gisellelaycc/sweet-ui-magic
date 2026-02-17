@@ -108,13 +108,13 @@ export const WelcomeStep = ({ onNext, locked = false, onRequestConnect }: Props)
               {locked && (
                 <div className="absolute inset-0 rounded-xl bg-background/70 backdrop-blur-sm border border-foreground/10 flex flex-col items-center justify-center gap-4 px-4 py-6 min-h-[120px]">
                   <p className="text-xs text-muted-foreground text-center">
-                    Connect wallet to continue.
+                    {t('wallet.connectToContinue')}
                   </p>
                   <button
                     onClick={onRequestConnect}
                     className="btn-twin btn-twin-primary py-2 px-3 text-xs"
                   >
-                    Connect Wallet
+                    {t('wallet.connect')}
                   </button>
                 </div>
               )}

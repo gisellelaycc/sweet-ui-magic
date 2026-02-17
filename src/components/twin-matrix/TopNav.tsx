@@ -17,8 +17,7 @@ interface Props {
 const NAV_KEYS: { id: NavPage; key: string }[] = [
   { id: 'identity', key: 'nav.identity' },
   { id: 'agent', key: 'nav.agents' },
-  { id: 'missions', key: 'nav.signalMarketplace' },
-  { id: 'auth', key: 'nav.records' },
+  { id: 'missions', key: 'nav.signalRecords' },
 ];
 
 export const TopNav = ({
@@ -46,7 +45,7 @@ export const TopNav = ({
     return () => document.removeEventListener('mousedown', handler);
   }, [langOpen, walletMenuOpen]);
 
-  const langs: Lang[] = ['en', 'zh', 'ja', 'ko'];
+  const langs: Lang[] = ['en', 'zh', 'zhCN', 'ja', 'ko'];
 
   return (
     <header className="flex items-center justify-between px-6 py-3 border-b border-foreground/5 relative z-30">
@@ -89,7 +88,7 @@ export const TopNav = ({
             onClick={() => setLangOpen(!langOpen)}
             className="text-sm text-muted-foreground hover:text-foreground transition-colors py-2 px-1"
           >
-            {lang.toUpperCase()}
+            {lang === 'zhCN' ? '简体' : lang.toUpperCase()}
           </button>
 
           {langOpen && (
@@ -156,7 +155,7 @@ export const TopNav = ({
             onClick={onConnectWallet}
             className="btn-twin btn-twin-primary py-2 px-3 text-xs"
           >
-            Connect Wallet
+            {t('wallet.connect')}
           </button>
         )}
       </div>

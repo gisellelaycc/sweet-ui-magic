@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { permissionMaskToGrantedQuadrants, type OnchainBoundAgent, type OnchainVersion } from '@/lib/contracts/twin-matrix-sbt';
 import { SPEC_REGISTRY } from '@/lib/twin-encoder/spec-registry';
+import { useI18n } from '@/lib/i18n';
 
 interface Props {
   tokenId: bigint;
@@ -44,6 +45,7 @@ export const OnchainIdentityStatePage = ({
   onRefresh,
   isRefreshing,
 }: Props) => {
+  const { t } = useI18n();
   const [selectedVersion, setSelectedVersion] = useState<number | null>(null);
   const [hoveredCell, setHoveredCell] = useState<number | null>(null);
 
@@ -74,9 +76,10 @@ export const OnchainIdentityStatePage = ({
   }, [activeVersion]);
 
   const aiSummary = useMemo(() => {
-    if (!activeVersion) return 'No on-chain matrix available yet.';
+    if (!activeVersion) return t('onchain.noMatrixYet');
 
     const dominantLayer = [...layerMix].sort((a, b) => b.percent - a.percent)[0];
+    const dominantLayerLabel = t(`common.${dominantLayer.key}`);
     const activeDims = activeVersion.matrix
       .map((value, index) => ({ value, index }))
       .filter((item) => item.value > 0)
@@ -85,48 +88,51 @@ export const OnchainIdentityStatePage = ({
       .map((item) => humanizeLabel(DIM_LABEL_MAP.get(item.index) ?? `D${item.index}`));
 
     if (activeDims.length === 0) {
-      return `Current matrix is sparse. Dominant layer is ${dominantLayer.label}.`;
+      return t('onchain.aiSparse').replace('{layer}', dominantLayerLabel);
     }
 
-    return `Dominant layer: ${dominantLayer.label} (${dominantLayer.percent}%). Top signals: ${activeDims.join(', ')}.`;
-  }, [activeVersion, layerMix]);
+    return t('onchain.aiDominant')
+      .replace('{layer}', dominantLayerLabel)
+      .replace('{percent}', String(dominantLayer.percent))
+      .replace('{signals}', activeDims.join(', '));
+  }, [activeVersion, layerMix, t]);
 
   return (
     <div className="animate-fade-in h-full overflow-y-auto scrollbar-hide">
       <div className="max-w-6xl mx-auto px-6 py-6 space-y-6">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h2 className="text-2xl font-bold mb-1">Identity State</h2>
-            <p className="text-muted-foreground text-sm">On-chain state from TwinMatrixSBT</p>
+            <h2 className="text-2xl font-bold mb-1">{t('myIdentity.title')}</h2>
+            <p className="text-muted-foreground text-sm">{t('onchain.subtitle')}</p>
           </div>
           <button
             onClick={onRefresh}
             disabled={isRefreshing}
             className="text-xs px-4 py-2 border border-foreground/10 rounded-lg text-foreground/80 hover:bg-foreground/5 hover:text-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isRefreshing ? 'Refreshing...' : 'Refresh'}
+            {isRefreshing ? t('onchain.refreshing') : t('onchain.refresh')}
           </button>
         </div>
 
         <ThinDivider />
 
         <div className="flex items-center gap-6 text-xs text-muted-foreground/70 flex-wrap">
-          <span>Token ID <span className="text-foreground/80 font-mono">{tokenId.toString()}</span></span>
+          <span>{t('onchain.tokenId')} <span className="text-foreground/80 font-mono">{tokenId.toString()}</span></span>
           <span>·</span>
-          <span>Latest Version <span className="text-foreground/80 font-mono">v{latestVersion}</span></span>
+          <span>{t('onchain.latestVersion')} <span className="text-foreground/80 font-mono">v{latestVersion}</span></span>
           <span>·</span>
-          <span>Wallet <span className="text-foreground/80 font-mono">{walletAddress ?? '-'}</span></span>
+          <span>{t('onchain.wallet')} <span className="text-foreground/80 font-mono">{walletAddress ?? '-'}</span></span>
         </div>
 
         <ThinDivider />
 
         <div>
-          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-4">State Insight</h3>
+          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-4">{t('dashboard.stateInsight')}</h3>
           <div className="space-y-2.5">
             {layerMix.map((layer) => (
               <div key={layer.key} className="space-y-1">
                 <div className="flex justify-between text-[11px]">
-                  <span className="text-foreground/70">{layer.label}</span>
+                  <span className="text-foreground/70">{t(`common.${layer.key}`)}</span>
                   <span className="text-muted-foreground">{layer.percent}%</span>
                 </div>
                 <div className="h-[3px] bg-transparent rounded-full overflow-visible">
@@ -147,7 +153,7 @@ export const OnchainIdentityStatePage = ({
         <ThinDivider />
 
         <div>
-          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-3">AI Summary</h3>
+          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-3">{t('dashboard.aiSummary')}</h3>
           <p className="text-sm text-foreground/80 italic leading-relaxed">{aiSummary}</p>
         </div>
 
@@ -156,7 +162,7 @@ export const OnchainIdentityStatePage = ({
         <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,560px)_minmax(0,1fr)] gap-6 xl:gap-10 items-start">
           <div className="w-fit max-w-[560px]">
             <div className="mb-3">
-              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Twin Matrix Projection (256D)</h3>
+              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">{t('review.projection')}</h3>
             </div>
             {activeVersion ? (
               <div className="relative max-w-[560px]">
@@ -230,7 +236,7 @@ export const OnchainIdentityStatePage = ({
                                   </span>
                                   {isHovered && (
                                     <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-foreground/90 text-background text-[8px] px-1.5 py-0.5 rounded whitespace-nowrap z-10">
-                                      D{idx}: {value} ({slice.label})
+                                      D{idx}: {value} ({t(`common.${slice.key}`)})
                                     </div>
                                   )}
                                 </div>
@@ -244,12 +250,12 @@ export const OnchainIdentityStatePage = ({
                 </div>
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground">No matrix versions available.</p>
+              <p className="text-sm text-muted-foreground">{t('onchain.noMatrix')}</p>
             )}
           </div>
 
           <div className="space-y-0 min-w-0 xl:pl-2">
-            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2">Version History</h3>
+            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2">{t('dashboard.versionHistory')}</h3>
             <div className="border border-foreground/10 rounded-xl px-3 py-3">
               {versions.map((item, idx) => (
                 <div key={item.version}>
@@ -259,9 +265,9 @@ export const OnchainIdentityStatePage = ({
                   >
                     <div className="flex items-center justify-between gap-3">
                       <span className="text-sm font-mono">v{item.version}</span>
-                      <span className="text-xs text-muted-foreground">Block {item.blockNumber}</span>
+                      <span className="text-xs text-muted-foreground">{t('onchain.block')} {item.blockNumber}</span>
                     </div>
-                    <p className="text-xs text-muted-foreground font-mono mt-1">digest: {shortDigest(item.digest)}</p>
+                    <p className="text-xs text-muted-foreground font-mono mt-1">{t('onchain.digest')}: {shortDigest(item.digest)}</p>
                   </button>
                   {idx < versions.length - 1 && <ThinDivider />}
                 </div>
@@ -273,9 +279,9 @@ export const OnchainIdentityStatePage = ({
         <ThinDivider />
 
         <div className="space-y-0">
-          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2">Bound Agents</h3>
+          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2">{t('dashboard.boundAgents')}</h3>
           {boundAgents.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No bound agents found on-chain.</p>
+            <p className="text-sm text-muted-foreground">{t('agentStudio.noBoundAgents')}</p>
           ) : (
             boundAgents.map((agent, idx) => (
               <div key={agent.address}>
@@ -283,15 +289,15 @@ export const OnchainIdentityStatePage = ({
                   <div className="flex items-center justify-between gap-3">
                     <p className="text-sm font-medium">{agent.name}</p>
                     <span className={`text-[10px] px-2 py-0.5 rounded-full ${agent.active ? 'bg-emerald-500/15 text-emerald-300' : 'bg-foreground/10 text-muted-foreground'}`}>
-                      {agent.active ? 'ACTIVE' : 'INACTIVE'}
+                      {agent.active ? t('onchain.active') : t('onchain.inactive')}
                     </span>
                   </div>
                   <p className="text-xs font-mono text-muted-foreground mt-1 break-all">{agent.address}</p>
                   <p className="text-[10px] font-mono text-muted-foreground mt-1">
-                    ERC8004 Token ID: {agent.tokenId !== null ? agent.tokenId.toString() : '-'}
+                    {t('onchain.erc8004TokenId')}: {agent.tokenId !== null ? agent.tokenId.toString() : '-'}
                   </p>
                   <p className="text-[10px] font-mono text-muted-foreground mt-1">
-                    Scope Granted: {permissionMaskToGrantedQuadrants(agent.permissionMask).join(', ') || 'None'}
+                    {t('onchain.scopeGranted')}: {permissionMaskToGrantedQuadrants(agent.permissionMask).join(', ') || t('onchain.none')}
                   </p>
                 </div>
                 {idx < boundAgents.length - 1 && <ThinDivider />}

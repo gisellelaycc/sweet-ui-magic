@@ -3,6 +3,7 @@ import { BaseError, type Address } from 'viem';
 import { toast } from 'sonner';
 import { usePublicClient, useWriteContract } from 'wagmi';
 import { BSC_TESTNET_CHAIN_ID } from '@/lib/wallet/config';
+import { useI18n } from '@/lib/i18n';
 import {
   TWIN_MATRIX_SBT_ADDRESS,
   permissionMaskToGrantedQuadrants,
@@ -55,6 +56,7 @@ export const AgentPermissionEditPage = ({
   onBack,
   onUpdated,
 }: Props) => {
+  const { t } = useI18n();
   const publicClient = usePublicClient({ chainId: BSC_TESTNET_CHAIN_ID });
   const { writeContractAsync } = useWriteContract();
   const [selectedScopes, setSelectedScopes] = useState<string[]>(
@@ -75,16 +77,16 @@ export const AgentPermissionEditPage = ({
   const handleUpdatePermission = async () => {
     if (!publicClient) return;
     if (isWrongNetwork) {
-      toast.error('Please switch to BSC testnet (97) before updating permission.');
+      toast.error(t('agent.error.switchBscBeforeUpdatePermission'));
       return;
     }
     const newMask = buildPermissionMaskFromQuadrants(selectedScopes);
     if (newMask === 0n) {
-      toast.error('Please select at least one permission quadrant.');
+      toast.error(t('agent.error.selectScope'));
       return;
     }
     if (!durationSeconds) {
-      toast.error('Please select a valid authorization duration.');
+      toast.error(t('agent.error.selectDuration'));
       return;
     }
 
@@ -98,9 +100,9 @@ export const AgentPermissionEditPage = ({
         args: [tokenId, agent.address, newMask, expiry],
         chainId: BSC_TESTNET_CHAIN_ID,
       });
-      toast.info('Permission update submitted. Waiting for confirmation...');
+      toast.info(t('agent.permissionUpdateSubmitted'));
       await publicClient.waitForTransactionReceipt({ hash });
-      toast.success('Permission scope updated.', {
+      toast.success(t('agent.permissionUpdated'), {
         description: (
           <a
             href={`https://testnet.bscscan.com/tx/${hash}`}
@@ -108,14 +110,14 @@ export const AgentPermissionEditPage = ({
             rel="noreferrer"
             className="underline"
           >
-            View tx on BscScan
+            {t('agent.viewTx')}
           </a>
         ),
       });
       onUpdated();
     } catch (error) {
       const message = error instanceof BaseError ? error.shortMessage : String(error);
-      toast.error(`Update permission failed: ${message}`);
+      toast.error(`${t('agent.error.updatePermissionFailed')}: ${message}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -128,11 +130,11 @@ export const AgentPermissionEditPage = ({
           onClick={onBack}
           className="text-xs text-muted-foreground hover:text-foreground transition-colors"
         >
-          ← Back to Agent Studio
+          ← {t('agent.backToStudio')}
         </button>
 
         <div>
-          <h2 className="text-2xl font-bold mb-1">Edit Agent Permission</h2>
+          <h2 className="text-2xl font-bold mb-1">{t('agent.editPermissionTitle')}</h2>
           <p className="text-muted-foreground text-sm">
             {agent.name} · {formatAddressPreview(agent.address)}
           </p>
@@ -141,7 +143,7 @@ export const AgentPermissionEditPage = ({
         <div className="w-full h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)' }} />
 
         <div className="space-y-3">
-          <p className="text-xs text-muted-foreground uppercase tracking-widest">Scope</p>
+          <p className="text-xs text-muted-foreground uppercase tracking-widest">{t('agent.scope')}</p>
           <div className="flex flex-wrap gap-2">
             {QUADRANTS.map((scope) => {
               const selected = selectedScopes.includes(scope);
@@ -159,7 +161,7 @@ export const AgentPermissionEditPage = ({
                   }`}
                   style={selected ? { borderColor: 'rgba(242,68,85,0.4)', background: 'rgba(242,68,85,0.08)', color: 'rgba(242,68,85,0.9)' } : {}}
                 >
-                  {scope}
+                  {t(`common.${scope.toLowerCase()}`)}
                 </button>
               );
             })}
@@ -169,7 +171,7 @@ export const AgentPermissionEditPage = ({
         <div className="w-full h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)' }} />
 
         <div className="space-y-3">
-          <p className="text-xs text-muted-foreground uppercase tracking-widest">Authorization Duration</p>
+          <p className="text-xs text-muted-foreground uppercase tracking-widest">{t('agent.authDuration')}</p>
           <div className="space-y-2">
             {DURATION_OPTIONS.map((option) => (
               <div
@@ -186,19 +188,19 @@ export const AgentPermissionEditPage = ({
                 >
                   {duration === option && <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#F24455' }} />}
                 </span>
-                <span className="text-sm text-foreground/80">{option}</span>
+                <span className="text-sm text-foreground/80">{t(option === '7 days' ? 'duration.7days' : option === '30 days' ? 'duration.30days' : 'duration.custom')}</span>
               </div>
             ))}
           </div>
           {duration === 'Custom' && (
             <div className="animate-fade-in flex items-center gap-2 pt-1">
-              <span className="text-[11px] text-muted-foreground">Days</span>
+              <span className="text-[11px] text-muted-foreground">{t('agent.days')}</span>
               <input
                 type="number"
                 min="1"
                 value={customDays}
                 onChange={(e) => setCustomDays(e.target.value.replace(/[^0-9]/g, ''))}
-                placeholder="e.g. 14"
+                placeholder={t('agent.customDaysPlaceholder')}
                 className="flex-1 bg-transparent border-b border-foreground/10 px-0 py-1.5 text-xs text-foreground focus:outline-none focus:border-foreground/30 transition-colors"
               />
             </div>
@@ -208,14 +210,14 @@ export const AgentPermissionEditPage = ({
         {isWrongNetwork && (
           <div className="rounded-lg border border-yellow-400/35 bg-yellow-400/10 px-3 py-2">
             <p className="text-[11px] text-yellow-200 mb-2">
-              Wrong network detected. Switch to BSC Testnet (97) before updating permission.
+              {t('review.wrongNetwork').replace('{network}', 'BSC Testnet (97)')}
             </p>
             <button
               onClick={onSwitchNetwork}
               className="btn-twin btn-twin-primary py-1.5 px-3 text-xs"
               disabled={isSwitchingNetwork}
             >
-              {isSwitchingNetwork ? 'Switching...' : 'Switch to BSC Testnet (97)'}
+              {isSwitchingNetwork ? t('review.switching') : t('review.switchTo').replace('{network}', 'BSC Testnet (97)')}
             </button>
           </div>
         )}
@@ -225,7 +227,7 @@ export const AgentPermissionEditPage = ({
           disabled={isSubmitting || isWrongNetwork}
           className="btn-twin btn-twin-primary btn-glow w-full py-3 disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          {isSubmitting ? 'Updating...' : 'Update Permission Scope'}
+          {isSubmitting ? t('agent.updating') : t('agent.updatePermissionScope')}
         </button>
       </div>
     </div>

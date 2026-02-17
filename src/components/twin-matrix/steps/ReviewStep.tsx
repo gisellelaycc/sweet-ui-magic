@@ -4,10 +4,10 @@ import { StepLayout, StepContent } from '../StepLayout';
 import { useI18n } from '@/lib/i18n';
 
 const SLICES = [
-  { label: "Physical", range: [0, 63], color: "255, 60, 100" },
-  { label: "Digital", range: [64, 127], color: "60, 180, 255" },
-  { label: "Social", range: [128, 191], color: "255, 200, 40" },
-  { label: "Spiritual", range: [192, 255], color: "10, 255, 255" },
+  { labelKey: 'common.physical', range: [0, 63], color: "255, 60, 100" },
+  { labelKey: 'common.digital', range: [64, 127], color: "60, 180, 255" },
+  { labelKey: 'common.social', range: [128, 191], color: "255, 200, 40" },
+  { labelKey: 'common.spiritual', range: [192, 255], color: "10, 255, 255" },
 ];
 
 interface Props {
@@ -152,7 +152,7 @@ export const ReviewStep = ({
                                   </span>
                                   {isHovered && (
                                     <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-foreground/90 text-background text-[8px] px-1.5 py-0.5 rounded whitespace-nowrap z-10">
-                                      D{idx}: {val} ({slice.label})
+                                      D{idx}: {val} ({t(slice.labelKey)})
                                     </div>
                                   )}
                                 </div>
@@ -178,8 +178,8 @@ export const ReviewStep = ({
                   <div className="space-y-1">
                     <div className="text-2xl font-bold text-foreground">{quadrant.label}</div>
                     <div className="text-xs text-muted-foreground space-y-0.5">
-                      <p>X (Outcome ↔ Experience): {quadrant.X}</p>
-                      <p>Y (Control ↔ Release): {quadrant.Y}</p>
+                      <p>{t('review.axisX')}: {quadrant.X}</p>
+                      <p>{t('review.axisY')}: {quadrant.Y}</p>
                     </div>
                   </div>
                 )}
@@ -209,10 +209,10 @@ export const ReviewStep = ({
               <div className="space-y-2">
                 <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">{t('review.layerMix')}</h3>
                 {[
-                  { label: "Physical", value: layerMix.physical, color: "255, 60, 100" },
-                  { label: "Digital", value: layerMix.digital, color: "60, 180, 255" },
-                  { label: "Social", value: layerMix.social, color: "255, 200, 40" },
-                  { label: "Spiritual", value: layerMix.spiritual, color: "10, 255, 255" },
+                  { label: t('common.physical'), value: layerMix.physical, color: "255, 60, 100" },
+                  { label: t('common.digital'), value: layerMix.digital, color: "60, 180, 255" },
+                  { label: t('common.social'), value: layerMix.social, color: "255, 200, 40" },
+                  { label: t('common.spiritual'), value: layerMix.spiritual, color: "10, 255, 255" },
                 ].map((layer) => (
                   <div key={layer.label} className="space-y-1">
                     <div className="flex justify-between text-xs">
@@ -236,14 +236,14 @@ export const ReviewStep = ({
           {networkMismatch && (
             <div className="max-w-[520px] mx-auto mt-6 mb-3 rounded-xl border border-amber-400/30 bg-amber-400/10 px-4 py-3">
               <p className="text-xs text-amber-200">
-                Wrong network detected. Switch to {expectedNetworkLabel} before minting/updating matrix.
+                {t('review.wrongNetwork').replace('{network}', expectedNetworkLabel)}
               </p>
               <button
                 onClick={onSwitchNetwork}
                 disabled={!onSwitchNetwork || switchingNetwork}
                 className="mt-2 btn-twin btn-twin-ghost py-1.5 px-3 text-xs disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {switchingNetwork ? 'Switching...' : `Switch to ${expectedNetworkLabel}`}
+                {switchingNetwork ? t('review.switching') : t('review.switchTo').replace('{network}', expectedNetworkLabel)}
               </button>
             </div>
           )}
@@ -256,7 +256,7 @@ export const ReviewStep = ({
               disabled={primaryActionLoading || primaryActionDisabled}
               className="btn-twin btn-twin-primary btn-glow flex-1 py-2.5 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {primaryActionLoading ? 'Pending...' : (primaryActionLabel ?? t('review.commitState'))}
+              {primaryActionLoading ? t('review.pending') : (primaryActionLabel ?? t('review.commitState'))}
             </button>
           </div>
         </div>

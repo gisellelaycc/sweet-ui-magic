@@ -5,8 +5,7 @@ import { useI18n } from '@/lib/i18n';
 const MENU_ITEMS = [
   { id: 'identity', icon: '◈', labelKey: 'menu.identityState' },
   { id: 'update', icon: '✏️', labelKey: 'menu.refineState' },
-  { id: 'auth', icon: '🔐', labelKey: 'menu.issuedRecords' },
-  { id: 'missions', icon: '🎯', labelKey: 'menu.signalRequests' },
+  { id: 'missions', icon: '📒', labelKey: 'menu.signalRecords' },
   { id: 'settings', icon: '⚙️', labelKey: 'menu.preferences' },
 ];
 

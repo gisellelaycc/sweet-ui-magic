@@ -1,16 +1,17 @@
 import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
 
-export type Lang = 'en' | 'zh' | 'ja' | 'ko';
+export type Lang = 'en' | 'zh' | 'zhCN' | 'ja' | 'ko';
 
 const LANG_LABELS: Record<Lang, string> = {
   en: 'English',
   zh: '中文',
+  zhCN: '简体中文',
   ja: '日本語',
   ko: '한국어',
 };
 
 // All translatable strings keyed by dotted path
-type Translations = Record<string, Record<Lang, string>>;
+type Translations = Record<string, Partial<Record<Lang, string>>>;
 
 const T: Translations = {
   // ── Nav ──
@@ -18,6 +19,13 @@ const T: Translations = {
   'nav.agents': { en: 'Agents', zh: '代理', ja: 'エージェント', ko: '에이전트' },
   'nav.signalMarketplace': { en: 'Signal Marketplace', zh: '信號市場', ja: 'シグナルマーケット', ko: '시그널 마켓' },
   'nav.records': { en: 'Records', zh: '紀錄', ja: 'レコード', ko: '레코드' },
+  'nav.signalRecords': { en: 'Signal Records', zh: '信號紀錄', ja: 'シグナル記録', ko: '시그널 기록' },
+
+  // ── Wallet / Gate ──
+  'wallet.required': { en: 'Wallet Required', zh: '需要錢包', zhCN: '需要钱包', ja: 'ウォレットが必要です', ko: '지갑이 필요합니다' },
+  'wallet.connectToContinue': { en: 'Connect Wallet to Continue', zh: '連接錢包以繼續', zhCN: '连接钱包以继续', ja: '続行するにはウォレット接続', ko: '계속하려면 지갑 연결' },
+  'wallet.requiredDesc': { en: 'You need to connect a wallet before entering Twin Matrix. All actions are locked until a wallet is connected.', zh: '進入 Twin Matrix 前需要先連接錢包。未連接前所有操作都會被鎖定。', zhCN: '进入 Twin Matrix 前需要先连接钱包。未连接前所有操作都会被锁定。', ja: 'Twin Matrix に入る前にウォレット接続が必要です。接続されるまで操作はロックされます。', ko: 'Twin Matrix에 들어가기 전에 지갑 연결이 필요합니다. 연결 전까지 모든 동작이 잠깁니다.' },
+  'wallet.connect': { en: 'Connect Wallet', zh: '連接錢包', zhCN: '连接钱包', ja: 'ウォレット接続', ko: '지갑 연결' },
 
   // ── Welcome Step ──
   'welcome.title': { en: 'Bring your 256D self to life.', zh: '喚醒你的 256D 自我。', ja: '256Dの自分を呼び覚まそう。', ko: '256D 자아를 깨우세요.' },
@@ -39,6 +47,44 @@ const T: Translations = {
   'identity.status': { en: 'Status?', zh: '狀態？', ja: 'ステータス？', ko: '상태?' },
   'identity.work': { en: 'Work?', zh: '職業？', ja: '仕事？', ko: '직업?' },
   'identity.living': { en: 'Living?', zh: '居住？', ja: '居住？', ko: '거주?' },
+  'identity.opt.age.18_24': { en: '18–24', zh: '18–24', zhCN: '18–24', ja: '18–24', ko: '18–24' },
+  'identity.opt.age.25_34': { en: '25–34', zh: '25–34', zhCN: '25–34', ja: '25–34', ko: '25–34' },
+  'identity.opt.age.35_44': { en: '35–44', zh: '35–44', zhCN: '35–44', ja: '35–44', ko: '35–44' },
+  'identity.opt.age.45_54': { en: '45–54', zh: '45–54', zhCN: '45–54', ja: '45–54', ko: '45–54' },
+  'identity.opt.age.55_64': { en: '55–64', zh: '55–64', zhCN: '55–64', ja: '55–64', ko: '55–64' },
+  'identity.opt.age.65_plus': { en: '65+', zh: '65+', zhCN: '65+', ja: '65+', ko: '65+' },
+  'identity.opt.gender.male': { en: 'Male', zh: '男性', zhCN: '男性', ja: '男性', ko: '남성' },
+  'identity.opt.gender.female': { en: 'Female', zh: '女性', zhCN: '女性', ja: '女性', ko: '여성' },
+  'identity.opt.gender.non_binary': { en: 'Non-binary', zh: '非二元', zhCN: '非二元', ja: 'ノンバイナリー', ko: '논바이너리' },
+  'identity.opt.common.prefer_not': { en: 'Prefer not to say', zh: '不願透露', zhCN: '不愿透露', ja: '回答しない', ko: '응답 안 함' },
+  'identity.opt.height.lt160': { en: '< 160 cm', zh: '< 160 cm', zhCN: '< 160 cm', ja: '< 160 cm', ko: '< 160 cm' },
+  'identity.opt.height.160_170': { en: '160–170', zh: '160–170', zhCN: '160–170', ja: '160–170', ko: '160–170' },
+  'identity.opt.height.170_180': { en: '170–180', zh: '170–180', zhCN: '170–180', ja: '170–180', ko: '170–180' },
+  'identity.opt.height.gt180': { en: '> 180 cm', zh: '> 180 cm', zhCN: '> 180 cm', ja: '> 180 cm', ko: '> 180 cm' },
+  'identity.opt.weight.lt50': { en: '< 50 kg', zh: '< 50 kg', zhCN: '< 50 kg', ja: '< 50 kg', ko: '< 50 kg' },
+  'identity.opt.weight.50_65': { en: '50–65', zh: '50–65', zhCN: '50–65', ja: '50–65', ko: '50–65' },
+  'identity.opt.weight.65_80': { en: '65–80', zh: '65–80', zhCN: '65–80', ja: '65–80', ko: '65–80' },
+  'identity.opt.weight.gt80': { en: '> 80 kg', zh: '> 80 kg', zhCN: '> 80 kg', ja: '> 80 kg', ko: '> 80 kg' },
+  'identity.opt.education.high_school': { en: 'High School', zh: '高中', zhCN: '高中', ja: '高校', ko: '고등학교' },
+  'identity.opt.education.bachelor': { en: "Bachelor's", zh: '學士', zhCN: '学士', ja: '学士', ko: '학사' },
+  'identity.opt.education.master': { en: "Master's", zh: '碩士', zhCN: '硕士', ja: '修士', ko: '석사' },
+  'identity.opt.education.doctorate': { en: 'Doctorate', zh: '博士', zhCN: '博士', ja: '博士', ko: '박사' },
+  'identity.opt.common.other': { en: 'Other', zh: '其他', zhCN: '其他', ja: 'その他', ko: '기타' },
+  'identity.opt.income.lt30': { en: '< $30k', zh: '< $30k', zhCN: '< $30k', ja: '< $30k', ko: '< $30k' },
+  'identity.opt.income.30_60': { en: '$30k–60k', zh: '$30k–60k', zhCN: '$30k–60k', ja: '$30k–60k', ko: '$30k–60k' },
+  'identity.opt.income.60_100': { en: '$60k–100k', zh: '$60k–100k', zhCN: '$60k–100k', ja: '$60k–100k', ko: '$60k–100k' },
+  'identity.opt.income.gt100': { en: '$100k+', zh: '$100k+', zhCN: '$100k+', ja: '$100k+', ko: '$100k+' },
+  'identity.opt.marital.single': { en: 'Single', zh: '單身', zhCN: '单身', ja: '独身', ko: '미혼' },
+  'identity.opt.marital.relationship': { en: 'In a relationship', zh: '穩定交往中', zhCN: '稳定交往中', ja: '交際中', ko: '연애 중' },
+  'identity.opt.marital.married': { en: 'Married', zh: '已婚', zhCN: '已婚', ja: '既婚', ko: '기혼' },
+  'identity.opt.marital.na': { en: 'N/A', zh: '不適用', zhCN: '不适用', ja: '該当なし', ko: '해당 없음' },
+  'identity.opt.occupation.student': { en: 'Student', zh: '學生', zhCN: '学生', ja: '学生', ko: '학생' },
+  'identity.opt.occupation.employee': { en: 'Employee', zh: '受僱者', zhCN: '受雇者', ja: '会社員', ko: '직장인' },
+  'identity.opt.occupation.self_employed': { en: 'Self-employed', zh: '自營業', zhCN: '自营业', ja: '自営業', ko: '자영업' },
+  'identity.opt.occupation.freelancer': { en: 'Freelancer', zh: '自由工作者', zhCN: '自由职业者', ja: 'フリーランス', ko: '프리랜서' },
+  'identity.opt.living.urban': { en: 'Urban', zh: '都市', zhCN: '城市', ja: '都市', ko: '도시' },
+  'identity.opt.living.suburban': { en: 'Suburban', zh: '郊區', zhCN: '郊区', ja: '郊外', ko: '교외' },
+  'identity.opt.living.rural': { en: 'Rural', zh: '鄉村', zhCN: '乡村', ja: '地方', ko: '농촌' },
 
   // ── Category Step ──
   'category.title': { en: 'Signal Layers', zh: '信號層', ja: 'シグナルレイヤー', ko: '시그널 레이어' },
@@ -173,6 +219,12 @@ const T: Translations = {
   'review.layerMix': { en: 'Layer Mix', zh: '層分佈', ja: 'レイヤーミックス', ko: '레이어 믹스' },
   'review.refine': { en: 'Refine', zh: '精煉', ja: '調整', ko: '조정' },
   'review.commitState': { en: 'Commit State', zh: '提交狀態', ja: '状態を確定', ko: '상태 확정' },
+  'review.axisX': { en: 'X (Outcome ↔ Experience)', zh: 'X（結果 ↔ 體驗）', zhCN: 'X（结果 ↔ 体验）', ja: 'X（成果 ↔ 体験）', ko: 'X (결과 ↔ 경험)' },
+  'review.axisY': { en: 'Y (Control ↔ Release)', zh: 'Y（控制 ↔ 釋放）', zhCN: 'Y（控制 ↔ 释放）', ja: 'Y（制御 ↔ 解放）', ko: 'Y (통제 ↔ 해제)' },
+  'review.wrongNetwork': { en: 'Wrong network detected. Switch to {network} before proceeding.', zh: '偵測到錯誤網路，請先切換到 {network}。', zhCN: '检测到错误网络，请先切换到 {network}。', ja: 'ネットワークが異なります。{network} に切り替えてください。', ko: '네트워크가 다릅니다. {network}으로 전환하세요.' },
+  'review.switchTo': { en: 'Switch to {network}', zh: '切換到 {network}', zhCN: '切换到 {network}', ja: '{network} に切替', ko: '{network}으로 전환' },
+  'review.switching': { en: 'Switching...', zh: '切換中...', zhCN: '切换中...', ja: '切替中...', ko: '전환 중...' },
+  'review.pending': { en: 'Pending...', zh: '處理中...', zhCN: '处理中...', ja: '処理中...', ko: '처리 중...' },
   'review.committing': { en: 'Committing your identity…', zh: '正在提交你的身份…', ja: 'アイデンティティを確定中…', ko: '아이덴티티를 확정하는 중…' },
   'review.awaiting': { en: 'Awaiting wallet signature', zh: '等待錢包簽名', ja: 'ウォレット署名を待機中', ko: '지갑 서명 대기 중' },
   'review.committed': { en: 'Identity Committed', zh: '身份已提交', ja: 'アイデンティティ確定完了', ko: '아이덴티티 확정됨' },
@@ -295,6 +347,17 @@ const T: Translations = {
   'agentStudio.configure': { en: 'Configure', zh: '設定', ja: '設定', ko: '설정' },
   'agentStudio.pause': { en: 'Pause', zh: '暫停', ja: '一時停止', ko: '일시정지' },
   'agentStudio.continueSetup': { en: 'Continue Setup', zh: '繼續設定', ja: 'セットアップ続行', ko: '설정 계속' },
+  'agentStudio.draft': { en: 'Draft', zh: '草稿', zhCN: '草稿', ja: '下書き', ko: '초안' },
+  'agentStudio.noBoundAgents': { en: 'No bound agents found on-chain yet.', zh: '目前鏈上尚無綁定代理。', zhCN: '目前链上暂无绑定代理。', ja: 'オンチェーンにバインド済みエージェントはありません。', ko: '체인에 바인딩된 에이전트가 없습니다.' },
+  'agentStudio.selectToEdit': { en: 'Select Agent to Edit', zh: '選擇要編輯的代理', zhCN: '选择要编辑的代理', ja: '編集するエージェントを選択', ko: '편집할 에이전트 선택' },
+  'agentStudio.cancel': { en: 'Cancel', zh: '取消', zhCN: '取消', ja: 'キャンセル', ko: '취소' },
+  'agentStudio.usdtBalance': { en: 'USDT Balance', zh: 'USDT 餘額', zhCN: 'USDT 余额', ja: 'USDT残高', ko: 'USDT 잔액' },
+  'agentStudio.agentWallet': { en: 'Agent Wallet', zh: '代理錢包', zhCN: '代理钱包', ja: 'エージェントウォレット', ko: '에이전트 지갑' },
+  'agentStudio.agentAddress': { en: 'Agent Address', zh: '代理地址', zhCN: '代理地址', ja: 'エージェントアドレス', ko: '에이전트 주소' },
+  'agentStudio.expiryPermission': { en: 'Expiry of granted scope permission', zh: '授權範圍到期時間', zhCN: '授权范围到期时间', ja: '許可スコープの有効期限', ko: '권한 범위 만료 시간' },
+  'agentStudio.channelTelegram': { en: 'Telegram', zh: 'Telegram', zhCN: 'Telegram', ja: 'Telegram', ko: 'Telegram' },
+  'agentStudio.taskSignalMatching': { en: 'Signal Matching', zh: '信號匹配', zhCN: '信号匹配', ja: 'シグナルマッチング', ko: '시그널 매칭' },
+  'agentStudio.taskBrandOffers': { en: 'Brand Offers', zh: '品牌合作邀約', zhCN: '品牌合作邀约', ja: 'ブランドオファー', ko: '브랜드 오퍼' },
   'agentStudio.tasks': { en: 'Tasks:', zh: '任務：', ja: 'タスク:', ko: '작업:' },
   'agentStudio.earned': { en: 'Earned:', zh: '已賺取：', ja: '獲得:', ko: '획득:' },
   'agentStudio.created': { en: 'Created:', zh: '建立於：', ja: '作成:', ko: '생성:' },
@@ -312,6 +375,7 @@ const T: Translations = {
   'records.view': { en: 'View', zh: '檢視', ja: '表示', ko: '보기' },
   'records.active': { en: 'Active', zh: '啟用中', ja: 'アクティブ', ko: '활성' },
   'records.consumed': { en: 'Consumed', zh: '已消耗', ja: '消費済み', ko: '소비됨' },
+  'records.declined': { en: 'Declined', zh: '已拒絕', zhCN: '已拒绝', ja: '辞退済み', ko: '거절됨' },
 
   // ── Signal Marketplace Page ──
   'marketplace.title': { en: 'Signal Marketplace', zh: '信號市場', ja: 'シグナルマーケットプレイス', ko: '시그널 마켓플레이스' },
@@ -400,6 +464,7 @@ const T: Translations = {
   'menu.refineState': { en: 'Refine State', zh: '精煉狀態', ja: '状態を調整', ko: '상태 조정' },
   'menu.issuedRecords': { en: 'Issued Records', zh: '已發行紀錄', ja: '発行済みレコード', ko: '발행된 기록' },
   'menu.signalRequests': { en: 'Signal Requests', zh: '信號請求', ja: 'シグナルリクエスト', ko: '시그널 요청' },
+  'menu.signalRecords': { en: 'Signal Records', zh: '信號紀錄', ja: 'シグナル記録', ko: '시그널 기록' },
   'menu.preferences': { en: 'Preferences', zh: '偏好設定', ja: '設定', ko: '환경설정' },
 
   // ── Common ──
@@ -414,6 +479,91 @@ const T: Translations = {
   'common.core': { en: 'Core', zh: '核心', ja: 'コア', ko: '코어' },
   'common.topic': { en: 'Topic', zh: '主題', ja: 'トピック', ko: '토픽' },
   'common.soul': { en: 'Soul', zh: '靈魂', ja: 'ソウル', ko: '소울' },
+  'common.back': { en: 'Back', zh: '返回', zhCN: '返回', ja: '戻る', ko: '뒤로' },
+
+  // ── Onchain Identity Page ──
+  'onchain.subtitle': { en: 'On-chain state from TwinMatrixSBT', zh: '來自 TwinMatrixSBT 的鏈上狀態', zhCN: '来自 TwinMatrixSBT 的链上状态', ja: 'TwinMatrixSBT のオンチェーン状態', ko: 'TwinMatrixSBT 온체인 상태' },
+  'onchain.refresh': { en: 'Refresh', zh: '刷新', zhCN: '刷新', ja: '更新', ko: '새로고침' },
+  'onchain.refreshing': { en: 'Refreshing...', zh: '刷新中...', zhCN: '刷新中...', ja: '更新中...', ko: '새로고침 중...' },
+  'onchain.tokenId': { en: 'Token ID', zh: 'Token ID', zhCN: 'Token ID', ja: 'トークンID', ko: '토큰 ID' },
+  'onchain.latestVersion': { en: 'Latest Version', zh: '最新版本', zhCN: '最新版本', ja: '最新バージョン', ko: '최신 버전' },
+  'onchain.wallet': { en: 'Wallet', zh: '錢包', zhCN: '钱包', ja: 'ウォレット', ko: '지갑' },
+  'onchain.noMatrix': { en: 'No matrix versions available.', zh: '目前沒有可用的矩陣版本。', zhCN: '目前没有可用的矩阵版本。', ja: '利用可能なマトリックスバージョンがありません。', ko: '사용 가능한 매트릭스 버전이 없습니다.' },
+  'onchain.noMatrixYet': { en: 'No on-chain matrix available yet.', zh: '目前沒有可用的鏈上矩陣。', zhCN: '目前没有可用的链上矩阵。', ja: 'まだオンチェーンマトリックスがありません。', ko: '온체인 매트릭스가 아직 없습니다.' },
+  'onchain.aiSparse': { en: 'Current matrix is sparse. Dominant layer is {layer}.', zh: '目前矩陣較稀疏，主導層為 {layer}。', zhCN: '当前矩阵较稀疏，主导层为 {layer}。', ja: '現在のマトリックスは疎です。支配層は {layer}。', ko: '현재 매트릭스는 희소합니다. 지배 레이어는 {layer}입니다.' },
+  'onchain.aiDominant': { en: 'Dominant layer: {layer} ({percent}%). Top signals: {signals}.', zh: '主導層：{layer}（{percent}%）。主要信號：{signals}。', zhCN: '主导层：{layer}（{percent}%）。主要信号：{signals}。', ja: '支配層: {layer}（{percent}%）。主要シグナル: {signals}。', ko: '지배 레이어: {layer} ({percent}%). 주요 시그널: {signals}.' },
+  'onchain.block': { en: 'Block', zh: '區塊', zhCN: '区块', ja: 'ブロック', ko: '블록' },
+  'onchain.digest': { en: 'digest', zh: '摘要', zhCN: '摘要', ja: 'ダイジェスト', ko: '다이제스트' },
+  'onchain.active': { en: 'ACTIVE', zh: '啟用中', zhCN: '启用中', ja: '稼働中', ko: '활성' },
+  'onchain.inactive': { en: 'INACTIVE', zh: '未啟用', zhCN: '未启用', ja: '非アクティブ', ko: '비활성' },
+  'onchain.erc8004TokenId': { en: 'ERC8004 Token ID', zh: 'ERC8004 Token ID', zhCN: 'ERC8004 Token ID', ja: 'ERC8004 トークンID', ko: 'ERC8004 토큰 ID' },
+  'onchain.scopeGranted': { en: 'Scope Granted', zh: '已授權範圍', zhCN: '已授权范围', ja: '付与済みスコープ', ko: '권한 부여 범위' },
+  'onchain.none': { en: 'None', zh: '無', zhCN: '无', ja: 'なし', ko: '없음' },
+
+  // ── Agent Flow Extra ──
+  'agent.namePlaceholder': { en: 'e.g. Brand Tracker', zh: '例如：品牌追蹤器', zhCN: '例如：品牌追踪器', ja: '例: Brand Tracker', ko: '예: Brand Tracker' },
+  'agent.customDaysPlaceholder': { en: 'e.g. 14', zh: '例如：14', zhCN: '例如：14', ja: '例: 14', ko: '예: 14' },
+  'agent.creating': { en: 'Creating...', zh: '建立中...', zhCN: '创建中...', ja: '作成中...', ko: '생성 중...' },
+  'agent.waitingWallet': { en: 'Waiting for Agent Wallet', zh: '等待代理錢包', zhCN: '等待代理钱包', ja: 'エージェントウォレット待機中', ko: '에이전트 지갑 대기 중' },
+  'agent.agentId': { en: 'Agent ID', zh: '代理 ID', zhCN: '代理 ID', ja: 'エージェントID', ko: '에이전트 ID' },
+  'agent.binding': { en: 'Binding...', zh: '綁定中...', zhCN: '绑定中...', ja: 'バインド中...', ko: '바인딩 중...' },
+  'agent.bindPermission': { en: 'Bind your agent and grant permission scope', zh: '綁定代理並授權範圍', zhCN: '绑定代理并授权范围', ja: 'エージェントをバインドして権限を付与', ko: '에이전트를 바인딩하고 권한 범위 부여' },
+  'agent.bindingSubmitted': { en: 'Binding transaction submitted. Waiting for confirmation...', zh: '綁定交易已送出，等待確認...', zhCN: '绑定交易已提交，等待确认...', ja: 'バインドトランザクション送信済み。確認待ち...', ko: '바인딩 트랜잭션 제출됨. 확인 대기...' },
+  'agent.waitingTelegram': { en: 'Waiting for Telegram confirmation...', zh: '等待 Telegram 確認中...', zhCN: '等待 Telegram 确认中...', ja: 'Telegram確認待ち...', ko: 'Telegram 확인 대기 중...' },
+  'agent.selectedNotFound': { en: 'Selected agent not found. Please retry.', zh: '找不到選取的代理，請重試。', zhCN: '找不到选中的代理，请重试。', ja: '選択したエージェントが見つかりません。再試行してください。', ko: '선택한 에이전트를 찾을 수 없습니다. 다시 시도하세요.' },
+  'agent.error.walletTokenMissing': { en: 'Wallet or tokenId is missing. Please reconnect wallet and refresh identity state.', zh: '錢包或 tokenId 缺失，請重新連接錢包並刷新身份狀態。', zhCN: '钱包或 tokenId 缺失，请重新连接钱包并刷新身份状态。', ja: 'ウォレットまたはtokenIdが不足しています。再接続して更新してください。', ko: '지갑 또는 tokenId가 없습니다. 지갑 재연결 후 새로고침하세요.' },
+  'agent.error.missingDeepLink': { en: 'Missing Telegram deepLink. Please create agent again.', zh: '缺少 Telegram deepLink，請重新建立代理。', zhCN: '缺少 Telegram deepLink，请重新创建代理。', ja: 'Telegram deepLink がありません。再作成してください。', ko: 'Telegram deepLink가 없습니다. 에이전트를 다시 생성하세요.' },
+  'agent.error.missingTokenId': { en: 'Missing tokenId. Please refresh identity state and try again.', zh: '缺少 tokenId，請刷新身份狀態後重試。', zhCN: '缺少 tokenId，请刷新身份状态后重试。', ja: 'tokenId がありません。更新して再試行してください。', ko: 'tokenId가 없습니다. 상태 새로고침 후 다시 시도하세요.' },
+  'agent.error.switchBscBeforeBind': { en: 'Please switch to BSC testnet (97) before binding agent permission.', zh: '綁定授權前請切換到 BSC testnet (97)。', zhCN: '绑定授权前请切换到 BSC testnet (97)。', ja: 'バインド前に BSC testnet (97) に切替えてください。', ko: '바인딩 전에 BSC testnet(97)으로 전환하세요.' },
+  'agent.error.switchBscBeforeUpdatePermission': { en: 'Please switch to BSC testnet (97) before updating permission.', zh: '更新授權前請切換到 BSC testnet (97)。', zhCN: '更新授权前请切换到 BSC testnet (97)。', ja: '更新前に BSC testnet (97) に切替えてください。', ko: '권한 업데이트 전에 BSC testnet(97)으로 전환하세요.' },
+  'agent.error.selectScope': { en: 'Please select at least one permission quadrant.', zh: '請至少選擇一個授權象限。', zhCN: '请至少选择一个授权象限。', ja: '少なくとも1つの権限象限を選択してください。', ko: '최소 1개의 권한 사분면을 선택하세요.' },
+  'agent.error.selectDuration': { en: 'Please select a valid authorization duration.', zh: '請選擇有效的授權期限。', zhCN: '请选择有效的授权期限。', ja: '有効な権限期間を選択してください。', ko: '유효한 권한 기간을 선택하세요.' },
+  'agent.error.updatePermissionFailed': { en: 'Update permission failed', zh: '更新授權失敗', zhCN: '更新授权失败', ja: '権限更新に失敗', ko: '권한 업데이트 실패' },
+  'agent.permissionUpdateSubmitted': { en: 'Permission update submitted. Waiting for confirmation...', zh: '已送出授權更新交易，等待確認...', zhCN: '已提交授权更新交易，等待确认...', ja: '権限更新を送信しました。確認待ち...', ko: '권한 업데이트 트랜잭션 전송. 확인 대기...' },
+  'agent.permissionUpdated': { en: 'Permission scope updated.', zh: '授權範圍已更新。', zhCN: '授权范围已更新。', ja: '権限スコープを更新しました。', ko: '권한 범위가 업데이트되었습니다.' },
+  'agent.viewTx': { en: 'View tx on BscScan', zh: '在 BscScan 查看交易', zhCN: '在 BscScan 查看交易', ja: 'BscScanで取引を見る', ko: 'BscScan에서 트랜잭션 보기' },
+  'agent.backToStudio': { en: 'Back to Agent Studio', zh: '返回 Agent Studio', zhCN: '返回 Agent Studio', ja: 'Agent Studio に戻る', ko: 'Agent Studio로 돌아가기' },
+  'agent.editPermissionTitle': { en: 'Edit Agent Permission', zh: '編輯代理授權', zhCN: '编辑代理授权', ja: 'エージェント権限を編集', ko: '에이전트 권한 편집' },
+  'agent.updating': { en: 'Updating...', zh: '更新中...', zhCN: '更新中...', ja: '更新中...', ko: '업데이트 중...' },
+  'agent.updatePermissionScope': { en: 'Update Permission Scope', zh: '更新授權範圍', zhCN: '更新授权范围', ja: '権限スコープを更新', ko: '권한 범위 업데이트' },
+
+  // ── Signal Records ──
+  'signalRecords.title': { en: 'Signal Records', zh: '信號紀錄', zhCN: '信号记录', ja: 'シグナル記録', ko: '시그널 기록' },
+  'signalRecords.subtitle': { en: 'Tracks accepted tasks lifecycle: currently doing, completed, expired/revoked.', zh: '追蹤已接受任務生命週期：進行中、已完成、已過期/已撤銷。', zhCN: '跟踪已接受任务生命周期：进行中、已完成、已过期/已撤销。', ja: '受諾済みタスクのライフサイクルを追跡します。', ko: '수락된 작업의 수명주기를 추적합니다.' },
+  'signalRecords.activeCommitments': { en: 'Active Commitments', zh: '進行中承諾', zhCN: '进行中任务', ja: '進行中コミットメント', ko: '진행 중 작업' },
+  'signalRecords.completed': { en: 'Completed', zh: '已完成', zhCN: '已完成', ja: '完了', ko: '완료' },
+  'signalRecords.expiredDeclined': { en: 'Expired / Declined', zh: '已過期 / 已拒絕', zhCN: '已过期 / 已拒绝', ja: '期限切れ / 辞退', ko: '만료 / 거절' },
+  'signalRecords.inflow': { en: 'Inflow', zh: '進帳', zhCN: '进账', ja: '入金', ko: '유입' },
+  'signalRecords.activeSubtitle': { en: 'Accepted tasks in progress, with usage-based quota tracking.', zh: '已接受且進行中的任務，按使用量追蹤配額。', zhCN: '已接受且进行中的任务，按使用量追踪配额。', ja: '進行中タスクを使用量ベースで追跡。', ko: '진행 중 작업을 사용량 기반으로 추적.' },
+  'signalRecords.issuedBy': { en: 'Issued by', zh: '發布方', zhCN: '发布方', ja: '発行元', ko: '발행자' },
+  'signalRecords.remainingQuota': { en: 'Remaining quota', zh: '剩餘配額', zhCN: '剩余额度', ja: '残りクォータ', ko: '잔여 할당량' },
+  'signalRecords.expiry': { en: 'Expiry', zh: '到期', zhCN: '到期', ja: '期限', ko: '만료' },
+  'signalRecords.completedRecords': { en: 'Completed Records', zh: '已完成紀錄', zhCN: '已完成记录', ja: '完了記録', ko: '완료 기록' },
+  'signalRecords.completedSubtitle': { en: 'Finished tasks with usage result and earned reward.', zh: '已結束任務的使用結果與進帳。', zhCN: '已结束任务的使用结果与收益。', ja: '完了タスクの使用結果と報酬。', ko: '완료 작업의 사용 결과와 보상.' },
+  'signalRecords.scopeUsed': { en: 'Scope used', zh: '使用範圍', zhCN: '使用范围', ja: '使用スコープ', ko: '사용 범위' },
+  'signalRecords.totalUsage': { en: 'Total usage', zh: '總使用量', zhCN: '总使用量', ja: '総使用量', ko: '총 사용량' },
+  'signalRecords.completedDate': { en: 'Completed date', zh: '完成日期', zhCN: '完成日期', ja: '完了日', ko: '완료일' },
+  'signalRecords.endedSubtitle': { en: 'Ended tasks that need renewal or action in Telegram.', zh: '已結束任務，可續期或前往 Telegram 處理。', zhCN: '已结束任务，可续期或前往 Telegram 处理。', ja: '終了タスク。更新またはTelegramで対応。', ko: '종료된 작업. 갱신 또는 Telegram 처리 필요.' },
+  'signalRecords.expiryDate': { en: 'Expiry date', zh: '到期日期', zhCN: '到期日期', ja: '期限日', ko: '만료일' },
+  'signalRecords.declineDate': { en: 'Decline date', zh: '拒絕日期', zhCN: '拒绝日期', ja: '辞退日', ko: '거절일' },
+  'signalRecords.openTelegram': { en: 'Open in Telegram', zh: '在 Telegram 開啟', zhCN: '在 Telegram 打开', ja: 'Telegramで開く', ko: 'Telegram에서 열기' },
+  'signalRecords.declined': { en: 'Declined', zh: '已拒絕', zhCN: '已拒绝', ja: '辞退', ko: '거절됨' },
+
+  // ── Wizard Layout (Identity Flow) ──
+  'wizard.mintSubmitted': { en: 'Mint transaction submitted. Waiting for confirmation...', zh: 'Mint 交易已送出，等待確認...', zhCN: 'Mint 交易已提交，等待确认...', ja: 'Mintトランザクション送信済み。確認待ち...', ko: '민트 트랜잭션 제출됨. 확인 대기...' },
+  'wizard.mintSuccess': { en: 'SBT minted successfully.', zh: 'SBT 鑄造成功。', zhCN: 'SBT 铸造成功。', ja: 'SBTのMintに成功しました。', ko: 'SBT 민팅 성공.' },
+  'wizard.updateSubmitted': { en: 'Update transaction submitted. Waiting for confirmation...', zh: '更新交易已送出，等待確認...', zhCN: '更新交易已提交，等待确认...', ja: '更新トランザクション送信済み。確認待ち...', ko: '업데이트 트랜잭션 제출됨. 확인 대기...' },
+  'wizard.updateSuccess': { en: 'Matrix updated on-chain.', zh: '矩陣已更新到鏈上。', zhCN: '矩阵已更新到链上。', ja: 'マトリックスをオンチェーン更新しました。', ko: '매트릭스를 온체인에 업데이트했습니다.' },
+  'wizard.matrixNotReady': { en: 'Matrix is not ready. Please finish the review flow first.', zh: '矩陣尚未準備完成，請先完成 review 流程。', zhCN: '矩阵尚未准备完成，请先完成 review 流程。', ja: 'マトリックス未準備です。先にreviewフローを完了してください。', ko: '매트릭스가 준비되지 않았습니다. review 플로우를 먼저 완료하세요.' },
+  'wizard.updateMatrix': { en: 'Update Matrix', zh: '更新矩陣', zhCN: '更新矩阵', ja: 'マトリックス更新', ko: '매트릭스 업데이트' },
+  'wizard.mintSbt': { en: 'Mint SBT', zh: '鑄造 SBT', zhCN: '铸造 SBT', ja: 'SBTをMint', ko: 'SBT 민트' },
+  'wizard.checkingIdentity': { en: 'Checking on-chain identity state...', zh: '檢查鏈上身份狀態中...', zhCN: '检查链上身份状态中...', ja: 'オンチェーン状態を確認中...', ko: '온체인 상태 확인 중...' },
+  'wizard.failedFetchContract': { en: 'Failed to fetch contract state', zh: '取得合約狀態失敗', zhCN: '获取合约状态失败', ja: 'コントラクト状態の取得に失敗', ko: '컨트랙트 상태 조회 실패' },
+  'wizard.retry': { en: 'Retry', zh: '重試', zhCN: '重试', ja: '再試行', ko: '재시도' },
+  'wizard.matrixUpdateNudge': { en: 'Matrix update complete. You can switch to Agent tab and click + New Agent.', zh: '矩陣更新完成。你可以切到 Agent 分頁並點擊 + New Agent。', zhCN: '矩阵更新完成。你可以切到 Agent 标签并点击 + New Agent。', ja: 'マトリックス更新完了。Agentタブで + New Agent を押してください。', ko: '매트릭스 업데이트 완료. Agent 탭에서 + New Agent를 클릭하세요.' },
+  'wizard.dismiss': { en: 'Dismiss', zh: '關閉', zhCN: '关闭', ja: '閉じる', ko: '닫기' },
+  'wizard.goToAgentTab': { en: 'Go to Agent Tab', zh: '前往 Agent 分頁', zhCN: '前往 Agent 标签', ja: 'Agentタブへ', ko: 'Agent 탭으로 이동' },
+  'wizard.needMintBeforeAgent': { en: 'Please mint SBT first. Agent must be bound to your SBT.', zh: '請先鑄造 SBT。Agent 必須綁定在你的 SBT 上。', zhCN: '请先铸造 SBT。Agent 必须绑定在你的 SBT 上。', ja: '先にSBTをMintしてください。AgentはSBTに紐づく必要があります。', ko: '먼저 SBT를 민팅하세요. Agent는 SBT에 바인딩되어야 합니다.' },
 };
 
 interface I18nContextType {
@@ -431,6 +581,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   const t = useCallback((key: string): string => {
     const entry = T[key];
     if (!entry) return key;
+    if (lang === 'zhCN') return entry.zhCN ?? entry.zh ?? entry.en ?? key;
     return entry[lang] ?? entry.en ?? key;
   }, [lang]);
 
