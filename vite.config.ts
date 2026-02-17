@@ -16,7 +16,7 @@ export default defineConfig(({ mode }) => {
       },
       proxy: {
         "/api": {
-          target: env.VITE_DEV_PROXY_TARGET || "http://agent.twin3.ai",
+          target: env.VITE_DEV_PROXY_TARGET || "https://agent.twin3.ai",
           changeOrigin: true,
           secure: false,
         },

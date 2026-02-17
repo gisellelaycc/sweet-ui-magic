@@ -556,7 +556,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
                       disabled={!canCreateAgent || !agentName.trim()}
                       className={`btn-twin btn-twin-primary w-full py-3 disabled:opacity-30 disabled:cursor-not-allowed ${agentName.trim() ? 'btn-glow' : ''}`}
                     >
-                      {t('agent.createAgent')}
+                      {t('agent.next')}
                     </button>
                   </div>
                 </div>

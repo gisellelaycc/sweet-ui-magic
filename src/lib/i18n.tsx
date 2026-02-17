@@ -255,6 +255,7 @@ const T: Translations = {
   'agent.activateDesc': { en: 'Let this identity act on your behalf.', zh: '讓這個身份代你行動。', ja: 'このアイデンティティにあなたの代わりに行動させます。', ko: '이 아이덴티티가 당신을 대신하여 행동합니다.' },
   'agent.name': { en: 'Agent Name', zh: '代理名稱', ja: 'エージェント名', ko: '에이전트 이름' },
   'agent.createAgent': { en: 'Create Agent', zh: '建立代理', ja: 'エージェント作成', ko: '에이전트 생성' },
+  'agent.next': { en: 'Next', zh: '下一步', zhCN: '下一步', ja: '次へ', ko: '다음' },
   'agent.viewExisting': { en: 'View existing agents', zh: '查看現有代理', ja: '既存のエージェントを表示', ko: '기존 에이전트 보기' },
   'agent.behavior': { en: 'Behavior', zh: '行為模式', ja: '行動', ko: '행동' },
   'agent.activeMode': { en: 'Active', zh: '主動搜尋', ja: 'アクティブ', ko: '능동 탐색' },
