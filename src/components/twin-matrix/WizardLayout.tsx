@@ -587,8 +587,8 @@ export const WizardLayout = () => {
             )}
           </>
         )}
-        {isConnected && activePage === 'auth' && <SignalRecordsPage />}
-        {isConnected && activePage === 'missions' && <SignalRecordsPage />}
+        {isConnected && activePage === 'auth' && <SignalRecordsPage hasMintedSbt={hasMintedSbt} />}
+        {isConnected && activePage === 'missions' && <SignalRecordsPage hasMintedSbt={hasMintedSbt} />}
         {isConnected && activePage === 'settings' && <SettingsPage />}
       </main>
 

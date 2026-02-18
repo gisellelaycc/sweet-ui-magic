@@ -1,6 +1,8 @@
 import type { Address, PublicClient } from 'viem';
 
 const DATA_URI_JSON_BASE64_PREFIX = 'data:application/json;base64,';
+const LOG_SCAN_BLOCK_RANGE = 9000n;
+const MAX_LOG_LOOKBACK_BLOCKS = 300000n;
 
 function parseAddress(value: string | undefined): Address | null {
   const raw = (value ?? '').trim();
@@ -38,6 +40,13 @@ const identityRegistryErc8004Abi = [
     inputs: [{ name: 'tokenId', type: 'uint256' }],
     outputs: [{ type: 'string' }],
   },
+  {
+    type: 'function',
+    name: 'getAgentWallet',
+    stateMutability: 'view',
+    inputs: [{ name: 'agentId', type: 'uint256' }],
+    outputs: [{ type: 'address' }],
+  },
 ] as const;
 
 interface Erc8004TokenMetadata {
@@ -72,13 +81,83 @@ function parseMetadataFromTokenUri(tokenUri: string): Erc8004TokenMetadata | nul
   }
 }
 
-function parseAddressFromBytes(value: `0x${string}`): Address | null {
-  if (!value || value === '0x') return null;
-  const raw = value.toLowerCase().replace(/^0x/, '');
-  if (raw.length < 40) return null;
-  const tail = raw.slice(-40);
-  const candidate = `0x${tail}`;
-  return /^0x[a-f0-9]{40}$/.test(candidate) ? (candidate as Address) : null;
+async function findLatestRegisteredTokenIdByOwner(
+  publicClient: PublicClient,
+  owner: Address,
+): Promise<bigint | undefined> {
+  if (!ERC8004_CONTRACT_ADDRESS) return undefined;
+  const latestBlock = await publicClient.getBlockNumber();
+  const minBlock = latestBlock > MAX_LOG_LOOKBACK_BLOCKS ? latestBlock - MAX_LOG_LOOKBACK_BLOCKS : 0n;
+
+  for (let toBlock = latestBlock; toBlock >= minBlock;) {
+    const fromBlock = toBlock >= LOG_SCAN_BLOCK_RANGE - 1n ? toBlock - (LOG_SCAN_BLOCK_RANGE - 1n) : 0n;
+    const boundedFrom = fromBlock < minBlock ? minBlock : fromBlock;
+
+    const events = await publicClient.getContractEvents({
+      address: ERC8004_CONTRACT_ADDRESS,
+      abi: identityRegistryErc8004Abi,
+      eventName: 'Registered',
+      args: { owner },
+      fromBlock: boundedFrom,
+      toBlock,
+    });
+
+    if (events.length > 0) {
+      const latestLog = events[events.length - 1];
+      return latestLog.args.agentId;
+    }
+
+    if (boundedFrom === minBlock) break;
+    toBlock = boundedFrom - 1n;
+  }
+
+  return undefined;
+}
+
+async function findLatestRegisteredTokenIdByAgentWallet(
+  publicClient: PublicClient,
+  agentAddress: Address,
+): Promise<bigint | undefined> {
+  if (!ERC8004_CONTRACT_ADDRESS) return undefined;
+  const latestBlock = await publicClient.getBlockNumber();
+  const minBlock = latestBlock > MAX_LOG_LOOKBACK_BLOCKS ? latestBlock - MAX_LOG_LOOKBACK_BLOCKS : 0n;
+  const normalizedAgentAddress = agentAddress.toLowerCase();
+
+  for (let toBlock = latestBlock; toBlock >= minBlock;) {
+    const fromBlock = toBlock >= LOG_SCAN_BLOCK_RANGE - 1n ? toBlock - (LOG_SCAN_BLOCK_RANGE - 1n) : 0n;
+    const boundedFrom = fromBlock < minBlock ? minBlock : fromBlock;
+
+    const events = await publicClient.getContractEvents({
+      address: ERC8004_CONTRACT_ADDRESS,
+      abi: identityRegistryErc8004Abi,
+      eventName: 'Registered',
+      fromBlock: boundedFrom,
+      toBlock,
+    });
+
+    for (let i = events.length - 1; i >= 0; i--) {
+      const candidateId = events[i].args.agentId;
+      if (candidateId === undefined) continue;
+      try {
+        const wallet = await publicClient.readContract({
+          address: ERC8004_CONTRACT_ADDRESS,
+          abi: identityRegistryErc8004Abi,
+          functionName: 'getAgentWallet',
+          args: [candidateId],
+        });
+        if (wallet.toLowerCase() === normalizedAgentAddress) {
+          return candidateId;
+        }
+      } catch {
+        continue;
+      }
+    }
+
+    if (boundedFrom === minBlock) break;
+    toBlock = boundedFrom - 1n;
+  }
+
+  return undefined;
 }
 
 export async function resolveAgentProfileFromErc8004(
@@ -88,44 +167,8 @@ export async function resolveAgentProfileFromErc8004(
   if (!ERC8004_CONTRACT_ADDRESS) return null;
 
   try {
-    const registeredEvents = await publicClient.getContractEvents({
-      address: ERC8004_CONTRACT_ADDRESS,
-      abi: identityRegistryErc8004Abi,
-      eventName: 'Registered',
-      args: { owner: agentAddress },
-      fromBlock: 0n,
-      toBlock: 'latest',
-    });
-
-    let tokenId: bigint | undefined;
-    if (registeredEvents.length > 0) {
-      const latestLog = registeredEvents[registeredEvents.length - 1];
-      tokenId = latestLog.args.agentId;
-    }
-
-    // Fallback path: resolve tokenId from MetadataSet(agentWallet) events.
-    if (tokenId === undefined) {
-      const metadataEvents = await publicClient.getContractEvents({
-        address: ERC8004_CONTRACT_ADDRESS,
-        abi: identityRegistryErc8004Abi,
-        eventName: 'MetadataSet',
-        args: { indexedMetadataKey: 'agentWallet' },
-        fromBlock: 0n,
-        toBlock: 'latest',
-      });
-
-      for (let i = metadataEvents.length - 1; i >= 0; i--) {
-        const event = metadataEvents[i];
-        const value = event.args.metadataValue;
-        if (!value) continue;
-        const wallet = parseAddressFromBytes(value);
-        if (!wallet) continue;
-        if (wallet.toLowerCase() === agentAddress.toLowerCase()) {
-          tokenId = event.args.agentId;
-          break;
-        }
-      }
-    }
+    let tokenId = await findLatestRegisteredTokenIdByOwner(publicClient, agentAddress);
+    if (tokenId === undefined) tokenId = await findLatestRegisteredTokenIdByAgentWallet(publicClient, agentAddress);
 
     if (tokenId === undefined) return null;
 

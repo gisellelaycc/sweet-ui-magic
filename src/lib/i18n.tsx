@@ -465,7 +465,7 @@ const T: Translations = {
   'menu.refineState': { en: 'Refine State', zh: '精煉狀態', ja: '状態を調整', ko: '상태 조정' },
   'menu.issuedRecords': { en: 'Issued Records', zh: '已發行紀錄', ja: '発行済みレコード', ko: '발행된 기록' },
   'menu.signalRequests': { en: 'Signal Requests', zh: '信號請求', ja: 'シグナルリクエスト', ko: '시그널 요청' },
-  'menu.signalRecords': { en: 'Signal Records', zh: '信號紀錄', ja: 'シグナル記録', ko: '시그널 기록' },
+  'menu.signalRecords': { en: 'Task Records', zh: '任務紀錄', zhCN: '任务记录', ja: 'タスク記録', ko: '작업 기록' },
   'menu.preferences': { en: 'Preferences', zh: '偏好設定', ja: '設定', ko: '환경설정' },
 
   // ── Common ──
@@ -554,6 +554,7 @@ const T: Translations = {
   'signalRecords.declineDate': { en: 'Decline date', zh: '拒絕日期', zhCN: '拒绝日期', ja: '辞退日', ko: '거절일' },
   'signalRecords.openTelegram': { en: 'Open in Telegram', zh: '在 Telegram 開啟', zhCN: '在 Telegram 打开', ja: 'Telegramで開く', ko: 'Telegram에서 열기' },
   'signalRecords.declined': { en: 'Declined', zh: '已拒絕', zhCN: '已拒绝', ja: '辞退', ko: '거절됨' },
+  'signalRecords.noIdentityState': { en: 'No records yet. Mint SBT first to start receiving tasks.', zh: '目前沒有任務紀錄。請先 mint SBT 後才會有任務。', zhCN: '目前没有任务记录。请先 mint SBT 后才会有任务。', ja: 'まだ記録がありません。まず SBT をMintするとタスクが表示されます。', ko: '아직 기록이 없습니다. 먼저 SBT를 민팅해야 작업이 표시됩니다.' },
 
   // ── Wizard Layout (Identity Flow) ──
   'wizard.mintSubmitted': { en: 'Mint transaction submitted. Waiting for confirmation...', zh: 'Mint 交易已送出，等待確認...', zhCN: 'Mint 交易已提交，等待确认...', ja: 'Mintトランザクション送信済み。確認待ち...', ko: '민트 트랜잭션 제출됨. 확인 대기...' },

@@ -80,7 +80,11 @@ function statusLabel(status: MissionStatus, t: (key: string) => string): string 
   return status;
 }
 
-export const SignalRecordsPage = () => {
+interface Props {
+  hasMintedSbt: boolean;
+}
+
+export const SignalRecordsPage = ({ hasMintedSbt }: Props) => {
   const { t } = useI18n();
   const { address, isConnected } = useAccount();
   const [missions, setMissions] = useState<MissionRow[]>([]);
@@ -88,7 +92,7 @@ export const SignalRecordsPage = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isConnected || !address) {
+    if (!isConnected || !address || !hasMintedSbt) {
       setMissions([]);
       setError(null);
       return;
@@ -119,7 +123,7 @@ export const SignalRecordsPage = () => {
 
     void load();
     return () => controller.abort();
-  }, [address, isConnected]);
+  }, [address, isConnected, hasMintedSbt]);
 
   const activeRows = useMemo(
     () => missions.filter((m) => m.status === 'running' || m.status === 'active'),
@@ -150,6 +154,8 @@ export const SignalRecordsPage = () => {
 
         {!isConnected || !address ? (
           <p className="text-sm text-muted-foreground">{t('wallet.connectToContinue')}</p>
+        ) : !hasMintedSbt ? (
+          <p className="text-sm text-muted-foreground">{t('signalRecords.noIdentityState')}</p>
         ) : isLoading ? (
           <p className="text-sm text-muted-foreground">Loading mission records...</p>
         ) : error ? (
