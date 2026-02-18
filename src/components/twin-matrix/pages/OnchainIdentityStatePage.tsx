@@ -10,6 +10,7 @@ interface Props {
   versions: OnchainVersion[];
   boundAgents: OnchainBoundAgent[];
   onRefresh: () => void;
+  onReconfigure: () => void;
   isRefreshing: boolean;
 }
 
@@ -43,6 +44,7 @@ export const OnchainIdentityStatePage = ({
   versions,
   boundAgents,
   onRefresh,
+  onReconfigure,
   isRefreshing,
 }: Props) => {
   const { t } = useI18n();
@@ -105,13 +107,21 @@ export const OnchainIdentityStatePage = ({
             <h2 className="text-2xl font-bold mb-1">{t('myIdentity.title')}</h2>
             <p className="text-muted-foreground text-sm">{t('onchain.subtitle')}</p>
           </div>
-          <button
-            onClick={onRefresh}
-            disabled={isRefreshing}
-            className="text-xs px-4 py-2 border border-foreground/10 rounded-lg text-foreground/80 hover:bg-foreground/5 hover:text-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isRefreshing ? t('onchain.refreshing') : t('onchain.refresh')}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={onReconfigure}
+              className="text-xs px-4 py-2 border border-foreground/10 rounded-lg text-foreground/80 hover:bg-foreground/5 hover:text-foreground transition-colors"
+            >
+              {t('onchain.reconfigure')}
+            </button>
+            <button
+              onClick={onRefresh}
+              disabled={isRefreshing}
+              className="text-xs px-4 py-2 border border-foreground/10 rounded-lg text-foreground/80 hover:bg-foreground/5 hover:text-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isRefreshing ? t('onchain.refreshing') : t('onchain.refresh')}
+            </button>
+          </div>
         </div>
 
         <ThinDivider />

@@ -6,11 +6,11 @@ import { useI18n } from '@/lib/i18n';
 
 const SIGNALS: (IdentityModule & { soon?: boolean })[] = [
   { id: 'sport', icon: '🏃', label: 'Sport', description: 'Physical signal · competitive state', active: true },
-  { id: 'music', icon: '🎵', label: 'Music', description: 'Rhythm signal · listening state', active: true },
-  { id: 'art', icon: '🎨', label: 'Art', description: 'Aesthetic signal · creative state', active: true },
-  { id: 'reading', icon: '📚', label: 'Reading', description: 'Knowledge signal · absorption state', active: true },
-  { id: 'food', icon: '🍳', label: 'Food', description: 'Lifestyle signal · dietary state', active: true },
-  { id: 'travel', icon: '✈️', label: 'Travel', description: 'Mobility signal · exploration state', active: true },
+  { id: 'music', icon: '🎵', label: 'Music', description: 'Rhythm signal · listening state', active: false, soon: true },
+  { id: 'art', icon: '🎨', label: 'Art', description: 'Aesthetic signal · creative state', active: false, soon: true },
+  { id: 'reading', icon: '📚', label: 'Reading', description: 'Knowledge signal · absorption state', active: false, soon: true },
+  { id: 'food', icon: '🍳', label: 'Food', description: 'Lifestyle signal · dietary state', active: false, soon: true },
+  { id: 'travel', icon: '✈️', label: 'Travel', description: 'Mobility signal · exploration state', active: false, soon: true },
   { id: 'finance', icon: '💰', label: 'Finance', description: 'Risk signal · asset state', active: false, soon: true },
   { id: 'gaming', icon: '🎮', label: 'Gaming', description: 'Strategic signal · competitive state', active: false, soon: true },
   { id: 'learning', icon: '🧠', label: 'Learning', description: 'Growth signal · focus state', active: false, soon: true },
@@ -27,7 +27,7 @@ interface Props {
 export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
   const { t } = useI18n();
   const [selected, setSelected] = useState(SIGNALS[0].id);
-  const [activated, setActivated] = useState<string[]>(activeModules);
+  const [activated, setActivated] = useState<string[]>(activeModules.filter((moduleId) => moduleId === 'sport'));
   const [transitioning, setTransitioning] = useState(false);
   const [soonTooltip, setSoonTooltip] = useState<string | null>(null);
   const tooltipTimer = useRef<ReturnType<typeof setTimeout>>();
@@ -36,6 +36,14 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
   const isActivated = activated.includes(selected);
   const isMinted = MINTED_MODULES.includes(selected);
   const hasActive = activated.length > 0;
+
+  useEffect(() => {
+    const sanitized = activeModules.filter((moduleId) => moduleId === 'sport');
+    if (sanitized.length !== activeModules.length) {
+      setActivated(sanitized);
+      onUpdate(sanitized);
+    }
+  }, [activeModules, onUpdate]);
 
   const toggleActive = () => {
     if (current.soon) return;

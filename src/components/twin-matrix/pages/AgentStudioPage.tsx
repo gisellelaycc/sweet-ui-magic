@@ -30,6 +30,7 @@ export const AgentStudioPage = ({ boundAgents, onCreateAgent, onEditAgent }: Pro
       address: agent.address,
       permissionExpiry: agent.permissionExpiry,
       usdtBalanceWei: agent.usdtBalanceWei,
+      usdtDecimals: agent.usdtDecimals,
       scopeGranted: permissionMaskToGrantedQuadrants(agent.permissionMask),
       status: agent.active ? 'active' : 'draft' as const,
       connectedChannels: [t('agentStudio.channelTelegram')],
@@ -42,14 +43,15 @@ export const AgentStudioPage = ({ boundAgents, onCreateAgent, onEditAgent }: Pro
     return new Date(Number(expiry) * 1000).toLocaleString();
   };
 
-  const formatUsdtBalance = (balanceWei: bigint | null): string => {
-    if (balanceWei === null) return '-';
-    const base = 10n ** 18n;
-    const whole = balanceWei / base;
-    const fraction = balanceWei % base;
-    const fractionStr = (fraction + base).toString().slice(1).replace(/0+$/, '').slice(0, 6);
-    const wholeStr = whole.toLocaleString();
-    return `${fractionStr ? `${wholeStr}.${fractionStr}` : wholeStr} USDT`;
+  const formatUsdtBalance = (balanceRaw: bigint | null, decimals: number): string => {
+    if (decimals < 0) return '-';
+    if (decimals > 30) return '-';
+    if (balanceRaw === null) return '-';
+    const base = 10n ** BigInt(decimals);
+    const scaled10 = (balanceRaw * 10n + base / 2n) / base; // round to 1 decimal
+    const whole = scaled10 / 10n;
+    const decimal = scaled10 % 10n;
+    return `${whole.toLocaleString()}.${decimal.toString()} USDT`;
   };
 
   const formatAddressPreview = (address: string): string => `${address.slice(0, 6)}...${address.slice(-4)}`;
@@ -144,7 +146,7 @@ export const AgentStudioPage = ({ boundAgents, onCreateAgent, onEditAgent }: Pro
 
                 <div className="flex items-center gap-6 text-xs text-muted-foreground/60">
                   <span>
-                    {t('agentStudio.usdtBalance')} <span className="text-foreground/70">{formatUsdtBalance(agent.usdtBalanceWei)}</span>
+                    {t('agentStudio.usdtBalance')} <span className="text-foreground/70">{formatUsdtBalance(agent.usdtBalanceWei, agent.usdtDecimals)}</span>
                   </span>
                   <span>
                     {t('agentStudio.agentWallet')} <span className="text-foreground/70 font-mono">{formatAddressPreview(agent.address)}</span>

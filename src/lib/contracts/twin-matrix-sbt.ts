@@ -147,6 +147,13 @@ export const erc20BalanceAbi = [
     inputs: [{ name: 'account', type: 'address' }],
     outputs: [{ type: 'uint256' }],
   },
+  {
+    type: 'function',
+    name: 'decimals',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [{ type: 'uint8' }],
+  },
 ] as const;
 
 export interface OnchainVersion {
@@ -163,6 +170,7 @@ export interface OnchainBoundAgent {
   permissionMask: bigint;
   permissionExpiry: bigint;
   usdtBalanceWei: bigint | null;
+  usdtDecimals: number;
   permissionMaskBinary256: string;
   scopeGranted: number[];
   active: boolean;

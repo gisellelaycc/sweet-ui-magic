@@ -4,7 +4,7 @@ export type Lang = 'en' | 'zh' | 'zhCN' | 'ja' | 'ko';
 
 const LANG_LABELS: Record<Lang, string> = {
   en: 'English',
-  zh: '中文',
+  zh: '繁體中文',
   zhCN: '简体中文',
   ja: '日本語',
   ko: '한국어',
@@ -19,7 +19,7 @@ const T: Translations = {
   'nav.agents': { en: 'Agents', zh: '代理', ja: 'エージェント', ko: '에이전트' },
   'nav.signalMarketplace': { en: 'Signal Marketplace', zh: '信號市場', ja: 'シグナルマーケット', ko: '시그널 마켓' },
   'nav.records': { en: 'Records', zh: '紀錄', ja: 'レコード', ko: '레코드' },
-  'nav.signalRecords': { en: 'Signal Records', zh: '信號紀錄', ja: 'シグナル記録', ko: '시그널 기록' },
+  'nav.signalRecords': { en: 'Task Records', zh: '任務紀錄', zhCN: '任务记录', ja: 'タスク記録', ko: '작업 기록' },
 
   // ── Wallet / Gate ──
   'wallet.required': { en: 'Wallet Required', zh: '需要錢包', zhCN: '需要钱包', ja: 'ウォレットが必要です', ko: '지갑이 필요합니다' },
@@ -486,6 +486,7 @@ const T: Translations = {
   'onchain.subtitle': { en: 'On-chain state from TwinMatrixSBT', zh: '來自 TwinMatrixSBT 的鏈上狀態', zhCN: '来自 TwinMatrixSBT 的链上状态', ja: 'TwinMatrixSBT のオンチェーン状態', ko: 'TwinMatrixSBT 온체인 상태' },
   'onchain.refresh': { en: 'Refresh', zh: '刷新', zhCN: '刷新', ja: '更新', ko: '새로고침' },
   'onchain.refreshing': { en: 'Refreshing...', zh: '刷新中...', zhCN: '刷新中...', ja: '更新中...', ko: '새로고침 중...' },
+  'onchain.reconfigure': { en: 'Reconfigure Preferences', zh: '重新設定偏好', zhCN: '重新设置偏好', ja: '設定をやり直す', ko: '환경설정 다시하기' },
   'onchain.tokenId': { en: 'Token ID', zh: 'Token ID', zhCN: 'Token ID', ja: 'トークンID', ko: '토큰 ID' },
   'onchain.latestVersion': { en: 'Latest Version', zh: '最新版本', zhCN: '最新版本', ja: '最新バージョン', ko: '최신 버전' },
   'onchain.wallet': { en: 'Wallet', zh: '錢包', zhCN: '钱包', ja: 'ウォレット', ko: '지갑' },
@@ -529,19 +530,23 @@ const T: Translations = {
   'agent.updatePermissionScope': { en: 'Update Permission Scope', zh: '更新授權範圍', zhCN: '更新授权范围', ja: '権限スコープを更新', ko: '권한 범위 업데이트' },
 
   // ── Signal Records ──
-  'signalRecords.title': { en: 'Signal Records', zh: '信號紀錄', zhCN: '信号记录', ja: 'シグナル記録', ko: '시그널 기록' },
+  'signalRecords.title': { en: 'Task Records', zh: '任務紀錄', zhCN: '任务记录', ja: 'タスク記録', ko: '작업 기록' },
   'signalRecords.subtitle': { en: 'Tracks accepted tasks lifecycle: currently doing, completed, expired/revoked.', zh: '追蹤已接受任務生命週期：進行中、已完成、已過期/已撤銷。', zhCN: '跟踪已接受任务生命周期：进行中、已完成、已过期/已撤销。', ja: '受諾済みタスクのライフサイクルを追跡します。', ko: '수락된 작업의 수명주기를 추적합니다.' },
-  'signalRecords.activeCommitments': { en: 'Active Commitments', zh: '進行中承諾', zhCN: '进行中任务', ja: '進行中コミットメント', ko: '진행 중 작업' },
+  'signalRecords.activeCommitments': { en: 'Ongoing Tasks', zh: '進行中任務', zhCN: '进行中任务', ja: '進行中タスク', ko: '진행 중 작업' },
   'signalRecords.completed': { en: 'Completed', zh: '已完成', zhCN: '已完成', ja: '完了', ko: '완료' },
   'signalRecords.expiredDeclined': { en: 'Expired / Declined', zh: '已過期 / 已拒絕', zhCN: '已过期 / 已拒绝', ja: '期限切れ / 辞退', ko: '만료 / 거절' },
   'signalRecords.inflow': { en: 'Inflow', zh: '進帳', zhCN: '进账', ja: '入金', ko: '유입' },
   'signalRecords.activeSubtitle': { en: 'Accepted tasks in progress, with usage-based quota tracking.', zh: '已接受且進行中的任務，按使用量追蹤配額。', zhCN: '已接受且进行中的任务，按使用量追踪配额。', ja: '進行中タスクを使用量ベースで追跡。', ko: '진행 중 작업을 사용량 기반으로 추적.' },
-  'signalRecords.issuedBy': { en: 'Issued by', zh: '發布方', zhCN: '发布方', ja: '発行元', ko: '발행자' },
+  'signalRecords.issuedBy': { en: 'Handling Agent', zh: '執行代理', zhCN: '执行代理', ja: '担当エージェント', ko: '담당 에이전트' },
   'signalRecords.remainingQuota': { en: 'Remaining quota', zh: '剩餘配額', zhCN: '剩余额度', ja: '残りクォータ', ko: '잔여 할당량' },
   'signalRecords.expiry': { en: 'Expiry', zh: '到期', zhCN: '到期', ja: '期限', ko: '만료' },
   'signalRecords.completedRecords': { en: 'Completed Records', zh: '已完成紀錄', zhCN: '已完成记录', ja: '完了記録', ko: '완료 기록' },
   'signalRecords.completedSubtitle': { en: 'Finished tasks with usage result and earned reward.', zh: '已結束任務的使用結果與進帳。', zhCN: '已结束任务的使用结果与收益。', ja: '完了タスクの使用結果と報酬。', ko: '완료 작업의 사용 결과와 보상.' },
   'signalRecords.scopeUsed': { en: 'Scope used', zh: '使用範圍', zhCN: '使用范围', ja: '使用スコープ', ko: '사용 범위' },
+  'signalRecords.createdAt': { en: 'Created At', zh: '建立時間', zhCN: '创建时间', ja: '作成日時', ko: '생성 시간' },
+  'signalRecords.completedAt': { en: 'Completed At', zh: '完成時間', zhCN: '完成时间', ja: '完了日時', ko: '완료 시간' },
+  'signalRecords.expiresAt': { en: 'Expires At', zh: '到期時間', zhCN: '到期时间', ja: '期限日時', ko: '만료 시간' },
+  'signalRecords.transferTxHash': { en: 'USDT Transfer Tx', zh: 'USDT 轉帳交易', zhCN: 'USDT 转账交易', ja: 'USDT送金Tx', ko: 'USDT 전송 Tx' },
   'signalRecords.totalUsage': { en: 'Total usage', zh: '總使用量', zhCN: '总使用量', ja: '総使用量', ko: '총 사용량' },
   'signalRecords.completedDate': { en: 'Completed date', zh: '完成日期', zhCN: '完成日期', ja: '完了日', ko: '완료일' },
   'signalRecords.endedSubtitle': { en: 'Ended tasks that need renewal or action in Telegram.', zh: '已結束任務，可續期或前往 Telegram 處理。', zhCN: '已结束任务，可续期或前往 Telegram 处理。', ja: '終了タスク。更新またはTelegramで対応。', ko: '종료된 작업. 갱신 또는 Telegram 처리 필요.' },

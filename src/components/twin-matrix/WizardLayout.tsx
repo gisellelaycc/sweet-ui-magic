@@ -42,6 +42,8 @@ import { OnchainIdentityStatePage } from './pages/OnchainIdentityStatePage';
 type MenuPage = 'identity' | 'update' | 'auth' | 'agent' | 'missions' | 'settings';
 type TxAction = 'mint' | 'update' | null;
 type AuthView = 'records' | 'form' | 'editPermission';
+const MENU_PAGE_STORAGE_KEY = 'twin-matrix.active-page';
+const MENU_PAGES: MenuPage[] = ['identity', 'update', 'auth', 'agent', 'missions', 'settings'];
 
 const EMPTY_SIGNATURE = Array.from({ length: 256 }, () => 0);
 const usdtContractAddress = (import.meta.env.USDT_CONTRACT_ADDRESS ?? '').trim();
@@ -81,7 +83,12 @@ export const WizardLayout = () => {
 
   const [state, setState] = useState<WizardState>(initialState);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activePage, setActivePage] = useState<MenuPage>('identity');
+  const [activePage, setActivePage] = useState<MenuPage>(() => {
+    if (typeof window === 'undefined') return 'identity';
+    const stored = window.localStorage.getItem(MENU_PAGE_STORAGE_KEY);
+    if (stored && MENU_PAGES.includes(stored as MenuPage)) return stored as MenuPage;
+    return 'identity';
+  });
   const [txAction, setTxAction] = useState<TxAction>(null);
   const [isCheckingToken, setIsCheckingToken] = useState(false);
   const [tokenId, setTokenId] = useState<bigint | null>(null);
@@ -97,6 +104,11 @@ export const WizardLayout = () => {
   const walletAddress = address ? `${address.slice(0, 6)}…${address.slice(-4)}` : undefined;
   const hasMintedSbt = tokenId !== null;
   const isWrongNetwork = isConnected && chainId !== BSC_TESTNET_CHAIN_ID;
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    window.localStorage.setItem(MENU_PAGE_STORAGE_KEY, activePage);
+  }, [activePage]);
 
   const next = () => {
     if (state.step === 5) {
@@ -171,6 +183,14 @@ export const WizardLayout = () => {
         args: [currentTokenId],
       });
 
+      const usdtDecimals = hasValidUsdtAddress
+        ? Number(await publicClient.readContract({
+            address: usdtContractAddress as `0x${string}`,
+            abi: erc20BalanceAbi,
+            functionName: 'decimals',
+          }))
+        : 18;
+
       const boundAgentRows: OnchainBoundAgent[] = await Promise.all(
         boundAgentAddresses.map(async (agentAddress) => {
           const [permissionMask, permissionExpiry, profile, usdtBalanceWei] = await Promise.all([
@@ -206,6 +226,7 @@ export const WizardLayout = () => {
             permissionMask,
             permissionExpiry,
             usdtBalanceWei,
+            usdtDecimals,
             permissionMaskBinary256: permissionMaskToBinary256(permissionMask),
             scopeGranted,
             active: permissionMask > 0n,
@@ -427,6 +448,10 @@ export const WizardLayout = () => {
                   latestVersion={latestVersion}
                   versions={versions}
                   boundAgents={boundAgents}
+                  onReconfigure={() => {
+                    setNeedsMatrixUpdate(true);
+                    setState((s) => ({ ...s, step: 2, activeModules: s.activeModules.filter((moduleId) => moduleId === 'sport') }));
+                  }}
                   onRefresh={() => void refreshOnchainState()}
                   isRefreshing={isCheckingToken}
                 />
