@@ -1,4 +1,4 @@
-# Twin Matrix Agent UI (Frontend)
+# Twin Matrix UI (Frontend)
 
 **[agent.twin3.ai](https://agent.twin3.ai/)** is the frontend interface for the Twin Matrix system, designed to demonstrate how a human-defined identity can be securely transformed into a personalized on-chain Agent capable of acting on the user's behalf.
 
