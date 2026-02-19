@@ -204,5 +204,3 @@ cd sweet-ui-magic
 npm install
 npm run dev
 ```
-
-Then open: [http://localhost:8080](http://localhost:8080)
