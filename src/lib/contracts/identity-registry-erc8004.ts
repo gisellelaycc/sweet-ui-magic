@@ -139,7 +139,8 @@ async function findLatestRegisteredTokenIdByAgentWallet(
       const candidateId = events[i].args.agentId;
       if (candidateId === undefined) continue;
       try {
-        const wallet = await publicClient.readContract({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const wallet = await (publicClient.readContract as any)({
           address: ERC8004_CONTRACT_ADDRESS,
           abi: identityRegistryErc8004Abi,
           functionName: 'getAgentWallet',
@@ -172,7 +173,8 @@ export async function resolveAgentProfileFromErc8004(
 
     if (tokenId === undefined) return null;
 
-    const tokenUri = await publicClient.readContract({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const tokenUri = await (publicClient.readContract as any)({
       address: ERC8004_CONTRACT_ADDRESS,
       abi: identityRegistryErc8004Abi,
       functionName: 'tokenURI',

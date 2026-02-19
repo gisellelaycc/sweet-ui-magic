@@ -410,7 +410,8 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
 
     try {
       setIsBindingAgent(true);
-      const hash = await writeContractAsync({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const hash = await (writeContractAsync as any)({
         address: TWIN_MATRIX_SBT_ADDRESS,
         abi: twinMatrixSbtAbi,
         functionName: 'bindAgentAndGrantPermission',
