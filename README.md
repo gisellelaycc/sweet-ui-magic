@@ -196,22 +196,13 @@ This frontend shows how that identity becomes actionable through personal agents
 
 ---
 
-## Tech Stack
-
-- [Vite](https://vitejs.dev/) + [React](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
-- [Tailwind CSS](https://tailwindcss.com/) + [shadcn/ui](https://ui.shadcn.com/)
-- [wagmi](https://wagmi.sh/) + [viem](https://viem.sh/) + [RainbowKit](https://www.rainbowkit.com/)
-
-## Development
+## Local Development
 
 ```sh
-# Clone the repository
-git clone <YOUR_GIT_URL>
-cd <YOUR_PROJECT_NAME>
-
-# Install dependencies
+git clone https://github.com/gisellelaycc/sweet-ui-magic.git
+cd sweet-ui-magic
 npm install
-
-# Start development server
 npm run dev
 ```
+
+Then open: [http://localhost:8080](http://localhost:8080)
