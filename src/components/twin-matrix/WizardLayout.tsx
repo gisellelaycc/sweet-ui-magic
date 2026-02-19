@@ -131,14 +131,16 @@ export const WizardLayout = () => {
     setIsCheckingToken(true);
     setContractError(null);
     try {
-      const currentTokenId = await publicClient.readContract({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const currentTokenId = await (publicClient.readContract as any)({
         address: TWIN_MATRIX_SBT_ADDRESS,
         abi: twinMatrixSbtAbi,
         functionName: 'tokenIdOf',
         args: [address],
       });
 
-      const versionCountRaw = await publicClient.readContract({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const versionCountRaw = await (publicClient.readContract as any)({
         address: TWIN_MATRIX_SBT_ADDRESS,
         abi: twinMatrixSbtAbi,
         functionName: 'getVersionCount',
@@ -146,7 +148,8 @@ export const WizardLayout = () => {
       });
       const versionCount = Number(versionCountRaw);
 
-      const latestVersionRaw = await publicClient.readContract({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const latestVersionRaw = await (publicClient.readContract as any)({
         address: TWIN_MATRIX_SBT_ADDRESS,
         abi: twinMatrixSbtAbi,
         functionName: 'latestVersion',
@@ -154,15 +157,17 @@ export const WizardLayout = () => {
       });
       const latestVersionNumber = Number(latestVersionRaw);
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const rc = publicClient.readContract as any;
       const versionRows: OnchainVersion[] = [];
       for (let version = versionCount; version >= 1; version--) {
-        const [digest, blockNumber] = await publicClient.readContract({
+        const [digest, blockNumber] = await rc({
           address: TWIN_MATRIX_SBT_ADDRESS,
           abi: twinMatrixSbtAbi,
           functionName: 'getVersionMeta',
           args: [currentTokenId, version],
         });
-        const matrixAtVersion = await publicClient.readContract({
+        const matrixAtVersion = await rc({
           address: TWIN_MATRIX_SBT_ADDRESS,
           abi: twinMatrixSbtAbi,
           functionName: 'getMatrixAtVersion',
@@ -176,7 +181,7 @@ export const WizardLayout = () => {
         });
       }
 
-      const boundAgentAddresses = await publicClient.readContract({
+      const boundAgentAddresses = await rc({
         address: TWIN_MATRIX_SBT_ADDRESS,
         abi: twinMatrixSbtAbi,
         functionName: 'getBoundAgents',
@@ -184,7 +189,7 @@ export const WizardLayout = () => {
       });
 
       const usdtDecimals = hasValidUsdtAddress
-        ? Number(await publicClient.readContract({
+        ? Number(await rc({
             address: usdtContractAddress as `0x${string}`,
             abi: erc20BalanceAbi,
             functionName: 'decimals',
@@ -192,15 +197,15 @@ export const WizardLayout = () => {
         : 18;
 
       const boundAgentRows: OnchainBoundAgent[] = await Promise.all(
-        boundAgentAddresses.map(async (agentAddress) => {
+        boundAgentAddresses.map(async (agentAddress: `0x${string}`) => {
           const [permissionMask, permissionExpiry, profile, usdtBalanceWei] = await Promise.all([
-            publicClient.readContract({
+            rc({
               address: TWIN_MATRIX_SBT_ADDRESS,
               abi: twinMatrixSbtAbi,
               functionName: 'permissionMaskOf',
               args: [currentTokenId, agentAddress],
             }),
-            publicClient.readContract({
+            rc({
               address: TWIN_MATRIX_SBT_ADDRESS,
               abi: twinMatrixSbtAbi,
               functionName: 'permissionExpiryOf',
@@ -208,7 +213,7 @@ export const WizardLayout = () => {
             }),
             resolveAgentProfileFromErc8004(publicClient, agentAddress),
             hasValidUsdtAddress
-              ? publicClient.readContract({
+              ? rc({
                   address: usdtContractAddress as `0x${string}`,
                   abi: erc20BalanceAbi,
                   functionName: 'balanceOf',
@@ -277,7 +282,8 @@ export const WizardLayout = () => {
 
     try {
       setTxAction('mint');
-      const hash = await writeContractAsync({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const hash = await (writeContractAsync as any)({
         address: TWIN_MATRIX_SBT_ADDRESS,
         abi: twinMatrixSbtAbi,
         functionName: 'mint',
@@ -321,7 +327,8 @@ export const WizardLayout = () => {
     try {
       setTxAction('update');
       const matrix = encodeSignatureToMatrix(state.signature);
-      const hash = await writeContractAsync({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const hash = await (writeContractAsync as any)({
         address: TWIN_MATRIX_SBT_ADDRESS,
         abi: twinMatrixSbtAbi,
         functionName: 'updateMatrix',

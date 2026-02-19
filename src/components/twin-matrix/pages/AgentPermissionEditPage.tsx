@@ -93,7 +93,8 @@ export const AgentPermissionEditPage = ({
     const expiry = BigInt(Math.floor(Date.now() / 1000) + durationSeconds);
     try {
       setIsSubmitting(true);
-      const hash = await writeContractAsync({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const hash = await (writeContractAsync as any)({
         address: TWIN_MATRIX_SBT_ADDRESS,
         abi: twinMatrixSbtAbi,
         functionName: 'setPermission',
