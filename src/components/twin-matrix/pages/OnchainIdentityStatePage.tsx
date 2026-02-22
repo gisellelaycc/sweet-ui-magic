@@ -192,11 +192,11 @@ export const OnchainIdentityStatePage = ({
 
             {activeVersion ? (
               <div className="overflow-x-auto">
-                <div className="flex flex-col gap-[2px]" style={{ fontFamily: "'SF Mono', 'Fira Code', 'Cascadia Code', monospace" }}>
+                <div className="flex flex-col gap-1" style={{ fontFamily: "'SF Mono', 'Fira Code', 'Cascadia Code', monospace" }}>
                   {Array.from({ length: 16 }, (_, row) => {
                     const rowAddr = (row * 16).toString(16).toUpperCase().padStart(4, '0');
                     return (
-                      <div key={row} className="flex items-center gap-[2px]">
+                      <div key={row} className="flex items-center gap-1">
                         <span className="text-right select-none shrink-0 w-12" style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)' }}>
                           {rowAddr}
                         </span>
@@ -215,19 +215,29 @@ export const OnchainIdentityStatePage = ({
                           else sliceIdx = 3;
                           const slice = LAYERS[sliceIdx];
                           const intensity = value / 255;
+                          const borderColor = value > 0
+                            ? `rgba(${slice.color}, ${0.2 + 0.5 * intensity})`
+                            : 'rgba(255, 255, 255, 0.08)';
                           const textColor = value > 0
-                            ? `rgba(${slice.color}, ${0.4 + 0.6 * intensity})`
-                            : 'rgba(255, 255, 255, 0.15)';
+                            ? `rgba(${slice.color}, ${0.5 + 0.5 * intensity})`
+                            : 'rgba(255, 255, 255, 0.2)';
                           return (
                             <div
                               key={col}
-                              className="flex items-center justify-center relative cursor-default rounded-sm"
+                              className="flex items-center justify-center relative cursor-default rounded-full"
                               style={{
-                                width: '2rem', height: '2rem', aspectRatio: '1',
-                                fontSize: '11px', color: textColor,
-                                textShadow: isTop && value > 0 ? `0 0 6px rgba(${slice.color}, 0.5)` : 'none',
-                                background: isHovered ? 'rgba(255,255,255,0.06)' : 'transparent',
-                                transition: 'background 0.15s',
+                                width: '2.1rem', height: '2.1rem', aspectRatio: '1',
+                                fontSize: '10px', color: textColor,
+                                border: `1px solid ${borderColor}`,
+                                textShadow: isTop && value > 0 ? `0 0 8px rgba(${slice.color}, 0.6)` : 'none',
+                                background: value > 0
+                                  ? `rgba(${slice.color}, ${intensity * 0.08})`
+                                  : 'transparent',
+                                boxShadow: isTop && value > 0
+                                  ? `0 0 10px rgba(${slice.color}, ${intensity * 0.3}), inset 0 0 6px rgba(${slice.color}, ${intensity * 0.1})`
+                                  : 'none',
+                                transition: 'all 0.15s',
+                                transform: isHovered ? 'scale(1.12)' : 'scale(1)',
                               }}
                               onMouseEnter={() => setHoveredCell(idx)}
                               onMouseLeave={() => setHoveredCell(null)}
@@ -334,12 +344,13 @@ export const OnchainIdentityStatePage = ({
               </div>
             </div>
 
-            {/* AI Summary */}
-            <div style={cardStyle}>
-              <p className="text-sm uppercase tracking-[0.15em] text-muted-foreground font-heading mb-3">{t('dashboard.aiSummary')}</p>
-              <p className="text-sm text-foreground/70 italic leading-relaxed">{aiSummary}</p>
-            </div>
           </div>
+        </div>
+
+        {/* ── AI Summary — full width below matrix ── */}
+        <div style={cardStyle}>
+          <p className="text-sm uppercase tracking-[0.15em] text-muted-foreground font-heading mb-3">{t('dashboard.aiSummary')}</p>
+          <p className="text-sm text-foreground/70 italic leading-relaxed">{aiSummary}</p>
         </div>
 
         {/* ── Bottom Row: Version History + Bound Agents ── */}

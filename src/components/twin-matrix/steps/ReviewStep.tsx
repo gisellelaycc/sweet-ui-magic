@@ -107,11 +107,11 @@ export const ReviewStep = ({
                   {t('review.projection')}
                 </h3>
                 <div className="overflow-x-auto relative z-10">
-                  <div className="flex flex-col gap-[2px] min-w-fit" style={{ fontFamily: "'SF Mono', 'Fira Code', 'Cascadia Code', monospace" }}>
+                  <div className="flex flex-col gap-1 min-w-fit" style={{ fontFamily: "'SF Mono', 'Fira Code', 'Cascadia Code', monospace" }}>
                     {Array.from({ length: 16 }, (_, row) => {
                       const isTopHalf = row < 8;
                       return (
-                        <div key={row} className={`flex items-center gap-[2px] ${row === 8 ? "mt-1" : ""}`}>
+                        <div key={row} className={`flex items-center gap-1 ${row === 8 ? "mt-1" : ""}`}>
                           <span className="text-[9px] text-muted-foreground/25 font-mono w-8 text-right shrink-0">
                             {(row * 16).toString(16).toUpperCase().padStart(4, "0")}
                           </span>
@@ -130,23 +130,29 @@ export const ReviewStep = ({
                             const intensity = val / 255;
                             const isTop = topIndices.has(idx);
                             const isHovered = hoveredCell === idx;
-                            const cellOpacity = val > 0 ? 0.25 + 0.75 * intensity : 0.03;
+                            const borderColor = val > 0
+                              ? `rgba(${slice.color}, ${0.2 + 0.5 * intensity})`
+                              : 'rgba(255, 255, 255, 0.08)';
+                            const textColor = val > 0
+                              ? `rgba(${slice.color}, ${0.5 + 0.5 * intensity})`
+                              : 'rgba(255, 255, 255, 0.2)';
                             return (
                               <div
                                 key={col}
-                                className={`rounded-sm flex items-center justify-center cursor-default relative transition-transform duration-150 ${col === 8 ? "ml-1" : ""}`}
+                                className={`rounded-full flex items-center justify-center cursor-default relative transition-transform duration-150 ${col === 8 ? "ml-1" : ""}`}
                                 style={{
-                                  width: "1.5rem", height: "1.5rem", aspectRatio: "1",
-                                  background: val > 0 ? `rgba(${slice.color}, ${cellOpacity * 0.5})` : "rgba(255, 255, 255, 0.015)",
+                                  width: "1.4rem", height: "1.4rem", aspectRatio: "1",
+                                  border: `1px solid ${borderColor}`,
+                                  background: val > 0 ? `rgba(${slice.color}, ${intensity * 0.08})` : "transparent",
                                   boxShadow: isTop && val > 0
-                                    ? `0 0 8px rgba(${slice.color}, ${cellOpacity * 0.6})`
-                                    : val > 120 ? `0 0 6px rgba(${slice.color}, ${cellOpacity * 0.3})` : "none",
+                                    ? `0 0 8px rgba(${slice.color}, ${intensity * 0.3}), inset 0 0 4px rgba(${slice.color}, ${intensity * 0.1})`
+                                    : "none",
                                   transform: isHovered ? "scale(1.15)" : "scale(1)",
                                 }}
                                 onMouseEnter={() => setHoveredCell(idx)}
                                 onMouseLeave={() => setHoveredCell(null)}
                               >
-                                <span className="text-[7px] font-mono" style={{ color: `rgba(255,255,255, ${0.15 + intensity * 0.55})` }}>
+                                <span className="text-[6px] font-mono" style={{ color: textColor, textShadow: isTop && val > 0 ? `0 0 6px rgba(${slice.color}, 0.5)` : 'none' }}>
                                   {val.toString(16).toUpperCase().padStart(2, "0")}
                                 </span>
                                 {isHovered && (
