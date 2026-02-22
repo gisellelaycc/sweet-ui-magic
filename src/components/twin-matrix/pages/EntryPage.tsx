@@ -109,7 +109,7 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
               {t('entry.humanDesc')}
             </p>
             <button
-              className="w-full py-4 rounded-xl text-base font-semibold transition-colors bg-foreground text-background hover:bg-foreground/90"
+              className="btn-twin btn-twin-primary w-full py-4 rounded-xl text-base font-semibold"
               onClick={(e) => {e.stopPropagation();handleHumanClick();}}>
 
               {locked ? t('wallet.connect') : t('entry.humanCta')}
