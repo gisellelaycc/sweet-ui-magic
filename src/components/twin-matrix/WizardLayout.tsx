@@ -127,7 +127,7 @@ export const WizardLayout = () => {
   }, []);
 
   const refreshOnchainState = useCallback(async () => {
-    if (!publicClient || !address) return;
+    if (!publicClient || !address || !isContractConfigured) return;
 
     setIsCheckingToken(true);
     setContractError(null);
