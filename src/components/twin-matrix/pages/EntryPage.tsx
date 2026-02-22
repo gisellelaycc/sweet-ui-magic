@@ -13,25 +13,25 @@ interface Props {
 }
 
 const SOCIAL_LINKS = [
-  { icon: xLogo, href: 'https://x.com/twin3_ai', alt: 'X' },
-  { icon: elementLogo, href: 'https://element.market/collections/twin3-1?search[toggles][0]=ALL', alt: 'Element' },
-  { icon: farcasterLogo, href: 'https://warpcast.com/twin3.eth', alt: 'Farcaster' },
-  { icon: bcscanLogo, href: 'https://bscscan.com/token/0xe3ec133e29addfbba26a412c38ed5de37195156f', alt: 'BscScan' },
-];
+{ icon: xLogo, href: 'https://x.com/twin3_ai', alt: 'X' },
+{ icon: elementLogo, href: 'https://element.market/collections/twin3-1?search[toggles][0]=ALL', alt: 'Element' },
+{ icon: farcasterLogo, href: 'https://warpcast.com/twin3.eth', alt: 'Farcaster' },
+{ icon: bcscanLogo, href: 'https://bscscan.com/token/0xe3ec133e29addfbba26a412c38ed5de37195156f', alt: 'BscScan' }];
+
 
 export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onRequestConnect }: Props) => {
   const { t } = useI18n();
 
   const handleHumanClick = () => {
-    if (locked && onRequestConnect) onRequestConnect();
-    else onHumanEntry();
+    if (locked && onRequestConnect) onRequestConnect();else
+    onHumanEntry();
   };
 
   const cardStyle: React.CSSProperties = {
     border: '1px solid rgba(255, 255, 255, 0.12)',
     borderRadius: '16px',
     padding: '1.75rem 1.75rem',
-    background: 'rgba(255, 255, 255, 0.02)',
+    background: 'rgba(255, 255, 255, 0.02)'
   };
 
   const handleCardEnter = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -54,9 +54,9 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
           </p>
 
           {/* Pretitle */}
-          <p className="text-muted-foreground/50 text-base md:text-lg uppercase tracking-[0.2em] font-heading mb-2">
-            Digital Version Of You:
-          </p>
+          
+
+
 
           {/* Main headline — largest, with scan-glow */}
           <h1 className="font-heading font-extrabold uppercase leading-[0.95] tracking-tight relative">
@@ -103,15 +103,15 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
             onClick={handleHumanClick}
             style={cardStyle}
             onMouseEnter={handleCardEnter}
-            onMouseLeave={handleCardLeave}
-          >
+            onMouseLeave={handleCardLeave}>
+
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed mb-6">
               {t('entry.humanDesc')}
             </p>
             <button
               className="w-full py-4 rounded-xl text-base font-semibold transition-colors bg-foreground text-background hover:bg-foreground/90"
-              onClick={(e) => { e.stopPropagation(); handleHumanClick(); }}
-            >
+              onClick={(e) => {e.stopPropagation();handleHumanClick();}}>
+
               {locked ? t('wallet.connect') : t('entry.humanCta')}
             </button>
           </div>
@@ -121,15 +121,15 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
             className="flex flex-col transition-all duration-300"
             style={cardStyle}
             onMouseEnter={handleCardEnter}
-            onMouseLeave={handleCardLeave}
-          >
+            onMouseLeave={handleCardLeave}>
+
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed mb-6">
               {t('entry.agentDesc')}
             </p>
             <button
               className="w-full py-4 rounded-xl text-base font-semibold border border-foreground/15 text-muted-foreground/50 cursor-not-allowed"
-              disabled
-            >
+              disabled>
+
               {t('entry.agentCta')}
             </button>
             <p className="text-xs text-muted-foreground/40 text-center mt-2 italic">
@@ -140,17 +140,17 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
           {/* Social block — below both cards */}
           <div className="flex flex-col px-2 py-4">
             <div className="flex items-center gap-5 mb-3">
-              {SOCIAL_LINKS.map((link) => (
-                <a
-                  key={link.alt}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-9 h-9 flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity"
-                >
+              {SOCIAL_LINKS.map((link) =>
+              <a
+                key={link.alt}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity">
+
                   <img src={link.icon} alt={link.alt} className="w-7 h-7" />
                 </a>
-              ))}
+              )}
             </div>
             <p className="text-base font-medium text-foreground/80 mb-1">
               {t('welcome.trackUs')}
@@ -166,6 +166,6 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
       <div className="absolute bottom-6 right-6 text-sm text-muted-foreground/40">
         Scroll to explore ↓
       </div>
-    </div>
-  );
+    </div>);
+
 };
