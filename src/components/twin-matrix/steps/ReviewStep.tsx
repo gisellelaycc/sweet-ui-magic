@@ -104,15 +104,15 @@ export const ReviewStep = ({
                   background: "radial-gradient(ellipse at center, rgba(10,255,255,0.08) 0%, transparent 70%)",
                 }} />
                 <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest mb-3 relative z-10">
-                  {t('review.projection')}
+                  Twin Matrix Projection (256D)
                 </h3>
-                <div className="overflow-x-auto relative z-10">
-                  <div className="flex flex-col gap-1 min-w-fit" style={{ fontFamily: "'SF Mono', 'Fira Code', 'Cascadia Code', monospace" }}>
+                <div className="relative z-10">
+                  <div className="flex flex-col gap-[2px]" style={{ fontFamily: "'SF Mono', 'Fira Code', 'Cascadia Code', monospace" }}>
                     {Array.from({ length: 16 }, (_, row) => {
                       const isTopHalf = row < 8;
                       return (
-                        <div key={row} className={`flex items-center gap-1 ${row === 8 ? "mt-1" : ""}`}>
-                          <span className="text-[9px] text-muted-foreground/25 font-mono w-8 text-right shrink-0">
+                        <div key={row} className={`flex items-center gap-[2px] ${row === 8 ? "mt-[2px]" : ""}`}>
+                          <span className="text-[8px] text-muted-foreground/25 font-mono w-7 text-right shrink-0">
                             {(row * 16).toString(16).toUpperCase().padStart(4, "0")}
                           </span>
                           {Array.from({ length: 16 }, (_, col) => {
@@ -139,9 +139,9 @@ export const ReviewStep = ({
                             return (
                               <div
                                 key={col}
-                                className={`rounded-full flex items-center justify-center cursor-default relative transition-transform duration-150 ${col === 8 ? "ml-1" : ""}`}
+                                className={`rounded-full flex items-center justify-center cursor-default relative transition-transform duration-150 ${col === 8 ? "ml-[2px]" : ""}`}
                                 style={{
-                                  width: "1.4rem", height: "1.4rem", aspectRatio: "1",
+                                  width: "clamp(1.1rem, 2.5vw, 1.6rem)", height: "clamp(1.1rem, 2.5vw, 1.6rem)", aspectRatio: "1",
                                   border: `1px solid ${borderColor}`,
                                   background: val > 0 ? `rgba(${slice.color}, ${intensity * 0.08})` : "transparent",
                                   boxShadow: isTop && val > 0

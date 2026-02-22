@@ -97,10 +97,10 @@ export const GenerateStep = ({ wizardState, onComplete }: Props) => {
           <div className="relative mb-6 p-4">
             <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, rgba(10,255,255,0.10) 0%, rgba(10,255,255,0.03) 40%, transparent 70%)' }} />
             <div className="absolute inset-0 pointer-events-none animate-[field-breathe_5s_ease-in-out_infinite]" style={{ background: 'radial-gradient(ellipse at center, rgba(10,255,255,0.06) 0%, transparent 60%)' }} />
-            <div className="flex flex-col gap-1 relative z-10" style={{ fontFamily: "'SF Mono', 'Fira Code', 'Cascadia Code', monospace" }}>
+            <div className="flex flex-col gap-[2px] relative z-10" style={{ fontFamily: "'SF Mono', 'Fira Code', 'Cascadia Code', monospace" }}>
               {Array.from({ length: 16 }, (_, row) => (
-                <div key={row} className="flex items-center gap-1">
-                  <span className="text-[9px] text-muted-foreground/40 font-mono w-8 text-right shrink-0">{rowLabels[row]}</span>
+                <div key={row} className="flex items-center gap-[2px]">
+                  <span className="text-[8px] text-muted-foreground/40 font-mono w-7 text-right shrink-0">{rowLabels[row]}</span>
                   {Array.from({ length: 16 }, (_, col) => {
                     const idx = row * 16 + col;
                     const val = gridValues[idx];
@@ -112,7 +112,7 @@ export const GenerateStep = ({ wizardState, onComplete }: Props) => {
                       : 'rgba(255, 255, 255, 0.06)';
                     return (
                       <div key={col} className="rounded-full flex items-center justify-center relative" style={{
-                        width: '1.4rem', height: '1.4rem', aspectRatio: '1',
+                        width: 'clamp(1.1rem, 2.5vw, 1.6rem)', height: 'clamp(1.1rem, 2.5vw, 1.6rem)', aspectRatio: '1',
                         border: `1px solid ${borderColor}`,
                         background: val > 0 ? `rgba(10, 255, 255, ${intensity * 0.08})` : 'transparent',
                         boxShadow: justChanged ? `0 0 10px rgba(10, 255, 255, 0.6), 0 0 20px rgba(10, 255, 255, 0.3)` : val > 150 ? `0 0 6px rgba(10, 255, 255, ${intensity * 0.3})` : 'none',

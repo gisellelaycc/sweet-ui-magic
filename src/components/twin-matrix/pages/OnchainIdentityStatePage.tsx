@@ -186,18 +186,18 @@ export const OnchainIdentityStatePage = ({
           {/* ── Twin Matrix Grid (no card wrapper) ── */}
           <div>
             <div className="flex items-center gap-2 mb-5">
-              <p className="text-base font-heading font-semibold text-foreground">Twin Matrix (256D)</p>
+              <p className="text-base font-heading font-semibold text-foreground">Twin Matrix Projection (256D)</p>
               <span className="text-muted-foreground/40 text-sm cursor-help" title="256-dimension identity projection">ⓘ</span>
             </div>
 
             {activeVersion ? (
-              <div className="overflow-x-auto">
-                <div className="flex flex-col gap-1" style={{ fontFamily: "'SF Mono', 'Fira Code', 'Cascadia Code', monospace" }}>
+              <div>
+                <div className="flex flex-col gap-[2px]" style={{ fontFamily: "'SF Mono', 'Fira Code', 'Cascadia Code', monospace" }}>
                   {Array.from({ length: 16 }, (_, row) => {
                     const rowAddr = (row * 16).toString(16).toUpperCase().padStart(4, '0');
                     return (
-                      <div key={row} className="flex items-center gap-1">
-                        <span className="text-right select-none shrink-0 w-12" style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)' }}>
+                      <div key={row} className="flex items-center gap-[2px]">
+                        <span className="text-right select-none shrink-0 w-10" style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)' }}>
                           {rowAddr}
                         </span>
                         {Array.from({ length: 16 }, (_, col) => {
@@ -226,8 +226,8 @@ export const OnchainIdentityStatePage = ({
                               key={col}
                               className="flex items-center justify-center relative cursor-default rounded-full"
                               style={{
-                                width: '2.1rem', height: '2.1rem', aspectRatio: '1',
-                                fontSize: '10px', color: textColor,
+                                width: 'clamp(1.3rem, 2.8vw, 2rem)', height: 'clamp(1.3rem, 2.8vw, 2rem)', aspectRatio: '1',
+                                fontSize: 'clamp(7px, 1.2vw, 10px)', color: textColor,
                                 border: `1px solid ${borderColor}`,
                                 textShadow: isTop && value > 0 ? `0 0 8px rgba(${slice.color}, 0.6)` : 'none',
                                 background: value > 0
