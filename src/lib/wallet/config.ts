@@ -2,7 +2,7 @@ import { getDefaultConfig } from '@rainbow-me/rainbowkit';
 import { bscTestnet } from 'wagmi/chains';
 
 const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID ?? 'REPLACE_WITH_WALLETCONNECT_PROJECT_ID';
-const rpcUrl = (import.meta.env.VITE_RPC_URL ?? import.meta.env.RPC_URL ?? '').trim();
+const rpcUrl = (import.meta.env.RPC_URL ?? '').trim();
 
 const chain = rpcUrl
   ? {
