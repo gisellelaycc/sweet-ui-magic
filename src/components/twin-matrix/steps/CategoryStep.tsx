@@ -74,7 +74,7 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
   return (
     <StepLayout>
       <StepContent>
-        <div className="w-full flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
+        <div className="w-full flex flex-col lg:flex-row gap-8 lg:gap-16 items-start">
           <div className="flex-1 min-w-0 flex flex-col items-center lg:items-start">
             <div className="mb-8 w-full">
               <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] tracking-tight mb-2">

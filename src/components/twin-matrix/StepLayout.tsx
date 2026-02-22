@@ -24,8 +24,8 @@ export const StepHeader = ({ children }: Props) => (
 /** Middle zone: scrollable stage area — full width centered. */
 export const StepContent = ({ children }: Props) => (
   <div className="flex-1 min-h-0 overflow-y-auto scrollbar-hide">
-    <div className="min-h-full flex flex-col items-center justify-center px-8 py-4">
-      <div className="w-full max-w-[760px]">
+    <div className="min-h-full flex flex-col items-center justify-center px-6 md:px-10 py-6">
+      <div className="w-full max-w-[960px]">
         {children}
       </div>
     </div>

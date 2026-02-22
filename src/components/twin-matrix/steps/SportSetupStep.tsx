@@ -62,7 +62,7 @@ export const SportSetupStep = ({ data, onUpdate, onNext }: Props) => {
     <StepLayout>
       <StepContent>
         <div className="flex flex-col items-center">
-          <div className="w-full max-w-lg mb-8">
+          <div className="w-full max-w-xl mb-8">
             <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] tracking-tight mb-2">
               {t('sportSetup.title')}
             </h2>
@@ -71,13 +71,13 @@ export const SportSetupStep = ({ data, onUpdate, onNext }: Props) => {
             </p>
           </div>
 
-          <div className="glass-card space-y-6 w-full max-w-lg">
+          <div className="glass-card space-y-6 w-full max-w-xl">
             <SliderSelect label={t('sportSetup.frequency')} options={FREQ_OPTIONS} value={setup.frequency} onChange={v => update('frequency', v)} t={t} />
             <SliderSelect label={t('sportSetup.duration')} options={DURATION_OPTIONS} value={setup.duration} onChange={v => update('duration', v)} t={t} />
             <SliderSelect label={t('sportSetup.steps')} options={STEP_OPTIONS} value={setup.dailySteps} onChange={v => update('dailySteps', v)} t={t} />
           </div>
 
-          <div className="w-full max-w-lg mt-6">
+          <div className="w-full max-w-xl mt-6">
             <button onClick={onNext} disabled={!isValid} className={`btn-twin btn-twin-primary w-full py-2.5 text-sm disabled:opacity-30 disabled:cursor-not-allowed ${isValid ? 'btn-glow' : ''}`}>
               {t('sportSetup.proceed')}
             </button>
