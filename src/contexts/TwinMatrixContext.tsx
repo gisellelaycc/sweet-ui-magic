@@ -29,7 +29,8 @@ const usdtContractAddress = (import.meta.env.USDT_CONTRACT_ADDRESS ?? '').trim()
 const hasValidUsdtAddress = /^0x[a-fA-F0-9]{40}$/.test(usdtContractAddress);
 
 /** Mock mode — set VITE_MOCK_MODE=true in .env to bypass all chain interactions */
-const IS_MOCK_MODE = import.meta.env.VITE_MOCK_MODE === 'true';
+/** Toggle to `false` when ready to use real chain interactions */
+const IS_MOCK_MODE = true;
 
 const MOCK_ADDRESS = '0x1234567890abcdef1234567890abcdef12345678' as `0x${string}`;
 const MOCK_WALLET_DISPLAY = '0x1234…5678';
