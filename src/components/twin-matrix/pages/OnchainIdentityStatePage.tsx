@@ -152,7 +152,7 @@ export const OnchainIdentityStatePage = ({
         </div>
 
         {/* ── Subtitle ── */}
-        <p className="text-xs text-muted-foreground/60 leading-relaxed max-w-2xl">
+        <p className="text-sm text-muted-foreground/60 leading-relaxed max-w-2xl">
           Attribute values and rankings are hidden in the black number for the airdrop index. Update more attributes to get more airdrops.
         </p>
 
@@ -173,7 +173,7 @@ export const OnchainIdentityStatePage = ({
               >
                 {stat.value}
               </span>
-              <span className="text-[10px] uppercase tracking-wider text-muted-foreground mt-1">
+              <span className="text-xs uppercase tracking-wider text-muted-foreground mt-1">
                 {stat.label}
               </span>
             </div>
@@ -183,23 +183,23 @@ export const OnchainIdentityStatePage = ({
         {/* ── Main Content: Matrix + Right Panel ── */}
         <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_minmax(0,400px)] gap-5 items-start">
 
-          {/* ── Twin Matrix Grid (reference style) ── */}
-          <div style={cardStyle}>
-            <div className="flex items-center gap-2 mb-4">
-              <p className="text-sm font-heading font-semibold text-foreground">Twin Matrix</p>
-              <span className="text-muted-foreground/40 text-xs cursor-help" title="256-dimension identity projection">ⓘ</span>
+          {/* ── Twin Matrix Grid (no card wrapper) ── */}
+          <div>
+            <div className="flex items-center gap-2 mb-5">
+              <p className="text-base font-heading font-semibold text-foreground">Twin Matrix (256D)</p>
+              <span className="text-muted-foreground/40 text-sm cursor-help" title="256-dimension identity projection">ⓘ</span>
             </div>
 
             {activeVersion ? (
               <div className="overflow-x-auto">
-                <table className="border-collapse" style={{ fontFamily: "'SF Mono', 'Fira Code', 'Cascadia Code', monospace" }}>
+                <table className="border-collapse w-full" style={{ fontFamily: "'SF Mono', 'Fira Code', 'Cascadia Code', monospace" }}>
                   <tbody>
                     {Array.from({ length: 16 }, (_, row) => {
                       const rowAddr = (row * 16).toString(16).toUpperCase().padStart(4, '0');
                       return (
                         <tr key={row}>
                           {/* Row hex label */}
-                          <td className="pr-3 py-[3px] text-right select-none" style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)' }}>
+                          <td className="pr-4 py-[5px] text-right select-none" style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)' }}>
                             {rowAddr}
                           </td>
                           {/* 16 hex cells */}
@@ -230,8 +230,8 @@ export const OnchainIdentityStatePage = ({
                                 key={col}
                                 className="text-center relative cursor-default"
                                 style={{
-                                  fontSize: '11px',
-                                  padding: '3px 4px',
+                                  fontSize: '13px',
+                                  padding: '5px 6px',
                                   color: textColor,
                                   textShadow: isTop && value > 0 ? `0 0 6px rgba(${slice.color}, 0.5)` : 'none',
                                   background: isHovered ? 'rgba(255,255,255,0.06)' : 'transparent',
@@ -246,7 +246,7 @@ export const OnchainIdentityStatePage = ({
                                   <div
                                     className="absolute -top-7 left-1/2 -translate-x-1/2 z-20 whitespace-nowrap rounded px-2 py-0.5"
                                     style={{
-                                      fontSize: '9px',
+                                      fontSize: '10px',
                                       background: 'hsl(var(--foreground))',
                                       color: 'hsl(var(--background))',
                                     }}
@@ -272,7 +272,7 @@ export const OnchainIdentityStatePage = ({
           <div className="space-y-5">
             {/* Twin Matrix Update panel */}
             <div style={cardStyle}>
-              <p className="text-sm font-heading font-semibold text-foreground mb-5">Twin Matrix Update</p>
+              <p className="text-base font-heading font-semibold text-foreground mb-5">Twin Matrix Update</p>
 
               {/* Step 01 */}
               <div className="flex items-start gap-3 mb-4">
@@ -283,10 +283,10 @@ export const OnchainIdentityStatePage = ({
                   01
                 </span>
                 <div className="flex-1">
-                  <p className="text-xs font-semibold text-foreground/80 uppercase tracking-wide mb-2">
+                  <p className="text-sm font-semibold text-foreground/80 uppercase tracking-wide mb-2">
                     Refine Your Matrix
                   </p>
-                  <p className="text-[11px] text-muted-foreground leading-relaxed mb-3">
+                  <p className="text-xs text-muted-foreground leading-relaxed mb-3">
                     Update your identity dimensions to improve your Twin Matrix projection and earn more points.
                   </p>
                   <button
@@ -309,10 +309,10 @@ export const OnchainIdentityStatePage = ({
                   02
                 </span>
                 <div className="flex-1">
-                  <p className="text-xs font-semibold text-foreground/80 uppercase tracking-wide mb-2">
+                  <p className="text-sm font-semibold text-foreground/80 uppercase tracking-wide mb-2">
                     Confirm On-chain
                   </p>
-                  <p className="text-[11px] text-muted-foreground leading-relaxed mb-3">
+                  <p className="text-xs text-muted-foreground leading-relaxed mb-3">
                     Commit your updated matrix to the blockchain. This seals your identity state permanently.
                   </p>
                   <button
@@ -327,11 +327,11 @@ export const OnchainIdentityStatePage = ({
 
             {/* State Insight */}
             <div style={cardStyle}>
-              <p className="text-xs uppercase tracking-[0.15em] text-muted-foreground font-heading mb-4">{t('dashboard.stateInsight')}</p>
+              <p className="text-sm uppercase tracking-[0.15em] text-muted-foreground font-heading mb-4">{t('dashboard.stateInsight')}</p>
               <div className="space-y-3">
                 {layerMix.map((layer) => (
                   <div key={layer.key} className="space-y-1">
-                    <div className="flex justify-between text-xs">
+                    <div className="flex justify-between text-sm">
                       <span className="text-foreground/70">{t(`common.${layer.key}`)}</span>
                       <span className="text-muted-foreground">{layer.percent}%</span>
                     </div>
@@ -352,17 +352,17 @@ export const OnchainIdentityStatePage = ({
 
             {/* AI Summary */}
             <div style={cardStyle}>
-              <p className="text-xs uppercase tracking-[0.15em] text-muted-foreground font-heading mb-3">{t('dashboard.aiSummary')}</p>
-              <p className="text-xs text-foreground/70 italic leading-relaxed">{aiSummary}</p>
+              <p className="text-sm uppercase tracking-[0.15em] text-muted-foreground font-heading mb-3">{t('dashboard.aiSummary')}</p>
+              <p className="text-sm text-foreground/70 italic leading-relaxed">{aiSummary}</p>
             </div>
           </div>
         </div>
 
         {/* ── Bottom Row: Version History + Bound Agents ── */}
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 -mt-1">
           {/* Version History */}
           <div style={cardStyle}>
-            <p className="text-xs uppercase tracking-[0.15em] text-muted-foreground font-heading mb-4">{t('dashboard.versionHistory')}</p>
+            <p className="text-sm uppercase tracking-[0.15em] text-muted-foreground font-heading mb-4">{t('dashboard.versionHistory')}</p>
             {versions.length === 0 ? (
               <p className="text-xs text-muted-foreground">No versions recorded yet.</p>
             ) : (
@@ -370,13 +370,13 @@ export const OnchainIdentityStatePage = ({
                 <div key={item.version}>
                   <button
                     onClick={() => setSelectedVersion(item.version)}
-                    className={`w-full text-left px-3 py-2.5 rounded-lg transition-colors text-xs ${activeVersion?.version === item.version ? 'bg-foreground/[0.06]' : ''}`}
+                    className={`w-full text-left px-3 py-2.5 rounded-lg transition-colors text-sm ${activeVersion?.version === item.version ? 'bg-foreground/[0.06]' : ''}`}
                   >
                     <div className="flex items-center justify-between gap-3">
                       <span className="font-mono font-medium text-foreground/80">v{item.version}</span>
                       <span className="text-muted-foreground">{t('onchain.block')} {item.blockNumber}</span>
                     </div>
-                    <p className="text-muted-foreground font-mono mt-0.5">{t('onchain.digest')}: {shortDigest(item.digest)}</p>
+                    <p className="text-sm text-muted-foreground font-mono mt-0.5">{t('onchain.digest')}: {shortDigest(item.digest)}</p>
                   </button>
                   {idx < versions.length - 1 && (
                     <div className="w-full h-px my-1" style={{ background: 'rgba(255,255,255,0.04)' }} />
@@ -388,7 +388,7 @@ export const OnchainIdentityStatePage = ({
 
           {/* Bound Agents */}
           <div style={cardStyle}>
-            <p className="text-xs uppercase tracking-[0.15em] text-muted-foreground font-heading mb-4">{t('dashboard.boundAgents')}</p>
+            <p className="text-sm uppercase tracking-[0.15em] text-muted-foreground font-heading mb-4">{t('dashboard.boundAgents')}</p>
             {boundAgents.length === 0 ? (
               <p className="text-xs text-muted-foreground">{t('agentStudio.noBoundAgents')}</p>
             ) : (
