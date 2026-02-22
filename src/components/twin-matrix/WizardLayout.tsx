@@ -9,6 +9,7 @@ import {
   decodeMatrixToSignature,
   erc20BalanceAbi,
   encodeSignatureToMatrix,
+  isContractConfigured,
   isTokenNotFoundError,
   permissionMaskToBinary256,
   permissionMaskToGrantedScope,
@@ -395,6 +396,11 @@ export const WizardLayout = () => {
       />
 
       <main className="flex-1 min-h-0 px-4 py-4 flex flex-col relative z-10">
+        {!isContractConfigured && (
+          <div className="max-w-4xl mx-auto w-full mb-3 rounded-lg border border-yellow-500/30 bg-yellow-500/10 px-4 py-2.5 text-center">
+            <p className="text-xs text-yellow-200">⚠️ Contract address not configured — on-chain features are disabled in this preview.</p>
+          </div>
+        )}
         {!isConnected && (
           <WelcomeStep
             onNext={next}
