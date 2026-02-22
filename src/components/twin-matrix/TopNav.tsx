@@ -17,7 +17,7 @@ interface Props {
 const NAV_KEYS: { id: NavPage; key: string }[] = [
   { id: 'identity', key: 'nav.identity' },
   { id: 'agent', key: 'nav.agents' },
-  { id: 'missions', key: 'nav.signalRecords' },
+  { id: 'missions', key: 'nav.tasks' },
 ];
 
 export const TopNav = ({
