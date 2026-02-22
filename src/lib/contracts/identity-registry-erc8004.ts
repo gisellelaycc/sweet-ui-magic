@@ -9,7 +9,9 @@ function parseAddress(value: string | undefined): Address | null {
   return /^0x[a-fA-F0-9]{40}$/.test(raw) ? (raw as Address) : null;
 }
 
-export const ERC8004_CONTRACT_ADDRESS = parseAddress(import.meta.env.ERC8004_CONTRACT_ADDRESS);
+export const ERC8004_CONTRACT_ADDRESS = parseAddress(
+  import.meta.env.VITE_ERC8004_CONTRACT_ADDRESS ?? import.meta.env.ERC8004_CONTRACT_ADDRESS
+);
 
 const identityRegistryErc8004Abi = [
   {
