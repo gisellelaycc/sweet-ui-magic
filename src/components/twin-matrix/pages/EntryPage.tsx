@@ -26,142 +26,153 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
   const [cardsVisible, setCardsVisible] = useState(false);
 
   useEffect(() => {
-    const t1 = setTimeout(() => setVisible(true), 400);
-    const t2 = setTimeout(() => setCardsVisible(true), 900);
+    const t1 = setTimeout(() => setVisible(true), 300);
+    const t2 = setTimeout(() => setCardsVisible(true), 700);
     return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
 
-  return (
-    <div className="relative flex flex-col items-center justify-center min-h-[75vh] px-4">
-      {/* Brand + Tagline */}
-      <div
-        className="flex flex-col items-center text-center mb-12"
-        style={{
-          opacity: visible ? 1 : 0,
-          transform: visible ? 'translateY(0)' : 'translateY(16px)',
-          transition: 'opacity 700ms ease-out, transform 700ms ease-out',
-        }}
-      >
-        <img src={logo} alt="Twin3" className="w-12 h-12 mb-6" />
-        <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground font-heading mb-3">
-          {t('welcome.pretitle')}
-        </p>
-        <h1
-          className="font-heading font-bold tracking-tight leading-[1.1] relative"
-          style={{ fontSize: 'clamp(1.75rem, 4.5vw, 3rem)', maxWidth: '620px' }}
-        >
-          <span className="scan-text-base">{t('welcome.title')}</span>
-          <span className="scan-text-glow" aria-hidden="true">{t('welcome.title')}</span>
-        </h1>
-        <p className="text-muted-foreground text-base md:text-lg max-w-md mx-auto leading-relaxed mt-4">
-          {t('entry.chooseYourPath')}
-        </p>
-      </div>
+  const handleHumanClick = () => {
+    if (locked && onRequestConnect) {
+      onRequestConnect();
+    } else {
+      onHumanEntry();
+    }
+  };
 
-      {/* Dual Entry Cards */}
-      <div
-        className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-3xl relative"
-        style={{
-          opacity: cardsVisible ? 1 : 0,
-          transform: cardsVisible ? 'translateY(0)' : 'translateY(24px)',
-          transition: 'opacity 600ms ease-out, transform 600ms ease-out',
-        }}
-      >
-        {/* Human Entry */}
-        <div className="glass-card glass-card-hover flex flex-col items-center text-center group cursor-pointer"
-          onClick={() => {
-            if (locked && onRequestConnect) {
-              onRequestConnect();
-            } else {
-              onHumanEntry();
-            }
+  return (
+    <div className="relative flex flex-col justify-center min-h-[85vh] px-6 md:px-12 lg:px-16">
+      {/* Main Layout: Left text + Right cards */}
+      <div className="flex flex-col lg:flex-row items-start lg:items-stretch gap-8 lg:gap-10 w-full max-w-[1400px] mx-auto">
+
+        {/* ── Left: Brand Typography ── */}
+        <div
+          className="flex-1 flex flex-col justify-center min-w-0"
+          style={{
+            opacity: visible ? 1 : 0,
+            transform: visible ? 'translateY(0)' : 'translateY(20px)',
+            transition: 'opacity 800ms ease-out, transform 800ms ease-out',
           }}
         >
-          <div className="w-14 h-14 rounded-full flex items-center justify-center mb-5"
-            style={{ background: 'rgba(10, 255, 255, 0.08)', border: '1px solid rgba(10, 255, 255, 0.2)' }}
-          >
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(10, 255, 255, 0.7)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-          </div>
-          <h2 className="font-heading font-semibold text-xl tracking-wide text-foreground mb-2">
-            {t('entry.human')}
-          </h2>
-          <p className="text-sm text-muted-foreground leading-relaxed mb-6 max-w-[260px]">
-            {t('entry.humanDesc')}
+          {/* Pre-title */}
+          <p className="text-base md:text-lg uppercase tracking-[0.25em] text-muted-foreground font-heading mb-4 md:mb-6">
+            {t('welcome.pretitle')}
           </p>
-          <button
-            className="btn-twin btn-twin-primary btn-glow w-full py-3 text-sm mt-auto"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (locked && onRequestConnect) {
-                onRequestConnect();
-              } else {
-                onHumanEntry();
-              }
-            }}
-          >
-            {locked ? t('wallet.connect') : t('entry.humanCta')}
-          </button>
+
+          {/* Main Headline — massive, left-aligned like twin3.ai */}
+          <h1 className="font-heading font-extrabold uppercase leading-[0.95] tracking-tight relative">
+            <span
+              className="block text-muted-foreground/30"
+              style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}
+            >
+              Empowering
+            </span>
+            <span
+              className="block text-foreground"
+              style={{ fontSize: 'clamp(3rem, 8.5vw, 7.5rem)' }}
+            >
+              Human
+            </span>
+            <span
+              className="block text-foreground"
+              style={{ fontSize: 'clamp(3rem, 8.5vw, 7.5rem)' }}
+            >
+              Experience
+            </span>
+            <span
+              className="block text-muted-foreground/30"
+              style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}
+            >
+              In the AI Age
+            </span>
+          </h1>
+
+          {/* Subtitle */}
+          <p className="text-muted-foreground text-base md:text-lg max-w-lg leading-relaxed mt-6 md:mt-8">
+            {t('welcome.subtitle')}
+          </p>
         </div>
 
-        {/* Agent Entry */}
-        <div className="glass-card glass-card-hover flex flex-col items-center text-center group">
-          <div className="w-14 h-14 rounded-full flex items-center justify-center mb-5"
-            style={{ background: 'rgba(242, 68, 85, 0.08)', border: '1px solid rgba(242, 68, 85, 0.2)' }}
+        {/* ── Right: Dual Entry Cards ── */}
+        <div
+          className="w-full lg:w-[460px] xl:w-[520px] shrink-0 flex flex-col gap-5"
+          style={{
+            opacity: cardsVisible ? 1 : 0,
+            transform: cardsVisible ? 'translateY(0)' : 'translateY(24px)',
+            transition: 'opacity 600ms ease-out, transform 600ms ease-out',
+          }}
+        >
+          {/* Human Entry Card */}
+          <div
+            className="glass-card glass-card-hover flex flex-col cursor-pointer flex-1"
+            onClick={handleHumanClick}
+            style={{ padding: '2rem 2.25rem' }}
           >
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(242, 68, 85, 0.7)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="11" width="18" height="10" rx="2" />
-              <circle cx="12" cy="5" r="2" />
-              <path d="M12 7v4" />
-              <line x1="8" y1="16" x2="8" y2="16" />
-              <line x1="16" y1="16" x2="16" y2="16" />
-            </svg>
+            <p className="text-sm text-muted-foreground mb-4">
+              {t('entry.humanDesc')}
+            </p>
+
+            <div className="flex-1" />
+
+            {/* CTA */}
+            <button
+              className="w-full py-4 rounded-xl text-base font-semibold transition-colors bg-foreground text-background hover:bg-foreground/90"
+              onClick={(e) => { e.stopPropagation(); handleHumanClick(); }}
+            >
+              {locked ? t('wallet.connect') : t('entry.humanCta')}
+            </button>
           </div>
-          <h2 className="font-heading font-semibold text-xl tracking-wide text-foreground mb-2">
-            {t('entry.agent')}
-          </h2>
-          <p className="text-sm text-muted-foreground leading-relaxed mb-6 max-w-[260px]">
-            {t('entry.agentDesc')}
-          </p>
-          <button
-            className="btn-twin btn-twin-ghost w-full py-3 text-sm mt-auto opacity-60 cursor-not-allowed"
-            disabled
+
+          {/* Agent Entry Card */}
+          <div
+            className="glass-card flex flex-col flex-1"
+            style={{ padding: '2rem 2.25rem' }}
           >
-            {t('entry.agentCta')}
-          </button>
-          <p className="text-[11px] text-muted-foreground/60 mt-2 italic">
-            {t('entry.agentComingSoon')}
-          </p>
+            {/* Social icons row */}
+            <div className="flex items-center gap-5 mb-5">
+              {SOCIAL_LINKS.map((link) => (
+                <a
+                  key={link.alt}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity"
+                >
+                  <img src={link.icon} alt={link.alt} className="w-6 h-6" />
+                </a>
+              ))}
+            </div>
+
+            <p className="text-sm font-medium text-foreground/80 mb-1">
+              {t('welcome.trackUs')}
+            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+              {t('welcome.trackUsDesc')}
+            </p>
+
+            <div className="flex-1" />
+
+            <button
+              className="w-full py-4 rounded-xl text-base font-semibold border border-foreground/15 text-muted-foreground cursor-not-allowed opacity-50"
+              disabled
+            >
+              {t('entry.agentCta')}
+            </button>
+            <p className="text-xs text-muted-foreground/50 text-center mt-2 italic">
+              {t('entry.agentComingSoon')}
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* Social Footer */}
+      {/* Scroll hint */}
       <div
-        className="flex flex-col items-center gap-3 mt-12"
+        className="absolute bottom-6 right-6 text-sm text-muted-foreground/40"
         style={{
           opacity: cardsVisible ? 1 : 0,
-          transition: 'opacity 800ms ease-out 300ms',
+          transition: 'opacity 1s ease-out 500ms',
         }}
       >
-        <div className="flex items-center gap-4">
-          {SOCIAL_LINKS.map((link) => (
-            <a
-              key={link.alt}
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-8 h-8 flex items-center justify-center opacity-60 hover:opacity-100 transition-opacity duration-200"
-            >
-              <img src={link.icon} alt={link.alt} className="w-5 h-5" />
-            </a>
-          ))}
-        </div>
-        <div className="text-center">
-          <p className="text-xs font-medium text-foreground/80">{t('welcome.trackUs')}</p>
-          <p className="text-[11px] text-muted-foreground">{t('welcome.trackUsDesc')}</p>
-        </div>
+        Scroll to explore ↓
       </div>
     </div>
   );
