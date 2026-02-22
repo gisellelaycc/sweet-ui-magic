@@ -48,7 +48,7 @@ export const TopNav = ({
   const langs: Lang[] = ['en', 'zh', 'zhCN', 'ja', 'ko'];
 
   return (
-    <header className="sticky top-0 flex items-center justify-between px-8 md:px-12 py-5 z-30 transition-colors duration-300" style={{ background: 'rgba(10, 12, 14, 0.55)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}>
+    <header className="sticky top-0 flex items-center justify-between px-8 md:px-12 py-5 z-30" style={{ background: 'rgba(10, 12, 14, 0.3)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}>
       {/* Logo — icon only, like twin3.ai */}
       <button
         onClick={() => onNavigate(null)}
