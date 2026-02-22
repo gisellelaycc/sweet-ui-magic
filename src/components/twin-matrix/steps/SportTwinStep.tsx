@@ -85,24 +85,24 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
           </div>
 
           <div className="flex flex-col md:flex-row gap-4 w-full">
-            <div className="glass-card !p-4 space-y-2 flex-1 min-w-0">
+            <div className="glass-card space-y-3 flex-1 min-w-0">
               <div>
-                <label className="text-sm font-medium text-foreground">{t('sportTwin.activities')}</label>
-                <p className="text-sm text-muted-foreground mt-0.5">{t('sportTwin.activitiesHint')}</p>
+                <label className="text-base font-medium text-foreground">{t('sportTwin.activities')}</label>
+                <p className="text-sm text-muted-foreground mt-1">{t('sportTwin.activitiesHint')}</p>
               </div>
               {twin.sportRanking.length > 0 && (
                 <p className="text-sm text-muted-foreground">{t('sportTwin.selected')} {twin.sportRanking.length} / 10</p>
               )}
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap gap-2">
                 {SPORTS.map(s => {
                   const rank = twin.sportRanking.indexOf(s.id);
                   const isSelected = rank >= 0;
                   return (
                     <button key={s.id} onClick={() => toggleSport(s.id)}
-                      className={`chip !text-xs !py-1.5 !px-3 relative ${isSelected ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}>
+                      className={`chip relative ${isSelected ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}>
                       {t(s.key)}
                       {isSelected && (
-                        <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-foreground text-background text-[9px] flex items-center justify-center font-bold">
+                        <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-foreground text-background text-[10px] flex items-center justify-center font-bold">
                           {rank + 1}
                         </span>
                       )}
@@ -112,30 +112,30 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
               </div>
             </div>
 
-            <div className="glass-card !p-4 space-y-2 flex-1 min-w-0">
+            <div className="glass-card space-y-3 flex-1 min-w-0">
               <div>
-                <label className="text-sm font-medium text-foreground">{t('sportTwin.outfitStyle')}</label>
-                <p className="text-sm text-muted-foreground mt-0.5">{t('sportTwin.outfitHint')}</p>
+                <label className="text-base font-medium text-foreground">{t('sportTwin.outfitStyle')}</label>
+                <p className="text-sm text-muted-foreground mt-1">{t('sportTwin.outfitHint')}</p>
               </div>
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap gap-2">
                 {OUTFIT_STYLES.map(s => (
                   <button key={s.id} onClick={() => toggleStyle(s.id)}
-                    className={`chip !text-xs !py-1.5 !px-3 ${twin.outfitStyle.includes(s.id) ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}>
+                    className={`chip ${twin.outfitStyle.includes(s.id) ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}>
                     {t(s.key)}
                   </button>
                 ))}
               </div>
             </div>
 
-            <div className="glass-card !p-4 space-y-2 flex-1 min-w-0">
+            <div className="glass-card space-y-3 flex-1 min-w-0">
               <div>
-                <label className="text-sm font-medium text-foreground">{t('sportTwin.brands')}</label>
-                <p className="text-sm text-muted-foreground mt-0.5">{t('sportTwin.brandsHint')}</p>
+                <label className="text-base font-medium text-foreground">{t('sportTwin.brands')}</label>
+                <p className="text-sm text-muted-foreground mt-1">{t('sportTwin.brandsHint')}</p>
               </div>
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap gap-2">
                 {BRANDS.map(b => (
                   <button key={b} onClick={() => toggleBrand(b)}
-                    className={`chip !text-xs !py-1.5 !px-3 ${twin.brands.includes(b) ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}>
+                    className={`chip ${twin.brands.includes(b) ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}>
                     {b}
                   </button>
                 ))}
@@ -143,7 +143,7 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
             </div>
           </div>
 
-          <div className="w-full max-w-md mx-auto mt-6">
+          <div className="w-full max-w-lg mx-auto mt-8">
             <button onClick={onNext} disabled={!isValid} className="btn-twin btn-twin-primary w-full py-2.5 text-sm disabled:opacity-30 disabled:cursor-not-allowed">
               {t('sportTwin.commit')}
             </button>

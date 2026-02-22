@@ -175,7 +175,7 @@ export const ReviewStep = ({
             <div className="lg:w-[40%] space-y-6">
               {/* Soul Quadrant */}
               <div className="space-y-2">
-                <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">{t('review.quadrant')}</h3>
+                <h3 className="text-base font-semibold text-muted-foreground uppercase tracking-widest">{t('review.quadrant')}</h3>
                 {quadrant.missing ? (
                   <p className="text-sm text-muted-foreground/50">{t('review.incompleteAxis')}</p>
                 ) : (
@@ -193,7 +193,7 @@ export const ReviewStep = ({
 
               {/* Identity Density */}
               <div className="space-y-2">
-                <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">{t('review.density')}</h3>
+                <h3 className="text-base font-semibold text-muted-foreground uppercase tracking-widest">{t('review.density')}</h3>
                 <div className="flex items-end gap-2">
                   <span className="text-3xl font-bold text-foreground">{identityDensity}%</span>
                   <span className="text-xs text-muted-foreground mb-1">{t('review.densityOf')}</span>
@@ -211,7 +211,7 @@ export const ReviewStep = ({
 
               {/* Layer Mix */}
               <div className="space-y-2">
-                <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">{t('review.layerMix')}</h3>
+                <h3 className="text-base font-semibold text-muted-foreground uppercase tracking-widest">{t('review.layerMix')}</h3>
                 {[
                   { label: t('common.physical'), value: layerMix.physical, color: "255, 60, 100" },
                   { label: t('common.digital'), value: layerMix.digital, color: "60, 180, 255" },
@@ -219,7 +219,7 @@ export const ReviewStep = ({
                   { label: t('common.spiritual'), value: layerMix.spiritual, color: "10, 255, 255" },
                 ].map((layer) => (
                   <div key={layer.label} className="space-y-1">
-                    <div className="flex justify-between text-sm">
+                    <div className="flex justify-between text-base">
                       <span className="text-foreground/70">{layer.label}</span>
                       <span className="text-muted-foreground">{layer.value}%</span>
                     </div>
@@ -251,7 +251,7 @@ export const ReviewStep = ({
               </button>
             </div>
           )}
-          <div className="flex gap-2 max-w-[480px] mx-auto mt-8">
+          <div className="flex gap-3 max-w-[520px] mx-auto mt-10">
             <button onClick={onBack} className="btn-twin btn-twin-ghost flex-1 py-2.5 text-sm">
               {t('review.refine')}
             </button>

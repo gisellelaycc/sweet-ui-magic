@@ -128,7 +128,7 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
               )}
             </div>
 
-            <div className="w-full mt-6" style={{ maxWidth: '520px' }}>
+            <div className="w-full mt-8" style={{ maxWidth: '520px' }}>
               <button onClick={onNext} disabled={!hasActive}
                 className={`btn-twin btn-twin-primary w-full py-2.5 text-sm disabled:opacity-30 disabled:cursor-not-allowed ${hasActive ? 'btn-glow' : ''}`}>
                 {t('category.proceed')}

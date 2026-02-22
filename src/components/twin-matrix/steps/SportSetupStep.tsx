@@ -35,10 +35,10 @@ const SliderSelect = ({ label, options, value, onChange, t }: { label: string; o
   const zone = idx >= 0 ? t(options[idx].zoneKey) : null;
   return (
     <div className="space-y-3">
-      <label className="text-sm text-muted-foreground">{label}</label>
+      <label className="text-base text-muted-foreground">{label}</label>
       <div className="flex gap-2">
         {options.map(o => (
-          <button key={o.label} onClick={() => onChange(o.label)} className={`chip !text-xs flex-1 justify-center ${value === o.label ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}>
+          <button key={o.label} onClick={() => onChange(o.label)} className={`chip flex-1 justify-center ${value === o.label ? '!bg-foreground/15 !border-foreground/30 !text-foreground' : ''}`}>
             {o.label}
           </button>
         ))}

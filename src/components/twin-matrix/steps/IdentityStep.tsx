@@ -128,7 +128,7 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
                     >
                       <button
                         onClick={() => toggle(f.key)}
-                        className={`inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm transition-all duration-200 border whitespace-nowrap shrink-0 ${
+                        className={`inline-flex items-center gap-1.5 px-5 py-3 rounded-full text-base transition-all duration-200 border whitespace-nowrap shrink-0 ${
                           isAnswered
                             ? 'border-foreground/15 text-foreground'
                             : 'border-foreground/10 text-foreground/60 hover:text-foreground/90 hover:border-foreground/15'
@@ -140,7 +140,7 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
                         }
                       >
                         <span className="font-medium">{t(f.i18nKey)}</span>
-                        {isAnswered && <span className="text-xs text-foreground/60 ml-0.5">{getOptionLabel(f, profile[f.key])}</span>}
+                        {isAnswered && <span className="text-sm text-foreground/60 ml-0.5">{getOptionLabel(f, profile[f.key])}</span>}
                         <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''} ${isAnswered ? 'text-foreground/40' : 'text-foreground/30'}`} />
                       </button>
 
@@ -150,7 +150,7 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
                             <button
                               key={o.value}
                               onClick={() => update(f.key, o.value)}
-                              className={`text-xs px-3 py-1.5 rounded-full border transition-all duration-200 whitespace-nowrap ${
+                              className={`text-sm px-4 py-2 rounded-full border transition-all duration-200 whitespace-nowrap ${
                                 profile[f.key] === o.value
                                   ? 'border-foreground/20 text-foreground'
                                   : 'border-transparent text-foreground/40 hover:text-foreground/70'
@@ -173,7 +173,7 @@ export const IdentityStep = ({ data, onUpdate, onNext }: Props) => {
             ))}
           </div>
 
-          <div className="w-full max-w-[420px]">
+          <div className="w-full max-w-[520px]">
             <button onClick={onNext} className="btn-twin btn-twin-primary w-full py-2.5 text-sm btn-glow">
               {t('identity.cta')}
             </button>
