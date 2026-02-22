@@ -74,7 +74,7 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
   return (
     <StepLayout>
       <StepContent>
-        <div className="w-full flex flex-col lg:flex-row gap-8 lg:gap-16 items-start">
+        <div className="w-full flex flex-col lg:flex-row gap-6 lg:gap-8 items-start">
           <div className="flex-1 min-w-0 flex flex-col items-center lg:items-start">
             <div className="mb-8 w-full">
               <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] tracking-tight mb-2">
@@ -136,7 +136,7 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
             </div>
           </div>
 
-          <div className="lg:w-[280px] shrink-0 flex flex-col gap-2">
+          <div className="lg:w-[320px] shrink-0 flex flex-col gap-2">
             {chipItems.map(chip => {
               const isMore = chip.id === '_more';
               const isSoon = chip.soon;
@@ -159,7 +159,7 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
                     }}
                     onMouseEnter={() => { if (isSoon) showSoonTooltip(chip.id); }}
                     onMouseLeave={() => { if (isSoon) setSoonTooltip(null); }}
-                    className="relative w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-left transition-all duration-300"
+                    className="relative w-full flex items-center gap-3 px-5 py-3.5 rounded-2xl text-left transition-all duration-300"
                     style={{
                       background: isChipSelected ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.02)',
                       border: `1px solid ${isChipSelected ? 'rgba(255, 255, 255, 0.15)' : 'rgba(255, 255, 255, 0.04)'}`,
@@ -173,14 +173,14 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
                         : 'none',
                     }}
                   >
-                    {isSoon && <Lock className="w-3 h-3 text-foreground/30 shrink-0" />}
-                    <span className="text-lg shrink-0">{chip.icon}</span>
+                    {isSoon && <Lock className="w-3.5 h-3.5 text-foreground/30 shrink-0" />}
+                    <span className="text-xl shrink-0">{chip.icon}</span>
                     <div className="min-w-0">
-                      <span className={`text-sm font-medium block ${isChipSelected ? 'text-foreground' : 'text-foreground/70'}`}>
+                      <span className={`text-base font-medium block ${isChipSelected ? 'text-foreground' : 'text-foreground/70'}`}>
                         {isMore ? t('category.andMore') : getLabel(chip.id)}
                       </span>
                       {!isMore && (
-                      <span className="text-[11px] text-muted-foreground/50 block leading-tight mt-0.5">
+                      <span className="text-xs text-muted-foreground/50 block leading-tight mt-0.5">
                           {getDesc(chip.id)}
                         </span>
                       )}

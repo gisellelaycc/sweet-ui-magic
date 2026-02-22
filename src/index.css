@@ -249,6 +249,10 @@ body::before {
     transform: translateY(-1px);
   }
 
+  .btn-twin-primary:not(:disabled) {
+    animation: btn-pulse-glow 2s ease-in-out infinite;
+  }
+
   .btn-twin-primary.btn-glow {
     animation: btn-pulse-glow 2s ease-in-out infinite;
   }
