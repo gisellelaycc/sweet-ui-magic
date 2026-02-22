@@ -60,18 +60,18 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
 
           {/* Main headline — largest, with scan-glow */}
           <h1 className="font-heading font-extrabold uppercase leading-[0.95] tracking-tight relative">
-            <span className="scan-text-base">
-              <span className="block" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}>
-                Build and
-              </span>
-              <span className="block" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}>
-                operate your
-              </span>
-              <span className="block" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}>
-                Twin Matrix
-              </span>
+            {/* Base white text */}
+            <span className="block text-foreground" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}>
+              Build and
             </span>
-            <span className="scan-text-glow" aria-hidden="true">
+            <span className="block text-foreground" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}>
+              operate your
+            </span>
+            <span className="block text-foreground" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}>
+              Twin Matrix
+            </span>
+            {/* Scan glow overlay */}
+            <span className="scan-text-glow font-heading font-extrabold uppercase leading-[0.95] tracking-tight" aria-hidden="true">
               <span className="block" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}>
                 Build and
               </span>
