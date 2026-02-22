@@ -23,7 +23,7 @@ import { useI18n } from '@/lib/i18n';
 import { MainMenu } from './MainMenu';
 import { TopNav } from './TopNav';
 import { ParticleBackground } from './ParticleBackground';
-import { WelcomeStep } from './steps/WelcomeStep';
+import { GatewayStep } from './steps/GatewayStep';
 import { IdentityStep } from './steps/IdentityStep';
 import { CategoryStep } from './steps/CategoryStep';
 import { SportSetupStep } from './steps/SportSetupStep';
@@ -366,7 +366,7 @@ export const WizardLayout = () => {
   }, [switchChain]);
 
   const showIdentityFlow = !hasMintedSbt || needsMatrixUpdate;
-  const showBack = activePage === 'identity' && showIdentityFlow && state.step > 0 && state.step < 6;
+  const showBack = activePage === 'identity' && showIdentityFlow && state.step > 1 && state.step < 6;
 
   const reviewActionLabel = useMemo(() => {
     if (needsMatrixUpdate || hasMintedSbt) return t('wizard.updateMatrix');
@@ -396,8 +396,9 @@ export const WizardLayout = () => {
 
       <main className="flex-1 min-h-0 px-4 py-4 flex flex-col relative z-10">
         {!isConnected && (
-          <WelcomeStep
-            onNext={next}
+          <GatewayStep
+            onHumanEntry={() => {}}
+            onAgentEntry={() => {}}
             locked
             onRequestConnect={() => openConnectModal?.()}
           />
@@ -478,7 +479,12 @@ export const WizardLayout = () => {
                 )}
 
                 {state.step === 0 && (
-                  <WelcomeStep onNext={next} />
+                  <GatewayStep
+                    onHumanEntry={() => setState((s) => ({ ...s, step: 1 }))}
+                    onAgentEntry={() => {
+                      setActivePage('agent');
+                    }}
+                  />
                 )}
                 {state.step === 1 && (
                   <IdentityStep data={state.profile} onUpdate={(p) => setState((s) => ({ ...s, profile: p }))} onNext={next} />

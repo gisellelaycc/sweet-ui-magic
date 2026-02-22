@@ -27,7 +27,7 @@ const T: Translations = {
   'wallet.requiredDesc': { en: 'You need to connect a wallet before entering Twin Matrix. All actions are locked until a wallet is connected.', zh: '進入 Twin Matrix 前需要先連接錢包。未連接前所有操作都會被鎖定。', zhCN: '进入 Twin Matrix 前需要先连接钱包。未连接前所有操作都会被锁定。', ja: 'Twin Matrix に入る前にウォレット接続が必要です。接続されるまで操作はロックされます。', ko: 'Twin Matrix에 들어가기 전에 지갑 연결이 필요합니다. 연결 전까지 모든 동작이 잠깁니다.' },
   'wallet.connect': { en: 'Connect Wallet', zh: '連接錢包', zhCN: '连接钱包', ja: 'ウォレット接続', ko: '지갑 연결' },
 
-  // ── Welcome Step ──
+  // ── Welcome / Gateway ──
   'welcome.pretitle': { en: 'Digital Version Of You:', zh: '你的數位分身：', zhCN: '你的数字分身：', ja: 'あなたのデジタル版：', ko: '당신의 디지털 버전：' },
   'welcome.title': { en: 'Empowering Human Experience in the AI Age', zh: '在 AI 時代賦能人類體驗', zhCN: '在 AI 时代赋能人类体验', ja: 'AI時代の人間体験を強化', ko: 'AI 시대의 인간 경험을 강화' },
   'welcome.subtitle': { en: 'Seal your identity. Deploy your agent. Earn with your twin.', zh: '封存你的身份。部署你的代理。用你的孿生賺取。', zhCN: '封存你的身份。部署你的代理。用你的孪生赚取。', ja: 'アイデンティティを封印。エージェントを展開。ツインで稼ぐ。', ko: '아이덴티티를 봉인. 에이전트를 배포. 트윈으로 수익 창출.' },
@@ -36,6 +36,18 @@ const T: Translations = {
   'welcome.hint': { en: 'Shape your 256D space in 2 min.', zh: '2 分鐘塑造你的 256D 空間。', ja: '2分で256D空間を形成。', ko: '2분 만에 256D 공간을 만드세요.' },
   'welcome.trackUs': { en: 'Track us on', zh: '追蹤我們', zhCN: '关注我们', ja: 'フォロー', ko: '팔로우' },
   'welcome.trackUsDesc': { en: 'X, Element, Farcaster, and BscScan for the latest updates!', zh: 'X、Element、Farcaster 和 BscScan 取得最新消息！', zhCN: 'X、Element、Farcaster 和 BscScan 获取最新消息！', ja: 'X、Element、Farcaster、BscScan で最新情報を！', ko: 'X, Element, Farcaster, BscScan에서 최신 업데이트를!' },
+  'welcome.chooseEntry': { en: 'Who are you?', zh: '你是誰？', zhCN: '你是谁？', ja: 'あなたは誰ですか？', ko: '당신은 누구입니까?' },
+
+  // ── Gateway: Human Entry ──
+  'gateway.human.title': { en: 'Human', zh: 'Human', zhCN: 'Human', ja: 'Human', ko: 'Human' },
+  'gateway.human.desc': { en: 'Verify you are human.\nBuild or update your Twin Matrix.', zh: '驗證你是真人。\n建立或更新你的 Twin Matrix。', zhCN: '验证你是真人。\n建立或更新你的 Twin Matrix。', ja: '人間であることを確認。\nTwin Matrixを構築・更新。', ko: '인간임을 인증하세요.\nTwin Matrix를 생성 또는 업데이트.' },
+  'gateway.human.cta': { en: 'Verify as Human', zh: '開始人類驗證', zhCN: '开始人类验证', ja: '人間として検証', ko: '인간으로 인증' },
+
+  // ── Gateway: Agent Entry ──
+  'gateway.agent.title': { en: 'Agent', zh: 'Agent', zhCN: 'Agent', ja: 'Agent', ko: 'Agent' },
+  'gateway.agent.desc': { en: 'Connect an agent to a Twin Matrix.\nInject a human identity base into your agent.', zh: '為你的 Agent 連結 Twin Matrix。\n為你的 Agent 注入人類身份基底。', zhCN: '为你的 Agent 连接 Twin Matrix。\n为你的 Agent 注入人类身份基底。', ja: 'エージェントをTwin Matrixに接続。\n人間のアイデンティティ基盤を注入。', ko: '에이전트를 Twin Matrix에 연결.\n인간 아이덴티티 기반을 주입.' },
+  'gateway.agent.cta': { en: 'Agent Access', zh: 'Agent Access', zhCN: 'Agent Access', ja: 'Agent Access', ko: 'Agent Access' },
+  'gateway.agent.comingSoon': { en: 'Details coming soon', zh: '細節即將公佈', zhCN: '细节即将公布', ja: '詳細は近日公開', ko: '세부 사항 곧 공개' },
 
   // ── Identity Step ──
   'identity.title': { en: 'Core Identity', zh: '核心身份', ja: 'コアアイデンティティ', ko: '코어 아이덴티티' },
