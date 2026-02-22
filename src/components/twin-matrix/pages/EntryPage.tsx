@@ -53,31 +53,31 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
             {t('welcome.pretitle')}
           </p>
 
-          {/* Main headline */}
+          {/* Pretitle */}
+          <p className="text-muted-foreground/50 text-base md:text-lg uppercase tracking-[0.2em] font-heading mb-2">
+            Digital Version Of You:
+          </p>
+
+          {/* Main headline — largest */}
           <h1 className="font-heading font-extrabold uppercase leading-[0.95] tracking-tight">
-            <span className="block text-foreground" style={{ fontSize: 'clamp(3rem, 8.5vw, 7.5rem)' }}>
-              Digital
+            <span className="block text-foreground" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}>
+              Build and
             </span>
-            <span className="block text-foreground" style={{ fontSize: 'clamp(3rem, 8.5vw, 7.5rem)' }}>
-              Version
+            <span className="block text-foreground" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}>
+              operate your
             </span>
-            <span className="block text-foreground" style={{ fontSize: 'clamp(3rem, 8.5vw, 7.5rem)' }}>
-              Of You
+            <span className="block text-foreground" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}>
+              Twin Matrix
             </span>
           </h1>
 
-          {/* Subtitle */}
-          <p className="text-muted-foreground text-lg md:text-xl max-w-lg leading-relaxed mt-6 md:mt-8">
-            Build and operate your Twin Matrix
-          </p>
-
           {/* Usage line */}
-          <p className="text-muted-foreground/70 text-base md:text-lg max-w-lg leading-relaxed mt-3">
+          <p className="text-muted-foreground/70 text-base md:text-lg max-w-lg leading-relaxed mt-6">
             Verify as human. Update your identity. Deploy your agent.
           </p>
 
           {/* Brand tagline */}
-          <p className="text-muted-foreground/40 text-sm md:text-base max-w-lg leading-relaxed mt-6">
+          <p className="text-muted-foreground/40 text-sm md:text-base max-w-lg leading-relaxed mt-4">
             Empowering human experience in the AI age.
           </p>
         </div>
