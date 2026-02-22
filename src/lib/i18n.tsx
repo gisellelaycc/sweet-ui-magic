@@ -20,6 +20,7 @@ const T: Translations = {
   'nav.signalMarketplace': { en: 'Signal Marketplace', zh: '信號市場', ja: 'シグナルマーケット', ko: '시그널 마켓' },
   'nav.records': { en: 'Records', zh: '紀錄', ja: 'レコード', ko: '레코드' },
   'nav.signalRecords': { en: 'Task Records', zh: '任務紀錄', zhCN: '任务记录', ja: 'タスク記録', ko: '작업 기록' },
+  'nav.tasks': { en: 'Tasks', zh: '任務', zhCN: '任务', ja: 'タスク', ko: '태스크' },
 
   // ── Wallet / Gate ──
   'wallet.required': { en: 'Wallet Required', zh: '需要錢包', zhCN: '需要钱包', ja: 'ウォレットが必要です', ko: '지갑이 필요합니다' },
