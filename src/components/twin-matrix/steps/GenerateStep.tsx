@@ -85,7 +85,7 @@ export const GenerateStep = ({ wizardState, onComplete }: Props) => {
   return (
     <StepLayout>
       <StepContent>
-        <div className="flex flex-col items-center text-center animate-fade-in px-4">
+        <div className="flex flex-col items-center text-center animate-fade-in px-4 min-h-[70vh] justify-center">
           <div className="mb-5 h-12 flex flex-col items-center justify-center" style={{
             opacity: phaseVisible ? 1 : 0, transform: phaseVisible ? 'translateY(0)' : 'translateY(8px)',
             transition: 'opacity 0.4s ease, transform 0.4s ease',

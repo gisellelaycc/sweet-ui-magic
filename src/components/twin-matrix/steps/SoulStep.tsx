@@ -59,7 +59,7 @@ export const SoulStep = ({ data, onUpdate, onNext }: Props) => {
             </p>
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-end">
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-end">
             <div className="flex-1 min-w-0">
               <div className="space-y-8">
                 <p className="text-sm text-muted-foreground uppercase tracking-widest">{t('soul.why')}</p>

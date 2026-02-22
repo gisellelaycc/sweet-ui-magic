@@ -96,7 +96,7 @@ export const ReviewStep = ({
             </p>
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-center">
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-center">
             {/* Left: Matrix — 60% */}
             <div className="lg:w-[60%] min-w-0">
               <div className="relative">
@@ -251,7 +251,7 @@ export const ReviewStep = ({
               </button>
             </div>
           )}
-          <div className="flex gap-2 max-w-[420px] mx-auto mt-8">
+          <div className="flex gap-2 max-w-[480px] mx-auto mt-8">
             <button onClick={onBack} className="btn-twin btn-twin-ghost flex-1 py-2.5 text-sm">
               {t('review.refine')}
             </button>
