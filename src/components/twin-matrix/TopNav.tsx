@@ -48,37 +48,28 @@ export const TopNav = ({
   const langs: Lang[] = ['en', 'zh', 'zhCN', 'ja', 'ko'];
 
   return (
-    <header className="flex items-center justify-between px-6 py-3 border-b border-foreground/5 relative z-30">
+    <header className="flex items-center justify-between px-6 md:px-10 py-4 relative z-30">
+      {/* Logo — icon only, like twin3.ai */}
       <button
         onClick={() => onNavigate(null)}
-        className="flex items-center gap-2.5 hover:opacity-80 transition-opacity"
+        className="hover:opacity-80 transition-opacity"
       >
-        <img src={logo} alt="Twin Matrix" className="w-6 h-6" />
-        <span className="font-semibold tracking-tight text-sm">Twin Matrix</span>
+        <img src={logo} alt="Twin Matrix" className="w-7 h-7" />
       </button>
 
-      <div className="flex items-center gap-6">
+      {/* Right side nav */}
+      <div className="flex items-center gap-5 md:gap-7">
         {NAV_KEYS.map(item => (
           <button
             key={item.id}
             onClick={() => onNavigate(item.id)}
-            className={`relative text-sm py-2 transition-colors group ${
+            className={`text-xs uppercase tracking-widest font-medium transition-colors ${
               activePage === item.id
                 ? 'text-foreground'
                 : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             {t(item.key)}
-            <span
-              className={`absolute bottom-0 left-0 right-0 h-px transition-opacity ${
-                activePage === item.id
-                  ? 'opacity-100'
-                  : 'opacity-0 group-hover:opacity-100'
-              }`}
-              style={{
-                background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)',
-              }}
-            />
           </button>
         ))}
 
@@ -86,7 +77,7 @@ export const TopNav = ({
         <div className="relative" ref={popRef}>
           <button
             onClick={() => setLangOpen(!langOpen)}
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors py-2 px-1"
+            className="text-xs uppercase tracking-widest font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
             {lang === 'zhCN' ? '简体' : lang.toUpperCase()}
           </button>
@@ -118,14 +109,14 @@ export const TopNav = ({
           )}
         </div>
 
+        {/* Wallet — twin3.ai style rounded pill button */}
         {isWalletConnected && walletAddress ? (
           <div className="relative" ref={walletRef}>
             <button
               onClick={() => setWalletMenuOpen((v) => !v)}
-              className="px-3 py-1.5 rounded-lg text-xs font-mono text-foreground/90 bg-foreground/5 border border-foreground/8 hover:bg-foreground/10 transition-colors flex items-center gap-1.5"
+              className="px-4 py-1.5 rounded-full text-xs font-medium border border-foreground/20 text-foreground hover:bg-foreground/10 transition-colors"
             >
-              <span>{walletAddress}</span>
-              <span className="text-[10px] text-muted-foreground">▾</span>
+              {walletAddress}
             </button>
 
             {walletMenuOpen && (
@@ -153,7 +144,7 @@ export const TopNav = ({
         ) : (
           <button
             onClick={onConnectWallet}
-            className="btn-twin btn-twin-primary py-2 px-3 text-xs"
+            className="px-5 py-1.5 rounded-full text-xs font-medium bg-[hsl(210,80%,60%)] text-white hover:bg-[hsl(210,80%,55%)] transition-colors"
           >
             {t('wallet.connect')}
           </button>
