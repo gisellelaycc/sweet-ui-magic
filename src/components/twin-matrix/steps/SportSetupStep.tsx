@@ -43,7 +43,7 @@ const SliderSelect = ({ label, options, value, onChange, t }: { label: string; o
           </button>
         ))}
       </div>
-      {zone && <div className="text-xs text-center py-1.5 px-3 rounded-full bg-foreground/5 text-foreground/60 inline-block">{t('zone.label')} {zone}</div>}
+      {zone && <div className="text-sm text-center py-1.5 px-3 rounded-full bg-foreground/5 text-foreground/60 inline-block">{t('zone.label')} {zone}</div>}
     </div>
   );
 };

@@ -103,62 +103,60 @@ export const ReviewStep = ({
                 <div className="absolute inset-0 pointer-events-none" style={{
                   background: "radial-gradient(ellipse at center, rgba(10,255,255,0.08) 0%, transparent 70%)",
                 }} />
-                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-3 relative z-10">
+                <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest mb-3 relative z-10">
                   {t('review.projection')}
                 </h3>
                 <div className="overflow-x-auto relative z-10">
-                  <div className="flex flex-col min-w-fit">
+                  <div className="flex flex-col gap-[2px] min-w-fit" style={{ fontFamily: "'SF Mono', 'Fira Code', 'Cascadia Code', monospace" }}>
                     {Array.from({ length: 16 }, (_, row) => {
                       const isTopHalf = row < 8;
                       return (
-                        <div key={row} className={`flex items-center gap-1 ${row === 8 ? "mt-2" : "mb-px"}`}>
-                          <span className="text-[7px] text-muted-foreground/25 font-mono w-7 text-right shrink-0">
+                        <div key={row} className={`flex items-center gap-[2px] ${row === 8 ? "mt-1" : ""}`}>
+                          <span className="text-[9px] text-muted-foreground/25 font-mono w-8 text-right shrink-0">
                             {(row * 16).toString(16).toUpperCase().padStart(4, "0")}
                           </span>
-                          <div className="flex gap-px">
-                            {Array.from({ length: 16 }, (_, col) => {
-                              const isLeftHalf = col < 8;
-                              let sliceIdx: number;
-                              let localRow: number;
-                              let localCol: number;
-                              if (isTopHalf && isLeftHalf) { sliceIdx = 0; localRow = row; localCol = col; }
-                              else if (isTopHalf && !isLeftHalf) { sliceIdx = 1; localRow = row; localCol = col - 8; }
-                              else if (!isTopHalf && isLeftHalf) { sliceIdx = 2; localRow = row - 8; localCol = col; }
-                              else { sliceIdx = 3; localRow = row - 8; localCol = col - 8; }
-                              const slice = SLICES[sliceIdx];
-                              const idx = slice.range[0] + localRow * 8 + localCol;
-                              const val = signature[idx] ?? 0;
-                              const intensity = val / 255;
-                              const isTop = topIndices.has(idx);
-                              const isHovered = hoveredCell === idx;
-                              const cellOpacity = val > 0 ? 0.25 + 0.75 * intensity : 0.03;
-                              return (
-                                <div
-                                  key={col}
-                                  className={`rounded-sm flex items-center justify-center cursor-default relative transition-transform duration-150 ${col === 8 ? "ml-1" : ""}`}
-                                  style={{
-                                    width: "1.25rem", height: "1.25rem", aspectRatio: "1",
-                                    background: val > 0 ? `rgba(${slice.color}, ${cellOpacity * 0.5})` : "rgba(255, 255, 255, 0.015)",
-                                    boxShadow: isTop && val > 0
-                                      ? `0 0 8px rgba(${slice.color}, ${cellOpacity * 0.6})`
-                                      : val > 120 ? `0 0 6px rgba(${slice.color}, ${cellOpacity * 0.3})` : "none",
-                                    transform: isHovered ? "scale(1.15)" : "scale(1)",
-                                  }}
-                                  onMouseEnter={() => setHoveredCell(idx)}
-                                  onMouseLeave={() => setHoveredCell(null)}
-                                >
-                                  <span className="text-[5px] font-mono" style={{ color: `rgba(255,255,255, ${0.15 + intensity * 0.55})` }}>
-                                    {val.toString(16).toUpperCase().padStart(2, "0")}
-                                  </span>
-                                  {isHovered && (
-                                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-foreground/90 text-background text-[8px] px-1.5 py-0.5 rounded whitespace-nowrap z-10">
-                                      D{idx}: {val} ({t(slice.labelKey)})
-                                    </div>
-                                  )}
-                                </div>
-                              );
-                            })}
-                          </div>
+                          {Array.from({ length: 16 }, (_, col) => {
+                            const isLeftHalf = col < 8;
+                            let sliceIdx: number;
+                            let localRow: number;
+                            let localCol: number;
+                            if (isTopHalf && isLeftHalf) { sliceIdx = 0; localRow = row; localCol = col; }
+                            else if (isTopHalf && !isLeftHalf) { sliceIdx = 1; localRow = row; localCol = col - 8; }
+                            else if (!isTopHalf && isLeftHalf) { sliceIdx = 2; localRow = row - 8; localCol = col; }
+                            else { sliceIdx = 3; localRow = row - 8; localCol = col - 8; }
+                            const slice = SLICES[sliceIdx];
+                            const idx = slice.range[0] + localRow * 8 + localCol;
+                            const val = signature[idx] ?? 0;
+                            const intensity = val / 255;
+                            const isTop = topIndices.has(idx);
+                            const isHovered = hoveredCell === idx;
+                            const cellOpacity = val > 0 ? 0.25 + 0.75 * intensity : 0.03;
+                            return (
+                              <div
+                                key={col}
+                                className={`rounded-sm flex items-center justify-center cursor-default relative transition-transform duration-150 ${col === 8 ? "ml-1" : ""}`}
+                                style={{
+                                  width: "1.5rem", height: "1.5rem", aspectRatio: "1",
+                                  background: val > 0 ? `rgba(${slice.color}, ${cellOpacity * 0.5})` : "rgba(255, 255, 255, 0.015)",
+                                  boxShadow: isTop && val > 0
+                                    ? `0 0 8px rgba(${slice.color}, ${cellOpacity * 0.6})`
+                                    : val > 120 ? `0 0 6px rgba(${slice.color}, ${cellOpacity * 0.3})` : "none",
+                                  transform: isHovered ? "scale(1.15)" : "scale(1)",
+                                }}
+                                onMouseEnter={() => setHoveredCell(idx)}
+                                onMouseLeave={() => setHoveredCell(null)}
+                              >
+                                <span className="text-[7px] font-mono" style={{ color: `rgba(255,255,255, ${0.15 + intensity * 0.55})` }}>
+                                  {val.toString(16).toUpperCase().padStart(2, "0")}
+                                </span>
+                                {isHovered && (
+                                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-foreground/90 text-background text-[9px] px-1.5 py-0.5 rounded whitespace-nowrap z-10">
+                                    D{idx}: {val} ({t(slice.labelKey)})
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
                         </div>
                       );
                     })}
@@ -171,7 +169,7 @@ export const ReviewStep = ({
             <div className="lg:w-[40%] space-y-6">
               {/* Soul Quadrant */}
               <div className="space-y-2">
-                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">{t('review.quadrant')}</h3>
+                <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">{t('review.quadrant')}</h3>
                 {quadrant.missing ? (
                   <p className="text-sm text-muted-foreground/50">{t('review.incompleteAxis')}</p>
                 ) : (
@@ -189,7 +187,7 @@ export const ReviewStep = ({
 
               {/* Identity Density */}
               <div className="space-y-2">
-                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">{t('review.density')}</h3>
+                <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">{t('review.density')}</h3>
                 <div className="flex items-end gap-2">
                   <span className="text-3xl font-bold text-foreground">{identityDensity}%</span>
                   <span className="text-xs text-muted-foreground mb-1">{t('review.densityOf')}</span>
@@ -207,7 +205,7 @@ export const ReviewStep = ({
 
               {/* Layer Mix */}
               <div className="space-y-2">
-                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">{t('review.layerMix')}</h3>
+                <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">{t('review.layerMix')}</h3>
                 {[
                   { label: t('common.physical'), value: layerMix.physical, color: "255, 60, 100" },
                   { label: t('common.digital'), value: layerMix.digital, color: "60, 180, 255" },
@@ -215,7 +213,7 @@ export const ReviewStep = ({
                   { label: t('common.spiritual'), value: layerMix.spiritual, color: "10, 255, 255" },
                 ].map((layer) => (
                   <div key={layer.label} className="space-y-1">
-                    <div className="flex justify-between text-xs">
+                    <div className="flex justify-between text-sm">
                       <span className="text-foreground/70">{layer.label}</span>
                       <span className="text-muted-foreground">{layer.value}%</span>
                     </div>

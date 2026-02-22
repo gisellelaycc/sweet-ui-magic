@@ -126,14 +126,14 @@ export const CompleteStep = ({ signature, onActivateAgent, onDashboard }: Props)
             <div className="flex items-start">
               {/* Dominant Dimensions */}
               <div className="flex-1 text-left space-y-2.5">
-                <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{t('complete.dominantDim')}</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-widest">{t('complete.dominantDim')}</p>
                 <div className="space-y-1.5">
                   {dominantDimensions.map(d => (
                     <div key={d.idx} className="flex items-center justify-between pr-4">
-                      <span className="text-[11px] font-light text-foreground/60">
+                      <span className="text-sm font-light text-foreground/60">
                         {d.layer} · {d.name}
                       </span>
-                      <span className="text-[10px] text-muted-foreground/60 font-mono font-light">
+                      <span className="text-xs text-muted-foreground/60 font-mono font-light">
                         {d.value.toFixed(2)}
                       </span>
                     </div>
@@ -145,8 +145,8 @@ export const CompleteStep = ({ signature, onActivateAgent, onDashboard }: Props)
 
               {/* Vector Imprint */}
               <div className="flex-1 text-left space-y-2">
-                <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{t('complete.vectorImprint')}</p>
-                <p className="text-[9px] text-muted-foreground/50">{t('complete.snapshot')}</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-widest">{t('complete.vectorImprint')}</p>
+                <p className="text-xs text-muted-foreground/50">{t('complete.snapshot')}</p>
                 <div className="space-y-3">
                   {SLICES.map(slice => {
                     const sliceData = signature.slice(slice.range[0], slice.range[1] + 1);
