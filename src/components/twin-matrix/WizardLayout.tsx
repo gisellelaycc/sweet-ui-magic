@@ -375,7 +375,7 @@ export const WizardLayout = () => {
   }, [needsMatrixUpdate, hasMintedSbt, t]);
 
   return (
-    <div className="h-full flex flex-col relative" style={{ zIndex: 10 }}>
+    <div className="flex-1 flex flex-col relative" style={{ zIndex: 10 }}>
       <ParticleBackground color="cyan" />
 
       <TopNav
