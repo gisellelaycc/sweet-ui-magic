@@ -58,16 +58,29 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
             Digital Version Of You:
           </p>
 
-          {/* Main headline — largest */}
-          <h1 className="font-heading font-extrabold uppercase leading-[0.95] tracking-tight">
-            <span className="block text-foreground" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}>
-              Build and
+          {/* Main headline — largest, with scan-glow */}
+          <h1 className="font-heading font-extrabold uppercase leading-[0.95] tracking-tight relative">
+            <span className="scan-text-base">
+              <span className="block" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}>
+                Build and
+              </span>
+              <span className="block" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}>
+                operate your
+              </span>
+              <span className="block" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}>
+                Twin Matrix
+              </span>
             </span>
-            <span className="block text-foreground" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}>
-              operate your
-            </span>
-            <span className="block text-foreground" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}>
-              Twin Matrix
+            <span className="scan-text-glow" aria-hidden="true">
+              <span className="block" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}>
+                Build and
+              </span>
+              <span className="block" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}>
+                operate your
+              </span>
+              <span className="block" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}>
+                Twin Matrix
+              </span>
             </span>
           </h1>
 
