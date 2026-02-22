@@ -6,6 +6,13 @@ import { TopNav } from '@/components/twin-matrix/TopNav';
 import { SiteFooter } from '@/components/twin-matrix/SiteFooter';
 import { SignalRecordsPage } from '@/components/twin-matrix/pages/SignalRecordsPage';
 
+const cardStyle: React.CSSProperties = {
+  border: '1px solid rgba(255, 255, 255, 0.12)',
+  borderRadius: '16px',
+  padding: '1.75rem',
+  background: 'rgba(255, 255, 255, 0.02)',
+};
+
 const TasksPage = () => {
   const navigate = useNavigate();
   const { t } = useI18n();
@@ -42,9 +49,14 @@ const TasksPage = () => {
         <main className="flex-1 min-h-0 px-4 py-4 flex flex-col relative z-10">
           {!isConnected ? (
             <div className="flex-1 flex items-center justify-center">
-              <div className="text-center space-y-4">
-                <p className="text-muted-foreground">{t('wallet.connect')} to view Tasks & Rewards</p>
-                <button onClick={() => openConnectModal?.()} className="btn-twin btn-twin-primary py-2.5 px-6 text-sm">
+              <div className="flex flex-col items-center text-center max-w-md" style={cardStyle}>
+                <p className="text-base md:text-lg text-muted-foreground leading-relaxed mb-6">
+                  {t('wallet.connect')} to view Tasks & Rewards
+                </p>
+                <button
+                  onClick={() => openConnectModal?.()}
+                  className="w-full py-4 rounded-xl text-base font-semibold bg-foreground text-background hover:bg-foreground/90 transition-colors"
+                >
                   {t('wallet.connect')}
                 </button>
               </div>

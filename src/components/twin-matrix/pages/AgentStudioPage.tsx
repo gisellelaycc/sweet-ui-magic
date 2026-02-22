@@ -2,14 +2,26 @@ import { useMemo, useState } from 'react';
 import { useI18n } from '@/lib/i18n';
 import { permissionMaskToGrantedQuadrants, type OnchainBoundAgent } from '@/lib/contracts/twin-matrix-sbt';
 
+const cardStyle: React.CSSProperties = {
+  border: '1px solid rgba(255, 255, 255, 0.12)',
+  borderRadius: '16px',
+  padding: '1.75rem',
+  background: 'rgba(255, 255, 255, 0.02)',
+};
+
+const handleCardEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.25)';
+  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
+};
+const handleCardLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
+  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.02)';
+};
+
 const statusColor: Record<string, string> = {
   active: 'rgba(10, 255, 255, 0.8)',
   draft: 'rgba(255, 255, 255, 0.3)',
 };
-
-const ThinDivider = () => (
-  <div className="w-full h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)' }} />
-);
 
 interface Props {
   boundAgents: OnchainBoundAgent[];
@@ -48,7 +60,7 @@ export const AgentStudioPage = ({ boundAgents, onCreateAgent, onEditAgent }: Pro
     if (decimals > 30) return '-';
     if (balanceRaw === null) return '-';
     const base = 10n ** BigInt(decimals);
-    const scaled10 = (balanceRaw * 10n + base / 2n) / base; // round to 1 decimal
+    const scaled10 = (balanceRaw * 10n + base / 2n) / base;
     const whole = scaled10 / 10n;
     const decimal = scaled10 % 10n;
     return `${whole.toLocaleString()}.${decimal.toString()} USDT`;
@@ -58,17 +70,21 @@ export const AgentStudioPage = ({ boundAgents, onCreateAgent, onEditAgent }: Pro
 
   return (
     <div className="animate-fade-in h-full overflow-y-auto scrollbar-hide">
-      <div className="max-w-3xl mx-auto px-6 py-6 space-y-6">
+      <div className="max-w-3xl mx-auto px-6 md:px-12 py-8 space-y-8">
+        {/* Page header */}
         <div>
-          <h2 className="text-2xl font-bold mb-1">{t('agentStudio.title')}</h2>
-          <p className="text-muted-foreground text-sm">{t('agentStudio.subtitle')}</p>
+          <p className="text-base uppercase tracking-[0.25em] text-muted-foreground font-heading mb-3">
+            {t('agentStudio.subtitle')}
+          </p>
+          <h2 className="font-heading font-extrabold uppercase leading-tight tracking-tight text-foreground" style={{ fontSize: 'clamp(1.75rem, 4vw, 3rem)' }}>
+            {t('agentStudio.title')}
+          </h2>
         </div>
 
-        <ThinDivider />
-
+        {/* Action buttons */}
         <div className="flex items-center gap-3">
           <button onClick={onCreateAgent}
-            className="text-xs px-4 py-2 border border-foreground/10 rounded-lg text-foreground/80 hover:bg-foreground/5 hover:text-foreground transition-colors">
+            className="py-3 px-6 rounded-xl text-sm font-semibold bg-foreground text-background hover:bg-foreground/90 transition-colors">
             {t('agentStudio.newAgent')}
           </button>
           <button
@@ -76,141 +92,153 @@ export const AgentStudioPage = ({ boundAgents, onCreateAgent, onEditAgent }: Pro
               if (studioAgents.length === 0) return;
               setIsChoosingEditTarget(true);
             }}
-            className="text-xs px-4 py-2 border border-foreground/10 rounded-lg text-muted-foreground hover:bg-foreground/5 hover:text-foreground transition-colors">
+            className="py-3 px-6 rounded-xl text-sm font-semibold border border-foreground/15 text-muted-foreground hover:bg-foreground/5 hover:text-foreground transition-colors">
             {t('agentStudio.editAgent')}
           </button>
         </div>
 
+        {/* Edit target selection */}
         {isChoosingEditTarget && (
-          <>
-            <ThinDivider />
-            <div className="space-y-3 animate-fade-in">
-              <p className="text-xs text-muted-foreground uppercase tracking-widest">{t('agentStudio.selectToEdit')}</p>
-              <div className="space-y-2">
-                {studioAgents.map((agent) => (
-                  <button
-                    key={`edit-target-${agent.id}`}
-                    onClick={() => {
-                      setIsChoosingEditTarget(false);
-                      onEditAgent(agent.address);
-                    }}
-                    className="w-full text-left px-3 py-2 rounded-lg border border-foreground/10 hover:bg-foreground/[0.03] transition-colors"
-                  >
-                    <p className="text-sm text-foreground/80">{agent.name}</p>
-                    <p className="text-[10px] text-muted-foreground/60 font-mono">{formatAddressPreview(agent.address)}</p>
-                  </button>
-                ))}
-              </div>
-              <button
-                onClick={() => setIsChoosingEditTarget(false)}
-                className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {t('agentStudio.cancel')}
-              </button>
+          <div
+            className="space-y-3 animate-fade-in transition-all duration-300"
+            style={cardStyle}
+            onMouseEnter={handleCardEnter}
+            onMouseLeave={handleCardLeave}
+          >
+            <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground font-heading">{t('agentStudio.selectToEdit')}</p>
+            <div className="space-y-2">
+              {studioAgents.map((agent) => (
+                <button
+                  key={`edit-target-${agent.id}`}
+                  onClick={() => {
+                    setIsChoosingEditTarget(false);
+                    onEditAgent(agent.address);
+                  }}
+                  className="w-full text-left px-4 py-3 rounded-xl border border-foreground/10 hover:bg-foreground/[0.04] hover:border-foreground/20 transition-all"
+                >
+                  <p className="text-base text-foreground/80">{agent.name}</p>
+                  <p className="text-xs text-muted-foreground/60 font-mono mt-0.5">{formatAddressPreview(agent.address)}</p>
+                </button>
+              ))}
             </div>
-          </>
+            <button
+              onClick={() => setIsChoosingEditTarget(false)}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {t('agentStudio.cancel')}
+            </button>
+          </div>
         )}
 
-        <ThinDivider />
-
-        <div className="space-y-0">
+        {/* Agent list */}
+        <div className="space-y-4">
           {studioAgents.length === 0 && (
-            <p className="text-sm text-muted-foreground">{t('agentStudio.noBoundAgents')}</p>
+            <div
+              className="transition-all duration-300"
+              style={cardStyle}
+              onMouseEnter={handleCardEnter}
+              onMouseLeave={handleCardLeave}
+            >
+              <p className="text-base text-muted-foreground">{t('agentStudio.noBoundAgents')}</p>
+            </div>
           )}
-          {studioAgents.map((agent, idx) => (
-            <div key={agent.id}>
-              <div
-                className={`px-5 py-5 space-y-3 cursor-pointer transition-colors ${selectedAgent === agent.id ? 'bg-foreground/[0.02]' : ''}`}
-                onClick={() => setSelectedAgent(selectedAgent === agent.id ? null : agent.id)}
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full flex-shrink-0"
-                      style={{
-                        background: agent.status === 'active' ? '#0AFFFF' : 'rgba(255,255,255,0.2)',
-                        boxShadow: agent.status === 'active' ? '0 0 6px rgba(10,255,255,0.4)' : 'none',
-                      }} />
-                    <div>
-                      <p className="font-semibold text-sm">{agent.name}</p>
-                      <p className="text-[10px] text-muted-foreground/50">
-                        {t('agentStudio.verifiedAgent')}
-                        {' · '}
-                        {t('onchain.tokenId')}: {agent.tokenId !== null ? agent.tokenId.toString() : '-'}
-                      </p>
+          {studioAgents.map((agent) => (
+            <div
+              key={agent.id}
+              className="cursor-pointer transition-all duration-300"
+              style={cardStyle}
+              onClick={() => setSelectedAgent(selectedAgent === agent.id ? null : agent.id)}
+              onMouseEnter={handleCardEnter}
+              onMouseLeave={handleCardLeave}
+            >
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                    style={{
+                      background: agent.status === 'active' ? '#0AFFFF' : 'rgba(255,255,255,0.2)',
+                      boxShadow: agent.status === 'active' ? '0 0 6px rgba(10,255,255,0.4)' : 'none',
+                    }} />
+                  <div>
+                    <p className="font-semibold text-base">{agent.name}</p>
+                    <p className="text-xs text-muted-foreground/50 mt-0.5">
+                      {t('agentStudio.verifiedAgent')}
+                      {' · '}
+                      {t('onchain.tokenId')}: {agent.tokenId !== null ? agent.tokenId.toString() : '-'}
+                    </p>
+                  </div>
+                </div>
+                <span className="text-xs font-medium" style={{ color: statusColor[agent.status] }}>
+                  {agent.status === 'active' ? t('records.active') : t('agentStudio.draft')}
+                </span>
+              </div>
+
+              <div className="flex items-center gap-6 text-sm text-muted-foreground/60 mt-4">
+                <span>
+                  {t('agentStudio.usdtBalance')} <span className="text-foreground/70">{formatUsdtBalance(agent.usdtBalanceWei, agent.usdtDecimals)}</span>
+                </span>
+                <span>
+                  {t('agentStudio.agentWallet')} <span className="text-foreground/70 font-mono">{formatAddressPreview(agent.address)}</span>
+                </span>
+              </div>
+
+              {selectedAgent === agent.id && (
+                <div className="pt-4 space-y-4 animate-fade-in">
+                  <div className="w-full h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)' }} />
+                  
+                  <div className="space-y-1.5 text-sm text-muted-foreground/60">
+                    <p>
+                      {t('agentStudio.agentAddress')}{' '}
+                      <span className="text-foreground/70 font-mono break-all">{agent.address}</span>
+                    </p>
+                    <p>
+                      {t('onchain.scopeGranted')}{' '}
+                      <span className="text-foreground/70">
+                        {agent.scopeGranted.length > 0 ? agent.scopeGranted.join(', ') : t('onchain.none')}
+                      </span>
+                    </p>
+                    <p>
+                      {t('agentStudio.expiryPermission')}{' '}
+                      <span className="text-foreground/70">{formatExpiry(agent.permissionExpiry)}</span>
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-heading">{t('agentStudio.taskTypes')}</p>
+                    <div className="flex gap-2">
+                      {agent.taskTypes.map(tt => (
+                        <span key={tt} className="text-xs font-mono px-3 py-1 rounded-full"
+                          style={{ background: 'rgba(10,255,255,0.08)', color: 'rgba(10,255,255,0.7)' }}>
+                          {tt}
+                        </span>
+                      ))}
                     </div>
                   </div>
-                  <span className="text-[10px] font-medium" style={{ color: statusColor[agent.status] }}>
-                    {agent.status === 'active' ? t('records.active') : t('agentStudio.draft')}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-6 text-xs text-muted-foreground/60">
-                  <span>
-                    {t('agentStudio.usdtBalance')} <span className="text-foreground/70">{formatUsdtBalance(agent.usdtBalanceWei, agent.usdtDecimals)}</span>
-                  </span>
-                  <span>
-                    {t('agentStudio.agentWallet')} <span className="text-foreground/70 font-mono">{formatAddressPreview(agent.address)}</span>
-                  </span>
-                </div>
-
-                {selectedAgent === agent.id && (
-                  <div className="pt-2 space-y-3 animate-fade-in">
-                    <div className="space-y-1 text-xs text-muted-foreground/60">
-                      <p>
-                        {t('agentStudio.agentAddress')}{' '}
-                        <span className="text-foreground/70 font-mono break-all">{agent.address}</span>
-                      </p>
-                      <p>
-                        {t('onchain.scopeGranted')}{' '}
-                        <span className="text-foreground/70">
-                          {agent.scopeGranted.length > 0 ? agent.scopeGranted.join(', ') : t('onchain.none')}
-                        </span>
-                      </p>
-                      <p>
-                        {t('agentStudio.expiryPermission')}{' '}
-                        <span className="text-foreground/70">{formatExpiry(agent.permissionExpiry)}</span>
-                      </p>
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{t('agentStudio.taskTypes')}</p>
-                      <div className="flex gap-2">
-                        {agent.taskTypes.map(tt => (
-                          <span key={tt} className="text-[10px] font-mono px-2.5 py-1 rounded-full"
-                            style={{ background: 'rgba(10,255,255,0.08)', color: 'rgba(10,255,255,0.7)' }}>
-                            {tt}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="space-y-1.5">
-                      <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{t('agentStudio.channels')}</p>
-                      <div className="flex gap-2">
-                        {agent.connectedChannels.length > 0 ? (
-                          agent.connectedChannels.map(c => (
-                            <span key={c} className="text-xs text-foreground/60">{c}</span>
-                          ))
-                        ) : (
-                          <span className="text-xs text-muted-foreground/40">{t('agentStudio.noChannels')}</span>
-                        )}
-                      </div>
-                    </div>
-                    <div className="flex gap-3 pt-1">
-                      <button onClick={(e) => { e.stopPropagation(); onEditAgent(agent.address); }}
-                        className="text-[11px] text-foreground/70 hover:text-foreground transition-colors">
-                        {t('agentStudio.configure')}
-                      </button>
-                      {agent.status === 'draft' && (
-                        <button onClick={(e) => { e.stopPropagation(); onEditAgent(agent.address); }}
-                          className="text-[11px] text-foreground/70 hover:text-foreground transition-colors">
-                          {t('agentStudio.continueSetup')}
-                        </button>
+                  <div className="space-y-2">
+                    <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-heading">{t('agentStudio.channels')}</p>
+                    <div className="flex gap-2">
+                      {agent.connectedChannels.length > 0 ? (
+                        agent.connectedChannels.map(c => (
+                          <span key={c} className="text-sm text-foreground/60">{c}</span>
+                        ))
+                      ) : (
+                        <span className="text-sm text-muted-foreground/40">{t('agentStudio.noChannels')}</span>
                       )}
                     </div>
                   </div>
-                )}
-              </div>
-              {idx < studioAgents.length - 1 && <ThinDivider />}
+                  <div className="flex gap-3 pt-2">
+                    <button onClick={(e) => { e.stopPropagation(); onEditAgent(agent.address); }}
+                      className="text-sm text-foreground/70 hover:text-foreground transition-colors">
+                      {t('agentStudio.configure')}
+                    </button>
+                    {agent.status === 'draft' && (
+                      <button onClick={(e) => { e.stopPropagation(); onEditAgent(agent.address); }}
+                        className="text-sm text-foreground/70 hover:text-foreground transition-colors">
+                        {t('agentStudio.continueSetup')}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           ))}
         </div>

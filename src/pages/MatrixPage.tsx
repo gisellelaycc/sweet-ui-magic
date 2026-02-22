@@ -112,23 +112,23 @@ const MatrixPage = () => {
 
         <main className="flex-1 min-h-0 px-4 py-4 flex flex-col relative z-10">
           {!isContractConfigured && (
-            <div className="max-w-4xl mx-auto w-full mb-3 rounded-lg border border-yellow-500/30 bg-yellow-500/10 px-4 py-2.5 text-center">
-              <p className="text-xs text-yellow-200">⚠️ Contract address not configured — on-chain features are disabled in this preview.</p>
+            <div className="max-w-4xl mx-auto w-full mb-3 transition-all duration-300" style={{ border: '1px solid rgba(250, 204, 21, 0.3)', borderRadius: '16px', padding: '1.25rem 1.75rem', background: 'rgba(250, 204, 21, 0.06)' }}>
+              <p className="text-sm text-yellow-200 text-center">⚠️ Contract address not configured — on-chain features are disabled in this preview.</p>
             </div>
           )}
 
           {isCheckingToken && (
-            <div className="glass-card max-w-xl mx-auto w-full text-center mt-12">
-              <p className="text-xs uppercase tracking-widest text-muted-foreground mb-2">TwinMatrixSBT</p>
+            <div className="max-w-xl mx-auto w-full text-center mt-12 transition-all duration-300" style={{ border: '1px solid rgba(255, 255, 255, 0.12)', borderRadius: '16px', padding: '1.75rem', background: 'rgba(255, 255, 255, 0.02)' }}>
+              <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground font-heading mb-2">TwinMatrixSBT</p>
               <p className="text-base">{t('wizard.checkingIdentity')}</p>
             </div>
           )}
 
           {!isCheckingToken && contractError && (
-            <div className="glass-card max-w-2xl mx-auto w-full mt-8">
-              <p className="text-sm text-destructive">{t('wizard.failedFetchContract')}</p>
-              <p className="text-xs text-muted-foreground mt-1 break-all">{contractError}</p>
-              <button onClick={() => void refreshOnchainState()} className="btn-twin btn-twin-primary mt-4 py-2 px-3 text-xs">
+            <div className="max-w-2xl mx-auto w-full mt-8 transition-all duration-300" style={{ border: '1px solid rgba(244, 63, 94, 0.3)', borderRadius: '16px', padding: '1.75rem', background: 'rgba(244, 63, 94, 0.06)' }}>
+              <p className="text-base text-destructive">{t('wizard.failedFetchContract')}</p>
+              <p className="text-sm text-muted-foreground mt-1 break-all">{contractError}</p>
+              <button onClick={() => void refreshOnchainState()} className="mt-4 py-3 px-6 rounded-xl text-sm font-semibold bg-foreground text-background hover:bg-foreground/90 transition-colors">
                 {t('wizard.retry')}
               </button>
             </div>
