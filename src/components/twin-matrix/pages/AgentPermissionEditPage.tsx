@@ -24,6 +24,22 @@ interface Props {
 const QUADRANTS = ['Physical', 'Digital', 'Social', 'Spiritual'] as const;
 const DURATION_OPTIONS = ['7 days', '30 days', 'Custom'] as const;
 
+const cardStyle: React.CSSProperties = {
+  border: '1px solid rgba(255, 255, 255, 0.12)',
+  borderRadius: '16px',
+  padding: '1.75rem',
+  background: 'rgba(255, 255, 255, 0.02)',
+};
+
+const handleCardEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.25)';
+  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
+};
+const handleCardLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
+  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.02)';
+};
+
 function buildPermissionMaskFromQuadrants(scopes: string[]): bigint {
   const ranges: Record<string, [number, number]> = {
     Physical: [0, 63],
@@ -105,12 +121,7 @@ export const AgentPermissionEditPage = ({
       await publicClient.waitForTransactionReceipt({ hash });
       toast.success(t('agent.permissionUpdated'), {
         description: (
-          <a
-            href={`https://testnet.bscscan.com/tx/${hash}`}
-            target="_blank"
-            rel="noreferrer"
-            className="underline"
-          >
+          <a href={`https://testnet.bscscan.com/tx/${hash}`} target="_blank" rel="noreferrer" className="underline">
             {t('agent.viewTx')}
           </a>
         ),
@@ -126,25 +137,30 @@ export const AgentPermissionEditPage = ({
 
   return (
     <div className="animate-fade-in h-full overflow-y-auto scrollbar-hide">
-      <div className="max-w-3xl mx-auto px-6 py-6 space-y-6">
+      <div className="max-w-3xl mx-auto px-6 md:px-12 py-8 space-y-8">
         <button
           onClick={onBack}
-          className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+          className="text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           ← {t('agent.backToStudio')}
         </button>
 
         <div>
-          <h2 className="text-2xl font-bold mb-1">{t('agent.editPermissionTitle')}</h2>
-          <p className="text-muted-foreground text-sm">
+          <p className="text-base uppercase tracking-[0.25em] text-muted-foreground font-heading mb-3">
             {agent.name} · {formatAddressPreview(agent.address)}
           </p>
+          <h2 className="font-heading font-extrabold uppercase leading-tight tracking-tight text-foreground" style={{ fontSize: 'clamp(1.75rem, 4vw, 3rem)' }}>
+            {t('agent.editPermissionTitle')}
+          </h2>
         </div>
 
-        <div className="w-full h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)' }} />
-
-        <div className="space-y-3">
-          <p className="text-xs text-muted-foreground uppercase tracking-widest">{t('agent.scope')}</p>
+        <div
+          className="transition-all duration-300"
+          style={cardStyle}
+          onMouseEnter={handleCardEnter}
+          onMouseLeave={handleCardLeave}
+        >
+          <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground font-heading mb-5">{t('agent.scope')}</p>
           <div className="flex flex-wrap gap-2">
             {QUADRANTS.map((scope) => {
               const selected = selectedScopes.includes(scope);
@@ -157,7 +173,7 @@ export const AgentPermissionEditPage = ({
                       : [...selectedScopes, scope];
                     setSelectedScopes(next);
                   }}
-                  className={`text-xs px-4 py-1.5 rounded-full transition-all ${
+                  className={`text-sm px-5 py-2 rounded-full transition-all ${
                     selected ? 'text-foreground border' : 'text-muted-foreground/50 border border-foreground/10 hover:border-foreground/20'
                   }`}
                   style={selected ? { borderColor: 'rgba(242,68,85,0.4)', background: 'rgba(242,68,85,0.08)', color: 'rgba(242,68,85,0.9)' } : {}}
@@ -169,11 +185,14 @@ export const AgentPermissionEditPage = ({
           </div>
         </div>
 
-        <div className="w-full h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)' }} />
-
-        <div className="space-y-3">
-          <p className="text-xs text-muted-foreground uppercase tracking-widest">{t('agent.authDuration')}</p>
-          <div className="space-y-2">
+        <div
+          className="transition-all duration-300"
+          style={cardStyle}
+          onMouseEnter={handleCardEnter}
+          onMouseLeave={handleCardLeave}
+        >
+          <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground font-heading mb-5">{t('agent.authDuration')}</p>
+          <div className="space-y-3">
             {DURATION_OPTIONS.map((option) => (
               <div
                 key={option}
@@ -184,38 +203,41 @@ export const AgentPermissionEditPage = ({
                 }}
               >
                 <span
-                  className="w-3.5 h-3.5 rounded-full border flex items-center justify-center flex-shrink-0"
+                  className="w-4 h-4 rounded-full border flex items-center justify-center flex-shrink-0"
                   style={{ borderColor: duration === option ? '#F24455' : 'rgba(255,255,255,0.15)' }}
                 >
-                  {duration === option && <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#F24455' }} />}
+                  {duration === option && <span className="w-2 h-2 rounded-full" style={{ background: '#F24455' }} />}
                 </span>
-                <span className="text-sm text-foreground/80">{t(option === '7 days' ? 'duration.7days' : option === '30 days' ? 'duration.30days' : 'duration.custom')}</span>
+                <span className="text-base text-foreground/80">{t(option === '7 days' ? 'duration.7days' : option === '30 days' ? 'duration.30days' : 'duration.custom')}</span>
               </div>
             ))}
           </div>
           {duration === 'Custom' && (
-            <div className="animate-fade-in flex items-center gap-2 pt-1">
-              <span className="text-[11px] text-muted-foreground">{t('agent.days')}</span>
+            <div className="animate-fade-in flex items-center gap-2 pt-3 mt-3">
+              <span className="text-sm text-muted-foreground">{t('agent.days')}</span>
               <input
                 type="number"
                 min="1"
                 value={customDays}
                 onChange={(e) => setCustomDays(e.target.value.replace(/[^0-9]/g, ''))}
                 placeholder={t('agent.customDaysPlaceholder')}
-                className="flex-1 bg-transparent border-b border-foreground/10 px-0 py-1.5 text-xs text-foreground focus:outline-none focus:border-foreground/30 transition-colors"
+                className="flex-1 bg-transparent border-b border-foreground/10 px-0 py-2 text-sm text-foreground focus:outline-none focus:border-foreground/30 transition-colors"
               />
             </div>
           )}
         </div>
 
         {isWrongNetwork && (
-          <div className="rounded-lg border border-yellow-400/35 bg-yellow-400/10 px-3 py-2">
-            <p className="text-[11px] text-yellow-200 mb-2">
+          <div
+            className="transition-all duration-300"
+            style={{ ...cardStyle, borderColor: 'rgba(250, 204, 21, 0.3)', background: 'rgba(250, 204, 21, 0.06)' }}
+          >
+            <p className="text-sm text-yellow-200 mb-3">
               {t('review.wrongNetwork').replace('{network}', 'BSC Testnet (97)')}
             </p>
             <button
               onClick={onSwitchNetwork}
-              className="btn-twin btn-twin-primary py-1.5 px-3 text-xs"
+              className="py-3 px-6 rounded-xl text-sm font-semibold bg-foreground text-background hover:bg-foreground/90 transition-colors"
               disabled={isSwitchingNetwork}
             >
               {isSwitchingNetwork ? t('review.switching') : t('review.switchTo').replace('{network}', 'BSC Testnet (97)')}
@@ -226,7 +248,7 @@ export const AgentPermissionEditPage = ({
         <button
           onClick={() => { void handleUpdatePermission(); }}
           disabled={isSubmitting || isWrongNetwork}
-          className="btn-twin btn-twin-primary btn-glow w-full py-3 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="w-full py-4 rounded-xl text-base font-semibold bg-foreground text-background hover:bg-foreground/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {isSubmitting ? t('agent.updating') : t('agent.updatePermissionScope')}
         </button>
