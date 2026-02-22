@@ -109,7 +109,7 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
                 <span className="text-5xl mb-4">{current.icon}</span>
                 <h3 className="text-xl font-semibold text-foreground mb-1">{getLabel(current.id)}</h3>
                 {isMinted && (
-                  <span className="text-[10px] px-3 py-0.5 rounded-full bg-green-400/10 text-green-400 mb-2">{t('category.minted')}</span>
+                  <span className="text-xs px-3 py-0.5 rounded-full bg-green-400/10 text-green-400 mb-2">{t('category.minted')}</span>
                 )}
                 <p className="text-sm text-muted-foreground/70 max-w-xs">{getDesc(current.id)}</p>
                 <p className="text-xs text-muted-foreground/40 mt-4">
@@ -180,7 +180,7 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
                         {isMore ? t('category.andMore') : getLabel(chip.id)}
                       </span>
                       {!isMore && (
-                        <span className="text-[10px] text-muted-foreground/50 block leading-tight mt-0.5">
+                      <span className="text-[11px] text-muted-foreground/50 block leading-tight mt-0.5">
                           {getDesc(chip.id)}
                         </span>
                       )}

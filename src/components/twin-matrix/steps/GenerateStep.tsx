@@ -90,40 +90,38 @@ export const GenerateStep = ({ wizardState, onComplete }: Props) => {
             opacity: phaseVisible ? 1 : 0, transform: phaseVisible ? 'translateY(0)' : 'translateY(8px)',
             transition: 'opacity 0.4s ease, transform 0.4s ease',
           }}>
-            <h2 className="text-base font-semibold tracking-tight">{PHASES[displayPhase]?.label}</h2>
-            <p className="text-[11px] text-muted-foreground mt-0.5">{PHASES[displayPhase]?.desc}</p>
+            <h2 className="text-lg font-semibold tracking-tight">{PHASES[displayPhase]?.label}</h2>
+            <p className="text-sm text-muted-foreground mt-0.5">{PHASES[displayPhase]?.desc}</p>
           </div>
 
           <div className="relative mb-6 p-4">
             <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, rgba(10,255,255,0.10) 0%, rgba(10,255,255,0.03) 40%, transparent 70%)' }} />
             <div className="absolute inset-0 pointer-events-none animate-[field-breathe_5s_ease-in-out_infinite]" style={{ background: 'radial-gradient(ellipse at center, rgba(10,255,255,0.06) 0%, transparent 60%)' }} />
-            <div className="flex flex-col gap-px relative z-10">
+            <div className="flex flex-col gap-[2px] relative z-10" style={{ fontFamily: "'SF Mono', 'Fira Code', 'Cascadia Code', monospace" }}>
               {Array.from({ length: 16 }, (_, row) => (
-                <div key={row} className="flex items-center gap-1">
-                  <span className="text-[8px] text-muted-foreground/40 font-mono w-8 text-right shrink-0">{rowLabels[row]}</span>
-                  <div className="flex gap-px">
-                    {Array.from({ length: 16 }, (_, col) => {
-                      const idx = row * 16 + col;
-                      const val = gridValues[idx];
-                      const intensity = val / 255;
-                      const showNumber = activePhase >= 3 && val > 0;
-                      const justChanged = changedCells.has(idx);
-                      return (
-                        <div key={col} className="rounded-sm flex items-center justify-center relative" style={{
-                          width: 20, height: 20, aspectRatio: '1',
-                          background: val > 0 ? `rgba(10, 255, 255, ${(0.25 + 0.75 * intensity) * 0.4})` : 'rgba(255, 255, 255, 0.015)',
-                          boxShadow: justChanged ? `0 0 10px rgba(10, 255, 255, 0.6), 0 0 20px rgba(10, 255, 255, 0.3)` : val > 150 ? `0 0 6px rgba(10, 255, 255, ${intensity * 0.4})` : 'none',
-                          transform: justChanged ? 'scale(1.2)' : 'scale(1)', transition: 'all 0.35s ease-out',
-                        }}>
-                          {showNumber && (
-                            <span className="text-[6px] font-mono" style={{ color: `rgba(255,255,255, ${0.2 + intensity * 0.5})`, opacity: justChanged ? 1 : 0.8, transition: 'opacity 0.3s' }}>
-                              {val.toString(16).toUpperCase().padStart(2, '0')}
-                            </span>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
+                <div key={row} className="flex items-center gap-[2px]">
+                  <span className="text-[9px] text-muted-foreground/40 font-mono w-8 text-right shrink-0">{rowLabels[row]}</span>
+                  {Array.from({ length: 16 }, (_, col) => {
+                    const idx = row * 16 + col;
+                    const val = gridValues[idx];
+                    const intensity = val / 255;
+                    const showNumber = activePhase >= 3 && val > 0;
+                    const justChanged = changedCells.has(idx);
+                    return (
+                      <div key={col} className="rounded-sm flex items-center justify-center relative" style={{
+                        width: '1.5rem', height: '1.5rem', aspectRatio: '1',
+                        background: val > 0 ? `rgba(10, 255, 255, ${(0.25 + 0.75 * intensity) * 0.4})` : 'rgba(255, 255, 255, 0.015)',
+                        boxShadow: justChanged ? `0 0 10px rgba(10, 255, 255, 0.6), 0 0 20px rgba(10, 255, 255, 0.3)` : val > 150 ? `0 0 6px rgba(10, 255, 255, ${intensity * 0.4})` : 'none',
+                        transform: justChanged ? 'scale(1.2)' : 'scale(1)', transition: 'all 0.35s ease-out',
+                      }}>
+                        {showNumber && (
+                          <span className="text-[7px] font-mono" style={{ color: `rgba(255,255,255, ${0.2 + intensity * 0.5})`, opacity: justChanged ? 1 : 0.8, transition: 'opacity 0.3s' }}>
+                            {val.toString(16).toUpperCase().padStart(2, '0')}
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               ))}
             </div>
@@ -142,7 +140,7 @@ export const GenerateStep = ({ wizardState, onComplete }: Props) => {
               boxShadow: '0 0 8px rgba(10,255,255,0.5), 0 0 20px rgba(10,255,255,0.2)',
             }} />
           </div>
-          <p className="text-xs text-muted-foreground/50 mt-2">{Math.round(progress)}%</p>
+          <p className="text-sm text-muted-foreground/50 mt-2">{Math.round(progress)}%</p>
         </div>
       </StepContent>
     </StepLayout>

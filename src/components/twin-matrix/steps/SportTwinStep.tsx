@@ -88,10 +88,10 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
             <div className="glass-card !p-4 space-y-2 flex-1 min-w-0">
               <div>
                 <label className="text-sm font-medium text-foreground">{t('sportTwin.activities')}</label>
-                <p className="text-xs text-muted-foreground mt-0.5">{t('sportTwin.activitiesHint')}</p>
+                <p className="text-sm text-muted-foreground mt-0.5">{t('sportTwin.activitiesHint')}</p>
               </div>
               {twin.sportRanking.length > 0 && (
-                <p className="text-xs text-muted-foreground">{t('sportTwin.selected')} {twin.sportRanking.length} / 10</p>
+                <p className="text-sm text-muted-foreground">{t('sportTwin.selected')} {twin.sportRanking.length} / 10</p>
               )}
               <div className="flex flex-wrap gap-1.5">
                 {SPORTS.map(s => {
@@ -115,7 +115,7 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
             <div className="glass-card !p-4 space-y-2 flex-1 min-w-0">
               <div>
                 <label className="text-sm font-medium text-foreground">{t('sportTwin.outfitStyle')}</label>
-                <p className="text-xs text-muted-foreground mt-0.5">{t('sportTwin.outfitHint')}</p>
+                <p className="text-sm text-muted-foreground mt-0.5">{t('sportTwin.outfitHint')}</p>
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {OUTFIT_STYLES.map(s => (
@@ -130,7 +130,7 @@ export const SportTwinStep = ({ data, onUpdate, onNext }: Props) => {
             <div className="glass-card !p-4 space-y-2 flex-1 min-w-0">
               <div>
                 <label className="text-sm font-medium text-foreground">{t('sportTwin.brands')}</label>
-                <p className="text-xs text-muted-foreground mt-0.5">{t('sportTwin.brandsHint')}</p>
+                <p className="text-sm text-muted-foreground mt-0.5">{t('sportTwin.brandsHint')}</p>
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {BRANDS.map(b => (

@@ -192,76 +192,60 @@ export const OnchainIdentityStatePage = ({
 
             {activeVersion ? (
               <div className="overflow-x-auto">
-                <table className="border-collapse w-full" style={{ fontFamily: "'SF Mono', 'Fira Code', 'Cascadia Code', monospace" }}>
-                  <tbody>
-                    {Array.from({ length: 16 }, (_, row) => {
-                      const rowAddr = (row * 16).toString(16).toUpperCase().padStart(4, '0');
-                      return (
-                        <tr key={row}>
-                          {/* Row hex label */}
-                          <td className="pr-4 py-[5px] text-right select-none" style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)' }}>
-                            {rowAddr}
-                          </td>
-                          {/* 16 hex cells */}
-                          {Array.from({ length: 16 }, (_, col) => {
-                            const idx = row * 16 + col;
-                            const value = matrix[idx] ?? 0;
-                            const hex = value.toString(16).toUpperCase().padStart(2, '0');
-                            const isTop = topIndices.has(idx);
-                            const isHovered = hoveredCell === idx;
-
-                            // Determine layer color
-                            const isTopHalf = row < 8;
-                            const isLeftHalf = col < 8;
-                            let sliceIdx: number;
-                            if (isTopHalf && isLeftHalf) sliceIdx = 0;
-                            else if (isTopHalf && !isLeftHalf) sliceIdx = 1;
-                            else if (!isTopHalf && isLeftHalf) sliceIdx = 2;
-                            else sliceIdx = 3;
-                            const slice = LAYERS[sliceIdx];
-
-                            const intensity = value / 255;
-                            const textColor = value > 0
-                              ? `rgba(${slice.color}, ${0.4 + 0.6 * intensity})`
-                              : 'rgba(255, 255, 255, 0.15)';
-
-                            return (
-                              <td
-                                key={col}
-                                className="text-center relative cursor-default"
-                                style={{
-                                  fontSize: '13px',
-                                  padding: '5px 6px',
-                                  color: textColor,
-                                  textShadow: isTop && value > 0 ? `0 0 6px rgba(${slice.color}, 0.5)` : 'none',
-                                  background: isHovered ? 'rgba(255,255,255,0.06)' : 'transparent',
-                                  borderRadius: '3px',
-                                  transition: 'background 0.15s',
-                                }}
-                                onMouseEnter={() => setHoveredCell(idx)}
-                                onMouseLeave={() => setHoveredCell(null)}
-                              >
-                                {hex}
-                                {isHovered && (
-                                  <div
-                                    className="absolute -top-7 left-1/2 -translate-x-1/2 z-20 whitespace-nowrap rounded px-2 py-0.5"
-                                    style={{
-                                      fontSize: '10px',
-                                      background: 'hsl(var(--foreground))',
-                                      color: 'hsl(var(--background))',
-                                    }}
-                                  >
-                                    D{idx}: {value} ({t(`common.${slice.key}`)})
-                                  </div>
-                                )}
-                              </td>
-                            );
-                          })}
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                <div className="flex flex-col gap-[2px]" style={{ fontFamily: "'SF Mono', 'Fira Code', 'Cascadia Code', monospace" }}>
+                  {Array.from({ length: 16 }, (_, row) => {
+                    const rowAddr = (row * 16).toString(16).toUpperCase().padStart(4, '0');
+                    return (
+                      <div key={row} className="flex items-center gap-[2px]">
+                        <span className="text-right select-none shrink-0 w-12" style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)' }}>
+                          {rowAddr}
+                        </span>
+                        {Array.from({ length: 16 }, (_, col) => {
+                          const idx = row * 16 + col;
+                          const value = matrix[idx] ?? 0;
+                          const hex = value.toString(16).toUpperCase().padStart(2, '0');
+                          const isTop = topIndices.has(idx);
+                          const isHovered = hoveredCell === idx;
+                          const isTopHalf = row < 8;
+                          const isLeftHalf = col < 8;
+                          let sliceIdx: number;
+                          if (isTopHalf && isLeftHalf) sliceIdx = 0;
+                          else if (isTopHalf && !isLeftHalf) sliceIdx = 1;
+                          else if (!isTopHalf && isLeftHalf) sliceIdx = 2;
+                          else sliceIdx = 3;
+                          const slice = LAYERS[sliceIdx];
+                          const intensity = value / 255;
+                          const textColor = value > 0
+                            ? `rgba(${slice.color}, ${0.4 + 0.6 * intensity})`
+                            : 'rgba(255, 255, 255, 0.15)';
+                          return (
+                            <div
+                              key={col}
+                              className="flex items-center justify-center relative cursor-default rounded-sm"
+                              style={{
+                                width: '2rem', height: '2rem', aspectRatio: '1',
+                                fontSize: '11px', color: textColor,
+                                textShadow: isTop && value > 0 ? `0 0 6px rgba(${slice.color}, 0.5)` : 'none',
+                                background: isHovered ? 'rgba(255,255,255,0.06)' : 'transparent',
+                                transition: 'background 0.15s',
+                              }}
+                              onMouseEnter={() => setHoveredCell(idx)}
+                              onMouseLeave={() => setHoveredCell(null)}
+                            >
+                              {hex}
+                              {isHovered && (
+                                <div className="absolute -top-7 left-1/2 -translate-x-1/2 z-20 whitespace-nowrap rounded px-2 py-0.5"
+                                  style={{ fontSize: '10px', background: 'hsl(var(--foreground))', color: 'hsl(var(--background))' }}>
+                                  D{idx}: {value} ({t(`common.${slice.key}`)})
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             ) : (
               <p className="text-sm text-muted-foreground">{t('onchain.noMatrix')}</p>
