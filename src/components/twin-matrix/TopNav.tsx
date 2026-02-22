@@ -48,13 +48,13 @@ export const TopNav = ({
   const langs: Lang[] = ['en', 'zh', 'zhCN', 'ja', 'ko'];
 
   return (
-    <header className="flex items-center justify-between px-6 md:px-10 py-4 relative z-30">
+    <header className="sticky top-0 flex items-center justify-between px-8 md:px-12 py-5 z-30" style={{ background: 'rgba(0, 0, 0, 0.4)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}>
       {/* Logo — icon only, like twin3.ai */}
       <button
         onClick={() => onNavigate(null)}
         className="hover:opacity-80 transition-opacity"
       >
-        <img src={logo} alt="Twin Matrix" className="w-7 h-7" />
+        <img src={logo} alt="Twin Matrix" className="w-8 h-8" />
       </button>
 
       {/* Right side nav */}
@@ -63,7 +63,7 @@ export const TopNav = ({
           <button
             key={item.id}
             onClick={() => onNavigate(item.id)}
-            className={`text-xs uppercase tracking-widest font-medium transition-colors ${
+            className={`text-sm uppercase tracking-widest font-medium transition-colors ${
               activePage === item.id
                 ? 'text-foreground'
                 : 'text-muted-foreground hover:text-foreground'
@@ -77,7 +77,7 @@ export const TopNav = ({
         <div className="relative" ref={popRef}>
           <button
             onClick={() => setLangOpen(!langOpen)}
-            className="text-xs uppercase tracking-widest font-medium text-muted-foreground hover:text-foreground transition-colors"
+            className="text-sm uppercase tracking-widest font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
             {lang === 'zhCN' ? '简体' : lang.toUpperCase()}
           </button>
@@ -144,7 +144,7 @@ export const TopNav = ({
         ) : (
           <button
             onClick={onConnectWallet}
-            className="px-5 py-1.5 rounded-full text-xs font-medium bg-[hsl(210,80%,60%)] text-white hover:bg-[hsl(210,80%,55%)] transition-colors"
+            className="px-6 py-2 rounded-full text-sm font-medium bg-[hsl(210,80%,60%)] text-white hover:bg-[hsl(210,80%,55%)] transition-colors"
           >
             {t('wallet.connect')}
           </button>
