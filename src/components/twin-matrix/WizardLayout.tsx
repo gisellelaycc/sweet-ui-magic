@@ -25,6 +25,7 @@ import { MainMenu } from './MainMenu';
 import { TopNav } from './TopNav';
 import { ParticleBackground } from './ParticleBackground';
 import { WelcomeStep } from './steps/WelcomeStep';
+import { EntryPage } from './pages/EntryPage';
 import { IdentityStep } from './steps/IdentityStep';
 import { CategoryStep } from './steps/CategoryStep';
 import { SportSetupStep } from './steps/SportSetupStep';
@@ -402,8 +403,9 @@ export const WizardLayout = () => {
           </div>
         )}
         {!isConnected && (
-          <WelcomeStep
-            onNext={next}
+          <EntryPage
+            onHumanEntry={() => openConnectModal?.()}
+            onAgentEntry={() => {}}
             locked
             onRequestConnect={() => openConnectModal?.()}
           />
@@ -484,7 +486,10 @@ export const WizardLayout = () => {
                 )}
 
                 {state.step === 0 && (
-                  <WelcomeStep onNext={next} />
+                  <EntryPage
+                    onHumanEntry={next}
+                    onAgentEntry={() => {}}
+                  />
                 )}
                 {state.step === 1 && (
                   <IdentityStep data={state.profile} onUpdate={(p) => setState((s) => ({ ...s, profile: p }))} onNext={next} />
