@@ -28,11 +28,14 @@ const T: Translations = {
   'wallet.connect': { en: 'Connect Wallet', zh: '連接錢包', zhCN: '连接钱包', ja: 'ウォレット接続', ko: '지갑 연결' },
 
   // ── Welcome Step ──
-  'welcome.title': { en: 'Bring your 256D self to life.', zh: '喚醒你的 256D 自我。', ja: '256Dの自分を呼び覚まそう。', ko: '256D 자아를 깨우세요.' },
-  'welcome.subtitle': { en: 'Build an OpenClaw agent that thinks like you.', zh: '打造一個與你思維同步的 OpenClaw 代理。', ja: 'あなたのように考える OpenClaw エージェントを構築。', ko: '당신처럼 생각하는 OpenClaw 에이전트를 만드세요.' },
+  'welcome.pretitle': { en: 'Digital Version Of You:', zh: '你的數位分身：', zhCN: '你的数字分身：', ja: 'あなたのデジタル版：', ko: '당신의 디지털 버전：' },
+  'welcome.title': { en: 'Empowering Human Experience in the AI Age', zh: '在 AI 時代賦能人類體驗', zhCN: '在 AI 时代赋能人类体验', ja: 'AI時代の人間体験を強化', ko: 'AI 시대의 인간 경험을 강화' },
+  'welcome.subtitle': { en: 'Seal your identity. Deploy your agent. Earn with your twin.', zh: '封存你的身份。部署你的代理。用你的孿生賺取。', zhCN: '封存你的身份。部署你的代理。用你的孪生赚取。', ja: 'アイデンティティを封印。エージェントを展開。ツインで稼ぐ。', ko: '아이덴티티를 봉인. 에이전트를 배포. 트윈으로 수익 창출.' },
   'welcome.start': { en: 'Start', zh: '開始', ja: '開始', ko: '시작' },
   'welcome.placeholder': { en: 'Your name', zh: '你的名字', ja: 'あなたの名前', ko: '이름을 입력하세요' },
   'welcome.hint': { en: 'Shape your 256D space in 2 min.', zh: '2 分鐘塑造你的 256D 空間。', ja: '2分で256D空間を形成。', ko: '2분 만에 256D 공간을 만드세요.' },
+  'welcome.trackUs': { en: 'Track us on', zh: '追蹤我們', zhCN: '关注我们', ja: 'フォロー', ko: '팔로우' },
+  'welcome.trackUsDesc': { en: 'X, Element, Farcaster, and BscScan for the latest updates!', zh: 'X、Element、Farcaster 和 BscScan 取得最新消息！', zhCN: 'X、Element、Farcaster 和 BscScan 获取最新消息！', ja: 'X、Element、Farcaster、BscScan で最新情報を！', ko: 'X, Element, Farcaster, BscScan에서 최신 업데이트를!' },
 
   // ── Identity Step ──
   'identity.title': { en: 'Core Identity', zh: '核心身份', ja: 'コアアイデンティティ', ko: '코어 아이덴티티' },
