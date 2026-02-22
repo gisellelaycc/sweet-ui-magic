@@ -2,6 +2,10 @@ import { useState, useEffect } from 'react';
 import logo from '@/assets/twin3-logo.svg';
 import { StepLayout, StepContent } from '../StepLayout';
 import { useI18n } from '@/lib/i18n';
+import xLogo from '@/assets/social/x-logo.svg';
+import elementLogo from '@/assets/social/element-logo.svg';
+import farcasterLogo from '@/assets/social/farcaster-logo.svg';
+import bcscanLogo from '@/assets/social/bcscan-logo.svg';
 
 interface Props {
   onNext: () => void;
@@ -25,20 +29,38 @@ const GlowLine = () => (
   </div>
 );
 
-/* ── Scan Glow Title: text itself glows as scan passes ── */
-const ScanGlowTitle = ({ text, visible }: { text: string; visible: boolean }) => (
-  <h1
-    className="text-4xl sm:text-5xl md:text-[3.5rem] font-bold tracking-tight leading-[1.15] whitespace-nowrap relative"
-    style={{
-      opacity: visible ? 1 : 0,
-      transform: visible ? 'scale(1)' : 'scale(0.92)',
-      transition: 'opacity 800ms ease-out, transform 800ms ease-out',
-    }}
-  >
-    <span className="scan-text-base">{text}</span>
-    <span className="scan-text-glow" aria-hidden="true">{text}</span>
-  </h1>
-);
+/* ── Social Footer ── */
+const SOCIAL_LINKS = [
+  { icon: xLogo, href: 'https://x.com/twin3_ai', alt: 'X (Twitter)' },
+  { icon: elementLogo, href: 'https://element.market/collections/twin3-1?search[toggles][0]=ALL', alt: 'Element' },
+  { icon: farcasterLogo, href: 'https://warpcast.com/twin3.eth', alt: 'Farcaster' },
+  { icon: bcscanLogo, href: 'https://bscscan.com/token/0xe3ec133e29addfbba26a412c38ed5de37195156f', alt: 'BscScan' },
+];
+
+const SocialFooter = () => {
+  const { t } = useI18n();
+  return (
+    <div className="flex flex-col items-center gap-3 mt-auto pt-8">
+      <div className="flex items-center gap-4">
+        {SOCIAL_LINKS.map((link) => (
+          <a
+            key={link.alt}
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-8 h-8 flex items-center justify-center opacity-60 hover:opacity-100 transition-opacity duration-200"
+          >
+            <img src={link.icon} alt={link.alt} className="w-5 h-5" />
+          </a>
+        ))}
+      </div>
+      <div className="text-center">
+        <p className="text-xs font-medium text-foreground/80">{t('welcome.trackUs')}</p>
+        <p className="text-[11px] text-muted-foreground">{t('welcome.trackUsDesc')}</p>
+      </div>
+    </div>
+  );
+};
 
 export const WelcomeStep = ({ onNext, locked = false, onRequestConnect }: Props) => {
   const { t } = useI18n();
@@ -72,10 +94,35 @@ export const WelcomeStep = ({ onNext, locked = false, onRequestConnect }: Props)
               }}
             />
 
-            <ScanGlowTitle text={t('welcome.title')} visible={titleVisible} />
+            {/* Pre-title */}
+            <p
+              className="text-sm uppercase tracking-[0.2em] text-muted-foreground font-heading mb-3"
+              style={{
+                opacity: titleVisible ? 1 : 0,
+                transform: titleVisible ? 'translateY(0)' : 'translateY(8px)',
+                transition: 'opacity 500ms ease-out 200ms, transform 500ms ease-out 200ms',
+              }}
+            >
+              {t('welcome.pretitle')}
+            </p>
+
+            {/* Main title — Montserrat, bold, twin3.ai style */}
+            <h1
+              className="font-heading font-bold tracking-tight leading-[1.1] relative"
+              style={{
+                fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+                maxWidth: '600px',
+                opacity: titleVisible ? 1 : 0,
+                transform: titleVisible ? 'scale(1)' : 'scale(0.92)',
+                transition: 'opacity 800ms ease-out, transform 800ms ease-out',
+              }}
+            >
+              <span className="scan-text-base">{t('welcome.title')}</span>
+              <span className="scan-text-glow" aria-hidden="true">{t('welcome.title')}</span>
+            </h1>
 
             <p
-              className="text-muted-foreground text-lg md:text-xl max-w-md mx-auto leading-relaxed mt-5"
+              className="text-muted-foreground text-base md:text-lg max-w-md mx-auto leading-relaxed mt-5"
               style={{
                 opacity: titleVisible ? 1 : 0,
                 transform: titleVisible ? 'translateY(0)' : 'translateY(12px)',
@@ -119,6 +166,16 @@ export const WelcomeStep = ({ onNext, locked = false, onRequestConnect }: Props)
                 </div>
               )}
             </div>
+          </div>
+
+          {/* Social Footer */}
+          <div
+            style={{
+              opacity: contentVisible ? 1 : 0,
+              transition: 'opacity 800ms ease-out 400ms',
+            }}
+          >
+            <SocialFooter />
           </div>
         </div>
       </StepContent>
