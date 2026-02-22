@@ -28,6 +28,53 @@ const EMPTY_SIGNATURE = Array.from({ length: 256 }, () => 0);
 const usdtContractAddress = (import.meta.env.USDT_CONTRACT_ADDRESS ?? '').trim();
 const hasValidUsdtAddress = /^0x[a-fA-F0-9]{40}$/.test(usdtContractAddress);
 
+/** Mock mode — set VITE_MOCK_MODE=true in .env to bypass all chain interactions */
+const IS_MOCK_MODE = import.meta.env.VITE_MOCK_MODE === 'true';
+
+const MOCK_ADDRESS = '0x1234567890abcdef1234567890abcdef12345678' as `0x${string}`;
+const MOCK_WALLET_DISPLAY = '0x1234…5678';
+const MOCK_TOKEN_ID = 42n;
+
+function generateMockMatrix(): number[] {
+  return Array.from({ length: 256 }, (_, i) => {
+    // Create a realistic-looking distribution
+    const quadrant = Math.floor(i / 64);
+    const base = [60, 40, 30, 50][quadrant];
+    const noise = Math.floor(Math.random() * 80);
+    return Math.min(255, Math.max(0, base + noise));
+  });
+}
+
+const MOCK_VERSIONS: OnchainVersion[] = [
+  {
+    version: 2,
+    blockNumber: 48291034,
+    digest: '0xabc123def456789012345678901234567890abcdef1234567890abcdef123456',
+    matrix: generateMockMatrix(),
+  },
+  {
+    version: 1,
+    blockNumber: 47102983,
+    digest: '0x9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba',
+    matrix: generateMockMatrix(),
+  },
+];
+
+const MOCK_BOUND_AGENTS: OnchainBoundAgent[] = [
+  {
+    name: 'Brand Tracker Alpha',
+    address: '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd' as `0x${string}`,
+    tokenId: 7n,
+    permissionMask: (1n << 64n) - 1n, // Physical quadrant
+    permissionExpiry: BigInt(Math.floor(Date.now() / 1000) + 30 * 24 * 3600),
+    usdtBalanceWei: 150000000000000000000n,
+    usdtDecimals: 18,
+    permissionMaskBinary256: '1'.repeat(64) + '0'.repeat(192),
+    scopeGranted: [0, 1, 2, 3], // Physical quadrant indices
+    active: true,
+  },
+];
+
 const initialState: WizardState = {
   step: 0,
   profile: { username: '', heightBin: '', weightBin: '', ageBin: '', gender: '', education: '', income: '', maritalStatus: '', occupation: '', livingType: '' },
@@ -98,7 +145,95 @@ export const useTwinMatrix = () => {
   return ctx;
 };
 
-export const TwinMatrixProvider = ({ children }: { children: ReactNode }) => {
+// ─── Mock Provider ───────────────────────────────────────────────
+const MockTwinMatrixProvider = ({ children }: { children: ReactNode }) => {
+  const { t } = useI18n();
+  const [state, setState] = useState<WizardState>(initialState);
+  const [txAction, setTxAction] = useState<TxAction>(null);
+  const [mockHasMinted, setMockHasMinted] = useState(false);
+  const [needsMatrixUpdate, setNeedsMatrixUpdate] = useState(false);
+  const [showAgentNudge, setShowAgentNudge] = useState(false);
+
+  const next = () => {
+    if (state.step === 5) {
+      const err = validateBaseline(state);
+      if (err) {
+        toast.error(err.message, { description: `Error: ${err.code}` });
+        return;
+      }
+    }
+    setState((s) => ({ ...s, step: s.step + 1 }));
+  };
+
+  const handleGenerateComplete = useCallback((sig: number[]) => {
+    setState((s) => ({ ...s, signature: sig, step: s.step + 1 }));
+  }, []);
+
+  const handleMintSbt = useCallback(async () => {
+    setTxAction('mint');
+    toast.info('(Mock) Minting SBT…');
+    await new Promise((r) => setTimeout(r, 2000));
+    setMockHasMinted(true);
+    setNeedsMatrixUpdate(true);
+    toast.success('(Mock) SBT minted successfully!');
+    setTxAction(null);
+  }, []);
+
+  const handleUpdateMatrix = useCallback(async () => {
+    if (state.signature.length !== 256) {
+      toast.error(t('wizard.matrixNotReady'));
+      return;
+    }
+    setTxAction('update');
+    toast.info('(Mock) Updating Matrix…');
+    await new Promise((r) => setTimeout(r, 2000));
+    setNeedsMatrixUpdate(false);
+    setState((s) => ({ ...s, step: 0 }));
+    setShowAgentNudge(true);
+    toast.success('(Mock) Matrix updated successfully!');
+    setTxAction(null);
+  }, [state.signature, t]);
+
+  const refreshOnchainState = useCallback(async () => {
+    // no-op in mock mode
+  }, []);
+
+  const value: TwinMatrixContextValue = {
+    address: MOCK_ADDRESS,
+    isConnected: true,
+    walletAddress: MOCK_WALLET_DISPLAY,
+    isWrongNetwork: false,
+    openConnectModal: () => toast.info('(Mock) Connect modal would open'),
+    disconnect: () => toast.info('(Mock) Disconnect'),
+    switchToBscTestnet: () => {},
+    isSwitchingNetwork: false,
+    isContractConfigured: true,
+    isCheckingToken: false,
+    contractError: null,
+    tokenId: mockHasMinted ? MOCK_TOKEN_ID : null,
+    hasMintedSbt: mockHasMinted,
+    latestVersion: mockHasMinted ? 2 : 0,
+    versions: mockHasMinted ? MOCK_VERSIONS : [],
+    boundAgents: mockHasMinted ? MOCK_BOUND_AGENTS : [],
+    refreshOnchainState,
+    state,
+    setState,
+    next,
+    handleGenerateComplete,
+    txAction,
+    handleMintSbt,
+    handleUpdateMatrix,
+    needsMatrixUpdate,
+    setNeedsMatrixUpdate,
+    showAgentNudge,
+    setShowAgentNudge,
+  };
+
+  return <TwinMatrixContext.Provider value={value}>{children}</TwinMatrixContext.Provider>;
+};
+
+// ─── Real Provider (unchanged logic) ─────────────────────────────
+const RealTwinMatrixProvider = ({ children }: { children: ReactNode }) => {
   const { t } = useI18n();
   const { address, isConnected } = useAccount();
   const chainId = useChainId();
@@ -395,4 +530,12 @@ export const TwinMatrixProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return <TwinMatrixContext.Provider value={value}>{children}</TwinMatrixContext.Provider>;
+};
+
+// ─── Export: auto-select provider based on env ───────────────────
+export const TwinMatrixProvider = ({ children }: { children: ReactNode }) => {
+  if (IS_MOCK_MODE) {
+    return <MockTwinMatrixProvider>{children}</MockTwinMatrixProvider>;
+  }
+  return <RealTwinMatrixProvider>{children}</RealTwinMatrixProvider>;
 };
