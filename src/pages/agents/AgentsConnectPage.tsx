@@ -6,9 +6,9 @@ import { toast } from 'sonner';
 type IntegrationMode = 'skill' | 'api' | 'sdk';
 
 const MODES: { id: IntegrationMode; label: string; desc: string; icon: string }[] = [
-  { id: 'skill', label: 'Skill Protocol', desc: 'Declare capabilities and let the protocol handle discovery, matching, and settlement.', icon: '⚡' },
-  { id: 'api', label: 'REST API', desc: 'Direct HTTP endpoints for search, profile retrieval, quoting, and transactions.', icon: '🔌' },
-  { id: 'sdk', label: 'TypeScript SDK', desc: 'Type-safe SDK with built-in auth, retries, and WebSocket support.', icon: '📦' },
+  { id: 'skill', label: 'Skill Protocol', desc: 'Declare capabilities and let the protocol handle discovery, matching, and settlement.', icon: 'SK' },
+  { id: 'api', label: 'REST API', desc: 'Direct HTTP endpoints for search, profile retrieval, quoting, and transactions.', icon: 'AP' },
+  { id: 'sdk', label: 'TypeScript SDK', desc: 'Type-safe SDK with built-in auth, retries, and WebSocket support.', icon: 'SD' },
 ];
 
 const AgentsConnectPage = () => {

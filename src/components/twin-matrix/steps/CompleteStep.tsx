@@ -92,7 +92,7 @@ export const CompleteStep = ({ signature, onActivateAgent, onDashboard }: Props)
     <StepLayout>
       <StepContent>
         <div className="flex flex-col items-center text-center px-4">
-          <div className="text-6xl mb-6">✨</div>
+          <div className="text-3xl mb-6 font-heading font-bold text-foreground/20">⬡</div>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-2">{t('complete.title')}</h2>
           <p className="text-muted-foreground mb-8 max-w-sm">
             {t('complete.subtitle')}

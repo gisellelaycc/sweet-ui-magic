@@ -176,7 +176,7 @@ export const OnchainIdentityStatePage = ({
             onClick={onSetupAgent}
           >
             <div className="flex items-center gap-3">
-              <span className="text-xl">🤖</span>
+              <span className="text-sm font-mono text-foreground/50">AG</span>
               <div>
                 <p className="text-sm font-medium text-foreground">
                   {t('agentStudio.identityCta')}

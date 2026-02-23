@@ -5,15 +5,15 @@ import { StepLayout, StepContent } from '../StepLayout';
 import { useI18n } from '@/lib/i18n';
 
 const SIGNALS: (IdentityModule & { soon?: boolean })[] = [
-  { id: 'sport', icon: '🏃', label: 'Sport', description: 'Physical signal · competitive state', active: true },
-  { id: 'music', icon: '🎵', label: 'Music', description: 'Rhythm signal · listening state', active: false, soon: true },
-  { id: 'art', icon: '🎨', label: 'Art', description: 'Aesthetic signal · creative state', active: false, soon: true },
-  { id: 'reading', icon: '📚', label: 'Reading', description: 'Knowledge signal · absorption state', active: false, soon: true },
-  { id: 'food', icon: '🍳', label: 'Food', description: 'Lifestyle signal · dietary state', active: false, soon: true },
-  { id: 'travel', icon: '✈️', label: 'Travel', description: 'Mobility signal · exploration state', active: false, soon: true },
-  { id: 'finance', icon: '💰', label: 'Finance', description: 'Risk signal · asset state', active: false, soon: true },
-  { id: 'gaming', icon: '🎮', label: 'Gaming', description: 'Strategic signal · competitive state', active: false, soon: true },
-  { id: 'learning', icon: '🧠', label: 'Learning', description: 'Growth signal · focus state', active: false, soon: true },
+  { id: 'sport', icon: 'SP', label: 'Sport', description: 'Physical signal · competitive state', active: true },
+  { id: 'music', icon: 'MU', label: 'Music', description: 'Rhythm signal · listening state', active: false, soon: true },
+  { id: 'art', icon: 'AR', label: 'Art', description: 'Aesthetic signal · creative state', active: false, soon: true },
+  { id: 'reading', icon: 'RD', label: 'Reading', description: 'Knowledge signal · absorption state', active: false, soon: true },
+  { id: 'food', icon: 'FD', label: 'Food', description: 'Lifestyle signal · dietary state', active: false, soon: true },
+  { id: 'travel', icon: 'TR', label: 'Travel', description: 'Mobility signal · exploration state', active: false, soon: true },
+  { id: 'finance', icon: 'FI', label: 'Finance', description: 'Risk signal · asset state', active: false, soon: true },
+  { id: 'gaming', icon: 'GM', label: 'Gaming', description: 'Strategic signal · competitive state', active: false, soon: true },
+  { id: 'learning', icon: 'LN', label: 'Learning', description: 'Growth signal · focus state', active: false, soon: true },
 ];
 
 const MINTED_MODULES = ['music', 'reading'];

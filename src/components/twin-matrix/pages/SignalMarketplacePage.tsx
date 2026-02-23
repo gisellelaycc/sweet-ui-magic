@@ -262,7 +262,7 @@ export const SignalMarketplacePage = () => {
                   <>
                     <div className="space-y-2">
                       <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Reward</p>
-                      <p className="text-sm text-foreground/80">💰 {signal.reward}</p>
+                      <p className="text-sm text-foreground/80">{signal.reward}</p>
                       <p className="text-[10px] text-muted-foreground/50">Payment is released upon successful review and task completion.</p>
                     </div>
                     <div className="space-y-1">
@@ -340,7 +340,7 @@ export const SignalMarketplacePage = () => {
               <div className="flex gap-4">
                 <div className="space-y-1">
                   <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Reward</p>
-                  <p className="text-sm text-foreground/80">💰 {viewSignal.reward}</p>
+                  <p className="text-sm text-foreground/80">{viewSignal.reward}</p>
                 </div>
                 {viewSignal.deadline && (
                   <div className="space-y-1">
