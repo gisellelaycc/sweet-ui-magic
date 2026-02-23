@@ -53,50 +53,57 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
             {t('welcome.pretitle')}
           </p>
 
-          {/* Pretitle */}
-          
-
-
-
           {/* Main headline — largest, with scan-glow */}
           <h1 className="font-heading font-extrabold uppercase leading-[0.95] tracking-tight relative">
-            {/* Base white text */}
-            <span className="block text-foreground" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}>
-              Build and
+            <span className="block text-foreground" style={{ fontSize: 'clamp(2.2rem, 6vw, 5rem)' }}>
+              Humans list their
             </span>
-            <span className="block text-foreground" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}>
-              operate your
+            <span className="block text-foreground" style={{ fontSize: 'clamp(2.2rem, 6vw, 5rem)' }}>
+              experience.
             </span>
-            <span className="block text-foreground" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}>
-              Twin Matrix
+            <span className="block text-foreground mt-2" style={{ fontSize: 'clamp(2.2rem, 6vw, 5rem)' }}>
+              Agents find,
+            </span>
+            <span className="block text-foreground" style={{ fontSize: 'clamp(2.2rem, 6vw, 5rem)' }}>
+              negotiate, and
+            </span>
+            <span className="block text-foreground" style={{ fontSize: 'clamp(2.2rem, 6vw, 5rem)' }}>
+              pay for it.
             </span>
             {/* Scan glow overlay */}
             <span className="scan-text-glow font-heading font-extrabold uppercase leading-[0.95] tracking-tight" aria-hidden="true">
-              <span className="block" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}>
-                Build and
+              <span className="block" style={{ fontSize: 'clamp(2.2rem, 6vw, 5rem)' }}>
+                Humans list their
               </span>
-              <span className="block" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}>
-                operate your
+              <span className="block" style={{ fontSize: 'clamp(2.2rem, 6vw, 5rem)' }}>
+                experience.
               </span>
-              <span className="block" style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}>
-                Twin Matrix
+              <span className="block mt-2" style={{ fontSize: 'clamp(2.2rem, 6vw, 5rem)' }}>
+                Agents find,
+              </span>
+              <span className="block" style={{ fontSize: 'clamp(2.2rem, 6vw, 5rem)' }}>
+                negotiate, and
+              </span>
+              <span className="block" style={{ fontSize: 'clamp(2.2rem, 6vw, 5rem)' }}>
+                pay for it.
               </span>
             </span>
           </h1>
 
-          {/* Usage line */}
+          {/* Subtitle */}
           <p className="text-muted-foreground/70 text-base md:text-lg max-w-lg leading-relaxed mt-6">
-            Verify as human. Update your identity. Deploy your agent.
+            A marketplace connecting real human experience with agent economies.
           </p>
 
-          {/* Brand tagline */}
+          {/* Small text */}
           <p className="text-muted-foreground/40 text-sm md:text-base max-w-lg leading-relaxed mt-4">
-            Empowering human experience in the AI age.
+            Humans publish structured identities through Twin Matrix. Agents connect via Personal Agent skills to discover and transact.
           </p>
         </div>
 
         {/* ── Right: Cards (vertical) + Social ── */}
         <div className="w-full lg:w-[520px] xl:w-[560px] shrink-0 flex flex-col gap-4">
+          {/* Human Entry Card */}
           {/* Human Entry Card */}
           <div
             className="flex flex-col cursor-pointer transition-all duration-300"
@@ -105,31 +112,31 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
             onMouseEnter={handleCardEnter}
             onMouseLeave={handleCardLeave}>
 
+            <p className="text-sm uppercase tracking-widest text-muted-foreground/60 font-heading mb-2">For Humans</p>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed mb-6">
               {t('entry.humanDesc')}
             </p>
             <button
               className="btn-twin btn-twin-primary w-full py-4 rounded-xl text-base font-semibold"
               onClick={(e) => {e.stopPropagation();handleHumanClick();}}>
-
               {locked ? t('wallet.connect') : t('entry.humanCta')}
             </button>
           </div>
 
-          {/* Agent Entry Card — same size & style */}
+          {/* Agent Entry Card */}
           <div
             className="flex flex-col transition-all duration-300"
             style={cardStyle}
             onMouseEnter={handleCardEnter}
             onMouseLeave={handleCardLeave}>
 
+            <p className="text-sm uppercase tracking-widest text-muted-foreground/60 font-heading mb-2">For Agents & Systems</p>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed mb-6">
               {t('entry.agentDesc')}
             </p>
             <button
               className="w-full py-4 rounded-xl text-base font-semibold border border-foreground/15 text-muted-foreground/50 cursor-not-allowed"
               disabled>
-
               {t('entry.agentCta')}
             </button>
             <p className="text-xs text-muted-foreground/40 text-center mt-2 italic">

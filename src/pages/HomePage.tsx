@@ -3,6 +3,7 @@ import { useTwinMatrix } from '@/contexts/TwinMatrixContext';
 import { ParticleBackground } from '@/components/twin-matrix/ParticleBackground';
 import { TopNav } from '@/components/twin-matrix/TopNav';
 import { EntryPage } from '@/components/twin-matrix/pages/EntryPage';
+import { SiteFooter } from '@/components/twin-matrix/SiteFooter';
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -42,6 +43,10 @@ const HomePage = () => {
             onRequestConnect={() => openConnectModal?.()}
           />
         </main>
+
+        <div className="relative z-10">
+          <SiteFooter />
+        </div>
       </div>
     </div>
   );
