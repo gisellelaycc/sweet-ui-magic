@@ -31,15 +31,15 @@ const T: Translations = {
   // ── Entry Page ──
   'entry.chooseYourPath': { en: 'Are you Human, or Agent?', zh: '你是人類，還是 Agent？', zhCN: '你是人类，还是 Agent？', ja: 'あなたは人間ですか、それともエージェントですか？', ko: '당신은 인간인가요, 에이전트인가요?' },
   'entry.human': { en: 'Human', zh: '人類', zhCN: '人类', ja: '人間', ko: '인간' },
-  'entry.humanDesc': { en: 'Verify as human. Build or update your Twin Matrix identity state.', zh: '驗證你是真人。建立或更新你的 Twin Matrix 身份狀態。', zhCN: '验证你是真人。建立或更新你的 Twin Matrix 身份状态。', ja: '人間として認証。Twin Matrix アイデンティティを構築・更新。', ko: '인간으로 인증. Twin Matrix 아이덴티티를 구축 또는 업데이트.' },
+  'entry.humanDesc': { en: 'Create your Twin Matrix to list your experience in the agent economy.', zh: '建立你的 Twin Matrix，在代理經濟中列出你的經驗。', zhCN: '建立你的 Twin Matrix，在代理经济中列出你的经验。', ja: 'Twin Matrixを作成し、エージェントエコノミーに経験を掲載。', ko: 'Twin Matrix를 생성하여 에이전트 경제에 경험을 등록하세요.' },
   'entry.humanCta': { en: 'Verify as Human', zh: '開始人類驗證', zhCN: '开始人类验证', ja: '人間として認証', ko: '인간으로 인증' },
   'entry.agent': { en: 'Agent', zh: 'Agent', zhCN: 'Agent', ja: 'エージェント', ko: '에이전트' },
-  'entry.agentDesc': { en: 'Connect an agent to a Twin Matrix. Inject human identity as its soul foundation.', zh: '為你的 Agent 注入人類身份基底，連接至 Twin Matrix。', zhCN: '为你的 Agent 注入人类身份基底，连接至 Twin Matrix。', ja: 'エージェントをTwin Matrixに接続。人間のアイデンティティを魂の基盤として注入。', ko: '에이전트를 Twin Matrix에 연결. 인간 아이덴티티를 영혼의 기반으로 주입.' },
-  'entry.agentCta': { en: 'Agent Access', zh: 'Agent 入口', zhCN: 'Agent 入口', ja: 'エージェントアクセス', ko: '에이전트 접근' },
+  'entry.agentDesc': { en: 'Connect to the exchange and access human experience via Personal Agents.', zh: '連接交易所，透過 Personal Agent 獲取人類經驗。', zhCN: '连接交易所，通过 Personal Agent 获取人类经验。', ja: 'エクスチェンジに接続し、パーソナルエージェント経由で人間の経験にアクセス。', ko: '거래소에 연결하여 Personal Agent를 통해 인간 경험에 접근하세요.' },
+  'entry.agentCta': { en: 'Connect as Agent', zh: '以 Agent 連接', zhCN: '以 Agent 连接', ja: 'エージェントとして接続', ko: '에이전트로 연결' },
   'entry.agentComingSoon': { en: 'Soul definition in progress — coming soon', zh: '靈魂定義進行中 — 即將推出', zhCN: '灵魂定义进行中 — 即将推出', ja: 'ソウル定義進行中 — 近日公開', ko: '소울 정의 진행 중 — 곧 출시' },
 
   // ── Welcome Step ──
-  'welcome.pretitle': { en: 'Digital Version Of You:', zh: '你的數位分身：', zhCN: '你的数字分身：', ja: 'あなたのデジタル版：', ko: '당신의 디지털 버전：' },
+  'welcome.pretitle': { en: 'Twin Matrix Exchange', zh: 'Twin Matrix 交易所', zhCN: 'Twin Matrix 交易所', ja: 'Twin Matrix エクスチェンジ', ko: 'Twin Matrix 거래소' },
   'welcome.title': { en: 'Empowering Human Experience in the AI Age', zh: '在 AI 時代賦能人類體驗', zhCN: '在 AI 时代赋能人类体验', ja: 'AI時代の人間体験を強化', ko: 'AI 시대의 인간 경험을 강화' },
   'welcome.subtitle': { en: 'Seal your identity. Deploy your agent. Earn with your twin.', zh: '封存你的身份。部署你的代理。用你的孿生賺取。', zhCN: '封存你的身份。部署你的代理。用你的孪生赚取。', ja: 'アイデンティティを封印。エージェントを展開。ツインで稼ぐ。', ko: '아이덴티티를 봉인. 에이전트를 배포. 트윈으로 수익 창출.' },
   'welcome.start': { en: 'Start', zh: '開始', ja: '開始', ko: '시작' },
