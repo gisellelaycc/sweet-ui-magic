@@ -2,7 +2,7 @@ import React from 'react';
 import { useI18n } from '@/lib/i18n';
 import xLogo from '@/assets/social/x-logo.svg';
 import elementLogo from '@/assets/social/element-logo.svg';
-import farcasterLogo from '@/assets/social/farcaster-logo.svg';
+import discordLogo from '@/assets/social/discord-logo.svg';
 import bcscanLogo from '@/assets/social/bcscan-logo.svg';
 
 interface Props {
@@ -15,7 +15,7 @@ interface Props {
 const SOCIAL_LINKS = [
 { icon: xLogo, href: 'https://x.com/twin3_ai', alt: 'X' },
 { icon: elementLogo, href: 'https://element.market/collections/twin3-1?search[toggles][0]=ALL', alt: 'Element' },
-{ icon: farcasterLogo, href: 'https://warpcast.com/twin3.eth', alt: 'Farcaster' },
+{ icon: discordLogo, href: 'https://discord.gg/ZveHDMVG', alt: 'Discord' },
 { icon: bcscanLogo, href: 'https://bscscan.com/token/0xe3ec133e29addfbba26a412c38ed5de37195156f', alt: 'BscScan' }];
 
 
@@ -155,6 +155,23 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
               {t('welcome.trackUsDesc')}
             </p>
           </div>
+        </div>
+      </div>
+
+      {/* ── Exchange Metrics ── */}
+      <div className="px-6 md:px-12 lg:px-16 py-16 max-w-[1400px] mx-auto w-full">
+        <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground/50 font-heading mb-8 text-center">Exchange Metrics</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            { value: '31,714', label: 'Verified Humans' },
+            { value: '842', label: 'Connected Agent Systems' },
+            { value: '12,409', label: 'Executed Transactions' },
+          ].map((metric) => (
+            <div key={metric.label} className="text-center py-6" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.75rem', background: 'var(--glass-bg)' }}>
+              <p className="text-4xl md:text-5xl font-heading font-bold tracking-tight">{metric.value}</p>
+              <p className="text-sm text-muted-foreground mt-2">{metric.label}</p>
+            </div>
+          ))}
         </div>
       </div>
 
