@@ -187,7 +187,7 @@ export const SignalMarketplacePage = () => {
 
         <ThinDivider />
 
-        <div className="flex items-center gap-6 text-xs text-muted-foreground/70">
+        <div className="flex items-center gap-6 text-sm text-muted-foreground/70">
           <span>
             <span style={{ color: 'rgba(10, 255, 255, 0.8)' }}>{t('marketplace.activeSignals')}</span>{' '}
             <span className="text-foreground/80">{DEMO_SIGNALS.length}</span>
@@ -220,7 +220,7 @@ export const SignalMarketplacePage = () => {
           <div className="flex items-center gap-1">
             {LAYERS.map(layer => (
               <button key={layer.id} onClick={() => setActiveLayer(layer.id)}
-                className={`px-3 py-1 text-[11px] rounded-full transition-colors ${activeLayer === layer.id ? 'bg-foreground/10 text-foreground' : 'text-muted-foreground/60 hover:text-muted-foreground'}`}>
+                className={`px-3 py-1 text-xs rounded-full transition-colors ${activeLayer === layer.id ? 'bg-foreground/10 text-foreground' : 'text-muted-foreground/60 hover:text-muted-foreground'}`}>
                 {layer.label}
               </button>
             ))}
@@ -250,10 +250,10 @@ export const SignalMarketplacePage = () => {
                     <div className="w-9 h-9 rounded-full bg-foreground/8 flex items-center justify-center text-sm font-semibold text-foreground/60">{signal.brandInitial}</div>
                     <div>
                       <p className="font-semibold text-sm">{signal.brand}</p>
-                      <p className="text-[10px] text-muted-foreground/50">{t('marketplace.verifiedAgent')} · {signal.agentId}</p>
+                      <p className="text-xs text-muted-foreground/50">{t('marketplace.verifiedAgent')} · {signal.agentId}</p>
                     </div>
                   </div>
-                  <span className="text-[10px] font-medium" style={{ color: typeColor[signal.type] }}>
+                  <span className="text-xs font-medium" style={{ color: typeColor[signal.type] }}>
                     {signal.type === 'task' ? t('marketplace.paidTask') : t('marketplace.passiveSignal')}
                   </span>
                 </div>
@@ -261,45 +261,45 @@ export const SignalMarketplacePage = () => {
                 {signal.type === 'task' && (
                   <>
                     <div className="space-y-2">
-                      <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Reward</p>
+                       <p className="text-xs text-muted-foreground uppercase tracking-widest">Reward</p>
                       <p className="text-sm text-foreground/80">{signal.reward}</p>
-                      <p className="text-[10px] text-muted-foreground/50">Payment is released upon successful review and task completion.</p>
+                      <p className="text-xs text-muted-foreground/50">Payment is released upon successful review and task completion.</p>
                     </div>
                     <div className="space-y-1">
-                      <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Deadline</p>
+                      <p className="text-xs text-muted-foreground uppercase tracking-widest">Deadline</p>
                       <p className="text-sm text-foreground/80">{signal.deadline}</p>
                     </div>
                   </>
                 )}
                 <div className="space-y-2">
-                  <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{t('marketplace.whyMatch')}</p>
+                  <p className="text-xs text-muted-foreground uppercase tracking-widest">{t('marketplace.whyMatch')}</p>
                   <div className="space-y-1">
-                    {signal.matchReasons.map(r => (<p key={r} className="text-xs text-foreground/60">• {r}</p>))}
+                    {signal.matchReasons.map(r => (<p key={r} className="text-sm text-foreground/60">• {r}</p>))}
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Authorized Scope</p>
+                  <p className="text-xs text-muted-foreground uppercase tracking-widest">Authorized Scope</p>
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono px-2.5 py-1 rounded-full" style={{ background: 'rgba(10,255,255,0.08)', color: 'rgba(10,255,255,0.7)' }}>{signal.scope}</span>
-                    <span className="text-[10px] text-muted-foreground">{signal.quota} {t('marketplace.uses')} · {signal.validDays}d</span>
+                    <span className="text-xs font-mono px-2.5 py-1 rounded-full" style={{ background: 'rgba(10,255,255,0.08)', color: 'rgba(10,255,255,0.7)' }}>{signal.scope}</span>
+                    <span className="text-xs text-muted-foreground">{signal.quota} {t('marketplace.uses')} · {signal.validDays}d</span>
                   </div>
-                  <p className="text-[9px] text-muted-foreground/40">(Access limited to this scope only)</p>
+                  <p className="text-xs text-muted-foreground/40">(Access limited to this scope only)</p>
                 </div>
                 <div className="h-px" style={{ background: 'rgba(255,255,255,0.04)' }} />
                 <div className="flex items-center gap-3">
                   {signal.type === 'passive' ? (
                     <>
-                      <button onClick={() => setViewSignal(signal)} className="text-xs text-foreground/70 hover:text-foreground transition-colors">{t('marketplace.view')}</button>
-                      <button className="text-xs text-muted-foreground/50 hover:text-muted-foreground transition-colors">{t('marketplace.dismiss')}</button>
+                      <button onClick={() => setViewSignal(signal)} className="text-sm text-foreground/70 hover:text-foreground transition-colors">{t('marketplace.view')}</button>
+                      <button className="text-sm text-muted-foreground/50 hover:text-muted-foreground transition-colors">{t('marketplace.dismiss')}</button>
                     </>
                   ) : (
                     <>
-                      <button onClick={() => setViewSignal(signal)} className="text-xs text-foreground/70 hover:text-foreground transition-colors">{t('marketplace.reviewDetails')}</button>
-                      <button className="text-xs text-muted-foreground/50 hover:text-muted-foreground transition-colors">{t('marketplace.decline')}</button>
+                      <button onClick={() => setViewSignal(signal)} className="text-sm text-foreground/70 hover:text-foreground transition-colors">{t('marketplace.reviewDetails')}</button>
+                      <button className="text-sm text-muted-foreground/50 hover:text-muted-foreground transition-colors">{t('marketplace.decline')}</button>
                     </>
                   )}
                 </div>
-                <p className="text-[9px] text-muted-foreground/30">
+                <p className="text-xs text-muted-foreground/30">
                   {signal.type === 'passive' ? t('marketplace.viewConsumes') : 'Accept locks 1 quota · Payment on completion'}
                 </p>
               </div>
@@ -326,7 +326,7 @@ export const SignalMarketplacePage = () => {
               <div className="w-10 h-10 rounded-full bg-foreground/8 flex items-center justify-center text-sm font-semibold text-foreground/60">{viewSignal.brandInitial}</div>
               <div>
                 <p className="font-semibold">{viewSignal.brand}</p>
-                <p className="text-[10px] text-muted-foreground/50">{t('marketplace.verifiedAgent')} · {viewSignal.agentId}</p>
+                <p className="text-xs text-muted-foreground/50">{t('marketplace.verifiedAgent')} · {viewSignal.agentId}</p>
               </div>
             </div>
 
@@ -339,12 +339,12 @@ export const SignalMarketplacePage = () => {
             {viewSignal.type === 'task' && viewSignal.reward && (
               <div className="flex gap-4">
                 <div className="space-y-1">
-                  <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Reward</p>
+                   <p className="text-xs text-muted-foreground uppercase tracking-widest">Reward</p>
                   <p className="text-sm text-foreground/80">{viewSignal.reward}</p>
                 </div>
                 {viewSignal.deadline && (
                   <div className="space-y-1">
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Deadline</p>
+                    <p className="text-xs text-muted-foreground uppercase tracking-widest">Deadline</p>
                     <p className="text-sm text-foreground/80">{viewSignal.deadline}</p>
                   </div>
                 )}
@@ -354,13 +354,13 @@ export const SignalMarketplacePage = () => {
             {/* Description */}
             {viewSignal.detail.taskDescription && (
               <div className="space-y-2">
-                <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">Task Description</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-widest font-semibold">Task Description</p>
                 <p className="text-sm text-foreground/70 leading-relaxed whitespace-pre-line">{viewSignal.detail.taskDescription}</p>
               </div>
             )}
             {viewSignal.detail.passiveDescription && (
               <div className="space-y-2">
-                <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">About This Signal</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-widest font-semibold">About This Signal</p>
                 <p className="text-sm text-foreground/70 leading-relaxed whitespace-pre-line">{viewSignal.detail.passiveDescription}</p>
               </div>
             )}
@@ -368,7 +368,7 @@ export const SignalMarketplacePage = () => {
             {/* What You'll Do */}
             {viewSignal.detail.whatYoullDo && (
               <div className="space-y-2">
-                <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">What You'll Do</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-widest font-semibold">What You'll Do</p>
                 <ul className="space-y-1">
                   {viewSignal.detail.whatYoullDo.map((item, i) => (
                     <li key={i} className="text-sm text-foreground/70">• {item}</li>
@@ -380,7 +380,7 @@ export const SignalMarketplacePage = () => {
             {/* Features (passive) */}
             {viewSignal.detail.features && (
               <div className="space-y-2">
-                <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">What's Included</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-widest font-semibold">What's Included</p>
                 <ul className="space-y-1">
                   {viewSignal.detail.features.map((item, i) => (
                     <li key={i} className="text-sm text-foreground/70">• {item}</li>
@@ -392,10 +392,10 @@ export const SignalMarketplacePage = () => {
             {/* Supported data types */}
             {viewSignal.detail.supportedData && (
               <div className="space-y-2">
-                <p className="text-[11px] text-muted-foreground/60">Supported data types include:</p>
+                <p className="text-xs text-muted-foreground/60">Supported data types include:</p>
                 <ul className="space-y-0.5 pl-4">
                   {viewSignal.detail.supportedData.map((item, i) => (
-                    <li key={i} className="text-xs text-foreground/50">• {item}</li>
+                    <li key={i} className="text-sm text-foreground/50">• {item}</li>
                   ))}
                 </ul>
               </div>
@@ -403,13 +403,13 @@ export const SignalMarketplacePage = () => {
 
             {/* File note */}
             {viewSignal.detail.fileNote && (
-              <p className="text-xs text-muted-foreground/40 whitespace-pre-line">{viewSignal.detail.fileNote}</p>
+              <p className="text-sm text-muted-foreground/40 whitespace-pre-line">{viewSignal.detail.fileNote}</p>
             )}
 
             {/* Scope */}
             <div className="flex items-center justify-between px-4 py-2.5 rounded-xl" style={{ background: 'rgba(255,255,255,0.02)' }}>
-              <span className="text-[10px] font-mono" style={{ color: 'rgba(10,255,255,0.7)' }}>{viewSignal.scope}</span>
-              <span className="text-[10px] text-muted-foreground">{viewSignal.quota} uses · {viewSignal.validDays}d</span>
+              <span className="text-xs font-mono" style={{ color: 'rgba(10,255,255,0.7)' }}>{viewSignal.scope}</span>
+              <span className="text-xs text-muted-foreground">{viewSignal.quota} uses · {viewSignal.validDays}d</span>
             </div>
 
             <ThinDivider />

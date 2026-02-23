@@ -107,7 +107,7 @@ const AgentsConnectPage = () => {
                     <span key={scope} className="chip text-xs">{scope}</span>
                   ))}
                 </div>
-                <p className="text-xs text-muted-foreground">All scopes selected by default. Customize in console after creation.</p>
+                <p className="text-sm text-muted-foreground">All scopes selected by default. Customize in console after creation.</p>
               </div>
             </div>
 
@@ -130,11 +130,11 @@ const AgentsConnectPage = () => {
               <p className="text-sm uppercase tracking-widest text-muted-foreground/60 font-heading">Credentials</p>
               <div className="space-y-2">
                 <div>
-                  <p className="text-xs text-muted-foreground">API Key</p>
+                   <p className="text-sm text-muted-foreground">API Key</p>
                   <p className="text-sm font-mono bg-foreground/5 px-3 py-2 rounded-lg select-all">tm_live_k8f2j9a3m5n7p1q4r6s8t0</p>
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground">Endpoint</p>
+                   <p className="text-sm text-muted-foreground">Endpoint</p>
                   <p className="text-sm font-mono bg-foreground/5 px-3 py-2 rounded-lg select-all">https://api.twin3.ai/v1</p>
                 </div>
               </div>

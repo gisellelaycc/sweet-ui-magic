@@ -42,7 +42,7 @@ export const ActiveAuthorizationsPage = () => {
         <div>
           <h2 className="text-2xl font-bold mb-1">{t('records.title')}</h2>
           <p className="text-muted-foreground text-sm mb-3">{t('records.subtitle')}</p>
-          <p className="text-xs text-muted-foreground/70">
+          <p className="text-sm text-muted-foreground/70">
             <span style={{ color: 'rgba(10, 255, 255, 0.8)' }}>{t('records.active')}: {counts.active}</span>
             <span className="mx-2">·</span>
             <span>{t('records.consumed')}: {counts.consumed}</span>
@@ -63,7 +63,7 @@ export const ActiveAuthorizationsPage = () => {
                     {statusLabel[auth.status]}
                   </span>
                 </div>
-                <div className="space-y-1.5 text-xs">
+                <div className="space-y-1.5 text-sm">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">{t('records.scope')}</span>
                     <span className="text-foreground/70">{auth.scope}</span>
@@ -82,8 +82,8 @@ export const ActiveAuthorizationsPage = () => {
                   </div>
                 </div>
                 <div className="flex gap-3 pt-1">
-                  <button className="text-[11px] text-muted-foreground hover:text-foreground transition-colors">{t('records.view')}</button>
-                  <button className="text-[11px] transition-colors"
+                  <button className="text-sm text-muted-foreground hover:text-foreground transition-colors">{t('records.view')}</button>
+                  <button className="text-sm transition-colors"
                     style={{ color: auth.status === 'active' ? 'rgba(242, 68, 85, 0.6)' : statusColor[auth.status] }}>
                     {actionLabel[auth.status]}
                   </button>

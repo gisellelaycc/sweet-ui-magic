@@ -32,7 +32,7 @@ export const SettingsPage = () => {
           </div>
           <div>
             <span className="text-muted-foreground text-xs">{t('settings.address')}</span>
-            <p className="text-[11px] text-foreground/70 font-mono break-all mt-0.5">{walletAddress}</p>
+            <p className="text-sm text-foreground/70 font-mono break-all mt-0.5">{walletAddress}</p>
           </div>
         </div>
       </div>
@@ -65,7 +65,7 @@ export const SettingsPage = () => {
         </div>
       </div>
 
-      <p className="text-[10px] text-muted-foreground/30 text-center">Twin Matrix v0.1 — Demo</p>
+      <p className="text-xs text-muted-foreground/30 text-center">Twin Matrix v0.1 — Demo</p>
       </div>
     </div>
   );

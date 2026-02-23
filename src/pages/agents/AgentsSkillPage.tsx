@@ -41,12 +41,12 @@ const AgentsSkillPage = () => {
               <p className="text-sm text-muted-foreground">{cap.desc}</p>
               <div className="grid md:grid-cols-2 gap-3">
                 <div>
-                  <p className="text-xs uppercase tracking-widest text-muted-foreground/50 mb-1">Input</p>
-                  <p className="text-xs font-mono bg-foreground/5 px-3 py-2 rounded-lg">{cap.input}</p>
+                   <p className="text-xs uppercase tracking-widest text-muted-foreground/50 mb-1">Input</p>
+                  <p className="text-sm font-mono bg-foreground/5 px-3 py-2 rounded-lg">{cap.input}</p>
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-widest text-muted-foreground/50 mb-1">Output</p>
-                  <p className="text-xs font-mono bg-foreground/5 px-3 py-2 rounded-lg">{cap.output}</p>
+                   <p className="text-xs uppercase tracking-widest text-muted-foreground/50 mb-1">Output</p>
+                  <p className="text-sm font-mono bg-foreground/5 px-3 py-2 rounded-lg">{cap.output}</p>
                 </div>
               </div>
             </div>
@@ -59,18 +59,18 @@ const AgentsSkillPage = () => {
           <div className="grid md:grid-cols-3 gap-4">
             <div className="space-y-1">
               <p className="text-sm font-medium">Search & Match</p>
-              <p className="text-xs text-muted-foreground">Free tier: 100 queries/day</p>
-              <p className="text-xs text-muted-foreground">Pro: $0.01/query</p>
+              <p className="text-sm text-muted-foreground">Free tier: 100 queries/day</p>
+              <p className="text-sm text-muted-foreground">Pro: $0.01/query</p>
             </div>
             <div className="space-y-1">
               <p className="text-sm font-medium">Message & Negotiate</p>
-              <p className="text-xs text-muted-foreground">$0.05 per message</p>
-              <p className="text-xs text-muted-foreground">Free during beta</p>
+              <p className="text-sm text-muted-foreground">$0.05 per message</p>
+              <p className="text-sm text-muted-foreground">Free during beta</p>
             </div>
             <div className="space-y-1">
               <p className="text-sm font-medium">Transact</p>
-              <p className="text-xs text-muted-foreground">2.5% platform fee</p>
-              <p className="text-xs text-muted-foreground">Min: $0.50 per transaction</p>
+              <p className="text-sm text-muted-foreground">2.5% platform fee</p>
+              <p className="text-sm text-muted-foreground">Min: $0.50 per transaction</p>
             </div>
           </div>
         </div>

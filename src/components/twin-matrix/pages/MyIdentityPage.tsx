@@ -64,7 +64,7 @@ export const MyIdentityPage = ({ activeModules, signature, onNavigate }: Props) 
         <div className="flex items-center justify-between">
           <p className="text-xs" style={{ color: '#F24455' }}>● {t('records.active')}</p>
           <div className="text-right">
-            <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{t('myIdentity.layers')}</p>
+            <p className="text-xs text-muted-foreground uppercase tracking-widest">{t('myIdentity.layers')}</p>
             <p className="text-sm font-medium">{activeModules.length} {t('myIdentity.active')}</p>
           </div>
         </div>
@@ -75,7 +75,7 @@ export const MyIdentityPage = ({ activeModules, signature, onNavigate }: Props) 
         <div className="space-y-2">
           {topDimensions.map(dim => (
             <div key={dim.label} className="space-y-1">
-              <div className="flex justify-between text-[11px]">
+              <div className="flex justify-between text-sm">
                 <span className="text-foreground/60">{dim.label}</span>
                 <span className="text-muted-foreground">{Math.round((dim.value / 255) * 100)}%</span>
               </div>
@@ -95,7 +95,7 @@ export const MyIdentityPage = ({ activeModules, signature, onNavigate }: Props) 
           <div className="bg-foreground/35" style={{ width: `${topicPercent}%` }} />
           <div className="bg-foreground/15 rounded-r-full" style={{ width: `${soulPercent}%` }} />
         </div>
-        <div className="flex justify-between text-[10px] text-muted-foreground">
+        <div className="flex justify-between text-xs text-muted-foreground">
           <span>{t('common.core')} {corePercent}%</span>
           <span>{t('common.topic')} {topicPercent}%</span>
           <span>{t('common.soul')} {soulPercent}%</span>
