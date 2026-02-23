@@ -171,7 +171,7 @@ export const ReviewStep = ({
             {/* Right: 3 data sections — 40%, no glass cards, vertically centered */}
             <div className="lg:w-[40%] space-y-6">
               {/* Soul Quadrant */}
-              <div className="space-y-2">
+              <div className="space-y-2 rounded-2xl p-5" style={{ border: '1px solid var(--glass-border)', background: 'var(--glass-bg)' }}>
                 <h3 className="text-base font-semibold text-muted-foreground uppercase tracking-widest">{t('review.quadrant')}</h3>
                 {quadrant.missing ? (
                   <p className="text-sm text-muted-foreground/50">{t('review.incompleteAxis')}</p>
@@ -186,10 +186,7 @@ export const ReviewStep = ({
                 )}
               </div>
 
-              <div className="h-px w-full" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)' }} />
-
-              {/* Identity Density */}
-              <div className="space-y-2">
+              <div className="space-y-2 rounded-2xl p-5" style={{ border: '1px solid var(--glass-border)', background: 'var(--glass-bg)' }}>
                 <h3 className="text-base font-semibold text-muted-foreground uppercase tracking-widest">{t('review.density')}</h3>
                 <div className="flex items-end gap-2">
                   <span className="text-3xl font-bold text-foreground">{identityDensity}%</span>
@@ -204,10 +201,7 @@ export const ReviewStep = ({
                 </div>
               </div>
 
-              <div className="h-px w-full" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)' }} />
-
-              {/* Layer Mix */}
-              <div className="space-y-2">
+              <div className="space-y-2 rounded-2xl p-5" style={{ border: '1px solid var(--glass-border)', background: 'var(--glass-bg)' }}>
                 <h3 className="text-base font-semibold text-muted-foreground uppercase tracking-widest">{t('review.layerMix')}</h3>
                 {[
                   { label: t('common.physical'), value: layerMix.physical, color: "255, 60, 100" },
