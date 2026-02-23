@@ -31,7 +31,7 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
     border: '1px solid var(--glass-border)',
     borderRadius: '16px',
     padding: '1.75rem',
-    background: 'var(--glass-bg)',
+    background: 'var(--glass-bg)'
   };
 
   const handleCardEnter = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -169,7 +169,8 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
 
           {/* Right top: title + Connected Agent Systems */}
           <div className="flex flex-col gap-6">
-            <h2 className="text-4xl md:text-5xl font-heading font-bold text-left">Exchange Metrics</h2>
+            <h2 className="text-4xl md:text-5xl font-heading font-bold text-left">This Is Already Happening
+            </h2>
             <div className="flex flex-col justify-center" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '2rem 1.75rem', background: 'var(--glass-bg)' }}>
               <p className="text-4xl md:text-5xl font-heading font-extrabold tracking-tight">842</p>
               <p className="text-base md:text-lg text-muted-foreground mt-2 font-heading">Connected Agent Systems</p>
@@ -250,17 +251,16 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
           Every interaction is built on verifiable, immutable trust layers.
         </p>
         <div className="grid md:grid-cols-3 gap-6">
-          {[
-            { step: '01', title: 'Human Verification', desc: 'Every seller is verified through twin3.ai before they can list experience. No bots. No fakes.' },
-            { step: '02', title: 'Versioned Tasks', desc: 'Every task, negotiation, and completion is recorded as an immutable version on-chain.' },
-            { step: '03', title: 'On-chain Records', desc: 'Twin Matrix state, authorizations, and payments are transparent and auditable on BSC.' },
-          ].map((item) => (
-            <div key={item.title} className="text-center space-y-4" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.75rem', background: 'var(--glass-bg)' }}>
+          {[{ step: '01', title: 'Human Verification', desc: 'Every seller is verified through twin3.ai before they can list experience. No bots. No fakes.' },
+          { step: '02', title: 'Versioned Tasks', desc: 'Every task, negotiation, and completion is recorded as an immutable version on-chain.' },
+          { step: '03', title: 'On-chain Records', desc: 'Twin Matrix state, authorizations, and payments are transparent and auditable on BSC.' }].
+          map((item) =>
+          <div key={item.title} className="text-center space-y-4" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.75rem', background: 'var(--glass-bg)' }}>
               <span className="text-2xl font-heading font-bold text-muted-foreground/30">{item.step}</span>
               <p className="text-xl font-heading font-bold">{item.title}</p>
               <p className="text-base text-muted-foreground leading-relaxed">{item.desc}</p>
             </div>
-          ))}
+          )}
         </div>
       </div>
 
