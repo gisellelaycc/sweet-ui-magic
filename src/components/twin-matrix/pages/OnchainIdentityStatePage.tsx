@@ -180,7 +180,7 @@ export const OnchainIdentityStatePage = ({
                     const rowAddr = (row * 16).toString(16).toUpperCase().padStart(4, '0');
                     return (
                       <div key={row} className="flex items-center gap-[2px]">
-                        <span className="text-right select-none shrink-0 w-10" style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)' }}>
+                        <span className="text-right select-none shrink-0 w-10" style={{ fontSize: '10px', color: 'rgba(0, 0, 0, 0.3)' }}>
                           {rowAddr}
                         </span>
                         {Array.from({ length: 16 }, (_, col) => {
@@ -200,11 +200,11 @@ export const OnchainIdentityStatePage = ({
                           const intensity = value / 255;
                           const isActive = value > 0;
                           const borderColor = isActive
-                            ? `rgba(${slice.color}, ${0.3 + 0.6 * intensity})`
-                            : 'hsl(var(--foreground) / 0.05)';
-                          const textColor = isActive
                             ? `rgba(${slice.color}, ${0.6 + 0.4 * intensity})`
-                            : 'hsl(var(--foreground) / 0.12)';
+                            : 'rgba(0, 0, 0, 0.2)';
+                          const textColor = isActive
+                            ? `rgba(${slice.color}, ${0.7 + 0.3 * intensity})`
+                            : 'rgba(0, 0, 0, 0.35)';
                           return (
                             <div
                               key={col}
@@ -213,12 +213,12 @@ export const OnchainIdentityStatePage = ({
                                 width: 'clamp(1.3rem, 2.8vw, 2rem)', height: 'clamp(1.3rem, 2.8vw, 2rem)', aspectRatio: '1',
                                 fontSize: 'clamp(7px, 1.2vw, 10px)', color: textColor,
                                 border: `1px solid ${borderColor}`,
-                                textShadow: isActive ? `0 0 10px rgba(${slice.color}, ${0.4 + 0.6 * intensity})` : 'none',
+                                textShadow: isActive ? `0 0 2px rgba(${slice.color}, 0.2)` : 'none',
                                 background: isActive
-                                  ? `rgba(${slice.color}, ${0.05 + intensity * 0.15})`
-                                  : 'hsl(var(--foreground) / 0.01)',
+                                  ? `rgba(${slice.color}, ${0.1 + intensity * 0.15})`
+                                  : 'transparent',
                                 boxShadow: isActive
-                                  ? `0 0 ${6 + intensity * 14}px rgba(${slice.color}, ${0.15 + intensity * 0.35}), inset 0 0 ${4 + intensity * 8}px rgba(${slice.color}, ${intensity * 0.15})`
+                                  ? `0 0 3px rgba(${slice.color}, ${intensity * 0.15})`
                                   : 'none',
                                 transition: 'all 0.15s',
                                 transform: isHovered ? 'scale(1.12)' : 'scale(1)',
