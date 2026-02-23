@@ -5,10 +5,10 @@ import { toast } from 'sonner';
 
 type IntegrationMode = 'skill' | 'api' | 'sdk';
 
-const MODES: { id: IntegrationMode; label: string; desc: string }[] = [
-  { id: 'skill', label: 'Skill Protocol', desc: 'Declare capabilities and let the protocol handle discovery, matching, and settlement.' },
-  { id: 'api', label: 'REST API', desc: 'Direct HTTP endpoints for search, profile retrieval, quoting, and transactions.' },
-  { id: 'sdk', label: 'TypeScript SDK', desc: 'Type-safe SDK with built-in auth, retries, and WebSocket support.' },
+const MODES: { id: IntegrationMode; label: string; desc: string; icon: string }[] = [
+  { id: 'skill', label: 'Skill Protocol', desc: 'Declare capabilities and let the protocol handle discovery, matching, and settlement.', icon: '⚡' },
+  { id: 'api', label: 'REST API', desc: 'Direct HTTP endpoints for search, profile retrieval, quoting, and transactions.', icon: '🔌' },
+  { id: 'sdk', label: 'TypeScript SDK', desc: 'Type-safe SDK with built-in auth, retries, and WebSocket support.', icon: '📦' },
 ];
 
 const AgentsConnectPage = () => {
@@ -18,6 +18,12 @@ const AgentsConnectPage = () => {
   const [agentName, setAgentName] = useState('');
   const [step, setStep] = useState<'choose' | 'configure' | 'done'>('choose');
 
+  const cardStyle: React.CSSProperties = {
+    border: '1px solid var(--glass-border)',
+    borderRadius: '16px',
+    padding: '1.75rem',
+    background: 'var(--glass-bg)',
+  };
 
   const handleCreate = () => {
     if (!orgName.trim() || !agentName.trim()) {
@@ -47,13 +53,17 @@ const AgentsConnectPage = () => {
                 <button
                   key={m.id}
                   onClick={() => { setMode(m.id); setStep('configure'); }}
-                  className={`glass-card text-left w-full transition-all duration-200 hover:border-foreground/20 ${
+                  style={cardStyle}
+                  className={`text-left w-full transition-all duration-200 hover:border-foreground/20 ${
                     mode === m.id ? 'border-foreground/30' : ''
                   }`}
                 >
-                  <div>
-                    <p className="text-lg font-heading font-semibold">{m.label}</p>
-                    <p className="text-sm text-muted-foreground mt-1">{m.desc}</p>
+                  <div className="flex items-start gap-3">
+                    <span className="text-xl mt-0.5">{m.icon}</span>
+                    <div>
+                      <p className="font-medium">{m.label}</p>
+                      <p className="text-sm text-muted-foreground mt-0.5">{m.desc}</p>
+                    </div>
                   </div>
                 </button>
               ))}
@@ -67,7 +77,7 @@ const AgentsConnectPage = () => {
               Step 2 — Configure ({MODES.find(m => m.id === mode)?.label})
             </p>
 
-            <div className="glass-card space-y-4">
+            <div style={cardStyle} className="space-y-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium">Organization Name</label>
                 <input
@@ -116,7 +126,7 @@ const AgentsConnectPage = () => {
             <h2 className="text-xl font-heading font-bold">Agent Connected</h2>
             <p className="text-muted-foreground text-sm">Your agent "{agentName}" is ready to use.</p>
 
-            <div className="glass-card text-left space-y-3">
+            <div style={cardStyle} className="text-left space-y-3">
               <p className="text-sm uppercase tracking-widest text-muted-foreground/60 font-heading">Credentials</p>
               <div className="space-y-2">
                 <div>

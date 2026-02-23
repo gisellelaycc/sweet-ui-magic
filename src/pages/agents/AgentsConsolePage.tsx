@@ -31,6 +31,13 @@ const AgentsConsolePage = () => {
   const [keys, setKeys] = useState<ApiKey[]>(MOCK_KEYS);
   const [newKeyName, setNewKeyName] = useState('');
 
+  const cardStyle: React.CSSProperties = {
+    border: '1px solid var(--glass-border)',
+    borderRadius: '16px',
+    padding: '1.75rem',
+    background: 'var(--glass-bg)',
+  };
+
   const tabBtn = (id: typeof tab, label: string) => (
     <button
       onClick={() => setTab(id)}
@@ -81,7 +88,8 @@ const AgentsConsolePage = () => {
 
         {tab === 'keys' && (
           <div className="space-y-4 animate-fade-in">
-            <div className="glass-card flex items-end gap-3">
+            {/* Create new key */}
+            <div style={cardStyle} className="flex items-end gap-3">
               <div className="flex-1 space-y-1">
                 <label className="text-xs text-muted-foreground">New API Key</label>
                 <input
@@ -98,8 +106,9 @@ const AgentsConsolePage = () => {
               </button>
             </div>
 
+            {/* Key list */}
             {keys.map((k) => (
-              <div key={k.id} className="glass-card flex items-center justify-between">
+              <div key={k.id} style={cardStyle} className="flex items-center justify-between">
                 <div className="space-y-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <p className="text-sm font-medium">{k.name}</p>
@@ -122,6 +131,7 @@ const AgentsConsolePage = () => {
 
         {tab === 'usage' && (
           <div className="space-y-4 animate-fade-in">
+            {/* Summary */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {[
                 { label: 'Total Searches', value: MOCK_USAGE.reduce((s, d) => s + d.searches, 0).toLocaleString() },
@@ -129,14 +139,15 @@ const AgentsConsolePage = () => {
                 { label: 'Messages Sent', value: MOCK_USAGE.reduce((s, d) => s + d.messages, 0).toLocaleString() },
                 { label: 'Transactions', value: MOCK_USAGE.reduce((s, d) => s + d.transactions, 0).toLocaleString() },
               ].map((stat) => (
-                <div key={stat.label} className="glass-card text-center">
+                <div key={stat.label} style={cardStyle} className="text-center">
                   <p className="text-xl font-heading font-bold">{stat.value}</p>
                   <p className="text-xs text-muted-foreground mt-1">{stat.label}</p>
                 </div>
               ))}
             </div>
 
-            <div className="glass-card">
+            {/* Daily breakdown */}
+            <div style={cardStyle}>
               <p className="text-sm font-medium mb-3">Daily Breakdown</p>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
@@ -164,7 +175,8 @@ const AgentsConsolePage = () => {
               </div>
             </div>
 
-            <div className="glass-card space-y-2">
+            {/* Billing */}
+            <div style={cardStyle} className="space-y-2">
               <p className="text-sm font-medium">Current Period Estimate</p>
               <p className="text-2xl font-heading font-bold">$47.50</p>
               <p className="text-xs text-muted-foreground">Feb 1 – Feb 28, 2026 · Pro plan</p>
@@ -174,7 +186,7 @@ const AgentsConsolePage = () => {
 
         {tab === 'org' && (
           <div className="space-y-4 animate-fade-in">
-            <div className="glass-card space-y-4">
+            <div style={cardStyle} className="space-y-4">
               <p className="text-sm uppercase tracking-widest text-muted-foreground/60 font-heading">Organization</p>
               <div className="space-y-3">
                 <div className="space-y-1">
@@ -207,7 +219,7 @@ const AgentsConsolePage = () => {
               </button>
             </div>
 
-            <div className="glass-card space-y-3">
+            <div style={cardStyle} className="space-y-3">
               <p className="text-sm uppercase tracking-widest text-muted-foreground/60 font-heading">Team Members</p>
               <div className="space-y-2">
                 {[
