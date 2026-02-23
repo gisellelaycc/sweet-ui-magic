@@ -294,6 +294,7 @@ const T: Record<string, string> = {
   'onchain.coverage': 'Coverage',
   'onchain.reconfigure': 'Reconfigure Matrix',
   'onchain.refresh': 'Refresh',
+  'onchain.refreshing': 'Refreshing…',
   'onchain.overview': 'Matrix Overview',
   'onchain.physical': 'Physical',
   'onchain.social': 'Social',
@@ -304,6 +305,21 @@ const T: Record<string, string> = {
   'onchain.noAgents': 'No agents bound yet.',
   'onchain.versionHistory': 'Version History',
   'onchain.noVersions': 'No versions recorded.',
+  'onchain.noMatrix': 'No matrix data available.',
+  'onchain.noMatrixYet': 'No matrix data recorded yet.',
+  'onchain.block': 'Block',
+  'onchain.digest': 'Digest',
+  'onchain.active': 'Active',
+  'onchain.inactive': 'Inactive',
+  'onchain.scopeGranted': 'Scope granted',
+  'onchain.none': 'None',
+  'onchain.aiSparse': 'Your identity leans toward {layer}, but the matrix is still sparse. Add more signals to enrich your projection.',
+  'onchain.aiDominant': 'Dominant layer: {layer} ({percent}%). Top signals: {signals}.',
+
+  // ── Dashboard extras ──
+  'dashboard.stateInsight': 'State Insight',
+  'dashboard.aiSummary': 'AI Summary',
+  'dashboard.versionHistory': 'Version History',
 
   // ── Missions / Tasks ──
   'missions.title': 'Task Records',
