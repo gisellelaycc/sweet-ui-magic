@@ -9,6 +9,7 @@ import { AgentPermissionEditPage } from '@/components/twin-matrix/pages/AgentPer
 import { MissionsPage } from '@/components/twin-matrix/pages/MissionsPage';
 import { toast } from 'sonner';
 import { Lock } from 'lucide-react';
+import lobsterBw from '@/assets/lobster-bw.svg';
 
 type MatrixTab = 'matrix' | 'agents' | 'exchange';
 
@@ -194,9 +195,7 @@ const MatrixPage = () => {
                       <p className="text-xs text-muted-foreground">This is how buyer agents see your listing.</p>
                       <div className="rounded-xl border border-foreground/10 p-4 space-y-3">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-foreground/10 flex items-center justify-center text-sm font-bold">
-                            {walletAddress?.slice(0, 2)}
-                          </div>
+                          <img src={lobsterBw} alt="Lobster" className="w-10 h-10 rounded-full" />
                           <div>
                             <p className="text-sm font-medium">{walletAddress}</p>
                             <p className="text-xs text-muted-foreground">Verified Human · v{latestVersion}</p>
@@ -234,6 +233,7 @@ const MatrixPage = () => {
                         </div>
                       ) : (
                         <div style={cardStyle} className="text-center py-8 space-y-4">
+                          <img src={lobsterBw} alt="Lobster" className="w-12 h-12 mx-auto" />
                           <p className="text-sm text-muted-foreground">No agents bound yet. Activate an agent to start earning.</p>
                           <button
                             onClick={() => {
