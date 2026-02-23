@@ -223,27 +223,32 @@ export const ParticleBackground = ({ color = 'cyan' }: ParticleBackgroundProps) 
 
         if (p.layer === 'c') {
           // Layer C: large blurry nebula spots
-          const opMul = isLight ? 0.6 : 1;
+          const opMul = isLight ? 0.4 : 1;
           const alpha = Math.min(0.06, p.baseOpacity * pulse * opMul);
-          const gradient = ctx.createRadialGradient(px, py, 0, px, py, p.size);
-          const baseColor = isLight ? '100, 155, 150' : '10, 255, 255';
-          gradient.addColorStop(0, `rgba(${baseColor}, ${alpha * 1.5})`);
-          gradient.addColorStop(0.5, `rgba(${baseColor}, ${alpha * 0.5})`);
+          const gradient = ctx.createRadialGradient(px, py, 0, px, py, p.size * (isLight ? 0.8 : 1));
+          // Light: warm gray-taupe dust, not teal/blue
+          const baseColor = isLight ? '165, 160, 150' : '10, 255, 255';
+          gradient.addColorStop(0, `rgba(${baseColor}, ${alpha * 1.2})`);
+          gradient.addColorStop(0.5, `rgba(${baseColor}, ${alpha * 0.4})`);
           gradient.addColorStop(1, `rgba(${baseColor}, 0)`);
           ctx.beginPath();
-          ctx.arc(px, py, p.size, 0, Math.PI * 2);
+          ctx.arc(px, py, p.size * (isLight ? 0.8 : 1), 0, Math.PI * 2);
           ctx.fillStyle = gradient;
           ctx.fill();
         } else if (p.layer === 'b') {
-          // Layer B: medium bright with subtle glow
-          const opMul = isLight ? 0.65 : 1;
+          // Layer B: medium particles
+          const opMul = isLight ? 0.4 : 1;
           const alpha = Math.min(0.3, p.baseOpacity * pulse * opMul);
-          const particleColor = isLight ? `rgba(100, 155, 150, ${alpha})` : `rgba(10, 255, 255, ${alpha})`;
+          // Light: muted gray-green dust, smaller
+          const particleColor = isLight ? `rgba(150, 155, 148, ${alpha})` : `rgba(10, 255, 255, ${alpha})`;
           ctx.beginPath();
-          ctx.arc(px, py, p.size * (isLight ? 1.05 : 1), 0, Math.PI * 2);
+          ctx.arc(px, py, p.size * (isLight ? 0.75 : 1), 0, Math.PI * 2);
           if (!isLight && alpha > 0.15) {
             ctx.shadowColor = 'rgba(10, 255, 255, 0.2)';
             ctx.shadowBlur = 4;
+          } else if (isLight) {
+            ctx.shadowColor = 'rgba(150, 155, 148, 0.15)';
+            ctx.shadowBlur = 3;
           } else {
             ctx.shadowColor = 'transparent';
             ctx.shadowBlur = 0;
@@ -251,14 +256,15 @@ export const ParticleBackground = ({ color = 'cyan' }: ParticleBackgroundProps) 
           ctx.fillStyle = particleColor;
           ctx.fill();
         } else {
-          // Layer A: tiny micro-bright dots
-          const opMul = isLight ? 0.6 : 1;
+          // Layer A: tiny micro dots
+          const opMul = isLight ? 0.4 : 1;
           const alpha = Math.min(0.5, p.baseOpacity * pulse * opMul);
-          const particleColor = isLight ? `rgba(100, 150, 145, ${alpha})` : `rgba(10, 255, 255, ${alpha})`;
+          // Light: warm gray dust motes, very small
+          const particleColor = isLight ? `rgba(155, 150, 142, ${alpha})` : `rgba(10, 255, 255, ${alpha})`;
           ctx.shadowColor = 'transparent';
           ctx.shadowBlur = 0;
           ctx.beginPath();
-          ctx.arc(px, py, p.size, 0, Math.PI * 2);
+          ctx.arc(px, py, p.size * (isLight ? 0.7 : 1), 0, Math.PI * 2);
           ctx.fillStyle = particleColor;
           ctx.fill();
         }
