@@ -72,21 +72,21 @@ const VerifyPage = () => {
 
               <div className="rounded-2xl p-6 text-left space-y-4" style={{ border: '1px solid var(--glass-border)', background: 'var(--glass-bg)' }}>
                 <div className="flex items-start gap-3">
-                  <span className="text-lg mt-0.5">🔒</span>
+                  <span className="text-sm font-heading font-bold text-muted-foreground/40 mt-0.5">01</span>
                   <div>
                     <p className="text-sm font-medium">Privacy-Preserving</p>
                     <p className="text-xs text-muted-foreground">No personal data stored. Only a cryptographic proof is recorded.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <span className="text-lg mt-0.5">⚡</span>
+                  <span className="text-sm font-heading font-bold text-muted-foreground/40 mt-0.5">02</span>
                   <div>
                     <p className="text-sm font-medium">Quick Process</p>
                     <p className="text-xs text-muted-foreground">Verification takes less than 30 seconds.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <span className="text-lg mt-0.5">🛡️</span>
+                  <span className="text-sm font-heading font-bold text-muted-foreground/40 mt-0.5">03</span>
                   <div>
                     <p className="text-sm font-medium">Trust Layer</p>
                     <p className="text-xs text-muted-foreground">Buyer agents can confirm you're a real person before transacting.</p>
