@@ -11,6 +11,7 @@ interface Props {
   boundAgents: OnchainBoundAgent[];
   onRefresh: () => void;
   onReconfigure: () => void;
+  onSetupAgent?: () => void;
   isRefreshing: boolean;
 }
 
@@ -48,6 +49,7 @@ export const OnchainIdentityStatePage = ({
   boundAgents,
   onRefresh,
   onReconfigure,
+  onSetupAgent,
   isRefreshing,
 }: Props) => {
   const { t } = useI18n();
@@ -162,6 +164,40 @@ export const OnchainIdentityStatePage = ({
             </div>
           ))}
         </div>
+
+        {/* ── Agent Setup CTA ── */}
+        {onSetupAgent && boundAgents.length === 0 && (
+          <div
+            className="flex items-center justify-between gap-4 px-6 py-4 rounded-2xl animate-fade-in cursor-pointer group"
+            style={{
+              background: 'rgba(10, 255, 255, 0.04)',
+              border: '1px solid rgba(10, 255, 255, 0.15)',
+            }}
+            onClick={onSetupAgent}
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-xl">🤖</span>
+              <div>
+                <p className="text-sm font-medium text-foreground/90">
+                  {t('agentStudio.identityCta') || 'Your identity is ready. Activate a Personal Agent to start earning.'}
+                </p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  {t('agentStudio.identityCtaDesc') || 'Let an agent act on your behalf — match signals, accept tasks, and manage offers.'}
+                </p>
+              </div>
+            </div>
+            <button
+              className="shrink-0 py-2 px-5 rounded-xl text-sm font-semibold transition-colors"
+              style={{
+                background: 'rgba(10, 255, 255, 0.12)',
+                color: 'rgba(10, 255, 255, 0.9)',
+                border: '1px solid rgba(10, 255, 255, 0.2)',
+              }}
+            >
+              {t('agentStudio.activateAgent') || 'Activate Agent'}
+            </button>
+          </div>
+        )}
 
         {/* ── Main Content: Matrix + Right Panel ── */}
         <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_minmax(0,400px)] gap-5 items-start">
