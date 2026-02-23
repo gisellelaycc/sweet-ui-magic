@@ -6,7 +6,7 @@ import { PageLayout } from '@/components/twin-matrix/PageLayout';
 import { OnchainIdentityStatePage } from '@/components/twin-matrix/pages/OnchainIdentityStatePage';
 import { SignalRecordsPage } from '@/components/twin-matrix/pages/SignalRecordsPage';
 
-type MatrixTab = 'matrix' | 'listing' | 'opportunities';
+type MatrixTab = 'matrix' | 'agents' | 'listing' | 'opportunities';
 
 const MatrixPage = () => {
   const navigate = useNavigate();
@@ -114,6 +114,7 @@ const MatrixPage = () => {
             {/* Tab bar */}
             <div className="flex gap-6 border-b border-foreground/10">
               {tabBtn('matrix', 'Twin Matrix')}
+              {tabBtn('agents', 'Agents')}
               {tabBtn('listing', 'Listing')}
               {tabBtn('opportunities', 'Opportunities')}
             </div>
@@ -135,6 +136,50 @@ const MatrixPage = () => {
                   onRefresh={() => void refreshOnchainState()}
                   isRefreshing={isCheckingToken}
                 />
+              </div>
+            )}
+
+            {tab === 'agents' && (
+              <div className="animate-fade-in space-y-6">
+                <div>
+                  <h2 className="text-xl font-heading font-bold">Bound Agents</h2>
+                  <p className="text-sm text-muted-foreground mt-1">Agents authorized to act on your behalf.</p>
+                </div>
+
+                {boundAgents.length === 0 ? (
+                  <div style={cardStyle} className="text-center py-12 space-y-4">
+                    <span className="text-4xl">🤖</span>
+                    <p className="text-sm text-muted-foreground">No agents bound yet. Activate an agent to start earning.</p>
+                    <button
+                      onClick={() => navigate('/account?tab=authorizations&action=new')}
+                      className="btn-twin btn-twin-primary py-3 px-6 text-sm"
+                    >
+                      Activate Agent
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {boundAgents.map((agent) => (
+                      <div key={agent.address} style={cardStyle} className="flex items-center justify-between gap-4">
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2">
+                            <p className="text-sm font-medium truncate">{agent.name}</p>
+                            <span className={`text-[10px] px-2 py-0.5 rounded-full shrink-0 ${agent.active ? 'bg-[hsla(164,24%,74%,0.15)] text-[hsl(164,24%,74%)]' : 'bg-foreground/10 text-muted-foreground'}`}>
+                              {agent.active ? 'Active' : 'Inactive'}
+                            </span>
+                          </div>
+                          <p className="text-[11px] font-mono text-muted-foreground mt-1 truncate">{agent.address}</p>
+                        </div>
+                        <button
+                          onClick={() => navigate(`/account?tab=authorizations&edit=${agent.address}`)}
+                          className="shrink-0 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                          Manage →
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 

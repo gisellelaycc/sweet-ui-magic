@@ -215,7 +215,7 @@ const MockTwinMatrixProvider = ({ children }: { children: ReactNode }) => {
     hasMintedSbt: mockHasMinted,
     latestVersion: mockHasMinted ? 2 : 0,
     versions: mockHasMinted ? MOCK_VERSIONS : [],
-    boundAgents: mockHasMinted ? MOCK_BOUND_AGENTS : [],
+    boundAgents: [],
     refreshOnchainState,
     state,
     setState,
