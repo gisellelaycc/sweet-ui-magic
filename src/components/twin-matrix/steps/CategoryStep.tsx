@@ -76,7 +76,7 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
         <div className="w-full flex flex-col gap-8">
           {/* Top: Title & description */}
           <div>
-            <h2 className="text-4xl md:text-5xl font-bold leading-[1.1] tracking-tight mb-3">
+            <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] tracking-tight mb-2">
               Twin Matrix Configuration
             </h2>
             <p className="text-muted-foreground text-base md:text-lg leading-relaxed max-w-2xl">
@@ -88,7 +88,7 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
           <div className="w-full flex flex-col lg:flex-row gap-6">
             {/* LEFT: Step 1 — Signal list */}
             <div className="lg:w-[65%] min-w-0 flex flex-col gap-2">
-              <p className="text-sm font-semibold text-muted-foreground uppercase tracking-widest mb-2">
+              <p className="text-base text-muted-foreground uppercase tracking-widest mb-3">
                 Step 1 · Choose a signal layer
               </p>
               {chipItems.map(chip => {
@@ -113,7 +113,7 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
                       }}
                       onMouseEnter={() => { if (isSoon) showSoonTooltip(chip.id); }}
                       onMouseLeave={() => { if (isSoon) setSoonTooltip(null); }}
-                      className="relative w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-left transition-all duration-300"
+                      className="relative w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-left transition-all duration-300"
                       style={{
                         background: isChipSelected ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.02)',
                         border: `1px solid ${isChipSelected ? 'rgba(255, 255, 255, 0.15)' : 'rgba(255, 255, 255, 0.04)'}`,
@@ -130,11 +130,11 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
                       {isSoon && <Lock className="w-4 h-4 text-foreground/30 shrink-0" />}
                       <span className="text-2xl shrink-0">{chip.icon}</span>
                       <div className="min-w-0">
-                        <span className={`text-base font-medium block ${isChipSelected ? 'text-foreground' : 'text-foreground/70'}`}>
+                        <span className={`text-lg font-medium block ${isChipSelected ? 'text-foreground' : 'text-foreground/70'}`}>
                           {isMore ? t('category.andMore') : getLabel(chip.id)}
                         </span>
                         {!isMore && (
-                          <span className="text-sm text-muted-foreground/50 block leading-tight mt-0.5">
+                          <span className="text-base text-muted-foreground/50 block leading-tight mt-0.5">
                             {getDesc(chip.id)}
                           </span>
                         )}
@@ -154,7 +154,7 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
 
             {/* RIGHT: Step 2 — Shape card (30%) */}
             <div className="lg:w-[35%] shrink-0 flex flex-col">
-              <p className="text-sm font-semibold text-muted-foreground uppercase tracking-widest mb-3">
+              <p className="text-base text-muted-foreground uppercase tracking-widest mb-3">
                 Step 2 · Shape this signal
               </p>
               <div
@@ -179,19 +179,19 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
                   }}
                 >
                   <span className="text-6xl mb-5">{current.icon}</span>
-                  <h3 className="text-xl font-semibold text-foreground mb-1">{getLabel(current.id)}</h3>
+                  <h3 className="text-2xl font-semibold text-foreground mb-1">{getLabel(current.id)}</h3>
                   {isMinted && (
-                    <span className="text-xs px-3 py-0.5 rounded-full bg-green-400/10 text-green-400 mb-2">{t('category.minted')}</span>
+                    <span className="text-sm px-3 py-0.5 rounded-full bg-green-400/10 text-green-400 mb-2">{t('category.minted')}</span>
                   )}
                   <p className="text-base text-muted-foreground/70 max-w-xs mb-4">{getDesc(current.id)}</p>
-                  <p className="text-sm text-muted-foreground/40 mb-8">
+                  <p className="text-base text-muted-foreground/40 mb-8">
                     {isActivated ? t('category.tapDeactivate') : t('category.tapActivate')}
                   </p>
 
                   <button
                     onClick={(e) => { e.stopPropagation(); onNext(); }}
                     disabled={!hasActive}
-                    className="btn-twin btn-twin-primary px-6 py-3 text-base rounded-xl disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="btn-twin btn-twin-primary px-8 py-3 text-base rounded-xl disabled:opacity-30 disabled:cursor-not-allowed"
                   >
                     Proceed with {getLabel(selected)} signal
                   </button>
