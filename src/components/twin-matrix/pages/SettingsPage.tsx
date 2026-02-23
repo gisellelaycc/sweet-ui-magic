@@ -28,7 +28,7 @@ export const SettingsPage = () => {
         <div className="space-y-2 text-sm">
           <div className="flex justify-between">
             <span className="text-muted-foreground">{t('settings.status')}</span>
-            <span className="text-green-400 text-xs">{t('settings.statusConnected')}</span>
+            <span className="text-xs" style={{ color: 'hsl(164, 24%, 74%)' }}>{t('settings.statusConnected')}</span>
           </div>
           <div>
             <span className="text-muted-foreground text-xs">{t('settings.address')}</span>
@@ -52,8 +52,8 @@ export const SettingsPage = () => {
         <div className="space-y-3 text-sm">
           <div className="flex justify-between items-center">
             <span className="text-muted-foreground">{t('settings.notifications')}</span>
-            <div className="w-10 h-5 rounded-full bg-green-400/20 relative cursor-pointer">
-              <div className="absolute right-0.5 top-0.5 w-4 h-4 rounded-full bg-green-400 transition-all" />
+            <div className="w-10 h-5 rounded-full relative cursor-pointer" style={{ background: 'hsla(164, 24%, 74%, 0.2)' }}>
+              <div className="absolute right-0.5 top-0.5 w-4 h-4 rounded-full transition-all" style={{ background: 'hsl(164, 24%, 74%)' }} />
             </div>
           </div>
           <div className="flex justify-between items-center">

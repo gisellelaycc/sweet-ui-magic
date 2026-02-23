@@ -69,7 +69,7 @@ function shortAddress(address?: string | null): string {
 const STATUS_STYLE: Record<string, string> = {
   running: 'bg-cyan-400/15 text-cyan-200',
   active: 'bg-cyan-400/15 text-cyan-200',
-  completed: 'bg-emerald-400/15 text-emerald-200',
+  completed: 'bg-[hsla(164,24%,74%,0.15)] text-[hsl(164,24%,74%)]',
   expired: 'bg-amber-400/15 text-amber-200',
   revoked: 'bg-amber-400/15 text-amber-200',
   declined: 'bg-rose-400/15 text-rose-200',

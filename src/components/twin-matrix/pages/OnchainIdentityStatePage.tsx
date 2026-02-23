@@ -374,7 +374,7 @@ export const OnchainIdentityStatePage = ({
                   <div className="py-2.5">
                     <div className="flex items-center justify-between gap-3">
                       <p className="text-sm font-medium">{agent.name}</p>
-                      <span className={`text-[10px] px-2 py-0.5 rounded-full ${agent.active ? 'bg-emerald-500/15 text-emerald-300' : 'bg-foreground/10 text-muted-foreground'}`}>
+                      <span className={`text-[10px] px-2 py-0.5 rounded-full ${agent.active ? 'bg-[hsla(164,24%,74%,0.15)] text-[hsl(164,24%,74%)]' : 'bg-foreground/10 text-muted-foreground'}`}>
                         {agent.active ? t('onchain.active') : t('onchain.inactive')}
                       </span>
                     </div>

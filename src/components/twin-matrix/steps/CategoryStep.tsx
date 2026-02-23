@@ -181,7 +181,7 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
                   <span className="text-6xl mb-5">{current.icon}</span>
                   <h3 className="text-2xl font-semibold text-foreground mb-1">{getLabel(current.id)}</h3>
                   {isMinted && (
-                    <span className="text-sm px-3 py-0.5 rounded-full bg-green-400/10 text-green-400 mb-2">{t('category.minted')}</span>
+                    <span className="text-sm px-3 py-0.5 rounded-full mb-2" style={{ background: 'hsla(164, 24%, 74%, 0.15)', color: 'hsl(164, 24%, 74%)' }}>{t('category.minted')}</span>
                   )}
                   <p className="text-base text-muted-foreground/70 max-w-xs mb-4">{getDesc(current.id)}</p>
                   <p className="text-base text-muted-foreground/40 mb-8">
