@@ -13,7 +13,7 @@ import HomePage from "./pages/HomePage";
 import VerifyPage from "./pages/VerifyPage";
 import MintPage from "./pages/MintPage";
 import MatrixPage from "./pages/MatrixPage";
-import AccountPage from "./pages/AccountPage";
+
 import AgentsOverviewPage from "./pages/agents/AgentsOverviewPage";
 import AgentsConnectPage from "./pages/agents/AgentsConnectPage";
 import AgentsSkillPage from "./pages/agents/AgentsSkillPage";
@@ -47,7 +47,7 @@ const App = () => (
                   <Route path="/verify" element={<VerifyPage />} />
                   <Route path="/mint" element={<MintPage />} />
                   <Route path="/matrix" element={<MatrixPage />} />
-                  <Route path="/account" element={<AccountPage />} />
+                  
                   <Route path="/agents" element={<AgentsOverviewPage />} />
                   <Route path="/agents/connect" element={<AgentsConnectPage />} />
                   <Route path="/agents/skill" element={<AgentsSkillPage />} />

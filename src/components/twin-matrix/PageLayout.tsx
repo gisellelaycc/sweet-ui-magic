@@ -26,7 +26,7 @@ export const PageLayout = ({ activePage, children, hideParticles }: Props) => {
             if (id === null) navigate('/');
             else if (id === 'identity') navigate('/matrix');
             else if (id === 'agents') navigate('/agents');
-            else if (id === 'account') navigate('/account');
+            
           }}
           hasIdentity={hasMintedSbt}
           isWalletConnected={isConnected}
