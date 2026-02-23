@@ -5,7 +5,7 @@ import { BaseError, isAddress, type Address } from 'viem';
 import { useChainId, usePublicClient, useSwitchChain, useWriteContract } from 'wagmi';
 import type { AgentSetup, AgentDefinition, AgentPermission } from '@/types/twin-matrix';
 import { TaskCapabilitySection } from './TaskCapabilitySection';
-import lobsterIcon from '@/assets/lobster-icon.png';
+import lobsterIcon from '@/assets/openclaw.svg';
 import { useI18n } from '@/lib/i18n';
 import { BSC_TESTNET_CHAIN_ID } from '@/lib/wallet/config';
 import { TWIN_MATRIX_SBT_ADDRESS, twinMatrixSbtAbi } from '@/lib/contracts/twin-matrix-sbt';
