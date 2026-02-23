@@ -192,18 +192,18 @@ const MatrixPage = () => {
                     {/* Agent Profile Card */}
                     <div style={cardStyle} className="space-y-4">
                       <p className="text-sm uppercase tracking-widest text-muted-foreground/60 font-heading">Agent Profile Card</p>
-                      <p className="text-xs text-muted-foreground">This is how buyer agents see your listing.</p>
+                      <p className="text-sm text-muted-foreground">This is how buyer agents see your listing.</p>
                       <div className="rounded-xl border border-foreground/10 p-4 space-y-3">
                         <div className="flex items-center gap-3">
                           <img src={openClaw} alt="OpenClaw" className="w-10 h-10 rounded-full" />
                           <div>
                             <p className="text-sm font-medium">{walletAddress}</p>
-                            <p className="text-xs text-muted-foreground">Verified Human · v{latestVersion}</p>
+                            <p className="text-sm text-muted-foreground">Verified Human · v{latestVersion}</p>
                           </div>
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {['sport', 'running', 'marathon', 'fitness'].map((tag) => (
-                            <span key={tag} className="text-xs font-mono px-2 py-0.5 rounded-md bg-foreground/5">{tag}</span>
+                            <span key={tag} className="text-sm font-mono px-2 py-0.5 rounded-md bg-foreground/5">{tag}</span>
                           ))}
                         </div>
                       </div>
@@ -226,7 +226,7 @@ const MatrixPage = () => {
                           </div>
                           <button
                             onClick={() => { setEditingAgent(currentAgent.address); setAgentView('edit'); }}
-                            className="shrink-0 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                            className="shrink-0 text-sm text-muted-foreground hover:text-foreground transition-colors"
                           >
                             Manage →
                           </button>
@@ -254,7 +254,7 @@ const MatrixPage = () => {
                             <Lock className="w-4 h-4 text-muted-foreground" />
                             <div>
                               <p className="text-sm font-medium text-muted-foreground">Agent Slot {slot}</p>
-                              <p className="text-xs text-muted-foreground/60">Awaiting unlock — coming soon</p>
+                              <p className="text-sm text-muted-foreground/60">Awaiting unlock — coming soon</p>
                             </div>
                           </div>
                           <span className="text-xs px-2 py-0.5 rounded-full bg-foreground/5 text-muted-foreground">Locked</span>
