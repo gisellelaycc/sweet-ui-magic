@@ -32,6 +32,8 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
     borderRadius: '16px',
     padding: '1.75rem 1.75rem',
     background: 'var(--glass-bg)',
+    backdropFilter: 'blur(16px) saturate(160%)',
+    boxShadow: 'inset 0 1px 0 0 rgba(255,255,255,0.4), 0 4px 16px -4px rgba(100,130,180,0.10)',
   };
 
   const handleCardEnter = (e: React.MouseEvent<HTMLDivElement>) => {
