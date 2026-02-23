@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTwinMatrix } from '@/contexts/TwinMatrixContext';
 import { PageLayout } from '@/components/twin-matrix/PageLayout';
 
-type AccountTab = 'wallet' | 'settings';
+type AccountTab = 'wallet' | 'listing' | 'settings';
 
 const AccountPage = () => {
   const navigate = useNavigate();
@@ -15,6 +15,7 @@ const AccountPage = () => {
     walletAddress,
     hasMintedSbt,
     tokenId,
+    latestVersion,
     isWrongNetwork,
     isSwitchingNetwork,
     switchToBscTestnet,
@@ -74,6 +75,7 @@ const AccountPage = () => {
 
         <div className="flex gap-6 border-b border-foreground/10">
           {tabBtn('wallet', 'Wallet')}
+          {tabBtn('listing', 'Listing')}
           {tabBtn('settings', 'Settings')}
         </div>
 
@@ -133,6 +135,56 @@ const AccountPage = () => {
           </div>
         )}
 
+        {tab === 'listing' && (
+          <div className="space-y-4 animate-fade-in">
+            <div>
+              <h2 className="text-xl font-heading font-bold">Marketplace Presence</h2>
+              <p className="text-base md:text-lg text-muted-foreground mt-1">Control how buyer agents discover and interact with your profile.</p>
+            </div>
+
+            <div style={cardStyle} className="space-y-4">
+              <p className="text-sm uppercase tracking-widest text-muted-foreground/60 font-heading">Visibility</p>
+              {[
+                { id: 'public', label: 'Public', desc: 'Fully discoverable by all buyer agents. Maximum exposure.' },
+                { id: 'semi', label: 'Semi-Public', desc: 'Visible to verified agents only. Requires authorization to view full matrix.' },
+                { id: 'private', label: 'Private', desc: 'Hidden from search. Only accessible via direct invitation.' },
+              ].map((opt) => (
+                <label key={opt.id} className="flex items-start gap-3 cursor-pointer p-3 rounded-xl hover:bg-foreground/5 transition-colors">
+                  <input type="radio" name="visibility" defaultChecked={opt.id === 'public'} className="mt-1" />
+                  <div>
+                    <p className="text-sm font-medium">{opt.label}</p>
+                    <p className="text-xs text-muted-foreground">{opt.desc}</p>
+                  </div>
+                </label>
+              ))}
+            </div>
+
+            <div style={cardStyle} className="space-y-4">
+              <p className="text-sm uppercase tracking-widest text-muted-foreground/60 font-heading">Agent Profile Card</p>
+              <p className="text-xs text-muted-foreground">This is how buyer agents see your listing.</p>
+              <div className="rounded-xl border border-foreground/10 p-4 space-y-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-foreground/10 flex items-center justify-center text-sm font-bold">
+                    {walletAddress?.slice(0, 2)}
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">{walletAddress}</p>
+                    <p className="text-xs text-muted-foreground">Verified Human · v{latestVersion}</p>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {['sport', 'running', 'marathon', 'fitness'].map((tag) => (
+                    <span key={tag} className="text-xs font-mono px-2 py-0.5 rounded-md bg-foreground/5">{tag}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <button className="btn-twin btn-twin-primary py-3 px-6 text-sm">
+              Publish Changes
+            </button>
+          </div>
+        )}
 
         {tab === 'settings' && (
           <div className="space-y-4 animate-fade-in">
