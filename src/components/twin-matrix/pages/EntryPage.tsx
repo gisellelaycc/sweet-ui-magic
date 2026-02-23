@@ -59,7 +59,7 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
               <span className="font-extrabold">Humans</span>{' '}
               <span className="font-normal">list their experience.</span>
             </span>
-            <div className="mt-3" style={{ paddingLeft: '2.5em' }}>
+            <div className="mt-3" style={{ paddingLeft: '3.5em' }}>
               <span className="block text-foreground">
                 <span className="font-extrabold">Agents</span>
               </span>
@@ -76,7 +76,7 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
                 <span className="font-extrabold">Humans</span>{' '}
                 <span className="font-normal">list their experience.</span>
               </span>
-              <div className="mt-3" style={{ paddingLeft: '2.5em' }}>
+              <div className="mt-3" style={{ paddingLeft: '3.5em' }}>
                 <span className="block font-extrabold">Agents</span>
                 <span className="block font-normal">find, negotiate,</span>
                 <span className="block font-normal">and pay for it.</span>
