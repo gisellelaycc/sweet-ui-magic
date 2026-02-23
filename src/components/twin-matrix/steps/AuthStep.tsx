@@ -450,8 +450,21 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
 
       <div className="relative z-10 h-full overflow-y-auto scrollbar-hide">
         <div className="max-w-3xl mx-auto px-6 pt-6 pb-0">
-          <button onClick={onDashboard} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-            ← Back to Identity
+          <button
+            onClick={() => {
+              if (subStep === 'list') {
+                onDashboard();
+              } else if (subStep === 'create' || subStep === 'config') {
+                setSubStep('list');
+              } else if (subStep === 'telegram') {
+                setSubStep('config');
+              } else if (subStep === 'resolving' || subStep === 'activated') {
+                setSubStep('telegram');
+              }
+            }}
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            {subStep === 'list' ? '← Back to Agent Page' : '← Back'}
           </button>
         </div>
         <div className="max-w-lg mx-auto px-6 py-10 space-y-0">
