@@ -142,6 +142,36 @@ export const OnchainIdentityStatePage = ({
           <span>Wallet <span className="font-semibold text-foreground">{walletAddress ?? '-'}</span></span>
         </div>
 
+        {/* ── Stats Bar ── */}
+        <div className="grid grid-cols-5 gap-0 rounded-xl overflow-hidden" style={{ border: '1px solid rgba(255, 255, 255, 0.10)' }}>
+          {[
+            { value: `${filledCount}/256`, label: 'TWIN MATRIX' },
+            { value: '0', label: 'POINTS' },
+            { value: '0', label: 'INVITED TASKS' },
+            { value: '0', label: 'COMPLETED TASKS' },
+            { value: `${filledCount > 0 ? Math.round((filledCount / 256) * 100) : 0}%`, label: 'COMPLETION RATE', highlight: true },
+          ].map((stat, i, arr) => (
+            <div
+              key={stat.label}
+              className="flex flex-col items-center justify-center py-4 px-2"
+              style={{
+                borderRight: i < arr.length - 1 ? '1px solid rgba(255, 255, 255, 0.10)' : 'none',
+                background: 'rgba(255, 255, 255, 0.02)',
+              }}
+            >
+              <span
+                className="text-xl md:text-2xl font-heading font-bold"
+                style={{ color: stat.highlight ? '#F2850D' : 'hsl(var(--foreground))' }}
+              >
+                {stat.value}
+              </span>
+              <span className="text-[10px] uppercase tracking-wider text-muted-foreground mt-1">
+                {stat.label}
+              </span>
+            </div>
+          ))}
+        </div>
+
         {/* ── Main Content: Matrix + Right Panel ── */}
         <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_minmax(0,400px)] gap-5 items-start">
 
@@ -177,12 +207,13 @@ export const OnchainIdentityStatePage = ({
                           else sliceIdx = 3;
                           const slice = LAYERS[sliceIdx];
                           const intensity = value / 255;
-                          const borderColor = value > 0
-                            ? `rgba(${slice.color}, ${0.2 + 0.5 * intensity})`
-                            : 'rgba(255, 255, 255, 0.08)';
-                          const textColor = value > 0
-                            ? `rgba(${slice.color}, ${0.5 + 0.5 * intensity})`
-                            : 'rgba(255, 255, 255, 0.2)';
+                          const isActive = value > 0;
+                          const borderColor = isActive
+                            ? `rgba(${slice.color}, ${0.3 + 0.6 * intensity})`
+                            : 'rgba(255, 255, 255, 0.05)';
+                          const textColor = isActive
+                            ? `rgba(${slice.color}, ${0.6 + 0.4 * intensity})`
+                            : 'rgba(255, 255, 255, 0.12)';
                           return (
                             <div
                               key={col}
@@ -191,12 +222,12 @@ export const OnchainIdentityStatePage = ({
                                 width: 'clamp(1.3rem, 2.8vw, 2rem)', height: 'clamp(1.3rem, 2.8vw, 2rem)', aspectRatio: '1',
                                 fontSize: 'clamp(7px, 1.2vw, 10px)', color: textColor,
                                 border: `1px solid ${borderColor}`,
-                                textShadow: isTop && value > 0 ? `0 0 8px rgba(${slice.color}, 0.6)` : 'none',
-                                background: value > 0
-                                  ? `rgba(${slice.color}, ${intensity * 0.08})`
-                                  : 'transparent',
-                                boxShadow: isTop && value > 0
-                                  ? `0 0 10px rgba(${slice.color}, ${intensity * 0.3}), inset 0 0 6px rgba(${slice.color}, ${intensity * 0.1})`
+                                textShadow: isActive ? `0 0 10px rgba(${slice.color}, ${0.4 + 0.6 * intensity})` : 'none',
+                                background: isActive
+                                  ? `rgba(${slice.color}, ${0.05 + intensity * 0.15})`
+                                  : 'rgba(255, 255, 255, 0.01)',
+                                boxShadow: isActive
+                                  ? `0 0 ${6 + intensity * 14}px rgba(${slice.color}, ${0.15 + intensity * 0.35}), inset 0 0 ${4 + intensity * 8}px rgba(${slice.color}, ${intensity * 0.15})`
                                   : 'none',
                                 transition: 'all 0.15s',
                                 transform: isHovered ? 'scale(1.12)' : 'scale(1)',
