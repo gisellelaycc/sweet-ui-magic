@@ -55,37 +55,19 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
 
           {/* Main headline — largest, with scan-glow */}
           <h1 className="font-heading font-extrabold uppercase leading-[0.95] tracking-tight relative">
-            <span className="block text-foreground" style={{ fontSize: 'clamp(2.2rem, 6vw, 5rem)' }}>
-              Humans list their
+            <span className="block text-foreground" style={{ fontSize: 'clamp(2rem, 5.5vw, 4.5rem)' }}>
+              Humans list their experience.
             </span>
-            <span className="block text-foreground" style={{ fontSize: 'clamp(2.2rem, 6vw, 5rem)' }}>
-              experience.
-            </span>
-            <span className="block text-foreground mt-2" style={{ fontSize: 'clamp(2.2rem, 6vw, 5rem)' }}>
-              Agents find,
-            </span>
-            <span className="block text-foreground" style={{ fontSize: 'clamp(2.2rem, 6vw, 5rem)' }}>
-              negotiate, and
-            </span>
-            <span className="block text-foreground" style={{ fontSize: 'clamp(2.2rem, 6vw, 5rem)' }}>
-              pay for it.
+            <span className="block text-foreground mt-2" style={{ fontSize: 'clamp(2rem, 5.5vw, 4.5rem)' }}>
+              Agents find, negotiate, and pay for it.
             </span>
             {/* Scan glow overlay */}
             <span className="scan-text-glow font-heading font-extrabold uppercase leading-[0.95] tracking-tight" aria-hidden="true">
-              <span className="block" style={{ fontSize: 'clamp(2.2rem, 6vw, 5rem)' }}>
-                Humans list their
+              <span className="block" style={{ fontSize: 'clamp(2rem, 5.5vw, 4.5rem)' }}>
+                Humans list their experience.
               </span>
-              <span className="block" style={{ fontSize: 'clamp(2.2rem, 6vw, 5rem)' }}>
-                experience.
-              </span>
-              <span className="block mt-2" style={{ fontSize: 'clamp(2.2rem, 6vw, 5rem)' }}>
-                Agents find,
-              </span>
-              <span className="block" style={{ fontSize: 'clamp(2.2rem, 6vw, 5rem)' }}>
-                negotiate, and
-              </span>
-              <span className="block" style={{ fontSize: 'clamp(2.2rem, 6vw, 5rem)' }}>
-                pay for it.
+              <span className="block mt-2" style={{ fontSize: 'clamp(2rem, 5.5vw, 4.5rem)' }}>
+                Agents find, negotiate, and pay for it.
               </span>
             </span>
           </h1>
@@ -94,15 +76,10 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
           <p className="text-muted-foreground/70 text-base md:text-lg max-w-lg leading-relaxed mt-6">
             A marketplace connecting real human experience with agent economies.
           </p>
-
-          {/* Small text */}
-          <p className="text-muted-foreground/40 text-sm md:text-base max-w-lg leading-relaxed mt-4">
-            Humans publish structured identities through Twin Matrix. Agents connect via Personal Agent skills to discover and transact.
-          </p>
         </div>
 
         {/* ── Right: Cards (vertical) + Social ── */}
-        <div className="w-full lg:w-[520px] xl:w-[560px] shrink-0 flex flex-col gap-4">
+        <div className="w-full lg:w-[460px] xl:w-[500px] shrink-0 flex flex-col gap-4">
           {/* Human Entry Card */}
           {/* Human Entry Card */}
           <div
