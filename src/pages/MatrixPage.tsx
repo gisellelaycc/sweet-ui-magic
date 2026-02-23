@@ -120,7 +120,7 @@ const MatrixPage = () => {
 
             {tab === 'matrix' && (
               <div className="animate-fade-in">
-                <OnchainIdentityStatePage
+              <OnchainIdentityStatePage
                   tokenId={tokenId}
                   walletAddress={walletAddress}
                   latestVersion={latestVersion}
@@ -131,6 +131,7 @@ const MatrixPage = () => {
                     setState((s) => ({ ...s, step: 2, activeModules: s.activeModules.filter((m) => m === 'sport') }));
                     navigate('/mint');
                   }}
+                  onSetupAgent={() => navigate('/account?tab=authorizations&action=new')}
                   onRefresh={() => void refreshOnchainState()}
                   isRefreshing={isCheckingToken}
                 />

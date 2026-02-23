@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTwinMatrix } from '@/contexts/TwinMatrixContext';
 import { PageLayout } from '@/components/twin-matrix/PageLayout';
 import { AuthStep } from '@/components/twin-matrix/steps/AuthStep';
@@ -10,6 +10,7 @@ type AccountTab = 'wallet' | 'authorizations' | 'settings';
 
 const AccountPage = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const {
     isConnected,
     address,
@@ -27,9 +28,18 @@ const AccountPage = () => {
     switchToBscTestnet,
   } = useTwinMatrix();
 
-  const [tab, setTab] = useState<AccountTab>('wallet');
-  const [authView, setAuthView] = useState<'list' | 'form' | 'edit'>('list');
+  const initialTab = (searchParams.get('tab') as AccountTab) || 'wallet';
+  const initialAction = searchParams.get('action');
+  const [tab, setTab] = useState<AccountTab>(initialTab);
+  const [authView, setAuthView] = useState<'list' | 'form' | 'edit'>(initialAction === 'new' ? 'form' : 'list');
   const [editingAgent, setEditingAgent] = useState<string | null>(null);
+
+  // Sync tab from URL params on mount
+  useEffect(() => {
+    if (searchParams.get('tab') || searchParams.get('action')) {
+      setSearchParams({}, { replace: true });
+    }
+  }, []);
 
   const cardStyle: React.CSSProperties = {
     border: '1px solid var(--glass-border)',
