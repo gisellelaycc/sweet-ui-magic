@@ -5,8 +5,78 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    /* Twin3 Dark Glassmorphism Theme */
+  /* ── CREAM (default) ── */
+  :root,
+  [data-theme="cream"] {
+    --background: 37 33% 95%;
+    --foreground: 228 14% 12%;
+
+    --card: 37 25% 92%;
+    --card-foreground: 228 14% 12%;
+
+    --popover: 37 25% 92%;
+    --popover-foreground: 228 14% 12%;
+
+    --primary: 228 14% 12%;
+    --primary-foreground: 37 33% 95%;
+
+    --secondary: 30 10% 70%;
+    --secondary-foreground: 228 14% 12%;
+
+    --muted: 33 15% 88%;
+    --muted-foreground: 220 8% 45%;
+
+    --accent: 30 10% 70%;
+    --accent-foreground: 228 14% 12%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 30 10% 70% / 0.4;
+    --input: 30 10% 70% / 0.4;
+    --ring: 228 14% 12% / 0.2;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 37 30% 93%;
+    --sidebar-foreground: 220 9% 30%;
+    --sidebar-primary: 228 14% 12%;
+    --sidebar-primary-foreground: 37 33% 95%;
+    --sidebar-accent: 228 14% 12% / 0.06;
+    --sidebar-accent-foreground: 228 14% 12%;
+    --sidebar-border: 30 10% 70% / 0.3;
+    --sidebar-ring: 228 14% 12% / 0.2;
+
+    /* Twin3 Custom Tokens */
+    --glass-bg: rgba(0, 0, 0, 0.04);
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --glass-blur: 40px;
+
+    --color-text-primary: 228 14% 8%;
+    --color-text-secondary: 220 8% 40%;
+    --color-text-dim: 30 10% 60%;
+    --color-success: 142 71% 40%;
+    --color-warning: 33 100% 45%;
+
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.12);
+    --glow-primary: 0 0 0 1px rgba(0, 0, 0, 0.06);
+    --glow-accent: 0 0 24px rgba(0, 0, 0, 0.04);
+
+    --page-bg: 37 33% 95%;
+    --page-fg: 228 14% 12%;
+    --nav-bg: rgba(247, 245, 237, 0.7);
+
+    /* Matrix Dimension Colors */
+    --matrix-physical: 8 100% 41%;
+    --matrix-social: 44 100% 51%;
+    --matrix-digital: 207 52% 51%;
+    --matrix-spiritual: 173 74% 36%;
+  }
+
+  /* ── DARK ── */
+  [data-theme="dark"] {
     --background: 228 14% 6%;
     --foreground: 225 14% 93%;
 
@@ -46,7 +116,6 @@
     --sidebar-border: 0 0% 100% / 0.06;
     --sidebar-ring: 0 0% 100% / 0.2;
 
-    /* Twin3 Custom Tokens */
     --glass-bg: rgba(255, 255, 255, 0.08);
     --glass-border: rgba(255, 255, 255, 0.10);
     --glass-blur: 40px;
@@ -63,7 +132,77 @@
     --glow-primary: 0 0 0 1px rgba(255, 255, 255, 0.08);
     --glow-accent: 0 0 24px rgba(255, 255, 255, 0.06);
 
-    /* Matrix Dimension Colors */
+    --page-bg: 228 14% 4%;
+    --page-fg: 225 14% 93%;
+    --nav-bg: rgba(10, 12, 14, 0.3);
+
+    --matrix-physical: 8 100% 41%;
+    --matrix-social: 44 100% 51%;
+    --matrix-digital: 207 52% 51%;
+    --matrix-spiritual: 173 74% 36%;
+  }
+
+  /* ── LIGHT ── */
+  [data-theme="light"] {
+    --background: 0 0% 100%;
+    --foreground: 228 14% 12%;
+
+    --card: 220 14% 97%;
+    --card-foreground: 228 14% 12%;
+
+    --popover: 220 14% 97%;
+    --popover-foreground: 228 14% 12%;
+
+    --primary: 228 14% 12%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 9% 80%;
+    --secondary-foreground: 228 14% 12%;
+
+    --muted: 220 14% 94%;
+    --muted-foreground: 220 8% 45%;
+
+    --accent: 220 9% 80%;
+    --accent-foreground: 228 14% 12%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 9% 80% / 0.5;
+    --input: 220 9% 80% / 0.5;
+    --ring: 228 14% 12% / 0.2;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 220 14% 96%;
+    --sidebar-foreground: 220 9% 30%;
+    --sidebar-primary: 228 14% 12%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 228 14% 12% / 0.06;
+    --sidebar-accent-foreground: 228 14% 12%;
+    --sidebar-border: 220 9% 80% / 0.4;
+    --sidebar-ring: 228 14% 12% / 0.2;
+
+    --glass-bg: rgba(0, 0, 0, 0.03);
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --glass-blur: 40px;
+
+    --color-text-primary: 228 14% 8%;
+    --color-text-secondary: 220 8% 40%;
+    --color-text-dim: 220 9% 65%;
+    --color-success: 142 71% 40%;
+    --color-warning: 33 100% 45%;
+
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.07);
+    --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.10);
+    --glow-primary: 0 0 0 1px rgba(0, 0, 0, 0.05);
+    --glow-accent: 0 0 24px rgba(0, 0, 0, 0.03);
+
+    --page-bg: 0 0% 100%;
+    --page-fg: 228 14% 12%;
+    --nav-bg: rgba(255, 255, 255, 0.7);
+
     --matrix-physical: 8 100% 41%;
     --matrix-social: 44 100% 51%;
     --matrix-digital: 207 52% 51%;
@@ -88,16 +227,18 @@ html, body, #root {
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: hsl(228 14% 5%);
+  background: hsl(var(--background));
   background-attachment: fixed;
   color: hsl(var(--foreground));
   font-size: 14px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Ambient glow — Aqua #0AFFFF ↔ Celeste #ADFFFF drift */
+/* Ambient glow — Aqua #0AFFFF ↔ Celeste #ADFFFF drift (dark only) */
+[data-theme="dark"] body::after,
 body::after {
   content: '';
   position: fixed;
@@ -112,6 +253,13 @@ body::after {
   pointer-events: none;
   z-index: 0;
   animation: ambient-drift 20s ease-in-out infinite alternate;
+}
+
+[data-theme="cream"] body::after,
+[data-theme="light"] body::after {
+  background:
+    radial-gradient(ellipse 80% 70% at 20% 10%, rgba(10, 255, 255, 0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 80% at 85% 80%, rgba(173, 255, 255, 0.03) 0%, transparent 55%);
 }
 
 /* Subtle noise texture */
