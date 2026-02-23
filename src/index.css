@@ -5,76 +5,76 @@
 @tailwind utilities;
 
 @layer base {
-  /* ── CREAM (default) ── */
+  /* ── CREAM (default) — Nebula Mist ── */
   :root,
   [data-theme="cream"] {
-    --background: 220 20% 93%;
-    --foreground: 220 18% 18%;
+    --background: 40 20% 94%;
+    --foreground: 225 15% 15%;
 
-    --card: 220 15% 90%;
-    --card-foreground: 220 18% 18%;
+    --card: 38 16% 91%;
+    --card-foreground: 225 15% 15%;
 
-    --popover: 220 15% 90%;
-    --popover-foreground: 220 18% 18%;
+    --popover: 38 16% 91%;
+    --popover-foreground: 225 15% 15%;
 
-    --primary: 220 18% 18%;
-    --primary-foreground: 220 20% 95%;
+    --primary: 225 15% 15%;
+    --primary-foreground: 40 20% 96%;
 
-    --secondary: 200 10% 70%;
-    --secondary-foreground: 220 18% 18%;
+    --secondary: 30 8% 68%;
+    --secondary-foreground: 225 15% 15%;
 
-    --muted: 210 12% 86%;
-    --muted-foreground: 215 10% 42%;
+    --muted: 35 12% 87%;
+    --muted-foreground: 220 8% 40%;
 
-    --accent: 200 10% 70%;
-    --accent-foreground: 220 18% 18%;
+    --accent: 175 20% 45%;
+    --accent-foreground: 225 15% 15%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 210 12% 70% / 0.35;
-    --input: 210 12% 70% / 0.35;
-    --ring: 220 18% 18% / 0.2;
+    --border: 30 8% 68% / 0.35;
+    --input: 30 8% 68% / 0.35;
+    --ring: 225 15% 15% / 0.2;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 220 18% 91%;
-    --sidebar-foreground: 215 10% 30%;
-    --sidebar-primary: 220 18% 18%;
-    --sidebar-primary-foreground: 220 20% 95%;
-    --sidebar-accent: 220 18% 18% / 0.06;
-    --sidebar-accent-foreground: 220 18% 18%;
-    --sidebar-border: 210 12% 70% / 0.3;
-    --sidebar-ring: 220 18% 18% / 0.2;
+    --sidebar-background: 38 16% 92%;
+    --sidebar-foreground: 220 8% 30%;
+    --sidebar-primary: 225 15% 15%;
+    --sidebar-primary-foreground: 40 20% 96%;
+    --sidebar-accent: 225 15% 15% / 0.06;
+    --sidebar-accent-foreground: 225 15% 15%;
+    --sidebar-border: 30 8% 68% / 0.3;
+    --sidebar-ring: 225 15% 15% / 0.2;
 
     /* Twin3 Custom Tokens */
-    --glass-bg: rgba(255, 255, 255, 0.12);
-    --glass-border: rgba(255, 255, 255, 0.25);
-    --glass-blur: 40px;
+    --glass-bg: rgba(255, 255, 255, 0.10);
+    --glass-border: rgba(255, 255, 255, 0.22);
+    --glass-blur: 24px;
 
-    --color-text-primary: 220 18% 14%;
-    --color-text-secondary: 215 10% 38%;
-    --color-text-dim: 210 8% 55%;
-    --color-success: 164 24% 60%;
-    --color-success-deep: 177 80% 22%;
+    --color-text-primary: 225 15% 12%;
+    --color-text-secondary: 220 8% 36%;
+    --color-text-dim: 30 6% 52%;
+    --color-success: 175 20% 45%;
+    --color-success-deep: 177 40% 28%;
     --color-warning: 33 100% 45%;
 
-    --shadow-sm: 0 2px 8px rgba(0, 40, 80, 0.06);
-    --shadow-md: 0 8px 24px rgba(0, 40, 80, 0.08);
-    --shadow-lg: 0 16px 48px rgba(0, 40, 80, 0.10);
-    --glow-primary: 0 0 0 1px rgba(255, 255, 255, 0.3);
-    --glow-accent: 0 0 24px rgba(0, 180, 180, 0.06);
+    --shadow-sm: 0 2px 8px rgba(30, 30, 50, 0.06);
+    --shadow-md: 0 8px 24px rgba(30, 30, 50, 0.08);
+    --shadow-lg: 0 16px 48px rgba(30, 30, 50, 0.10);
+    --glow-primary: 0 0 0 1px rgba(255, 255, 255, 0.25);
+    --glow-accent: 0 0 20px rgba(100, 160, 155, 0.06);
 
-    --page-bg: 220 20% 93%;
-    --page-fg: 220 18% 18%;
-    --nav-bg: rgba(220, 225, 235, 0.55);
+    --page-bg: 40 20% 94%;
+    --page-fg: 225 15% 15%;
+    --nav-bg: rgba(244, 240, 232, 0.6);
 
     /* Matrix Dimension Colors */
     --matrix-physical: 8 100% 41%;
     --matrix-social: 44 100% 51%;
     --matrix-digital: 207 52% 51%;
     --matrix-spiritual: 173 74% 36%;
-    --matrix-grid-bg: hsla(177, 80%, 22%, 0.08);
+    --matrix-grid-bg: hsla(175, 20%, 45%, 0.08);
   }
 
   /* ── DARK ── */
@@ -195,18 +195,19 @@ body::after {
 
   [data-theme="cream"] body::after {
   background:
-    /* Core nebula: bright center fading outward */
-    radial-gradient(ellipse 90% 80% at 50% 45%, rgba(220, 230, 245, 0.95) 0%, transparent 70%),
-    /* Teal nebula wisps */
-    radial-gradient(ellipse 70% 60% at 20% 15%, rgba(0, 180, 170, 0.10) 0%, transparent 55%),
-    radial-gradient(ellipse 60% 70% at 82% 75%, rgba(0, 170, 180, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse 50% 50% at 65% 20%, rgba(0, 190, 180, 0.06) 0%, transparent 45%),
-    /* Cool purple-blue wisps */
-    radial-gradient(ellipse 55% 65% at 10% 70%, rgba(100, 120, 200, 0.07) 0%, transparent 50%),
-    radial-gradient(ellipse 60% 40% at 90% 30%, rgba(120, 130, 210, 0.05) 0%, transparent 45%);
+    /* Warm center glow */
+    radial-gradient(ellipse 85% 75% at 50% 45%, rgba(250, 248, 240, 0.9) 0%, transparent 65%),
+    /* Subtle warm-teal wisps (very muted) */
+    radial-gradient(ellipse 65% 55% at 18% 12%, rgba(100, 160, 155, 0.06) 0%, transparent 55%),
+    radial-gradient(ellipse 55% 65% at 84% 78%, rgba(100, 155, 160, 0.05) 0%, transparent 50%),
+    /* Warm corner darks (vignette built into gradient) */
+    radial-gradient(ellipse 100% 100% at 0% 0%, rgba(180, 170, 150, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse 100% 100% at 100% 100%, rgba(170, 165, 150, 0.10) 0%, transparent 50%),
+    radial-gradient(ellipse 100% 100% at 100% 0%, rgba(175, 168, 155, 0.08) 0%, transparent 45%),
+    radial-gradient(ellipse 100% 100% at 0% 100%, rgba(175, 165, 148, 0.08) 0%, transparent 45%);
 }
 
-/* Vignette for cream mode */
+/* Vignette overlay for cream mode */
 [data-theme="cream"] body::before,
 :root body::before {
   background-image: none !important;
@@ -218,10 +219,9 @@ body::after {
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(ellipse 100% 100% at 50% 50%, transparent 50%, rgba(140, 155, 180, 0.18) 100%);
+    radial-gradient(ellipse 110% 110% at 50% 50%, transparent 45%, rgba(160, 150, 135, 0.15) 100%);
   pointer-events: none;
   z-index: 1;
-  mix-blend-mode: multiply;
 }
 
 /* Subtle noise texture */
@@ -296,16 +296,15 @@ body::before {
     overflow: hidden;
   }
 
-  /* Cream mode glass: inset highlight + cool shadow */
+  /* Cream mode glass: inset highlight + warm cool shadow */
   [data-theme="cream"] .glass-card,
   :root .glass-card {
-    background: rgba(255, 255, 255, 0.10);
-    border-color: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.28);
     box-shadow:
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.5),
-      inset 0 0 0 1px rgba(255, 255, 255, 0.08),
-      0 4px 16px -4px rgba(100, 130, 180, 0.12),
-      0 1px 3px rgba(100, 130, 180, 0.06);
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.45),
+      0 4px 16px -4px rgba(60, 55, 45, 0.08),
+      0 1px 3px rgba(60, 55, 45, 0.04);
   }
 
   [data-theme="dark"] .glass-card {
@@ -320,10 +319,10 @@ body::before {
     border-color: hsl(var(--foreground) / 0.18);
   }
 
-  /* Cream mode: teal text gets soft glow */
+  /* Cream mode: teal text gets subtle clarity (no glow) */
   [data-theme="cream"] .text-teal-glow,
   :root .text-teal-glow {
-    text-shadow: 0 0 12px rgba(0, 180, 170, 0.2), 0 0 24px rgba(0, 180, 170, 0.08);
+    text-shadow: none;
   }
 
   .chip {
@@ -401,9 +400,9 @@ body::before {
 }
 
 [data-theme="cream"] .slider-thumb {
-  background: radial-gradient(circle, hsl(177, 100%, 14%) 0%, hsla(177, 100%, 14%, 0.6) 50%, transparent 75%);
-  box-shadow: 0 0 6px hsla(177, 100%, 14%, 0.4), 0 0 14px hsla(164, 24%, 74%, 0.3);
-  border-color: hsla(177, 100%, 14%, 0.3);
+  background: radial-gradient(circle, hsl(175, 30%, 30%) 0%, hsla(175, 25%, 35%, 0.5) 50%, transparent 75%);
+  box-shadow: 0 0 6px hsla(175, 25%, 35%, 0.3), 0 0 12px hsla(175, 20%, 45%, 0.15);
+  border-color: hsla(175, 25%, 35%, 0.2);
 }
 
 /* Animations */
@@ -414,6 +413,25 @@ body::before {
   50% {
     box-shadow: 0 0 16px rgba(10, 255, 255, 0.45), 0 0 40px rgba(10, 255, 255, 0.15);
   }
+}
+
+/* Cream mode: muted teal glow, no neon */
+[data-theme="cream"] .btn-twin-primary:not(:disabled),
+:root .btn-twin-primary:not(:disabled) {
+  animation: btn-pulse-glow-cream 2.5s ease-in-out infinite;
+}
+
+@keyframes btn-pulse-glow-cream {
+  0%, 100% {
+    box-shadow: 0 0 6px rgba(60, 55, 45, 0.08), 0 0 16px rgba(60, 55, 45, 0.04);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(60, 55, 45, 0.14), 0 0 28px rgba(60, 55, 45, 0.06);
+  }
+}
+
+[data-theme="dark"] .btn-twin-primary:not(:disabled) {
+  animation: btn-pulse-glow 2s ease-in-out infinite;
 }
 
 @keyframes btn-pulse-glow-red {
