@@ -120,7 +120,7 @@ export const OnchainIdentityStatePage = ({
             >
               Identity State
             </h2>
-            <p className="text-base text-muted-foreground mt-1">
+            <p className="text-sm text-muted-foreground mt-1">
               On-chain state from TwinMatrixSBT
             </p>
           </div>
@@ -170,31 +170,31 @@ export const OnchainIdentityStatePage = ({
           <div
             className="flex items-center justify-between gap-4 px-6 py-4 rounded-2xl animate-fade-in cursor-pointer group"
             style={{
-              background: 'rgba(10, 255, 255, 0.04)',
-              border: '1px solid rgba(10, 255, 255, 0.15)',
+              background: 'rgba(242, 133, 13, 0.06)',
+              border: '1px solid rgba(242, 133, 13, 0.25)',
             }}
             onClick={onSetupAgent}
           >
             <div className="flex items-center gap-3">
               <span className="text-xl">🤖</span>
               <div>
-                <p className="text-sm font-medium text-foreground/90">
-                  {t('agentStudio.identityCta') || 'Your identity is ready. Activate a Personal Agent to start earning.'}
+                <p className="text-sm font-medium text-foreground">
+                  {t('agentStudio.identityCta')}
                 </p>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  {t('agentStudio.identityCtaDesc') || 'Let an agent act on your behalf — match signals, accept tasks, and manage offers.'}
+                <p className="text-sm text-muted-foreground mt-0.5">
+                  {t('agentStudio.identityCtaDesc')}
                 </p>
               </div>
             </div>
             <button
               className="shrink-0 py-2 px-5 rounded-xl text-sm font-semibold transition-colors"
               style={{
-                background: 'rgba(10, 255, 255, 0.12)',
-                color: 'rgba(10, 255, 255, 0.9)',
-                border: '1px solid rgba(10, 255, 255, 0.2)',
+                background: 'rgba(242, 133, 13, 0.15)',
+                color: '#F2850D',
+                border: '1px solid rgba(242, 133, 13, 0.3)',
               }}
             >
-              {t('agentStudio.activateAgent') || 'Activate Agent'}
+              {t('agentStudio.activateAgent')}
             </button>
           </div>
         )}
@@ -299,7 +299,7 @@ export const OnchainIdentityStatePage = ({
                   <p className="text-sm font-semibold text-foreground/80 uppercase tracking-wide mb-2">
                     Refine Your Matrix
                   </p>
-                  <p className="text-xs text-muted-foreground leading-relaxed mb-3">
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-3">
                     Update your identity dimensions to improve your Twin Matrix projection and earn more points.
                   </p>
                   <button
@@ -324,7 +324,7 @@ export const OnchainIdentityStatePage = ({
                   <p className="text-sm font-semibold text-foreground/80 uppercase tracking-wide mb-2">
                     Confirm On-chain
                   </p>
-                  <p className="text-xs text-muted-foreground leading-relaxed mb-3">
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-3">
                     Commit your updated matrix to the blockchain. This seals your identity state permanently.
                   </p>
                   <button
@@ -377,7 +377,7 @@ export const OnchainIdentityStatePage = ({
           <div style={cardStyle}>
             <p className="text-sm uppercase tracking-[0.15em] text-muted-foreground font-heading mb-4">{t('dashboard.versionHistory')}</p>
             {versions.length === 0 ? (
-              <p className="text-xs text-muted-foreground">No versions recorded yet.</p>
+              <p className="text-sm text-muted-foreground">No versions recorded yet.</p>
             ) : (
               versions.map((item, idx) => (
                 <div key={item.version}>
@@ -403,7 +403,7 @@ export const OnchainIdentityStatePage = ({
           <div style={cardStyle}>
             <p className="text-sm uppercase tracking-[0.15em] text-muted-foreground font-heading mb-4">{t('dashboard.boundAgents')}</p>
             {boundAgents.length === 0 ? (
-              <p className="text-xs text-muted-foreground">{t('agentStudio.noBoundAgents')}</p>
+              <p className="text-sm text-muted-foreground">{t('agentStudio.noBoundAgents')}</p>
             ) : (
               boundAgents.map((agent, idx) => (
                 <div key={agent.address}>
