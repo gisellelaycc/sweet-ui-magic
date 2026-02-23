@@ -142,7 +142,7 @@ export const AgentPermissionEditPage = ({
           onClick={onBack}
           className="text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
-          ← {t('agent.backToStudio')}
+          ← Back to Identity
         </button>
 
         <div>
