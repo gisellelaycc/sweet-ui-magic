@@ -245,8 +245,8 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
 
       {/* ── Trust Primitives ── */}
       <div className="px-6 md:px-12 lg:px-16 py-20 max-w-[1400px] mx-auto w-full">
-        <h2 className="text-4xl md:text-5xl font-heading font-bold text-left mb-4">Trust Primitives</h2>
-        <p className="text-left text-lg text-muted-foreground mb-14 max-w-2xl leading-relaxed">
+        <h2 className="text-4xl md:text-5xl font-heading font-bold text-center mb-4">Trust Primitives</h2>
+        <p className="text-center text-lg text-muted-foreground mb-14 max-w-2xl mx-auto leading-relaxed">
           Every interaction is built on verifiable, immutable trust layers.
         </p>
         <div className="grid md:grid-cols-3 gap-6">
