@@ -460,8 +460,8 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
           {subStep === 'list' && (
             <div className="animate-fade-in space-y-0">
               <div className="text-center pb-6">
-                <h2 className="text-2xl font-bold mb-1">{t('agent.yourAgents')}</h2>
-                <p className="text-sm text-muted-foreground">{t('agent.manageCreate')}</p>
+                <h2 className="font-heading font-extrabold leading-tight tracking-tight text-foreground" style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.5rem)' }}>{t('agent.yourAgents')}</h2>
+                <p className="text-base md:text-lg text-muted-foreground mt-1">{t('agent.manageCreate')}</p>
               </div>
 
               <ThinDivider />
@@ -539,8 +539,8 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
 
               <div className="text-center pb-8">
                 <img src={lobsterIcon} alt="" className="w-16 h-16 mx-auto mb-4" style={{ filter: 'drop-shadow(0 0 8px rgba(242,68,85,0.5))', opacity: 0.9 }} />
-                <h2 className="text-2xl font-bold mb-1">{t('agent.activate')}</h2>
-                <p className="text-sm text-muted-foreground">{t('agent.activateDesc')}</p>
+                <h2 className="font-heading font-extrabold leading-tight tracking-tight text-foreground" style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.5rem)' }}>{t('agent.activate')}</h2>
+                <p className="text-base md:text-lg text-muted-foreground mt-1">{t('agent.activateDesc')}</p>
               </div>
 
               <ThinDivider />
@@ -652,8 +652,8 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
           {subStep === 'telegram' && (
             <div className="animate-fade-in space-y-0">
               <div className="text-center pb-8">
-                <h2 className="text-2xl font-bold mb-1">{t('telegram.title')}</h2>
-                <p className="text-sm text-muted-foreground">{t('telegram.subtitle')}</p>
+                <h2 className="font-heading font-extrabold leading-tight tracking-tight text-foreground" style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.5rem)' }}>{t('telegram.title')}</h2>
+                <p className="text-base md:text-lg text-muted-foreground mt-1">{t('telegram.subtitle')}</p>
               </div>
 
               <ThinDivider />
@@ -688,8 +688,8 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
           {subStep === 'resolving' && (
             <div className="animate-fade-in space-y-0">
               <div className="text-center pb-8">
-                <h2 className="text-2xl font-bold mb-1">{t('agent.waitingWallet')}</h2>
-                <p className="text-sm text-muted-foreground">Telegram confirmed. We are waiting for backend to return agentAddress.</p>
+                <h2 className="font-heading font-extrabold leading-tight tracking-tight text-foreground" style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.5rem)' }}>{t('agent.waitingWallet')}</h2>
+                <p className="text-base md:text-lg text-muted-foreground mt-1">Telegram confirmed. We are waiting for backend to return agentAddress.</p>
               </div>
 
               <ThinDivider />
@@ -725,8 +725,8 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
           {subStep === 'activated' && (
             <div className="animate-fade-in space-y-0">
               <div className="text-center pb-8">
-                <h2 className="text-2xl font-bold mb-1">{t('activated.title')}</h2>
-                <p className="text-sm text-muted-foreground">{t('activated.subtitle')}</p>
+                <h2 className="font-heading font-extrabold leading-tight tracking-tight text-foreground" style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.5rem)' }}>{t('activated.title')}</h2>
+                <p className="text-base md:text-lg text-muted-foreground mt-1">{t('activated.subtitle')}</p>
               </div>
 
               <ThinDivider />

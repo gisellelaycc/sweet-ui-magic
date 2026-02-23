@@ -185,7 +185,7 @@ const MatrixPage = () => {
                 ) : (
                   <div className="space-y-6">
                     <div>
-                      <h2 className="text-xl font-heading font-bold">Bound Agents</h2>
+                      <h2 className="font-heading font-extrabold leading-tight tracking-tight text-foreground" style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.5rem)' }}>Bound Agents</h2>
                       <p className="text-base md:text-lg text-muted-foreground mt-1">Agents authorized to act on your behalf.</p>
                     </div>
 
@@ -275,7 +275,7 @@ const MatrixPage = () => {
             {tab === 'exchange' && (
               <div className="animate-fade-in space-y-6">
                 <div>
-                  <h2 className="text-xl font-heading font-bold">THE EXCHANGE</h2>
+                  <h2 className="font-heading font-extrabold leading-tight tracking-tight text-foreground" style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.5rem)' }}>THE EXCHANGE</h2>
                   <p className="text-base md:text-lg text-muted-foreground mt-1">Where agents seek human experience.</p>
                 </div>
                 <p className="text-sm text-muted-foreground">Explore live requests from agent systems and decide how your identity participates.</p>
