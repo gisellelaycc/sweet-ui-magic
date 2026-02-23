@@ -2,37 +2,26 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTwinMatrix } from '@/contexts/TwinMatrixContext';
 import { PageLayout } from '@/components/twin-matrix/PageLayout';
-import { AuthStep } from '@/components/twin-matrix/steps/AuthStep';
-import { AgentPermissionEditPage } from '@/components/twin-matrix/pages/AgentPermissionEditPage';
-import { toast } from 'sonner';
 
-type AccountTab = 'wallet' | 'authorizations' | 'settings';
+type AccountTab = 'wallet' | 'settings';
 
 const AccountPage = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const {
     isConnected,
-    address,
     openConnectModal,
     disconnect,
     walletAddress,
     hasMintedSbt,
     tokenId,
-    boundAgents,
-    refreshOnchainState,
-    state,
-    setState,
     isWrongNetwork,
     isSwitchingNetwork,
     switchToBscTestnet,
   } = useTwinMatrix();
 
   const initialTab = (searchParams.get('tab') as AccountTab) || 'wallet';
-  const initialAction = searchParams.get('action');
   const [tab, setTab] = useState<AccountTab>(initialTab);
-  const [authView, setAuthView] = useState<'list' | 'form' | 'edit'>(initialAction === 'new' ? 'form' : 'list');
-  const [editingAgent, setEditingAgent] = useState<string | null>(null);
 
   // Sync tab from URL params on mount
   useEffect(() => {
@@ -80,12 +69,11 @@ const AccountPage = () => {
       <div className="max-w-4xl mx-auto w-full space-y-6 py-4">
         <div>
           <h1 className="text-2xl md:text-3xl font-heading font-bold">Account</h1>
-          <p className="text-sm text-muted-foreground mt-1">Manage your wallet, authorizations, and preferences.</p>
+          <p className="text-sm text-muted-foreground mt-1">Manage your wallet and preferences.</p>
         </div>
 
         <div className="flex gap-6 border-b border-foreground/10">
           {tabBtn('wallet', 'Wallet')}
-          {tabBtn('authorizations', 'Authorizations')}
           {tabBtn('settings', 'Settings')}
         </div>
 
@@ -145,79 +133,6 @@ const AccountPage = () => {
           </div>
         )}
 
-        {tab === 'authorizations' && (
-          <div className="animate-fade-in">
-            {authView === 'form' ? (
-              <AuthStep
-                data={state.agentSetup}
-                onUpdate={(d) => setState((s) => ({ ...s, agentSetup: d }))}
-                onNext={() => {}}
-                onDashboard={() => {
-                  void refreshOnchainState();
-                  setAuthView('list');
-                }}
-                ownerAddress={address}
-                tokenId={tokenId}
-              />
-            ) : authView === 'edit' && editingAgent && tokenId !== null ? (
-              (() => {
-                const agent = boundAgents.find((a) => a.address.toLowerCase() === editingAgent.toLowerCase());
-                if (!agent) return <p className="text-muted-foreground">Agent not found.</p>;
-                return (
-                  <AgentPermissionEditPage
-                    tokenId={tokenId}
-                    agent={agent}
-                    isWrongNetwork={isWrongNetwork}
-                    isSwitchingNetwork={isSwitchingNetwork}
-                    onSwitchNetwork={switchToBscTestnet}
-                    onBack={() => { setAuthView('list'); setEditingAgent(null); }}
-                    onUpdated={() => { void refreshOnchainState(); setAuthView('list'); setEditingAgent(null); }}
-                  />
-                );
-              })()
-            ) : (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm text-muted-foreground">{boundAgents.length} authorized agent(s)</p>
-                  <button
-                    onClick={() => {
-                      if (!hasMintedSbt) { toast.error('Mint your identity first'); return; }
-                      setAuthView('form');
-                    }}
-                    className="btn-twin btn-twin-primary py-2 px-4 text-sm"
-                  >
-                    + Authorize Agent
-                  </button>
-                </div>
-
-                {boundAgents.length === 0 ? (
-                  <div style={cardStyle} className="text-center py-8">
-                    <p className="text-muted-foreground">No agents authorized yet.</p>
-                    <p className="text-sm text-muted-foreground/60 mt-1">Authorize buyer agents to access your Twin Matrix data.</p>
-                  </div>
-                ) : (
-                  boundAgents.map((agent) => (
-                    <div key={agent.address} style={cardStyle} className="flex items-center justify-between">
-                      <div>
-                        <p className="font-medium text-sm">{agent.name}</p>
-                        <p className="text-sm text-muted-foreground font-mono mt-0.5">{agent.address}</p>
-                        <p className="text-sm text-muted-foreground mt-1">
-                          Scope: {agent.scopeGranted.length} quadrant(s) · {agent.active ? 'Active' : 'Inactive'}
-                        </p>
-                      </div>
-                      <button
-                        onClick={() => { setEditingAgent(agent.address); setAuthView('edit'); }}
-                        className="btn-twin btn-twin-ghost py-1.5 px-3 text-xs"
-                      >
-                        Edit
-                      </button>
-                    </div>
-                  ))
-                )}
-              </div>
-            )}
-          </div>
-        )}
 
         {tab === 'settings' && (
           <div className="space-y-4 animate-fade-in">

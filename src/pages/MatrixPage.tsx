@@ -5,6 +5,9 @@ import { useI18n } from '@/lib/i18n';
 import { PageLayout } from '@/components/twin-matrix/PageLayout';
 import { OnchainIdentityStatePage } from '@/components/twin-matrix/pages/OnchainIdentityStatePage';
 import { SignalRecordsPage } from '@/components/twin-matrix/pages/SignalRecordsPage';
+import { AuthStep } from '@/components/twin-matrix/steps/AuthStep';
+import { AgentPermissionEditPage } from '@/components/twin-matrix/pages/AgentPermissionEditPage';
+import { toast } from 'sonner';
 
 type MatrixTab = 'matrix' | 'agents' | 'listing' | 'opportunities';
 
@@ -25,10 +28,17 @@ const MatrixPage = () => {
     refreshOnchainState,
     setState,
     setNeedsMatrixUpdate,
-    walletAddress
+    walletAddress,
+    address,
+    state,
+    isWrongNetwork,
+    isSwitchingNetwork,
+    switchToBscTestnet,
   } = useTwinMatrix();
 
   const [tab, setTab] = useState<MatrixTab>('matrix');
+  const [agentView, setAgentView] = useState<'list' | 'form' | 'edit'>('list');
+  const [editingAgent, setEditingAgent] = useState<string | null>(null);
 
   const cardStyle: React.CSSProperties = {
     border: '1px solid var(--glass-border)',
@@ -132,7 +142,7 @@ const MatrixPage = () => {
                 setState((s) => ({ ...s, step: 2, activeModules: s.activeModules.filter((m) => m === 'sport') }));
                 navigate('/mint');
               }}
-              onSetupAgent={() => navigate('/account?tab=authorizations&action=new')}
+              onSetupAgent={() => { setTab('agents'); setAgentView('form'); }}
               onRefresh={() => void refreshOnchainState()}
               isRefreshing={isCheckingToken} />
 
@@ -140,46 +150,92 @@ const MatrixPage = () => {
           }
 
             {tab === 'agents' &&
-          <div className="animate-fade-in space-y-6">
-                <div>
-                  <h2 className="text-xl font-heading font-bold">Bound Agents</h2>
-                  <p className="text-sm text-muted-foreground mt-1">Agents authorized to act on your behalf.</p>
-                </div>
+          <div className="animate-fade-in">
+                {agentView === 'form' ? (
+                  <AuthStep
+                    data={state.agentSetup}
+                    onUpdate={(d) => setState((s) => ({ ...s, agentSetup: d }))}
+                    onNext={() => {}}
+                    onDashboard={() => {
+                      void refreshOnchainState();
+                      setAgentView('list');
+                    }}
+                    ownerAddress={address}
+                    tokenId={tokenId}
+                  />
+                ) : agentView === 'edit' && editingAgent && tokenId !== null ? (
+                  (() => {
+                    const agent = boundAgents.find((a) => a.address.toLowerCase() === editingAgent.toLowerCase());
+                    if (!agent) return <p className="text-muted-foreground">Agent not found.</p>;
+                    return (
+                      <AgentPermissionEditPage
+                        tokenId={tokenId}
+                        agent={agent}
+                        isWrongNetwork={isWrongNetwork}
+                        isSwitchingNetwork={isSwitchingNetwork}
+                        onSwitchNetwork={switchToBscTestnet}
+                        onBack={() => { setAgentView('list'); setEditingAgent(null); }}
+                        onUpdated={() => { void refreshOnchainState(); setAgentView('list'); setEditingAgent(null); }}
+                      />
+                    );
+                  })()
+                ) : (
+                  <div className="space-y-6">
+                    <div>
+                      <h2 className="text-xl font-heading font-bold">Bound Agents</h2>
+                      <p className="text-sm text-muted-foreground mt-1">Agents authorized to act on your behalf.</p>
+                    </div>
 
-                {boundAgents.length === 0 ?
-            <div style={cardStyle} className="text-center py-12 space-y-4">
-                    
-                    <p className="text-sm text-muted-foreground">No agents bound yet. Activate an agent to start earning.</p>
-                    <button
-                onClick={() => navigate('/account?tab=authorizations&action=new')}
-                className="btn-twin btn-twin-primary py-3 px-6 text-sm">
-
-                      Activate Agent
-                    </button>
-                  </div> :
-
-            <div className="space-y-3">
-                    {boundAgents.map((agent) =>
-              <div key={agent.address} style={cardStyle} className="flex items-center justify-between gap-4">
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-2">
-                            <p className="text-sm font-medium truncate">{agent.name}</p>
-                            <span className={`text-xs px-2 py-0.5 rounded-full shrink-0 ${agent.active ? 'bg-[hsla(164,24%,74%,0.15)] text-[hsl(164,24%,74%)]' : 'bg-foreground/10 text-muted-foreground'}`}>
-                              {agent.active ? 'Active' : 'Inactive'}
-                            </span>
-                          </div>
-                          <p className="text-sm font-mono text-muted-foreground mt-1 truncate">{agent.address}</p>
-                        </div>
+                    {boundAgents.length === 0 ? (
+                      <div style={cardStyle} className="text-center py-12 space-y-4">
+                        <p className="text-sm text-muted-foreground">No agents bound yet. Activate an agent to start earning.</p>
                         <button
-                  onClick={() => navigate(`/account?tab=authorizations&edit=${agent.address}`)}
-                  className="shrink-0 text-xs text-muted-foreground hover:text-foreground transition-colors">
-
-                          Manage →
+                          onClick={() => {
+                            if (!hasMintedSbt) { toast.error('Mint your identity first'); return; }
+                            setAgentView('form');
+                          }}
+                          className="btn-twin btn-twin-primary py-3 px-6 text-sm">
+                          Activate Agent
                         </button>
                       </div>
-              )}
+                    ) : (
+                      <>
+                        <div className="flex items-center justify-between">
+                          <p className="text-sm text-muted-foreground">{boundAgents.length} authorized agent(s)</p>
+                          <button
+                            onClick={() => {
+                              if (!hasMintedSbt) { toast.error('Mint your identity first'); return; }
+                              setAgentView('form');
+                            }}
+                            className="btn-twin btn-twin-primary py-2 px-4 text-sm"
+                          >
+                            + Authorize Agent
+                          </button>
+                        </div>
+                        <div className="space-y-3">
+                          {boundAgents.map((agent) => (
+                            <div key={agent.address} style={cardStyle} className="flex items-center justify-between gap-4">
+                              <div className="min-w-0">
+                                <div className="flex items-center gap-2">
+                                  <p className="text-sm font-medium truncate">{agent.name}</p>
+                                  <span className={`text-xs px-2 py-0.5 rounded-full shrink-0 ${agent.active ? 'bg-[hsla(164,24%,74%,0.15)] text-[hsl(164,24%,74%)]' : 'bg-foreground/10 text-muted-foreground'}`}>
+                                    {agent.active ? 'Active' : 'Inactive'}
+                                  </span>
+                                </div>
+                                <p className="text-sm font-mono text-muted-foreground mt-1 truncate">{agent.address}</p>
+                              </div>
+                              <button
+                                onClick={() => { setEditingAgent(agent.address); setAgentView('edit'); }}
+                                className="shrink-0 text-xs text-muted-foreground hover:text-foreground transition-colors">
+                                Manage →
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    )}
                   </div>
-            }
+                )}
               </div>
           }
 
