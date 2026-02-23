@@ -161,39 +161,39 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
       </div>
 
       {/* ── How it Works ── */}
-      <div className="px-6 md:px-12 lg:px-16 py-16 max-w-[1400px] mx-auto w-full">
-        <h2 className="text-4xl md:text-5xl font-heading font-bold text-center mb-12">How it Works</h2>
-        <div className="grid md:grid-cols-2 gap-10">
+      <div className="px-6 md:px-12 lg:px-16 py-20 max-w-[1400px] mx-auto w-full">
+        <h2 className="text-4xl md:text-5xl font-heading font-bold text-center mb-14">How it Works</h2>
+        <div className="grid md:grid-cols-2 gap-12">
           {/* Humans */}
-          <div className="space-y-4">
-            <p className="text-base uppercase tracking-widest text-muted-foreground/60 font-heading">For Humans</p>
+          <div className="space-y-5">
+            <p className="text-lg uppercase tracking-widest text-muted-foreground/60 font-heading mb-2">For Humans</p>
             {[
               { step: '01', title: 'Verify', desc: "Prove your humanity through twin3.ai's verification protocol." },
               { step: '02', title: 'Build Your Twin Matrix', desc: 'Define your skills, experience, and identity layers through a guided wizard.' },
               { step: '03', title: 'Get Discovered', desc: 'Buyer agents find, negotiate, and pay for your verified experience.' },
             ].map((s) => (
-              <div key={s.step} className="flex gap-4 items-start" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.25rem 1.5rem', background: 'var(--glass-bg)', backdropFilter: 'blur(16px) saturate(160%)' }}>
-                <span className="text-base font-mono text-muted-foreground/40 mt-0.5">{s.step}</span>
+              <div key={s.step} className="flex gap-5 items-start" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.5rem 1.75rem', background: 'var(--glass-bg)', backdropFilter: 'blur(16px) saturate(160%)' }}>
+                <span className="text-2xl font-heading font-bold text-muted-foreground/30 mt-0.5 shrink-0">{s.step}</span>
                 <div>
-                  <p className="text-base font-semibold">{s.title}</p>
-                  <p className="text-sm text-muted-foreground mt-1">{s.desc}</p>
+                  <p className="text-xl font-heading font-bold">{s.title}</p>
+                  <p className="text-base text-muted-foreground mt-1.5 leading-relaxed">{s.desc}</p>
                 </div>
               </div>
             ))}
           </div>
           {/* Agents */}
-          <div className="space-y-4">
-            <p className="text-base uppercase tracking-widest text-muted-foreground/60 font-heading">For Agents</p>
+          <div className="space-y-5">
+            <p className="text-lg uppercase tracking-widest text-muted-foreground/60 font-heading mb-2">For Agents</p>
             {[
               { step: '01', title: 'Connect', desc: 'Register your buyer agent via Skill protocol, REST API, or SDK.' },
               { step: '02', title: 'Search & Match', desc: 'Query verified humans by skill, availability, and matrix signature.' },
               { step: '03', title: 'Negotiate & Pay', desc: 'Propose tasks, agree on terms, and execute on-chain payments.' },
             ].map((s) => (
-              <div key={s.step} className="flex gap-4 items-start" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.25rem 1.5rem', background: 'var(--glass-bg)', backdropFilter: 'blur(16px) saturate(160%)' }}>
-                <span className="text-base font-mono text-muted-foreground/40 mt-0.5">{s.step}</span>
+              <div key={s.step} className="flex gap-5 items-start" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.5rem 1.75rem', background: 'var(--glass-bg)', backdropFilter: 'blur(16px) saturate(160%)' }}>
+                <span className="text-2xl font-heading font-bold text-muted-foreground/30 mt-0.5 shrink-0">{s.step}</span>
                 <div>
-                  <p className="text-base font-semibold">{s.title}</p>
-                  <p className="text-sm text-muted-foreground mt-1">{s.desc}</p>
+                  <p className="text-xl font-heading font-bold">{s.title}</p>
+                  <p className="text-base text-muted-foreground mt-1.5 leading-relaxed">{s.desc}</p>
                 </div>
               </div>
             ))}
@@ -202,21 +202,21 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
       </div>
 
       {/* ── Trust Primitives ── */}
-      <div className="px-6 md:px-12 lg:px-16 py-16 max-w-[1400px] mx-auto w-full">
-        <h2 className="text-4xl md:text-5xl font-heading font-bold text-center mb-3">Trust Primitives</h2>
-        <p className="text-center text-base text-muted-foreground mb-12 max-w-lg mx-auto">
+      <div className="px-6 md:px-12 lg:px-16 py-20 max-w-[1400px] mx-auto w-full">
+        <h2 className="text-4xl md:text-5xl font-heading font-bold text-center mb-4">Trust Primitives</h2>
+        <p className="text-center text-lg text-muted-foreground mb-14 max-w-2xl mx-auto leading-relaxed">
           Every interaction is built on verifiable, immutable trust layers.
         </p>
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-3 gap-6">
           {[
             { step: '01', title: 'Human Verification', desc: 'Every seller is verified through twin3.ai before they can list experience. No bots. No fakes.' },
             { step: '02', title: 'Versioned Tasks', desc: 'Every task, negotiation, and completion is recorded as an immutable version on-chain.' },
             { step: '03', title: 'On-chain Records', desc: 'Twin Matrix state, authorizations, and payments are transparent and auditable on BSC.' },
           ].map((item) => (
-            <div key={item.title} className="text-center space-y-3" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.75rem', background: 'var(--glass-bg)', backdropFilter: 'blur(16px) saturate(160%)' }}>
-              <span className="text-base font-mono text-muted-foreground/40">{item.step}</span>
-              <p className="text-base font-semibold">{item.title}</p>
-              <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
+            <div key={item.title} className="text-center space-y-4" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '2rem', background: 'var(--glass-bg)', backdropFilter: 'blur(16px) saturate(160%)' }}>
+              <span className="text-2xl font-heading font-bold text-muted-foreground/30">{item.step}</span>
+              <p className="text-xl font-heading font-bold">{item.title}</p>
+              <p className="text-base text-muted-foreground leading-relaxed">{item.desc}</p>
             </div>
           ))}
         </div>
