@@ -195,23 +195,21 @@ body::after {
 
   [data-theme="cream"] body::after {
   background:
-    /* Tight center spotlight */
-    radial-gradient(ellipse 42% 35% at 50% 38%, rgba(255, 252, 245, 0.75) 0%, transparent 50%),
-    /* Secondary light kiss top-right */
-    radial-gradient(ellipse 30% 25% at 68% 12%, rgba(255, 250, 240, 0.30) 0%, transparent 45%),
-    /* Nebula fog wisps */
-    radial-gradient(ellipse 50% 40% at 18% 22%, rgba(150, 162, 158, 0.12) 0%, transparent 48%),
-    radial-gradient(ellipse 40% 50% at 82% 72%, rgba(148, 158, 155, 0.10) 0%, transparent 42%),
-    radial-gradient(ellipse 30% 25% at 45% 78%, rgba(145, 152, 148, 0.08) 0%, transparent 38%),
-    /* Softer vignette — warm taupe, not muddy dark */
-    radial-gradient(ellipse 95% 95% at 0% 0%, rgba(175, 168, 158, 0.18) 0%, transparent 50%),
-    radial-gradient(ellipse 95% 95% at 100% 100%, rgba(172, 165, 155, 0.16) 0%, transparent 50%),
-    radial-gradient(ellipse 95% 95% at 100% 0%, rgba(174, 166, 158, 0.14) 0%, transparent 45%),
-    radial-gradient(ellipse 95% 95% at 0% 100%, rgba(174, 166, 158, 0.14) 0%, transparent 45%);
+    /* Center darkening — warm deep tone, like dark mode's deep center */
+    radial-gradient(ellipse 50% 45% at 50% 42%, rgba(140, 135, 125, 0.30) 0%, transparent 55%),
+    radial-gradient(ellipse 35% 30% at 48% 38%, rgba(125, 120, 112, 0.18) 0%, transparent 45%),
+    /* Nebula fog wisps in the dark center */
+    radial-gradient(ellipse 45% 35% at 35% 35%, rgba(145, 155, 150, 0.10) 0%, transparent 45%),
+    radial-gradient(ellipse 35% 45% at 70% 55%, rgba(142, 150, 148, 0.08) 0%, transparent 40%),
+    /* Bright edges —米白 light pushing in from corners */
+    radial-gradient(ellipse 80% 80% at 0% 0%, rgba(245, 242, 235, 0.50) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 80% at 100% 100%, rgba(245, 242, 235, 0.45) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 80% at 100% 0%, rgba(245, 242, 235, 0.40) 0%, transparent 50%),
+    radial-gradient(ellipse 80% 80% at 0% 100%, rgba(245, 242, 235, 0.40) 0%, transparent 50%);
   animation: ambient-drift 20s ease-in-out infinite alternate;
 }
 
-/* Vignette overlay for cream mode */
+/* Vignette overlay for cream mode — reversed: center darker, edges lighter */
 [data-theme="cream"] body::before,
 :root body::before {
   background-image: none !important;
@@ -223,7 +221,7 @@ body::after {
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(ellipse 95% 95% at 50% 50%, transparent 35%, rgba(165, 158, 148, 0.20) 100%);
+    radial-gradient(ellipse 85% 85% at 50% 50%, rgba(120, 115, 108, 0.15) 0%, transparent 50%);
   pointer-events: none;
   z-index: 1;
 }
