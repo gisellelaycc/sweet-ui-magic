@@ -146,74 +146,6 @@
     --matrix-grid-bg: transparent;
   }
 
-  /* ── LIGHT ── */
-  [data-theme="light"] {
-    --background: 0 0% 100%;
-    --foreground: 228 14% 12%;
-
-    --card: 220 14% 97%;
-    --card-foreground: 228 14% 12%;
-
-    --popover: 220 14% 97%;
-    --popover-foreground: 228 14% 12%;
-
-    --primary: 228 14% 12%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 220 9% 80%;
-    --secondary-foreground: 228 14% 12%;
-
-    --muted: 220 14% 94%;
-    --muted-foreground: 220 8% 45%;
-
-    --accent: 220 9% 80%;
-    --accent-foreground: 228 14% 12%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 220 9% 80% / 0.5;
-    --input: 220 9% 80% / 0.5;
-    --ring: 228 14% 12% / 0.2;
-
-    --radius: 0.75rem;
-
-    --sidebar-background: 220 14% 96%;
-    --sidebar-foreground: 220 9% 30%;
-    --sidebar-primary: 228 14% 12%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 228 14% 12% / 0.06;
-    --sidebar-accent-foreground: 228 14% 12%;
-    --sidebar-border: 220 9% 80% / 0.4;
-    --sidebar-ring: 228 14% 12% / 0.2;
-
-    --glass-bg: rgba(0, 0, 0, 0.03);
-    --glass-border: rgba(0, 0, 0, 0.08);
-    --glass-blur: 40px;
-
-    --color-text-primary: 228 14% 8%;
-    --color-text-secondary: 220 8% 40%;
-    --color-text-dim: 220 9% 65%;
-    --color-success: 164 24% 74%;
-    --color-success-deep: 177 100% 14%;
-    --color-warning: 33 100% 45%;
-
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.07);
-    --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.10);
-    --glow-primary: 0 0 0 1px rgba(0, 0, 0, 0.05);
-    --glow-accent: 0 0 24px rgba(0, 0, 0, 0.03);
-
-    --page-bg: 0 0% 100%;
-    --page-fg: 228 14% 12%;
-    --nav-bg: rgba(255, 255, 255, 0.7);
-
-    --matrix-physical: 8 100% 41%;
-    --matrix-social: 44 100% 51%;
-    --matrix-digital: 207 52% 51%;
-    --matrix-spiritual: 173 74% 36%;
-    --matrix-grid-bg: hsla(177, 100%, 14%, 0.08);
-  }
 }
 
 /* Global Reset */
@@ -261,8 +193,7 @@ body::after {
   animation: ambient-drift 20s ease-in-out infinite alternate;
 }
 
-[data-theme="cream"] body::after,
-[data-theme="light"] body::after {
+  [data-theme="cream"] body::after {
   background:
     radial-gradient(ellipse 80% 70% at 15% 8%, rgba(10, 200, 200, 0.12) 0%, transparent 60%),
     radial-gradient(ellipse 70% 80% at 88% 82%, rgba(10, 200, 200, 0.10) 0%, transparent 55%),
@@ -326,8 +257,7 @@ body::before {
   }
 
   /* Invert white SVG icons on light themes */
-  [data-theme="cream"] .social-icon,
-  [data-theme="light"] .social-icon {
+  [data-theme="cream"] .social-icon {
     filter: invert(1);
   }
 
@@ -426,8 +356,7 @@ body::before {
   box-shadow: 0 0 8px rgba(10, 255, 255, 0.4), 0 0 18px rgba(173, 255, 255, 0.2), 0 0 30px rgba(10, 255, 255, 0.08);
 }
 
-[data-theme="cream"] .slider-thumb,
-[data-theme="light"] .slider-thumb {
+[data-theme="cream"] .slider-thumb {
   background: radial-gradient(circle, hsl(177, 100%, 14%) 0%, hsla(177, 100%, 14%, 0.6) 50%, transparent 75%);
   box-shadow: 0 0 6px hsla(177, 100%, 14%, 0.4), 0 0 14px hsla(164, 24%, 74%, 0.3);
   border-color: hsla(177, 100%, 14%, 0.3);
