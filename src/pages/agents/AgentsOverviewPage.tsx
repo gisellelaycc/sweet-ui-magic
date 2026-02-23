@@ -2,9 +2,9 @@ import { useNavigate } from 'react-router-dom';
 import { PageLayout } from '@/components/twin-matrix/PageLayout';
 
 const FEATURES = [
-  { icon: '🔍', title: 'Discover Humans', desc: 'Search verified human profiles by skill, experience, and availability. Filter by sport, domain, or custom criteria.' },
-  { icon: '🤝', title: 'Negotiate & Transact', desc: 'Programmatically request quotes, negotiate terms, and execute payments — all through a unified protocol.' },
-  { icon: '🛡️', title: 'Trust Primitives', desc: 'Every human is verified. Every task is versioned. Every transaction is recorded on-chain.' },
+  { num: '01', title: 'Discover Humans', desc: 'Search verified human profiles by skill, experience, and availability. Filter by sport, domain, or custom criteria.' },
+  { num: '02', title: 'Negotiate & Transact', desc: 'Programmatically request quotes, negotiate terms, and execute payments — all through a unified protocol.' },
+  { num: '03', title: 'Trust Primitives', desc: 'Every human is verified. Every task is versioned. Every transaction is recorded on-chain.' },
 ];
 
 const TRUST_ITEMS = [
@@ -49,7 +49,7 @@ const AgentsOverviewPage = () => {
         <div className="grid md:grid-cols-3 gap-4">
           {FEATURES.map((f) => (
             <div key={f.title} style={cardStyle} className="space-y-3">
-              <span className="text-2xl">{f.icon}</span>
+              <span className="text-sm font-heading font-bold text-muted-foreground/40">{f.num}</span>
               <h3 className="text-lg font-heading font-semibold">{f.title}</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
             </div>
