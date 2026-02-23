@@ -23,13 +23,6 @@ const AgentsApiPage = () => {
   const navigate = useNavigate();
   const [showAuth, setShowAuth] = useState(false);
 
-  const cardStyle: React.CSSProperties = {
-    border: '1px solid var(--glass-border)',
-    borderRadius: '16px',
-    padding: '1.75rem',
-    background: 'var(--glass-bg)',
-  };
-
   const methodColor = (m: string) => {
     if (m === 'GET') return 'text-green-500';
     if (m === 'POST') return 'text-blue-400';
@@ -50,7 +43,7 @@ const AgentsApiPage = () => {
         </div>
 
         {/* Auth section */}
-        <div style={cardStyle} className="space-y-4">
+        <div className="glass-card space-y-4">
           <button onClick={() => setShowAuth(!showAuth)} className="flex items-center justify-between w-full">
             <h2 className="text-lg font-heading font-semibold">Authentication</h2>
             <span className="text-muted-foreground">{showAuth ? '▾' : '▸'}</span>
@@ -90,7 +83,7 @@ headers['X-Twin3-Timestamp'] = Date.now().toString();`}</pre>
           <h2 className="text-lg font-heading font-semibold">Endpoints</h2>
           <div className="space-y-2">
             {ENDPOINTS.map((ep) => (
-              <div key={ep.path} style={cardStyle} className="flex items-start gap-3">
+              <div key={ep.path} className="glass-card flex items-start gap-3">
                 <span className={`text-xs font-mono font-bold mt-0.5 w-12 shrink-0 ${methodColor(ep.method)}`}>{ep.method}</span>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-mono truncate">{ep.path}</p>
@@ -105,7 +98,7 @@ headers['X-Twin3-Timestamp'] = Date.now().toString();`}</pre>
         {/* Webhooks */}
         <div className="space-y-4">
           <h2 className="text-lg font-heading font-semibold">Webhooks</h2>
-          <div style={cardStyle} className="space-y-3">
+          <div className="glass-card space-y-3">
             <p className="text-sm text-muted-foreground">Configure webhook endpoints in your console to receive real-time event notifications.</p>
             <div className="space-y-2">
               {WEBHOOKS.map((wh) => (
@@ -119,7 +112,7 @@ headers['X-Twin3-Timestamp'] = Date.now().toString();`}</pre>
         </div>
 
         {/* Base URL */}
-        <div style={cardStyle} className="space-y-2">
+        <div className="glass-card space-y-2">
           <p className="text-sm font-medium">Base URL</p>
           <p className="text-sm font-mono bg-foreground/5 px-3 py-2 rounded-lg select-all">https://api.twin3.ai/v1</p>
           <p className="text-xs text-muted-foreground">All endpoints use HTTPS. Testnet available at api-testnet.twin3.ai</p>
