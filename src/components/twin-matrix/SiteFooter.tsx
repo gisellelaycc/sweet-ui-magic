@@ -1,23 +1,14 @@
 import logo from '@/assets/twin3-logo.svg';
 import xLogo from '@/assets/social/x-logo.svg';
 import elementLogo from '@/assets/social/element-logo.svg';
-import farcasterLogo from '@/assets/social/farcaster-logo.svg';
+
 import bcscanLogo from '@/assets/social/bcscan-logo.svg';
 
 const SOCIAL_LINKS = [
   { icon: xLogo, href: 'https://x.com/twin3_ai', alt: 'X' },
   { icon: elementLogo, href: 'https://element.market/collections/twin3-1?search[toggles][0]=ALL', alt: 'Element' },
-  { icon: farcasterLogo, href: 'https://warpcast.com/twin3.eth', alt: 'Farcaster' },
+  { icon: null, href: 'https://discord.gg/ZveHDMVG', alt: 'Discord' },
   { icon: bcscanLogo, href: 'https://bscscan.com/token/0xe3ec133e29addfbba26a412c38ed5de37195156f', alt: 'BscScan' },
-];
-
-const RESOURCE_LINKS = [
-  { label: 'Whitepaper', href: 'https://twin3.ai/whitepaper' },
-  { label: 'Tasks', href: 'https://twin3.ai/tasks' },
-];
-
-const FEATURE_LINKS = [
-  { label: 'My Twin', href: 'https://twin3.ai/my-twin' },
 ];
 
 export const SiteFooter = () => (
@@ -35,7 +26,7 @@ export const SiteFooter = () => (
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-widest text-muted-foreground font-medium">Social Media</p>
           <div className="flex items-center gap-3">
-            {SOCIAL_LINKS.map((link) => (
+                {SOCIAL_LINKS.map((link) => (
               <a
                 key={link.alt}
                 href={link.href}
@@ -43,43 +34,11 @@ export const SiteFooter = () => (
                 rel="noopener noreferrer"
                 className="w-7 h-7 flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity"
               >
-                <img src={link.icon} alt={link.alt} className="w-5 h-5 social-icon" />
-              </a>
-            ))}
-          </div>
-        </div>
-
-        {/* Resource */}
-        <div className="space-y-2">
-          <p className="text-xs uppercase tracking-widest text-muted-foreground font-medium">Resource</p>
-          <div className="flex flex-col gap-1">
-            {RESOURCE_LINKS.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-foreground/60 hover:text-foreground transition-colors"
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
-        </div>
-
-        {/* Features */}
-        <div className="space-y-2">
-          <p className="text-xs uppercase tracking-widest text-muted-foreground font-medium">Features</p>
-          <div className="flex flex-col gap-1">
-            {FEATURE_LINKS.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-foreground/60 hover:text-foreground transition-colors"
-              >
-                {link.label}
+                {link.icon ? (
+                  <img src={link.icon} alt={link.alt} className="w-5 h-5 social-icon" />
+                ) : (
+                  <span className="text-xs font-bold text-foreground/70">{link.alt.slice(0, 2)}</span>
+                )}
               </a>
             ))}
           </div>
