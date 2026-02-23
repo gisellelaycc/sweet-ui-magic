@@ -25,7 +25,7 @@ const MatrixPage = () => {
     refreshOnchainState,
     setState,
     setNeedsMatrixUpdate,
-    walletAddress,
+    walletAddress
   } = useTwinMatrix();
 
   const [tab, setTab] = useState<MatrixTab>('matrix');
@@ -34,20 +34,20 @@ const MatrixPage = () => {
     border: '1px solid var(--glass-border)',
     borderRadius: '16px',
     padding: '1.75rem',
-    background: 'var(--glass-bg)',
+    background: 'var(--glass-bg)'
   };
 
-  const tabBtn = (id: MatrixTab, label: string) => (
-    <button
-      key={id}
-      onClick={() => setTab(id)}
-      className={`text-sm uppercase tracking-widest font-medium transition-colors px-1 pb-2 ${
-        tab === id ? 'text-foreground border-b-2 border-foreground' : 'text-muted-foreground hover:text-foreground'
-      }`}
-    >
+  const tabBtn = (id: MatrixTab, label: string) =>
+  <button
+    key={id}
+    onClick={() => setTab(id)}
+    className={`text-sm uppercase tracking-widest font-medium transition-colors px-1 pb-2 ${
+    tab === id ? 'text-foreground border-b-2 border-foreground' : 'text-muted-foreground hover:text-foreground'}`
+    }>
+
       {label}
-    </button>
-  );
+    </button>;
+
 
   // Not connected — prompt to connect
   if (!isConnected) {
@@ -62,8 +62,8 @@ const MatrixPage = () => {
             </button>
           </div>
         </div>
-      </PageLayout>
-    );
+      </PageLayout>);
+
   }
 
   // Connected but no SBT — redirect to mint
@@ -79,38 +79,38 @@ const MatrixPage = () => {
             </button>
           </div>
         </div>
-      </PageLayout>
-    );
+      </PageLayout>);
+
   }
 
   return (
     <PageLayout activePage="identity">
       <div className="max-w-6xl mx-auto w-full space-y-6 py-4">
-        {!isContractConfigured && (
-          <div className="mb-3 transition-all duration-300" style={{ border: '1px solid rgba(250, 204, 21, 0.3)', borderRadius: '16px', padding: '1.25rem 1.75rem', background: 'rgba(250, 204, 21, 0.06)' }}>
+        {!isContractConfigured &&
+        <div className="mb-3 transition-all duration-300" style={{ border: '1px solid rgba(250, 204, 21, 0.3)', borderRadius: '16px', padding: '1.25rem 1.75rem', background: 'rgba(250, 204, 21, 0.06)' }}>
             <p className="text-sm text-yellow-200 text-center">⚠️ Contract address not configured — on-chain features are disabled in this preview.</p>
           </div>
-        )}
+        }
 
-        {isCheckingToken && (
-          <div className="text-center mt-12" style={cardStyle}>
+        {isCheckingToken &&
+        <div className="text-center mt-12" style={cardStyle}>
             <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground font-heading mb-2">TwinMatrixSBT</p>
             <p className="text-base">{t('wizard.checkingIdentity')}</p>
           </div>
-        )}
+        }
 
-        {!isCheckingToken && contractError && (
-          <div className="mt-8" style={{ border: '1px solid rgba(244, 63, 94, 0.3)', borderRadius: '16px', padding: '1.75rem', background: 'rgba(244, 63, 94, 0.06)' }}>
+        {!isCheckingToken && contractError &&
+        <div className="mt-8" style={{ border: '1px solid rgba(244, 63, 94, 0.3)', borderRadius: '16px', padding: '1.75rem', background: 'rgba(244, 63, 94, 0.06)' }}>
             <p className="text-base text-destructive">{t('wizard.failedFetchContract')}</p>
             <p className="text-sm text-muted-foreground mt-1 break-all">{contractError}</p>
             <button onClick={() => void refreshOnchainState()} className="mt-4 py-3 px-6 rounded-xl text-sm font-semibold bg-foreground text-background hover:bg-foreground/90 transition-colors">
               {t('wizard.retry')}
             </button>
           </div>
-        )}
+        }
 
-        {!isCheckingToken && !contractError && hasMintedSbt && (
-          <>
+        {!isCheckingToken && !contractError && hasMintedSbt &&
+        <>
             {/* Tab bar */}
             <div className="flex gap-6 border-b border-foreground/10">
               {tabBtn('matrix', 'Twin Matrix')}
@@ -119,48 +119,48 @@ const MatrixPage = () => {
               {tabBtn('opportunities', 'Opportunities')}
             </div>
 
-            {tab === 'matrix' && (
-              <div className="animate-fade-in">
+            {tab === 'matrix' &&
+          <div className="animate-fade-in">
               <OnchainIdentityStatePage
-                  tokenId={tokenId}
-                  walletAddress={walletAddress}
-                  latestVersion={latestVersion}
-                  versions={versions}
-                  boundAgents={boundAgents}
-                  onReconfigure={() => {
-                    setNeedsMatrixUpdate(true);
-                    setState((s) => ({ ...s, step: 2, activeModules: s.activeModules.filter((m) => m === 'sport') }));
-                    navigate('/mint');
-                  }}
-                  onSetupAgent={() => navigate('/account?tab=authorizations&action=new')}
-                  onRefresh={() => void refreshOnchainState()}
-                  isRefreshing={isCheckingToken}
-                />
-              </div>
-            )}
+              tokenId={tokenId}
+              walletAddress={walletAddress}
+              latestVersion={latestVersion}
+              versions={versions}
+              boundAgents={boundAgents}
+              onReconfigure={() => {
+                setNeedsMatrixUpdate(true);
+                setState((s) => ({ ...s, step: 2, activeModules: s.activeModules.filter((m) => m === 'sport') }));
+                navigate('/mint');
+              }}
+              onSetupAgent={() => navigate('/account?tab=authorizations&action=new')}
+              onRefresh={() => void refreshOnchainState()}
+              isRefreshing={isCheckingToken} />
 
-            {tab === 'agents' && (
-              <div className="animate-fade-in space-y-6">
+              </div>
+          }
+
+            {tab === 'agents' &&
+          <div className="animate-fade-in space-y-6">
                 <div>
                   <h2 className="text-xl font-heading font-bold">Bound Agents</h2>
                   <p className="text-sm text-muted-foreground mt-1">Agents authorized to act on your behalf.</p>
                 </div>
 
-                {boundAgents.length === 0 ? (
-                  <div style={cardStyle} className="text-center py-12 space-y-4">
-                    <p className="text-sm font-mono text-muted-foreground/50 mb-2">AG</p>
+                {boundAgents.length === 0 ?
+            <div style={cardStyle} className="text-center py-12 space-y-4">
+                    
                     <p className="text-sm text-muted-foreground">No agents bound yet. Activate an agent to start earning.</p>
                     <button
-                      onClick={() => navigate('/account?tab=authorizations&action=new')}
-                      className="btn-twin btn-twin-primary py-3 px-6 text-sm"
-                    >
+                onClick={() => navigate('/account?tab=authorizations&action=new')}
+                className="btn-twin btn-twin-primary py-3 px-6 text-sm">
+
                       Activate Agent
                     </button>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    {boundAgents.map((agent) => (
-                      <div key={agent.address} style={cardStyle} className="flex items-center justify-between gap-4">
+                  </div> :
+
+            <div className="space-y-3">
+                    {boundAgents.map((agent) =>
+              <div key={agent.address} style={cardStyle} className="flex items-center justify-between gap-4">
                         <div className="min-w-0">
                           <div className="flex items-center gap-2">
                             <p className="text-sm font-medium truncate">{agent.name}</p>
@@ -171,20 +171,20 @@ const MatrixPage = () => {
                           <p className="text-sm font-mono text-muted-foreground mt-1 truncate">{agent.address}</p>
                         </div>
                         <button
-                          onClick={() => navigate(`/account?tab=authorizations&edit=${agent.address}`)}
-                          className="shrink-0 text-xs text-muted-foreground hover:text-foreground transition-colors"
-                        >
+                  onClick={() => navigate(`/account?tab=authorizations&edit=${agent.address}`)}
+                  className="shrink-0 text-xs text-muted-foreground hover:text-foreground transition-colors">
+
                           Manage →
                         </button>
                       </div>
-                    ))}
+              )}
                   </div>
-                )}
+            }
               </div>
-            )}
+          }
 
-            {tab === 'listing' && (
-              <div className="animate-fade-in space-y-6">
+            {tab === 'listing' &&
+          <div className="animate-fade-in space-y-6">
                 <div>
                   <h2 className="text-xl font-heading font-bold">Marketplace Presence</h2>
                   <p className="text-sm text-muted-foreground mt-1">Control how buyer agents discover and interact with your profile.</p>
@@ -193,18 +193,18 @@ const MatrixPage = () => {
                 <div style={cardStyle} className="space-y-4">
                   <p className="text-sm uppercase tracking-widest text-muted-foreground/60 font-heading">Visibility</p>
                   {[
-                    { id: 'public', label: 'Public', desc: 'Fully discoverable by all buyer agents. Maximum exposure.' },
-                    { id: 'semi', label: 'Semi-Public', desc: 'Visible to verified agents only. Requires authorization to view full matrix.' },
-                    { id: 'private', label: 'Private', desc: 'Hidden from search. Only accessible via direct invitation.' },
-                  ].map((opt) => (
-                    <label key={opt.id} className="flex items-start gap-3 cursor-pointer p-3 rounded-xl hover:bg-foreground/5 transition-colors">
+              { id: 'public', label: 'Public', desc: 'Fully discoverable by all buyer agents. Maximum exposure.' },
+              { id: 'semi', label: 'Semi-Public', desc: 'Visible to verified agents only. Requires authorization to view full matrix.' },
+              { id: 'private', label: 'Private', desc: 'Hidden from search. Only accessible via direct invitation.' }].
+              map((opt) =>
+              <label key={opt.id} className="flex items-start gap-3 cursor-pointer p-3 rounded-xl hover:bg-foreground/5 transition-colors">
                       <input type="radio" name="visibility" defaultChecked={opt.id === 'public'} className="mt-1" />
                       <div>
                         <p className="text-sm font-medium">{opt.label}</p>
                         <p className="text-xs text-muted-foreground">{opt.desc}</p>
                       </div>
                     </label>
-                  ))}
+              )}
                 </div>
 
                 <div style={cardStyle} className="space-y-4">
@@ -221,9 +221,9 @@ const MatrixPage = () => {
                       </div>
                     </div>
                     <div className="flex flex-wrap gap-2">
-                      {['sport', 'running', 'marathon', 'fitness'].map(tag => (
-                        <span key={tag} className="text-xs font-mono px-2 py-0.5 rounded-md bg-foreground/5">{tag}</span>
-                      ))}
+                      {['sport', 'running', 'marathon', 'fitness'].map((tag) =>
+                  <span key={tag} className="text-xs font-mono px-2 py-0.5 rounded-md bg-foreground/5">{tag}</span>
+                  )}
                     </div>
                   </div>
                 </div>
@@ -232,18 +232,18 @@ const MatrixPage = () => {
                   Publish Changes
                 </button>
               </div>
-            )}
+          }
 
-            {tab === 'opportunities' && (
-              <div className="animate-fade-in">
+            {tab === 'opportunities' &&
+          <div className="animate-fade-in">
                 <SignalRecordsPage hasMintedSbt={hasMintedSbt} />
               </div>
-            )}
+          }
           </>
-        )}
+        }
       </div>
-    </PageLayout>
-  );
+    </PageLayout>);
+
 };
 
 export default MatrixPage;
