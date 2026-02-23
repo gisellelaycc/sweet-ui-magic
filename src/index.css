@@ -8,7 +8,7 @@
   /* ── CREAM (default) — Nebula Mist ── */
   :root,
   [data-theme="cream"] {
-    --background: 37 14% 93%;
+    --background: 35 12% 88%;
     --foreground: 225 15% 15%;
 
     --card: 36 12% 90%;
@@ -65,7 +65,7 @@
     --glow-primary: 0 0 0 1px rgba(255, 255, 255, 0.20);
     --glow-accent: 0 0 20px rgba(100, 160, 155, 0.04);
 
-    --page-bg: 37 14% 93%;
+    --page-bg: 35 12% 88%;
     --page-fg: 225 15% 15%;
     --nav-bg: rgba(242, 238, 230, 0.55);
 
@@ -195,18 +195,20 @@ body::after {
 
   [data-theme="cream"] body::after {
   background:
-    /* Layer 2 – Light source: top-right subtle warmth */
-    radial-gradient(ellipse 60% 50% at 72% 18%, rgba(255, 252, 245, 0.55) 0%, transparent 60%),
-    /* Layer 2 – Center stage: very subtle brightening */
-    radial-gradient(ellipse 70% 60% at 50% 45%, rgba(248, 245, 238, 0.4) 0%, transparent 55%),
-    /* Layer 3 – Nebula fog: ultra-subtle cool mist, NOT blue */
-    radial-gradient(ellipse 50% 40% at 25% 30%, rgba(180, 195, 190, 0.06) 0%, transparent 50%),
-    radial-gradient(ellipse 40% 50% at 78% 65%, rgba(175, 190, 188, 0.05) 0%, transparent 45%),
-    /* Layer 2 – Vignette: warm-gray corner darkening 4-5% */
-    radial-gradient(ellipse 120% 120% at 0% 0%, rgba(160, 152, 138, 0.14) 0%, transparent 45%),
-    radial-gradient(ellipse 120% 120% at 100% 100%, rgba(155, 148, 135, 0.12) 0%, transparent 45%),
-    radial-gradient(ellipse 120% 120% at 100% 0%, rgba(158, 150, 140, 0.10) 0%, transparent 40%),
-    radial-gradient(ellipse 120% 120% at 0% 100%, rgba(158, 150, 140, 0.10) 0%, transparent 40%);
+    /* Center stage light — creates "spotlight" like dark mode */
+    radial-gradient(ellipse 55% 45% at 52% 40%, rgba(255, 252, 245, 0.65) 0%, transparent 55%),
+    /* Secondary light source top-right */
+    radial-gradient(ellipse 40% 35% at 70% 15%, rgba(255, 250, 240, 0.35) 0%, transparent 50%),
+    /* Nebula fog wisps — cool-neutral, NOT blue */
+    radial-gradient(ellipse 55% 45% at 20% 25%, rgba(160, 170, 168, 0.10) 0%, transparent 50%),
+    radial-gradient(ellipse 45% 55% at 80% 70%, rgba(155, 165, 162, 0.08) 0%, transparent 45%),
+    radial-gradient(ellipse 35% 30% at 50% 75%, rgba(150, 158, 155, 0.06) 0%, transparent 40%),
+    /* Heavy vignette — 8-12% darkening at corners for depth */
+    radial-gradient(ellipse 100% 100% at 0% 0%, rgba(120, 115, 105, 0.22) 0%, transparent 50%),
+    radial-gradient(ellipse 100% 100% at 100% 100%, rgba(115, 110, 100, 0.20) 0%, transparent 50%),
+    radial-gradient(ellipse 100% 100% at 100% 0%, rgba(118, 112, 105, 0.18) 0%, transparent 45%),
+    radial-gradient(ellipse 100% 100% at 0% 100%, rgba(118, 112, 105, 0.18) 0%, transparent 45%);
+  animation: ambient-drift 20s ease-in-out infinite alternate;
 }
 
 /* Vignette overlay for cream mode */
@@ -221,7 +223,7 @@ body::after {
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(ellipse 110% 110% at 50% 50%, transparent 45%, rgba(160, 150, 135, 0.15) 100%);
+    radial-gradient(ellipse 100% 100% at 50% 50%, transparent 35%, rgba(130, 125, 115, 0.22) 100%);
   pointer-events: none;
   z-index: 1;
 }
@@ -303,18 +305,18 @@ body::before {
     overflow: hidden;
   }
 
-  /* Cream mode glass: truly transparent, strong highlight border, floating */
+  /* Cream mode glass: near-invisible bg, strong highlight edge, floating */
   [data-theme="cream"] .glass-card,
   :root .glass-card {
-    background: rgba(255, 255, 255, 0.025);
-    border: 1px solid rgba(255, 255, 255, 0.42);
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.48);
     box-shadow:
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.65),
-      inset 0 0 0 0.5px rgba(255, 255, 255, 0.18),
-      0 8px 28px -8px rgba(80, 85, 100, 0.13),
-      0 2px 8px rgba(80, 85, 100, 0.06);
-    backdrop-filter: blur(10px) saturate(120%);
-    -webkit-backdrop-filter: blur(10px) saturate(120%);
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.72),
+      inset 0 0 0 0.5px rgba(255, 255, 255, 0.22),
+      0 10px 32px -8px rgba(60, 65, 80, 0.16),
+      0 2px 10px rgba(60, 65, 80, 0.08);
+    backdrop-filter: blur(8px) saturate(110%);
+    -webkit-backdrop-filter: blur(8px) saturate(110%);
   }
 
   [data-theme="dark"] .glass-card {
