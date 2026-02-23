@@ -255,8 +255,7 @@ export const OnchainIdentityStatePage = ({
               {/* Step 01 */}
               <div className="flex items-start gap-3 mb-4">
                 <span
-                  className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold"
-                  style={{ border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.5)' }}
+                  className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold border border-foreground/15 text-foreground/50"
                 >
                   01
                 </span>
@@ -269,20 +268,19 @@ export const OnchainIdentityStatePage = ({
                   </p>
                   <button
                     onClick={onReconfigure}
-                    className="w-full py-2.5 rounded-lg text-xs font-semibold bg-foreground text-background hover:bg-foreground/90 transition-colors"
+                    className="btn-twin btn-twin-primary btn-glow w-full py-2.5 rounded-lg text-xs font-semibold"
                   >
                     Refine
                   </button>
                 </div>
               </div>
 
-              <div className="w-full h-px my-4" style={{ background: 'rgba(255,255,255,0.06)' }} />
+              <div className="w-full h-px my-4" style={{ background: 'hsl(var(--foreground) / 0.06)' }} />
 
               {/* Step 02 */}
               <div className="flex items-start gap-3">
                 <span
-                  className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold"
-                  style={{ border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.5)' }}
+                  className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold border border-foreground/15 text-foreground/50"
                 >
                   02
                 </span>
@@ -313,7 +311,7 @@ export const OnchainIdentityStatePage = ({
                       <span className="text-foreground/70">{t(`common.${layer.key}`)}</span>
                       <span className="text-muted-foreground">{layer.percent}%</span>
                     </div>
-                    <div className="h-[3px] rounded-full overflow-visible" style={{ background: 'rgba(255,255,255,0.04)' }}>
+                    <div className="h-[3px] rounded-full overflow-visible" style={{ background: 'hsl(var(--foreground) / 0.04)' }}>
                       <div
                         className="h-full rounded-full transition-all duration-700"
                         style={{
