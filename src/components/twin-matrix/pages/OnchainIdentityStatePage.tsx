@@ -133,22 +133,13 @@ export const OnchainIdentityStatePage = ({
           </div>
         </div>
 
-        {/* ── Meta Bar ── */}
-        <div className="flex items-center gap-4 text-sm text-muted-foreground flex-wrap">
-          <span>Token ID <span className="font-semibold text-foreground">{tokenId.toString()}</span></span>
-          <span className="text-muted-foreground/30">·</span>
-          <span>Latest Version <span className="font-semibold text-foreground">v{latestVersion}</span></span>
-          <span className="text-muted-foreground/30">·</span>
-          <span>Wallet <span className="font-semibold text-foreground">{walletAddress ?? '-'}</span></span>
-        </div>
-
         {/* ── Stats Bar ── */}
         <div className="grid grid-cols-5 gap-0 rounded-xl overflow-hidden" style={{ border: '1px solid rgba(255, 255, 255, 0.10)' }}>
           {[
+            { value: tokenId.toString(), label: 'TOKEN ID' },
+            { value: `v${latestVersion}`, label: 'LATEST VERSION' },
+            { value: walletAddress ?? '-', label: 'WALLET' },
             { value: `${filledCount}/256`, label: 'TWIN MATRIX' },
-            { value: '0', label: 'POINTS' },
-            { value: '0', label: 'INVITED TASKS' },
-            { value: '0', label: 'COMPLETED TASKS' },
             { value: `${filledCount > 0 ? Math.round((filledCount / 256) * 100) : 0}%`, label: 'COMPLETION RATE', highlight: true },
           ].map((stat, i, arr) => (
             <div
@@ -160,7 +151,7 @@ export const OnchainIdentityStatePage = ({
               }}
             >
               <span
-                className="text-xl md:text-2xl font-heading font-bold"
+                className="text-xl md:text-2xl font-heading font-bold truncate max-w-full"
                 style={{ color: stat.highlight ? '#F2850D' : 'hsl(var(--foreground))' }}
               >
                 {stat.value}
