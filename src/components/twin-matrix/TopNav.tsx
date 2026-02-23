@@ -18,7 +18,6 @@ interface Props {
 const NAV_ITEMS: { id: NavPage; label: string }[] = [
   { id: 'identity', label: 'Identity' },
   { id: 'agents', label: 'For Agents' },
-  { id: 'account', label: 'Account' },
 ];
 
 export const TopNav = ({
