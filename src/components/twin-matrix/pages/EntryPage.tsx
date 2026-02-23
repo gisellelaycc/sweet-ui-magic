@@ -30,10 +30,8 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
   const cardStyle: React.CSSProperties = {
     border: '1px solid var(--glass-border)',
     borderRadius: '16px',
-    padding: '1.75rem 1.75rem',
+    padding: '1.75rem',
     background: 'var(--glass-bg)',
-    backdropFilter: 'blur(16px) saturate(160%)',
-    boxShadow: 'inset 0 1px 0 0 rgba(255,255,255,0.4), 0 4px 16px -4px rgba(100,130,180,0.10)',
   };
 
   const handleCardEnter = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -172,7 +170,7 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
               { step: '02', title: 'Build Your Twin Matrix', desc: 'Define your skills, experience, and identity layers through a guided wizard.' },
               { step: '03', title: 'Get Discovered', desc: 'Buyer agents find, negotiate, and pay for your verified experience.' },
             ].map((s) => (
-              <div key={s.step} className="flex gap-5 items-start" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.5rem 1.75rem', background: 'var(--glass-bg)', backdropFilter: 'blur(16px) saturate(160%)' }}>
+              <div key={s.step} className="flex gap-5 items-start" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.75rem', background: 'var(--glass-bg)' }}>
                 <span className="text-2xl font-heading font-bold text-muted-foreground/30 mt-0.5 shrink-0">{s.step}</span>
                 <div>
                   <p className="text-xl font-heading font-bold">{s.title}</p>
@@ -189,7 +187,7 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
               { step: '02', title: 'Search & Match', desc: 'Query verified humans by skill, availability, and matrix signature.' },
               { step: '03', title: 'Negotiate & Pay', desc: 'Propose tasks, agree on terms, and execute on-chain payments.' },
             ].map((s) => (
-              <div key={s.step} className="flex gap-5 items-start" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.5rem 1.75rem', background: 'var(--glass-bg)', backdropFilter: 'blur(16px) saturate(160%)' }}>
+              <div key={s.step} className="flex gap-5 items-start" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.75rem', background: 'var(--glass-bg)' }}>
                 <span className="text-2xl font-heading font-bold text-muted-foreground/30 mt-0.5 shrink-0">{s.step}</span>
                 <div>
                   <p className="text-xl font-heading font-bold">{s.title}</p>
@@ -213,7 +211,7 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
             { step: '02', title: 'Versioned Tasks', desc: 'Every task, negotiation, and completion is recorded as an immutable version on-chain.' },
             { step: '03', title: 'On-chain Records', desc: 'Twin Matrix state, authorizations, and payments are transparent and auditable on BSC.' },
           ].map((item) => (
-            <div key={item.title} className="text-center space-y-4" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '2rem', background: 'var(--glass-bg)', backdropFilter: 'blur(16px) saturate(160%)' }}>
+            <div key={item.title} className="text-center space-y-4" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.75rem', background: 'var(--glass-bg)' }}>
               <span className="text-2xl font-heading font-bold text-muted-foreground/30">{item.step}</span>
               <p className="text-xl font-heading font-bold">{item.title}</p>
               <p className="text-base text-muted-foreground leading-relaxed">{item.desc}</p>
