@@ -48,9 +48,9 @@
     --sidebar-ring: 225 15% 15% / 0.2;
 
     /* Twin3 Custom Tokens */
-    --glass-bg: rgba(255, 255, 255, 0.06);
-    --glass-border: rgba(255, 255, 255, 0.18);
-    --glass-blur: 18px;
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.35);
+    --glass-blur: 14px;
 
     --color-text-primary: 225 15% 12%;
     --color-text-secondary: 220 8% 34%;
@@ -270,9 +270,14 @@ body::before {
 @layer components {
   .glass {
     background: var(--glass-bg);
-    backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
     border: 1px solid var(--glass-border);
+  }
+
+  [data-theme="cream"] .glass,
+  :root .glass {
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.50);
   }
 
   .glass-hover:hover {
@@ -298,17 +303,18 @@ body::before {
     overflow: hidden;
   }
 
-  /* Cream mode glass: floating card with inset highlight + cool-gray shadow */
+  /* Cream mode glass: truly transparent, strong highlight border, floating */
   [data-theme="cream"] .glass-card,
   :root .glass-card {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.20);
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.42);
     box-shadow:
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.50),
-      0 6px 20px -6px rgba(80, 85, 100, 0.10),
-      0 2px 6px rgba(80, 85, 100, 0.05);
-    backdrop-filter: blur(14px) saturate(140%);
-    -webkit-backdrop-filter: blur(14px) saturate(140%);
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.65),
+      inset 0 0 0 0.5px rgba(255, 255, 255, 0.18),
+      0 8px 28px -8px rgba(80, 85, 100, 0.13),
+      0 2px 8px rgba(80, 85, 100, 0.06);
+    backdrop-filter: blur(10px) saturate(120%);
+    -webkit-backdrop-filter: blur(10px) saturate(120%);
   }
 
   [data-theme="dark"] .glass-card {
@@ -358,6 +364,7 @@ body::before {
     background: hsl(var(--primary));
     color: hsl(var(--primary-foreground));
     border: 1px solid transparent;
+    transition: all 0.3s ease;
   }
 
   .btn-twin-primary:hover:not(:disabled) {
@@ -365,6 +372,22 @@ body::before {
     border: 1px solid hsl(var(--primary));
     color: hsl(var(--primary));
     transform: translateY(-1px);
+  }
+
+  /* Light mode CTA hover: deep muted teal glow halo */
+  [data-theme="cream"] .btn-twin-primary:hover:not(:disabled),
+  :root .btn-twin-primary:hover:not(:disabled) {
+    box-shadow:
+      0 0 10px rgba(70, 140, 135, 0.28),
+      0 0 24px rgba(70, 140, 135, 0.14),
+      0 0 44px rgba(70, 140, 135, 0.06);
+  }
+
+  [data-theme="dark"] .btn-twin-primary:hover:not(:disabled) {
+    box-shadow:
+      0 0 12px rgba(10, 255, 255, 0.3),
+      0 0 28px rgba(10, 255, 255, 0.12),
+      0 0 48px rgba(10, 255, 255, 0.06);
   }
 
   .btn-twin-primary:not(:disabled) {

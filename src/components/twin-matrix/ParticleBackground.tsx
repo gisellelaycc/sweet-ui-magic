@@ -59,6 +59,7 @@ interface CyanParticle {
   phase: number;
   jitter: number;
   layer: 'a' | 'b' | 'c';
+  depth: number; // 0=far, 1=near for parallax in light mode
 }
 
 interface RedParticle {
@@ -77,7 +78,6 @@ interface RedParticle {
 
 const createCyanParticles = (count: number): CyanParticle[] => {
   const particles: CyanParticle[] = [];
-  // Layer A: 1-2px micro-bright dots (60%)
   const countA = Math.floor(count * 0.6);
   for (let i = 0; i < countA; i++) {
     particles.push({
@@ -89,9 +89,9 @@ const createCyanParticles = (count: number): CyanParticle[] => {
       phase: Math.random() * Math.PI * 2,
       jitter: 0.3 + Math.random() * 1.5,
       layer: 'a',
+      depth: Math.random(),
     });
   }
-  // Layer B: 2-4px medium bright (28%)
   const countB = Math.floor(count * 0.28);
   for (let i = 0; i < countB; i++) {
     particles.push({
@@ -103,9 +103,9 @@ const createCyanParticles = (count: number): CyanParticle[] => {
       phase: Math.random() * Math.PI * 2,
       jitter: 0.8 + Math.random() * 2.5,
       layer: 'b',
+      depth: 0.3 + Math.random() * 0.5,
     });
   }
-  // Layer C: large blurry nebula spots (12%)
   const countC = count - countA - countB;
   for (let i = 0; i < countC; i++) {
     particles.push({
@@ -117,6 +117,7 @@ const createCyanParticles = (count: number): CyanParticle[] => {
       phase: Math.random() * Math.PI * 2,
       jitter: 1.5 + Math.random() * 4,
       layer: 'c',
+      depth: Math.random() * 0.3,
     });
   }
   return particles;
@@ -212,7 +213,7 @@ export const ParticleBackground = ({ color = 'cyan' }: ParticleBackgroundProps) 
       const cy = h / 2;
 
       for (const p of cyanParticles.current) {
-        p.angle += p.speed;
+        p.angle += p.speed * (isLight ? (0.5 + p.depth * 0.9) : 1);
         const breathe = Math.sin(time * 0.0005 + p.phase) * 0.15 + 1;
         const r = p.radius * breathe;
         const jx = Math.sin(time * 0.0015 + p.phase * 3) * p.jitter;
@@ -221,52 +222,61 @@ export const ParticleBackground = ({ color = 'cyan' }: ParticleBackgroundProps) 
         const py = cy + Math.sin(p.angle) * r * 0.6 + jy;
         const pulse = 0.4 + 0.6 * Math.sin(time * 0.0008 + p.phase);
 
-        if (p.layer === 'c') {
-          // Layer C: large blurry nebula spots
-          const opMul = isLight ? 0.4 : 1;
-          const alpha = Math.min(0.06, p.baseOpacity * pulse * opMul);
-          const gradient = ctx.createRadialGradient(px, py, 0, px, py, p.size * (isLight ? 0.8 : 1));
-          // Light: warm gray-taupe dust, not teal/blue
-          const baseColor = isLight ? '165, 160, 150' : '10, 255, 255';
-          gradient.addColorStop(0, `rgba(${baseColor}, ${alpha * 1.2})`);
-          gradient.addColorStop(0.5, `rgba(${baseColor}, ${alpha * 0.4})`);
-          gradient.addColorStop(1, `rgba(${baseColor}, 0)`);
-          ctx.beginPath();
-          ctx.arc(px, py, p.size * (isLight ? 0.8 : 1), 0, Math.PI * 2);
-          ctx.fillStyle = gradient;
-          ctx.fill();
-        } else if (p.layer === 'b') {
-          // Layer B: medium particles
-          const opMul = isLight ? 0.4 : 1;
-          const alpha = Math.min(0.3, p.baseOpacity * pulse * opMul);
-          // Light: muted gray-green dust, smaller
-          const particleColor = isLight ? `rgba(150, 155, 148, ${alpha})` : `rgba(10, 255, 255, ${alpha})`;
-          ctx.beginPath();
-          ctx.arc(px, py, p.size * (isLight ? 0.75 : 1), 0, Math.PI * 2);
-          if (!isLight && alpha > 0.15) {
-            ctx.shadowColor = 'rgba(10, 255, 255, 0.2)';
-            ctx.shadowBlur = 4;
-          } else if (isLight) {
-            ctx.shadowColor = 'rgba(150, 155, 148, 0.15)';
-            ctx.shadowBlur = 3;
+        if (isLight) {
+          // depth 0=far (tiny, faint, blurry), 1=near (bigger, sharper)
+          const depthSize = 0.25 + p.depth * 1.1;
+          const depthOpacity = 0.12 + p.depth * 0.58;
+          const depthBlur = (1 - p.depth) * 4.5;
+          const finalSize = p.size * depthSize;
+          const finalAlpha = Math.min(0.45, p.baseOpacity * pulse * depthOpacity);
+          const col = `rgba(140, 138, 130, ${finalAlpha})`;
+
+          if (p.layer === 'c') {
+            const gradient = ctx.createRadialGradient(px, py, 0, px, py, finalSize);
+            gradient.addColorStop(0, `rgba(155, 150, 142, ${finalAlpha * 0.7})`);
+            gradient.addColorStop(0.6, `rgba(155, 150, 142, ${finalAlpha * 0.15})`);
+            gradient.addColorStop(1, 'rgba(155, 150, 142, 0)');
+            ctx.beginPath();
+            ctx.arc(px, py, finalSize, 0, Math.PI * 2);
+            ctx.fillStyle = gradient;
+            ctx.fill();
           } else {
-            ctx.shadowColor = 'transparent';
+            ctx.shadowColor = depthBlur > 1 ? `rgba(140, 138, 130, ${finalAlpha * 0.3})` : 'transparent';
+            ctx.shadowBlur = depthBlur;
+            ctx.beginPath();
+            ctx.arc(px, py, finalSize, 0, Math.PI * 2);
+            ctx.fillStyle = col;
+            ctx.fill();
             ctx.shadowBlur = 0;
+            ctx.shadowColor = 'transparent';
           }
-          ctx.fillStyle = particleColor;
-          ctx.fill();
         } else {
-          // Layer A: tiny micro dots
-          const opMul = isLight ? 0.4 : 1;
-          const alpha = Math.min(0.5, p.baseOpacity * pulse * opMul);
-          // Light: warm gray dust motes, very small
-          const particleColor = isLight ? `rgba(155, 150, 142, ${alpha})` : `rgba(10, 255, 255, ${alpha})`;
-          ctx.shadowColor = 'transparent';
-          ctx.shadowBlur = 0;
-          ctx.beginPath();
-          ctx.arc(px, py, p.size * (isLight ? 0.7 : 1), 0, Math.PI * 2);
-          ctx.fillStyle = particleColor;
-          ctx.fill();
+          // ── Dark mode: original cyan ──
+          if (p.layer === 'c') {
+            const alpha = Math.min(0.06, p.baseOpacity * pulse);
+            const gradient = ctx.createRadialGradient(px, py, 0, px, py, p.size);
+            gradient.addColorStop(0, `rgba(10, 255, 255, ${alpha * 1.5})`);
+            gradient.addColorStop(0.5, `rgba(10, 255, 255, ${alpha * 0.5})`);
+            gradient.addColorStop(1, 'rgba(10, 255, 255, 0)');
+            ctx.beginPath();
+            ctx.arc(px, py, p.size, 0, Math.PI * 2);
+            ctx.fillStyle = gradient;
+            ctx.fill();
+          } else if (p.layer === 'b') {
+            const alpha = Math.min(0.3, p.baseOpacity * pulse);
+            ctx.beginPath();
+            ctx.arc(px, py, p.size, 0, Math.PI * 2);
+            if (alpha > 0.15) { ctx.shadowColor = 'rgba(10, 255, 255, 0.2)'; ctx.shadowBlur = 4; }
+            else { ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; }
+            ctx.fillStyle = `rgba(10, 255, 255, ${alpha})`;
+            ctx.fill();
+          } else {
+            ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0;
+            ctx.beginPath();
+            ctx.arc(px, py, p.size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(10, 255, 255, ${Math.min(0.5, p.baseOpacity * pulse)})`;
+            ctx.fill();
+          }
         }
       }
       ctx.shadowBlur = 0;
