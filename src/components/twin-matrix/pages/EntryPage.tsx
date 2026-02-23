@@ -160,24 +160,33 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
 
       {/* ── Exchange Metrics ── */}
       <div className="px-6 md:px-12 lg:px-16 py-20 max-w-[1400px] mx-auto w-full">
-        <h2 className="text-3xl md:text-4xl font-heading font-bold text-center mb-14 uppercase tracking-wide">Exchange Metrics</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[
-            { value: '31,714', label: 'Verified Humans' },
-            { value: '842', label: 'Connected Agent Systems' },
-            { value: '12,409', label: 'Executed Transactions' },
-          ].map((metric) => (
-            <div key={metric.label} className="text-center py-8" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '2rem 1.75rem', background: 'var(--glass-bg)' }}>
-              <p className="text-5xl md:text-6xl font-heading font-extrabold tracking-tight">{metric.value}</p>
-              <p className="text-base md:text-lg text-muted-foreground mt-3 font-heading">{metric.label}</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Left: Verified Humans (large) */}
+          <div className="flex flex-col justify-center md:row-span-2 py-10" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '2.5rem', background: 'var(--glass-bg)' }}>
+            <p className="text-6xl md:text-7xl lg:text-8xl font-heading font-extrabold tracking-tight">31,714</p>
+            <p className="text-lg md:text-xl text-muted-foreground mt-4 font-heading">Verified Humans</p>
+          </div>
+
+          {/* Right top: title + Connected Agent Systems */}
+          <div className="flex flex-col gap-6">
+            <h2 className="text-4xl md:text-5xl font-heading font-bold text-left">Exchange Metrics</h2>
+            <div className="flex flex-col justify-center" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '2rem 1.75rem', background: 'var(--glass-bg)' }}>
+              <p className="text-4xl md:text-5xl font-heading font-extrabold tracking-tight">842</p>
+              <p className="text-base md:text-lg text-muted-foreground mt-2 font-heading">Connected Agent Systems</p>
             </div>
-          ))}
+          </div>
+
+          {/* Right bottom: Executed Transactions */}
+          <div className="flex flex-col justify-center" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '2rem 1.75rem', background: 'var(--glass-bg)' }}>
+            <p className="text-4xl md:text-5xl font-heading font-extrabold tracking-tight">12,409</p>
+            <p className="text-base md:text-lg text-muted-foreground mt-2 font-heading">Executed Transactions</p>
+          </div>
         </div>
       </div>
 
       {/* ── How it Works ── */}
       <div className="px-6 md:px-12 lg:px-16 py-20 max-w-[1400px] mx-auto w-full">
-        <h2 className="text-4xl md:text-5xl font-heading font-bold text-center mb-14">How it Works</h2>
+        <h2 className="text-4xl md:text-5xl font-heading font-bold text-left mb-14">How it Works</h2>
         <div className="grid md:grid-cols-2 gap-x-12 gap-y-5">
           {/* Column headers */}
           <p className="text-lg uppercase tracking-widest text-muted-foreground/60 font-heading mb-0">For Humans</p>
@@ -236,8 +245,8 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
 
       {/* ── Trust Primitives ── */}
       <div className="px-6 md:px-12 lg:px-16 py-20 max-w-[1400px] mx-auto w-full">
-        <h2 className="text-4xl md:text-5xl font-heading font-bold text-center mb-4">Trust Primitives</h2>
-        <p className="text-center text-lg text-muted-foreground mb-14 max-w-2xl mx-auto leading-relaxed">
+        <h2 className="text-4xl md:text-5xl font-heading font-bold text-left mb-4">Trust Primitives</h2>
+        <p className="text-left text-lg text-muted-foreground mb-14 max-w-2xl leading-relaxed">
           Every interaction is built on verifiable, immutable trust layers.
         </p>
         <div className="grid md:grid-cols-3 gap-6">
