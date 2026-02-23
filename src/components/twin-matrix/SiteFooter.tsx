@@ -21,7 +21,7 @@ const FEATURE_LINKS = [
 ];
 
 export const SiteFooter = () => (
-  <footer className="w-full border-t border-foreground/5 bg-background/80 backdrop-blur-sm">
+  <footer className="w-full border-t border-foreground/5">
     <div className="max-w-7xl mx-auto px-6 md:px-10 py-10">
       {/* Top row */}
       <div className="flex flex-col md:flex-row items-start gap-8 md:gap-12 lg:gap-16">

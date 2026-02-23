@@ -172,7 +172,7 @@ export const ParticleBackground = ({ color = 'cyan' }: ParticleBackgroundProps) 
     if (colorRef.current === 'cyan') {
       // ── Cyan orbital mode ──
       const isLight = themeRef.current !== 'dark';
-      const opacityMul = isLight ? 2.5 : 1;
+      const opacityMul = isLight ? 1.6 : 1;
       const cx = w / 2;
       const cy = h / 2;
       for (const p of cyanParticles.current) {
@@ -186,10 +186,19 @@ export const ParticleBackground = ({ color = 'cyan' }: ParticleBackgroundProps) 
         const alpha = Math.min(1, p.baseOpacity * (0.4 + 0.6 * Math.sin(time * 0.0008 + p.phase)) * opacityMul);
         const particleColor = isLight ? `rgba(0, 180, 180, ${alpha})` : `rgba(10, 255, 255, ${alpha})`;
         ctx.beginPath();
-        ctx.arc(px, py, p.size * (isLight ? 1.3 : 1), 0, Math.PI * 2);
+        ctx.arc(px, py, p.size * (isLight ? 1.15 : 1), 0, Math.PI * 2);
+        // Add soft glow halo on light themes
+        if (isLight && alpha > 0.15) {
+          ctx.shadowColor = 'rgba(0, 180, 180, 0.3)';
+          ctx.shadowBlur = 6;
+        } else {
+          ctx.shadowColor = 'transparent';
+          ctx.shadowBlur = 0;
+        }
         ctx.fillStyle = particleColor;
         ctx.fill();
       }
+      ctx.shadowBlur = 0;
     } else {
       // ── Red: floating + lobster gathering ──
       if (!redInitedRef.current) initRedParticles(w, h);
