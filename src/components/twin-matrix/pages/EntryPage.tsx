@@ -45,7 +45,7 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
 
   return (
     <div className="relative flex flex-col justify-center min-h-[85vh] px-6 md:px-12 lg:px-16">
-      <div className="flex flex-col lg:flex-row items-start lg:items-stretch gap-8 lg:gap-10 w-full max-w-[1400px] mx-auto">
+      <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6 lg:gap-10 w-full max-w-[1400px] mx-auto">
 
         {/* ── Left: Brand Typography ── */}
         <div className="flex-1 flex flex-col justify-center min-w-0">
@@ -56,27 +56,31 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
           {/* Main headline — largest, with scan-glow */}
           <h1 className="font-heading uppercase leading-[0.95] tracking-tight relative" style={{ fontSize: 'clamp(2rem, 5.5vw, 4.5rem)' }}>
             <span className="block text-foreground">
-              <span className="font-extrabold">Humans</span>
+              <span className="font-extrabold">Humans</span>{' '}
+              <span className="font-normal">list their experience.</span>
             </span>
-            <span className="block text-foreground font-normal">
-              list their experience.
-            </span>
-            <span className="block text-foreground mt-3">
-              <span className="font-extrabold">Agents</span>
-            </span>
-            <span className="block text-foreground font-normal">
-              find, negotiate,
-            </span>
-            <span className="block text-foreground font-normal">
-              and pay for it.
-            </span>
+            <div className="mt-3" style={{ paddingLeft: '2.5em' }}>
+              <span className="block text-foreground">
+                <span className="font-extrabold">Agents</span>
+              </span>
+              <span className="block text-foreground font-normal">
+                find, negotiate,
+              </span>
+              <span className="block text-foreground font-normal">
+                and pay for it.
+              </span>
+            </div>
             {/* Scan glow overlay */}
             <span className="scan-text-glow font-heading uppercase leading-[0.95] tracking-tight" aria-hidden="true" style={{ fontSize: 'clamp(2rem, 5.5vw, 4.5rem)' }}>
-              <span className="block font-extrabold">Humans</span>
-              <span className="block font-normal">list their experience.</span>
-              <span className="block mt-3 font-extrabold">Agents</span>
-              <span className="block font-normal">find, negotiate,</span>
-              <span className="block font-normal">and pay for it.</span>
+              <span className="block">
+                <span className="font-extrabold">Humans</span>{' '}
+                <span className="font-normal">list their experience.</span>
+              </span>
+              <div className="mt-3" style={{ paddingLeft: '2.5em' }}>
+                <span className="block font-extrabold">Agents</span>
+                <span className="block font-normal">find, negotiate,</span>
+                <span className="block font-normal">and pay for it.</span>
+              </div>
             </span>
           </h1>
 
