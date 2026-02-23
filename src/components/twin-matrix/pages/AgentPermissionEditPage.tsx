@@ -25,19 +25,19 @@ const QUADRANTS = ['Physical', 'Digital', 'Social', 'Spiritual'] as const;
 const DURATION_OPTIONS = ['7 days', '30 days', 'Custom'] as const;
 
 const cardStyle: React.CSSProperties = {
-  border: '1px solid rgba(255, 255, 255, 0.12)',
+  border: '1px solid var(--glass-border)',
   borderRadius: '16px',
   padding: '1.75rem',
-  background: 'rgba(255, 255, 255, 0.02)',
+  background: 'var(--glass-bg)',
 };
 
 const handleCardEnter = (e: React.MouseEvent<HTMLDivElement>) => {
-  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.25)';
-  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
+  e.currentTarget.style.borderColor = 'hsl(var(--foreground) / 0.2)';
+  e.currentTarget.style.background = 'hsl(var(--foreground) / 0.04)';
 };
 const handleCardLeave = (e: React.MouseEvent<HTMLDivElement>) => {
-  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
-  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.02)';
+  e.currentTarget.style.borderColor = '';
+  e.currentTarget.style.background = 'var(--glass-bg)';
 };
 
 function buildPermissionMaskFromQuadrants(scopes: string[]): bigint {

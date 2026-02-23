@@ -118,7 +118,7 @@ const MatrixPage = () => {
           )}
 
           {isCheckingToken && (
-            <div className="max-w-xl mx-auto w-full text-center mt-12 transition-all duration-300" style={{ border: '1px solid rgba(255, 255, 255, 0.12)', borderRadius: '16px', padding: '1.75rem', background: 'rgba(255, 255, 255, 0.02)' }}>
+            <div className="max-w-xl mx-auto w-full text-center mt-12 transition-all duration-300" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.75rem', background: 'var(--glass-bg)' }}>
               <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground font-heading mb-2">TwinMatrixSBT</p>
               <p className="text-base">{t('wizard.checkingIdentity')}</p>
             </div>

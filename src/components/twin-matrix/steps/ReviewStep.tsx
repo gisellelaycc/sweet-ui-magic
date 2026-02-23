@@ -132,10 +132,10 @@ export const ReviewStep = ({
                             const isHovered = hoveredCell === idx;
                             const borderColor = val > 0
                               ? `rgba(${slice.color}, ${0.2 + 0.5 * intensity})`
-                              : 'rgba(255, 255, 255, 0.08)';
+                              : 'hsl(var(--foreground) / 0.08)';
                             const textColor = val > 0
                               ? `rgba(${slice.color}, ${0.5 + 0.5 * intensity})`
-                              : 'rgba(255, 255, 255, 0.2)';
+                              : 'hsl(var(--foreground) / 0.2)';
                             return (
                               <div
                                 key={col}

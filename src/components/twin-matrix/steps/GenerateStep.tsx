@@ -109,7 +109,7 @@ export const GenerateStep = ({ wizardState, onComplete }: Props) => {
                     const justChanged = changedCells.has(idx);
                     const borderColor = val > 0
                       ? `rgba(10, 255, 255, ${0.15 + 0.4 * intensity})`
-                      : 'rgba(255, 255, 255, 0.06)';
+                      : 'hsl(var(--foreground) / 0.06)';
                     return (
                       <div key={col} className="rounded-full flex items-center justify-center relative" style={{
                         width: 'clamp(1.1rem, 2.5vw, 1.6rem)', height: 'clamp(1.1rem, 2.5vw, 1.6rem)', aspectRatio: '1',

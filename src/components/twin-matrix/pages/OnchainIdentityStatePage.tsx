@@ -24,10 +24,10 @@ const LAYERS = [
 const DIM_LABEL_MAP = new Map(SPEC_REGISTRY.map((item) => [item.dim_id, item.label]));
 
 const cardStyle: React.CSSProperties = {
-  border: '1px solid rgba(255, 255, 255, 0.10)',
+  border: '1px solid var(--glass-border)',
   borderRadius: '12px',
   padding: '1.5rem',
-  background: 'rgba(255, 255, 255, 0.02)',
+  background: 'var(--glass-bg)',
 };
 
 function shortDigest(digest: string): string {
@@ -134,7 +134,7 @@ export const OnchainIdentityStatePage = ({
         </div>
 
         {/* ── Stats Bar ── */}
-        <div className="grid grid-cols-5 gap-0 rounded-xl overflow-hidden" style={{ border: '1px solid rgba(255, 255, 255, 0.10)' }}>
+        <div className="grid grid-cols-5 gap-0 rounded-xl overflow-hidden" style={{ border: '1px solid var(--glass-border)' }}>
           {[
             { value: tokenId.toString(), label: 'TOKEN ID' },
             { value: `v${latestVersion}`, label: 'LATEST VERSION' },
@@ -146,8 +146,8 @@ export const OnchainIdentityStatePage = ({
               key={stat.label}
               className="flex flex-col items-center justify-center py-4 px-2"
               style={{
-                borderRight: i < arr.length - 1 ? '1px solid rgba(255, 255, 255, 0.10)' : 'none',
-                background: 'rgba(255, 255, 255, 0.02)',
+                borderRight: i < arr.length - 1 ? '1px solid var(--glass-border)' : 'none',
+                background: 'var(--glass-bg)',
               }}
             >
               <span
@@ -201,10 +201,10 @@ export const OnchainIdentityStatePage = ({
                           const isActive = value > 0;
                           const borderColor = isActive
                             ? `rgba(${slice.color}, ${0.3 + 0.6 * intensity})`
-                            : 'rgba(255, 255, 255, 0.05)';
+                            : 'hsl(var(--foreground) / 0.05)';
                           const textColor = isActive
                             ? `rgba(${slice.color}, ${0.6 + 0.4 * intensity})`
-                            : 'rgba(255, 255, 255, 0.12)';
+                            : 'hsl(var(--foreground) / 0.12)';
                           return (
                             <div
                               key={col}
@@ -216,7 +216,7 @@ export const OnchainIdentityStatePage = ({
                                 textShadow: isActive ? `0 0 10px rgba(${slice.color}, ${0.4 + 0.6 * intensity})` : 'none',
                                 background: isActive
                                   ? `rgba(${slice.color}, ${0.05 + intensity * 0.15})`
-                                  : 'rgba(255, 255, 255, 0.01)',
+                                  : 'hsl(var(--foreground) / 0.01)',
                                 boxShadow: isActive
                                   ? `0 0 ${6 + intensity * 14}px rgba(${slice.color}, ${0.15 + intensity * 0.35}), inset 0 0 ${4 + intensity * 8}px rgba(${slice.color}, ${intensity * 0.15})`
                                   : 'none',

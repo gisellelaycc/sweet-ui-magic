@@ -3,24 +3,24 @@ import { useI18n } from '@/lib/i18n';
 import { permissionMaskToGrantedQuadrants, type OnchainBoundAgent } from '@/lib/contracts/twin-matrix-sbt';
 
 const cardStyle: React.CSSProperties = {
-  border: '1px solid rgba(255, 255, 255, 0.12)',
+  border: '1px solid var(--glass-border)',
   borderRadius: '16px',
   padding: '1.75rem',
-  background: 'rgba(255, 255, 255, 0.02)',
+  background: 'var(--glass-bg)',
 };
 
 const handleCardEnter = (e: React.MouseEvent<HTMLDivElement>) => {
-  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.25)';
-  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
+  e.currentTarget.style.borderColor = 'hsl(var(--foreground) / 0.2)';
+  e.currentTarget.style.background = 'hsl(var(--foreground) / 0.04)';
 };
 const handleCardLeave = (e: React.MouseEvent<HTMLDivElement>) => {
-  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
-  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.02)';
+  e.currentTarget.style.borderColor = '';
+  e.currentTarget.style.background = 'var(--glass-bg)';
 };
 
 const statusColor: Record<string, string> = {
   active: 'rgba(10, 255, 255, 0.8)',
-  draft: 'rgba(255, 255, 255, 0.3)',
+  draft: 'hsl(var(--foreground) / 0.3)',
 };
 
 interface Props {

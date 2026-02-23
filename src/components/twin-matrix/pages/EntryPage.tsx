@@ -28,19 +28,19 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
   };
 
   const cardStyle: React.CSSProperties = {
-    border: '1px solid rgba(255, 255, 255, 0.12)',
+    border: '1px solid var(--glass-border)',
     borderRadius: '16px',
     padding: '1.75rem 1.75rem',
-    background: 'rgba(255, 255, 255, 0.02)'
+    background: 'var(--glass-bg)',
   };
 
   const handleCardEnter = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.25)';
-    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
+    e.currentTarget.style.borderColor = 'hsl(var(--foreground) / 0.2)';
+    e.currentTarget.style.background = 'hsl(var(--foreground) / 0.04)';
   };
   const handleCardLeave = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
-    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.02)';
+    e.currentTarget.style.borderColor = '';
+    e.currentTarget.style.background = 'var(--glass-bg)';
   };
 
   return (
@@ -148,7 +148,7 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
                 rel="noopener noreferrer"
                 className="w-9 h-9 flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity">
 
-                  <img src={link.icon} alt={link.alt} className="w-7 h-7" />
+                  <img src={link.icon} alt={link.alt} className="w-7 h-7 social-icon" />
                 </a>
               )}
             </div>

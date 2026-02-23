@@ -115,8 +115,8 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
                       onMouseLeave={() => { if (isSoon) setSoonTooltip(null); }}
                       className="relative w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-left transition-all duration-300"
                       style={{
-                        background: isChipSelected ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.02)',
-                        border: `1px solid ${isChipSelected ? 'rgba(255, 255, 255, 0.15)' : 'rgba(255, 255, 255, 0.04)'}`,
+                        background: isChipSelected ? 'hsl(var(--foreground) / 0.08)' : 'var(--glass-bg)',
+                        border: `1px solid ${isChipSelected ? 'hsl(var(--foreground) / 0.15)' : 'var(--glass-border)'}`,
                         opacity: isMore ? 0.4 : isSoon ? 0.4 : isChipSelected ? 1 : 0.7,
                         filter: isSoon ? 'blur(0.5px)' : 'none',
                         cursor: isSoon || isMore ? 'default' : 'pointer',

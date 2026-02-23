@@ -7,10 +7,10 @@ import { SiteFooter } from '@/components/twin-matrix/SiteFooter';
 import { SignalRecordsPage } from '@/components/twin-matrix/pages/SignalRecordsPage';
 
 const cardStyle: React.CSSProperties = {
-  border: '1px solid rgba(255, 255, 255, 0.12)',
+  border: '1px solid var(--glass-border)',
   borderRadius: '16px',
   padding: '1.75rem',
-  background: 'rgba(255, 255, 255, 0.02)',
+  background: 'var(--glass-bg)',
 };
 
 const TasksPage = () => {
