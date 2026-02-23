@@ -1,54 +1,27 @@
 import { useNavigate } from 'react-router-dom';
 import { useTwinMatrix } from '@/contexts/TwinMatrixContext';
-import { ParticleBackground } from '@/components/twin-matrix/ParticleBackground';
-import { TopNav } from '@/components/twin-matrix/TopNav';
+import { PageLayout } from '@/components/twin-matrix/PageLayout';
 import { EntryPage } from '@/components/twin-matrix/pages/EntryPage';
-import { SiteFooter } from '@/components/twin-matrix/SiteFooter';
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const { isConnected, openConnectModal, disconnect, walletAddress } = useTwinMatrix();
+  const { isConnected, openConnectModal } = useTwinMatrix();
 
   return (
-    <div className="h-screen w-full overflow-y-auto bg-background text-foreground">
-      <div className="min-h-screen flex flex-col relative" style={{ zIndex: 10 }}>
-        <ParticleBackground color="cyan" />
-
-        <TopNav
-          activePage={null}
-          onNavigate={(id) => {
-            if (id === 'identity') navigate('/matrix');
-            else if (id === 'agent') navigate('/agent');
-            else if (id === 'missions') navigate('/tasks');
-            else navigate('/');
-          }}
-          hasIdentity={false}
-          isWalletConnected={isConnected}
-          walletAddress={walletAddress}
-          onConnectWallet={() => openConnectModal?.()}
-          onDisconnectWallet={() => disconnect()}
-        />
-
-        <main className="flex-1 min-h-0 px-4 py-4 flex flex-col relative z-10">
-          <EntryPage
-            onHumanEntry={() => {
-              if (!isConnected) {
-                openConnectModal?.();
-              } else {
-                navigate('/matrix');
-              }
-            }}
-            onAgentEntry={() => navigate('/agent')}
-            locked={!isConnected}
-            onRequestConnect={() => openConnectModal?.()}
-          />
-        </main>
-
-        <div className="relative z-10">
-          <SiteFooter />
-        </div>
-      </div>
-    </div>
+    <PageLayout activePage={null}>
+      <EntryPage
+        onHumanEntry={() => {
+          if (!isConnected) {
+            openConnectModal?.();
+          } else {
+            navigate('/verify');
+          }
+        }}
+        onAgentEntry={() => navigate('/agents')}
+        locked={!isConnected}
+        onRequestConnect={() => openConnectModal?.()}
+      />
+    </PageLayout>
   );
 };
 

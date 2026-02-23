@@ -1,20 +1,12 @@
-import { useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTwinMatrix } from '@/contexts/TwinMatrixContext';
-import { ParticleBackground } from '@/components/twin-matrix/ParticleBackground';
-import { TopNav } from '@/components/twin-matrix/TopNav';
-import { SiteFooter } from '@/components/twin-matrix/SiteFooter';
 import { useI18n } from '@/lib/i18n';
-
-import { IdentityStep } from '@/components/twin-matrix/steps/IdentityStep';
-import { CategoryStep } from '@/components/twin-matrix/steps/CategoryStep';
-import { SportSetupStep } from '@/components/twin-matrix/steps/SportSetupStep';
-import { SportTwinStep } from '@/components/twin-matrix/steps/SportTwinStep';
-import { SoulStep } from '@/components/twin-matrix/steps/SoulStep';
-import { GenerateStep } from '@/components/twin-matrix/steps/GenerateStep';
-import { ReviewStep } from '@/components/twin-matrix/steps/ReviewStep';
+import { PageLayout } from '@/components/twin-matrix/PageLayout';
 import { OnchainIdentityStatePage } from '@/components/twin-matrix/pages/OnchainIdentityStatePage';
-import { EntryPage } from '@/components/twin-matrix/pages/EntryPage';
+import { SignalRecordsPage } from '@/components/twin-matrix/pages/SignalRecordsPage';
+
+type MatrixTab = 'matrix' | 'listing' | 'opportunities';
 
 const MatrixPage = () => {
   const navigate = useNavigate();
@@ -22,8 +14,6 @@ const MatrixPage = () => {
   const {
     isConnected,
     openConnectModal,
-    disconnect,
-    walletAddress,
     isContractConfigured,
     isCheckingToken,
     contractError,
@@ -33,199 +23,180 @@ const MatrixPage = () => {
     versions,
     boundAgents,
     refreshOnchainState,
-    state,
     setState,
-    next,
-    handleGenerateComplete,
-    txAction,
-    handleMintSbt,
-    handleUpdateMatrix,
-    needsMatrixUpdate,
     setNeedsMatrixUpdate,
-    showAgentNudge,
-    setShowAgentNudge,
-    isWrongNetwork,
-    isSwitchingNetwork,
-    switchToBscTestnet,
+    walletAddress,
   } = useTwinMatrix();
 
-  const showIdentityFlow = !hasMintedSbt || needsMatrixUpdate;
-  const showBack = showIdentityFlow && state.step > 0 && state.step < 6;
+  const [tab, setTab] = useState<MatrixTab>('matrix');
 
-  const reviewActionLabel = useMemo(() => {
-    if (needsMatrixUpdate || hasMintedSbt) return t('wizard.updateMatrix');
-    return t('wizard.mintSbt');
-  }, [needsMatrixUpdate, hasMintedSbt, t]);
+  const cardStyle: React.CSSProperties = {
+    border: '1px solid var(--glass-border)',
+    borderRadius: '16px',
+    padding: '1.75rem',
+    background: 'var(--glass-bg)',
+  };
 
-  // Redirect to home if not connected
+  const tabBtn = (id: MatrixTab, label: string) => (
+    <button
+      key={id}
+      onClick={() => setTab(id)}
+      className={`text-sm uppercase tracking-widest font-medium transition-colors px-1 pb-2 ${
+        tab === id ? 'text-foreground border-b-2 border-foreground' : 'text-muted-foreground hover:text-foreground'
+      }`}
+    >
+      {label}
+    </button>
+  );
+
+  // Not connected — prompt to connect
   if (!isConnected) {
     return (
-      <div className="h-screen w-full overflow-y-auto bg-background text-foreground">
-        <div className="min-h-screen flex flex-col relative" style={{ zIndex: 10 }}>
-          <ParticleBackground color="cyan" />
-          <TopNav
-            activePage="identity"
-            onNavigate={(id) => {
-              if (id === null) navigate('/');
-              else if (id === 'identity') navigate('/matrix');
-              else if (id === 'agent') navigate('/agent');
-              else if (id === 'missions') navigate('/tasks');
-            }}
-            hasIdentity={false}
-            isWalletConnected={false}
-            walletAddress={undefined}
-            onConnectWallet={() => openConnectModal?.()}
-            onDisconnectWallet={() => disconnect()}
-          />
-          <main className="flex-1 min-h-0 px-4 py-4 flex flex-col relative z-10">
-            <EntryPage
-              onHumanEntry={() => openConnectModal?.()}
-              onAgentEntry={() => navigate('/agent')}
-              locked
-              onRequestConnect={() => openConnectModal?.()}
-            />
-          </main>
+      <PageLayout activePage="identity">
+        <div className="flex-1 flex items-center justify-center">
+          <div className="max-w-md text-center space-y-6" style={cardStyle}>
+            <h2 className="text-xl font-heading font-bold">Connect Wallet</h2>
+            <p className="text-muted-foreground text-sm">Connect your wallet to view your Twin Matrix identity.</p>
+            <button onClick={() => openConnectModal?.()} className="btn-twin btn-twin-primary py-4 px-8 w-full">
+              Connect Wallet
+            </button>
+          </div>
         </div>
-      </div>
+      </PageLayout>
+    );
+  }
+
+  // Connected but no SBT — redirect to mint
+  if (!isCheckingToken && !contractError && !hasMintedSbt) {
+    return (
+      <PageLayout activePage="identity">
+        <div className="flex-1 flex items-center justify-center">
+          <div className="max-w-md text-center space-y-6" style={cardStyle}>
+            <h2 className="text-xl font-heading font-bold">No Identity Found</h2>
+            <p className="text-muted-foreground text-sm">You haven't created your Twin Matrix yet. Start by verifying your humanity.</p>
+            <button onClick={() => navigate('/verify')} className="btn-twin btn-twin-primary py-4 px-8 w-full">
+              Create Identity
+            </button>
+          </div>
+        </div>
+      </PageLayout>
     );
   }
 
   return (
-    <div className="h-screen w-full overflow-y-auto bg-background text-foreground">
-      <div className="min-h-screen flex flex-col relative" style={{ zIndex: 10 }}>
-        <ParticleBackground color="cyan" />
+    <PageLayout activePage="identity">
+      <div className="max-w-6xl mx-auto w-full space-y-6 py-4">
+        {!isContractConfigured && (
+          <div className="mb-3 transition-all duration-300" style={{ border: '1px solid rgba(250, 204, 21, 0.3)', borderRadius: '16px', padding: '1.25rem 1.75rem', background: 'rgba(250, 204, 21, 0.06)' }}>
+            <p className="text-sm text-yellow-200 text-center">⚠️ Contract address not configured — on-chain features are disabled in this preview.</p>
+          </div>
+        )}
 
-        <TopNav
-          activePage="identity"
-          onNavigate={(id) => {
-            if (id === null) navigate('/');
-            else if (id === 'identity') navigate('/matrix');
-            else if (id === 'agent') navigate('/agent');
-            else if (id === 'missions') navigate('/tasks');
-          }}
-          hasIdentity={hasMintedSbt}
-          isWalletConnected={isConnected}
-          walletAddress={walletAddress}
-          onConnectWallet={() => openConnectModal?.()}
-          onDisconnectWallet={() => disconnect()}
-        />
+        {isCheckingToken && (
+          <div className="text-center mt-12" style={cardStyle}>
+            <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground font-heading mb-2">TwinMatrixSBT</p>
+            <p className="text-base">{t('wizard.checkingIdentity')}</p>
+          </div>
+        )}
 
-        <main className="flex-1 min-h-0 px-4 py-4 flex flex-col relative z-10">
-          {!isContractConfigured && (
-            <div className="max-w-4xl mx-auto w-full mb-3 transition-all duration-300" style={{ border: '1px solid rgba(250, 204, 21, 0.3)', borderRadius: '16px', padding: '1.25rem 1.75rem', background: 'rgba(250, 204, 21, 0.06)' }}>
-              <p className="text-sm text-yellow-200 text-center">⚠️ Contract address not configured — on-chain features are disabled in this preview.</p>
+        {!isCheckingToken && contractError && (
+          <div className="mt-8" style={{ border: '1px solid rgba(244, 63, 94, 0.3)', borderRadius: '16px', padding: '1.75rem', background: 'rgba(244, 63, 94, 0.06)' }}>
+            <p className="text-base text-destructive">{t('wizard.failedFetchContract')}</p>
+            <p className="text-sm text-muted-foreground mt-1 break-all">{contractError}</p>
+            <button onClick={() => void refreshOnchainState()} className="mt-4 py-3 px-6 rounded-xl text-sm font-semibold bg-foreground text-background hover:bg-foreground/90 transition-colors">
+              {t('wizard.retry')}
+            </button>
+          </div>
+        )}
+
+        {!isCheckingToken && !contractError && hasMintedSbt && (
+          <>
+            {/* Tab bar */}
+            <div className="flex gap-6 border-b border-foreground/10">
+              {tabBtn('matrix', 'Twin Matrix')}
+              {tabBtn('listing', 'Listing')}
+              {tabBtn('opportunities', 'Opportunities')}
             </div>
-          )}
 
-          {isCheckingToken && (
-            <div className="max-w-xl mx-auto w-full text-center mt-12 transition-all duration-300" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.75rem', background: 'var(--glass-bg)' }}>
-              <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground font-heading mb-2">TwinMatrixSBT</p>
-              <p className="text-base">{t('wizard.checkingIdentity')}</p>
-            </div>
-          )}
+            {tab === 'matrix' && (
+              <div className="animate-fade-in">
+                <OnchainIdentityStatePage
+                  tokenId={tokenId}
+                  walletAddress={walletAddress}
+                  latestVersion={latestVersion}
+                  versions={versions}
+                  boundAgents={boundAgents}
+                  onReconfigure={() => {
+                    setNeedsMatrixUpdate(true);
+                    setState((s) => ({ ...s, step: 2, activeModules: s.activeModules.filter((m) => m === 'sport') }));
+                    navigate('/mint');
+                  }}
+                  onRefresh={() => void refreshOnchainState()}
+                  isRefreshing={isCheckingToken}
+                />
+              </div>
+            )}
 
-          {!isCheckingToken && contractError && (
-            <div className="max-w-2xl mx-auto w-full mt-8 transition-all duration-300" style={{ border: '1px solid rgba(244, 63, 94, 0.3)', borderRadius: '16px', padding: '1.75rem', background: 'rgba(244, 63, 94, 0.06)' }}>
-              <p className="text-base text-destructive">{t('wizard.failedFetchContract')}</p>
-              <p className="text-sm text-muted-foreground mt-1 break-all">{contractError}</p>
-              <button onClick={() => void refreshOnchainState()} className="mt-4 py-3 px-6 rounded-xl text-sm font-semibold bg-foreground text-background hover:bg-foreground/90 transition-colors">
-                {t('wizard.retry')}
-              </button>
-            </div>
-          )}
+            {tab === 'listing' && (
+              <div className="animate-fade-in space-y-6">
+                <div>
+                  <h2 className="text-xl font-heading font-bold">Marketplace Presence</h2>
+                  <p className="text-sm text-muted-foreground mt-1">Control how buyer agents discover and interact with your profile.</p>
+                </div>
 
-          {!isCheckingToken && !contractError && !showIdentityFlow && hasMintedSbt && (
-            <>
-              {showAgentNudge && (
-                <div className="max-w-6xl mx-auto w-full mb-4 rounded-xl border border-foreground/15 bg-foreground/5 px-4 py-3 flex items-center justify-between gap-3">
-                  <p className="text-xs text-muted-foreground">{t('wizard.matrixUpdateNudge')}</p>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <button onClick={() => setShowAgentNudge(false)} className="btn-twin btn-twin-ghost py-1.5 px-3 text-xs">
-                      {t('wizard.dismiss')}
-                    </button>
-                    <button
-                      onClick={() => {
-                        setShowAgentNudge(false);
-                        navigate('/agent');
-                      }}
-                      className="btn-twin btn-twin-primary py-1.5 px-3 text-xs"
-                    >
-                      {t('wizard.goToAgentTab')}
-                    </button>
+                <div style={cardStyle} className="space-y-4">
+                  <p className="text-sm uppercase tracking-widest text-muted-foreground/60 font-heading">Visibility</p>
+                  {[
+                    { id: 'public', label: 'Public', desc: 'Fully discoverable by all buyer agents. Maximum exposure.' },
+                    { id: 'semi', label: 'Semi-Public', desc: 'Visible to verified agents only. Requires authorization to view full matrix.' },
+                    { id: 'private', label: 'Private', desc: 'Hidden from search. Only accessible via direct invitation.' },
+                  ].map((opt) => (
+                    <label key={opt.id} className="flex items-start gap-3 cursor-pointer p-3 rounded-xl hover:bg-foreground/5 transition-colors">
+                      <input type="radio" name="visibility" defaultChecked={opt.id === 'public'} className="mt-1" />
+                      <div>
+                        <p className="text-sm font-medium">{opt.label}</p>
+                        <p className="text-xs text-muted-foreground">{opt.desc}</p>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+
+                <div style={cardStyle} className="space-y-4">
+                  <p className="text-sm uppercase tracking-widest text-muted-foreground/60 font-heading">Agent Profile Card</p>
+                  <p className="text-xs text-muted-foreground">This is how buyer agents see your listing.</p>
+                  <div className="rounded-xl border border-foreground/10 p-4 space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-foreground/10 flex items-center justify-center text-sm font-bold">
+                        {walletAddress?.slice(0, 2)}
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium">{walletAddress}</p>
+                        <p className="text-xs text-muted-foreground">Verified Human · v{latestVersion}</p>
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {['sport', 'running', 'marathon', 'fitness'].map(tag => (
+                        <span key={tag} className="text-xs font-mono px-2 py-0.5 rounded-md bg-foreground/5">{tag}</span>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              )}
 
-              <OnchainIdentityStatePage
-                tokenId={tokenId}
-                walletAddress={walletAddress}
-                latestVersion={latestVersion}
-                versions={versions}
-                boundAgents={boundAgents}
-                onReconfigure={() => {
-                  setNeedsMatrixUpdate(true);
-                  setState((s) => ({ ...s, step: 2, activeModules: s.activeModules.filter((moduleId) => moduleId === 'sport') }));
-                }}
-                onRefresh={() => void refreshOnchainState()}
-                isRefreshing={isCheckingToken}
-              />
-            </>
-          )}
-
-          {!isCheckingToken && !contractError && showIdentityFlow && (
-            <>
-              {showBack && (
-                <button
-                  onClick={() => setState((s) => ({ ...s, step: Math.max(0, s.step - 1) }))}
-                  className="absolute top-6 left-6 z-20 flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <span className="text-lg leading-none">←</span>
-                  <span>{t('common.back')}</span>
+                <button className="btn-twin btn-twin-primary py-3 px-6 text-sm">
+                  Publish Changes
                 </button>
-              )}
+              </div>
+            )}
 
-              {state.step === 0 && (
-                <EntryPage onHumanEntry={next} onAgentEntry={() => navigate('/agent')} />
-              )}
-              {state.step === 1 && (
-                <IdentityStep data={state.profile} onUpdate={(p) => setState((s) => ({ ...s, profile: p }))} onNext={next} />
-              )}
-              {state.step === 2 && (
-                <CategoryStep activeModules={state.activeModules} onUpdate={(m) => setState((s) => ({ ...s, activeModules: m }))} onNext={next} />
-              )}
-              {state.step === 3 && (
-                <SportSetupStep data={state.sportSetup} onUpdate={(d) => setState((s) => ({ ...s, sportSetup: d }))} onNext={next} />
-              )}
-              {state.step === 4 && (
-                <SportTwinStep data={state.sportTwin} onUpdate={(d) => setState((s) => ({ ...s, sportTwin: d }))} onNext={next} />
-              )}
-              {state.step === 5 && (
-                <SoulStep data={state.soul} onUpdate={(d) => setState((s) => ({ ...s, soul: d }))} onNext={next} />
-              )}
-              {state.step === 6 && <GenerateStep wizardState={state} onComplete={handleGenerateComplete} />}
-              {state.step === 7 && (
-                <ReviewStep
-                  signature={state.signature}
-                  tags={[]}
-                  activeModules={state.activeModules}
-                  onNext={next}
-                  onBack={() => setState((s) => ({ ...s, step: 5 }))}
-                  primaryActionLabel={reviewActionLabel}
-                  onPrimaryAction={needsMatrixUpdate || hasMintedSbt ? handleUpdateMatrix : handleMintSbt}
-                  primaryActionLoading={txAction !== null}
-                  primaryActionDisabled={txAction !== null || isWrongNetwork || ((needsMatrixUpdate || hasMintedSbt) && state.signature.length !== 256)}
-                  networkMismatch={isWrongNetwork}
-                  expectedNetworkLabel="BSC Testnet (97)"
-                  onSwitchNetwork={switchToBscTestnet}
-                  switchingNetwork={isSwitchingNetwork}
-                />
-              )}
-            </>
-          )}
-        </main>
+            {tab === 'opportunities' && (
+              <div className="animate-fade-in">
+                <SignalRecordsPage hasMintedSbt={hasMintedSbt} />
+              </div>
+            )}
+          </>
+        )}
       </div>
-      <SiteFooter />
-    </div>
+    </PageLayout>
   );
 };
 

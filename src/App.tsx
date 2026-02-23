@@ -10,9 +10,16 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import { wagmiConfig } from "./lib/wallet/config";
 import { TwinMatrixProvider } from "./contexts/TwinMatrixContext";
 import HomePage from "./pages/HomePage";
+import VerifyPage from "./pages/VerifyPage";
+import MintPage from "./pages/MintPage";
 import MatrixPage from "./pages/MatrixPage";
-import AgentPage from "./pages/AgentPage";
-import TasksPage from "./pages/TasksPage";
+import AccountPage from "./pages/AccountPage";
+import AgentsOverviewPage from "./pages/agents/AgentsOverviewPage";
+import AgentsConnectPage from "./pages/agents/AgentsConnectPage";
+import AgentsSkillPage from "./pages/agents/AgentsSkillPage";
+import AgentsApiPage from "./pages/agents/AgentsApiPage";
+import AgentsExamplesPage from "./pages/agents/AgentsExamplesPage";
+import AgentsConsolePage from "./pages/agents/AgentsConsolePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,9 +44,16 @@ const App = () => (
               <TwinMatrixProvider>
                 <Routes>
                   <Route path="/" element={<HomePage />} />
+                  <Route path="/verify" element={<VerifyPage />} />
+                  <Route path="/mint" element={<MintPage />} />
                   <Route path="/matrix" element={<MatrixPage />} />
-                  <Route path="/agent" element={<AgentPage />} />
-                  <Route path="/tasks" element={<TasksPage />} />
+                  <Route path="/account" element={<AccountPage />} />
+                  <Route path="/agents" element={<AgentsOverviewPage />} />
+                  <Route path="/agents/connect" element={<AgentsConnectPage />} />
+                  <Route path="/agents/skill" element={<AgentsSkillPage />} />
+                  <Route path="/agents/api" element={<AgentsApiPage />} />
+                  <Route path="/agents/examples" element={<AgentsExamplesPage />} />
+                  <Route path="/agents/console" element={<AgentsConsolePage />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>

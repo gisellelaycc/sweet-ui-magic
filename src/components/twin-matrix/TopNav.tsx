@@ -3,7 +3,7 @@ import logo from '@/assets/twin3-logo.svg';
 import { useI18n } from '@/lib/i18n';
 import { useTheme, type ColorMode } from '@/contexts/ThemeContext';
 
-type NavPage = 'identity' | 'update' | 'agent' | 'auth' | 'missions' | 'settings' | null;
+type NavPage = 'identity' | 'agents' | 'account' | null;
 
 interface Props {
   activePage: NavPage;
@@ -17,8 +17,8 @@ interface Props {
 
 const NAV_ITEMS: { id: NavPage; label: string }[] = [
   { id: 'identity', label: 'Identity' },
-  { id: 'agent', label: 'Agents' },
-  { id: 'missions', label: 'Tasks' },
+  { id: 'agents', label: 'For Agents' },
+  { id: 'account', label: 'Account' },
 ];
 
 export const TopNav = ({
