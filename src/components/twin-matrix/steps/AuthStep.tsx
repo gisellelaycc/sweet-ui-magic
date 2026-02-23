@@ -137,7 +137,7 @@ const ParticleCanvas = ({ width, height }: { width: number; height: number }) =>
 
 /* ── Thin Divider ── */
 const ThinDivider = () => (
-  <div className="w-full h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)' }} />
+  <div className="w-full h-px" style={{ background: 'linear-gradient(90deg, transparent, hsl(var(--foreground) / 0.15), transparent)' }} />
 );
 
 /* ── Constants ── */
@@ -596,7 +596,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
                                 const next = selected ? scopes.filter((x) => x !== s) : [...scopes, s];
                                 setPermission((p) => ({ ...p, identityScopes: next, identityScope: next[0] || '' }));
                               }}
-                              className={`text-sm px-4 py-1.5 rounded-full transition-all ${selected ? 'text-foreground border' : 'text-muted-foreground/50 border border-foreground/10 hover:border-foreground/20'}`}
+                              className={`text-sm px-4 py-1.5 rounded-full transition-all ${selected ? 'text-foreground border-2' : 'text-muted-foreground/60 border border-foreground/20 hover:border-foreground/30'}`}
                               style={selected ? { borderColor: 'rgba(242,68,85,0.4)', background: 'rgba(242,68,85,0.08)', color: 'rgba(242,68,85,0.9)' } : {}}>
                               {t(`common.${s.toLowerCase()}`)}
                             </button>
@@ -613,9 +613,9 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
                       <div className="space-y-2">
                         {DURATION_OPTIONS.map((d) => (
                           <div key={d} className="flex items-center gap-3 cursor-pointer" onClick={() => setPermission((p) => ({ ...p, authorizationDuration: d, customDurationDays: d === 'Custom' ? p.customDurationDays : '' }))}>
-                            <span className="w-3.5 h-3.5 rounded-full border flex items-center justify-center flex-shrink-0"
-                              style={{ borderColor: permission.authorizationDuration === d ? '#F24455' : 'rgba(255,255,255,0.15)' }}>
-                              {permission.authorizationDuration === d && <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#F24455' }} />}
+                            <span className="w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0"
+                              style={{ borderColor: permission.authorizationDuration === d ? '#F24455' : 'hsl(var(--foreground) / 0.25)' }}>
+                              {permission.authorizationDuration === d && <span className="w-2 h-2 rounded-full" style={{ background: '#F24455' }} />}
                             </span>
                             <span className="text-sm text-foreground/80">{t(d === '7 days' ? 'duration.7days' : d === '30 days' ? 'duration.30days' : 'duration.custom')}</span>
                           </div>

@@ -174,7 +174,7 @@ export const AgentPermissionEditPage = ({
                     setSelectedScopes(next);
                   }}
                   className={`text-sm px-5 py-2 rounded-full transition-all ${
-                    selected ? 'text-foreground border' : 'text-muted-foreground/50 border border-foreground/10 hover:border-foreground/20'
+                    selected ? 'text-foreground border-2' : 'text-muted-foreground/60 border border-foreground/20 hover:border-foreground/30'
                   }`}
                   style={selected ? { borderColor: 'rgba(242,68,85,0.4)', background: 'rgba(242,68,85,0.08)', color: 'rgba(242,68,85,0.9)' } : {}}
                 >
@@ -203,8 +203,8 @@ export const AgentPermissionEditPage = ({
                 }}
               >
                 <span
-                  className="w-4 h-4 rounded-full border flex items-center justify-center flex-shrink-0"
-                  style={{ borderColor: duration === option ? '#F24455' : 'rgba(255,255,255,0.15)' }}
+                  className="w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0"
+                  style={{ borderColor: duration === option ? '#F24455' : 'hsl(var(--foreground) / 0.25)' }}
                 >
                   {duration === option && <span className="w-2 h-2 rounded-full" style={{ background: '#F24455' }} />}
                 </span>
