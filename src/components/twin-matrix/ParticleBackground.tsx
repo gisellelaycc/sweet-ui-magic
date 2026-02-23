@@ -1,4 +1,5 @@
 import { useEffect, useRef, useCallback } from 'react';
+import { useTheme } from '@/contexts/ThemeContext';
 
 /* ── Lobster/shrimp silhouette (20×24 grid, more detailed) ── */
 const LOBSTER_PIXELS = [
@@ -91,13 +92,16 @@ interface ParticleBackgroundProps {
 
 export const ParticleBackground = ({ color = 'cyan' }: ParticleBackgroundProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { colorMode } = useTheme();
   const cyanParticles = useRef(createCyanParticles(256));
   const redParticles = useRef<RedParticle[]>([]);
   const raf = useRef(0);
   const colorRef = useRef(color);
   const timerRef = useRef(0);
   const redInitedRef = useRef(false);
+  const themeRef = useRef(colorMode);
   colorRef.current = color;
+  themeRef.current = colorMode;
 
   const initRedParticles = useCallback((w: number, h: number) => {
     const scale = Math.min(w, h) * 0.018;
@@ -167,6 +171,8 @@ export const ParticleBackground = ({ color = 'cyan' }: ParticleBackgroundProps) 
 
     if (colorRef.current === 'cyan') {
       // ── Cyan orbital mode ──
+      const isLight = themeRef.current !== 'dark';
+      const opacityMul = isLight ? 2.5 : 1;
       const cx = w / 2;
       const cy = h / 2;
       for (const p of cyanParticles.current) {
@@ -177,10 +183,11 @@ export const ParticleBackground = ({ color = 'cyan' }: ParticleBackgroundProps) 
         const jy = Math.cos(time * 0.001 + p.phase * 2) * p.jitter;
         const px = cx + Math.cos(p.angle) * r + jx;
         const py = cy + Math.sin(p.angle) * r * 0.6 + jy;
-        const alpha = p.baseOpacity * (0.4 + 0.6 * Math.sin(time * 0.0008 + p.phase));
+        const alpha = Math.min(1, p.baseOpacity * (0.4 + 0.6 * Math.sin(time * 0.0008 + p.phase)) * opacityMul);
+        const particleColor = isLight ? `rgba(0, 180, 180, ${alpha})` : `rgba(10, 255, 255, ${alpha})`;
         ctx.beginPath();
-        ctx.arc(px, py, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(10, 255, 255, ${alpha})`;
+        ctx.arc(px, py, p.size * (isLight ? 1.3 : 1), 0, Math.PI * 2);
+        ctx.fillStyle = particleColor;
         ctx.fill();
       }
     } else {
