@@ -58,6 +58,7 @@ interface CyanParticle {
   speed: number;
   phase: number;
   jitter: number;
+  layer: 'a' | 'b' | 'c';
 }
 
 interface RedParticle {
@@ -68,23 +69,58 @@ interface RedParticle {
   baseOpacity: number;
   phase: number;
   isLobster: boolean;
-  // for floating
   speed: number;
   angle: number;
   radius: number;
   jitter: number;
 }
 
-const createCyanParticles = (count: number): CyanParticle[] =>
-  Array.from({ length: count }, (_, i) => ({
-    angle: (i / count) * Math.PI * 2 + Math.random() * 0.4,
-    radius: 120 + Math.random() * 500,
-    size: 0.8 + Math.random() * 2,
-    baseOpacity: 0.08 + Math.random() * 0.25,
-    speed: 0.0001 + Math.random() * 0.0004,
-    phase: Math.random() * Math.PI * 2,
-    jitter: 0.5 + Math.random() * 2,
-  }));
+const createCyanParticles = (count: number): CyanParticle[] => {
+  const particles: CyanParticle[] = [];
+  // Layer A: 1-2px micro-bright dots (60%)
+  const countA = Math.floor(count * 0.6);
+  for (let i = 0; i < countA; i++) {
+    particles.push({
+      angle: (i / countA) * Math.PI * 2 + Math.random() * 0.4,
+      radius: 80 + Math.random() * 550,
+      size: 0.6 + Math.random() * 1.0,
+      baseOpacity: 0.15 + Math.random() * 0.30,
+      speed: 0.0001 + Math.random() * 0.0004,
+      phase: Math.random() * Math.PI * 2,
+      jitter: 0.3 + Math.random() * 1.5,
+      layer: 'a',
+    });
+  }
+  // Layer B: 2-4px medium bright (28%)
+  const countB = Math.floor(count * 0.28);
+  for (let i = 0; i < countB; i++) {
+    particles.push({
+      angle: (i / countB) * Math.PI * 2 + Math.random() * 0.6,
+      radius: 100 + Math.random() * 500,
+      size: 1.8 + Math.random() * 2.0,
+      baseOpacity: 0.08 + Math.random() * 0.18,
+      speed: 0.00008 + Math.random() * 0.0003,
+      phase: Math.random() * Math.PI * 2,
+      jitter: 0.8 + Math.random() * 2.5,
+      layer: 'b',
+    });
+  }
+  // Layer C: large blurry nebula spots (12%)
+  const countC = count - countA - countB;
+  for (let i = 0; i < countC; i++) {
+    particles.push({
+      angle: (i / countC) * Math.PI * 2 + Math.random() * 1.0,
+      radius: 150 + Math.random() * 450,
+      size: 6 + Math.random() * 10,
+      baseOpacity: 0.03 + Math.random() * 0.06,
+      speed: 0.00005 + Math.random() * 0.0002,
+      phase: Math.random() * Math.PI * 2,
+      jitter: 1.5 + Math.random() * 4,
+      layer: 'c',
+    });
+  }
+  return particles;
+};
 
 interface ParticleBackgroundProps {
   color?: 'cyan' | 'red';
@@ -170,11 +206,11 @@ export const ParticleBackground = ({ color = 'cyan' }: ParticleBackgroundProps) 
     ctx.clearRect(0, 0, w, h);
 
     if (colorRef.current === 'cyan') {
-      // ── Cyan orbital mode ──
+      // ── Cyan stardust mode (3 layers) ──
       const isLight = themeRef.current !== 'dark';
-      const opacityMul = isLight ? 1.6 : 1;
       const cx = w / 2;
       const cy = h / 2;
+
       for (const p of cyanParticles.current) {
         p.angle += p.speed;
         const breathe = Math.sin(time * 0.0005 + p.phase) * 0.15 + 1;
@@ -183,20 +219,49 @@ export const ParticleBackground = ({ color = 'cyan' }: ParticleBackgroundProps) 
         const jy = Math.cos(time * 0.001 + p.phase * 2) * p.jitter;
         const px = cx + Math.cos(p.angle) * r + jx;
         const py = cy + Math.sin(p.angle) * r * 0.6 + jy;
-        const alpha = Math.min(1, p.baseOpacity * (0.4 + 0.6 * Math.sin(time * 0.0008 + p.phase)) * opacityMul);
-        const particleColor = isLight ? `rgba(0, 180, 180, ${alpha})` : `rgba(10, 255, 255, ${alpha})`;
-        ctx.beginPath();
-        ctx.arc(px, py, p.size * (isLight ? 1.15 : 1), 0, Math.PI * 2);
-        // Add soft glow halo on light themes
-        if (isLight && alpha > 0.15) {
-          ctx.shadowColor = 'rgba(0, 180, 180, 0.3)';
-          ctx.shadowBlur = 6;
+        const pulse = 0.4 + 0.6 * Math.sin(time * 0.0008 + p.phase);
+
+        if (p.layer === 'c') {
+          // Layer C: large blurry nebula spots
+          const alpha = Math.min(0.08, p.baseOpacity * pulse * (isLight ? 1.8 : 1));
+          const gradient = ctx.createRadialGradient(px, py, 0, px, py, p.size);
+          const baseColor = isLight ? '0, 170, 175' : '10, 255, 255';
+          gradient.addColorStop(0, `rgba(${baseColor}, ${alpha * 1.5})`);
+          gradient.addColorStop(0.5, `rgba(${baseColor}, ${alpha * 0.5})`);
+          gradient.addColorStop(1, `rgba(${baseColor}, 0)`);
+          ctx.beginPath();
+          ctx.arc(px, py, p.size, 0, Math.PI * 2);
+          ctx.fillStyle = gradient;
+          ctx.fill();
+        } else if (p.layer === 'b') {
+          // Layer B: medium bright with subtle glow
+          const alpha = Math.min(0.4, p.baseOpacity * pulse * (isLight ? 1.5 : 1));
+          const particleColor = isLight ? `rgba(0, 170, 175, ${alpha})` : `rgba(10, 255, 255, ${alpha})`;
+          ctx.beginPath();
+          ctx.arc(px, py, p.size * (isLight ? 1.1 : 1), 0, Math.PI * 2);
+          if (isLight && alpha > 0.1) {
+            ctx.shadowColor = 'rgba(0, 170, 175, 0.25)';
+            ctx.shadowBlur = 8;
+          } else if (!isLight && alpha > 0.15) {
+            ctx.shadowColor = 'rgba(10, 255, 255, 0.2)';
+            ctx.shadowBlur = 4;
+          } else {
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+          }
+          ctx.fillStyle = particleColor;
+          ctx.fill();
         } else {
+          // Layer A: tiny micro-bright dots
+          const alpha = Math.min(0.7, p.baseOpacity * pulse * (isLight ? 1.6 : 1));
+          const particleColor = isLight ? `rgba(0, 160, 170, ${alpha})` : `rgba(10, 255, 255, ${alpha})`;
           ctx.shadowColor = 'transparent';
           ctx.shadowBlur = 0;
+          ctx.beginPath();
+          ctx.arc(px, py, p.size, 0, Math.PI * 2);
+          ctx.fillStyle = particleColor;
+          ctx.fill();
         }
-        ctx.fillStyle = particleColor;
-        ctx.fill();
       }
       ctx.shadowBlur = 0;
     } else {
