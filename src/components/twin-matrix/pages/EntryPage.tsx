@@ -161,40 +161,58 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
       {/* ── How it Works ── */}
       <div className="px-6 md:px-12 lg:px-16 py-20 max-w-[1400px] mx-auto w-full">
         <h2 className="text-4xl md:text-5xl font-heading font-bold text-center mb-14">How it Works</h2>
-        <div className="grid md:grid-cols-2 gap-12">
-          {/* Humans */}
-          <div className="space-y-5">
-            <p className="text-lg uppercase tracking-widest text-muted-foreground/60 font-heading mb-2">For Humans</p>
-            {[
-              { step: '01', title: 'Verify', desc: "Prove your humanity through twin3.ai's verification protocol." },
-              { step: '02', title: 'Build Your Twin Matrix', desc: 'Define your skills, experience, and identity layers through a guided wizard.' },
-              { step: '03', title: 'Get Discovered', desc: 'Buyer agents find, negotiate, and pay for your verified experience.' },
-            ].map((s) => (
-              <div key={s.step} className="flex gap-5 items-start" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.75rem', background: 'var(--glass-bg)', minHeight: '130px' }}>
-                <span className="text-2xl font-heading font-bold text-muted-foreground/30 mt-0.5 shrink-0">{s.step}</span>
-                <div>
-                  <p className="text-xl font-heading font-bold">{s.title}</p>
-                  <p className="text-base text-muted-foreground mt-1.5 leading-relaxed">{s.desc}</p>
-                </div>
-              </div>
-            ))}
+        <div className="grid md:grid-cols-2 gap-x-12 gap-y-5">
+          {/* Column headers */}
+          <p className="text-lg uppercase tracking-widest text-muted-foreground/60 font-heading mb-0">For Humans</p>
+          <p className="text-lg uppercase tracking-widest text-muted-foreground/60 font-heading mb-0 hidden md:block">For Agents</p>
+
+          {/* Row 1 */}
+          <div className="flex gap-5 items-start" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.75rem', background: 'var(--glass-bg)' }}>
+            <span className="text-2xl font-heading font-bold text-muted-foreground/30 mt-0.5 shrink-0">01</span>
+            <div>
+              <p className="text-xl font-heading font-bold">Verify</p>
+              <p className="text-base text-muted-foreground mt-1.5 leading-relaxed">Prove your humanity through twin3.ai's verification protocol.</p>
+            </div>
           </div>
-          {/* Agents */}
-          <div className="space-y-5">
-            <p className="text-lg uppercase tracking-widest text-muted-foreground/60 font-heading mb-2">For Agents</p>
-            {[
-              { step: '01', title: 'Connect', desc: 'Register your buyer agent via Skill protocol, REST API, or SDK.' },
-              { step: '02', title: 'Search & Match', desc: 'Query verified humans by skill, availability, and matrix signature.' },
-              { step: '03', title: 'Negotiate & Pay', desc: 'Propose tasks, agree on terms, and execute on-chain payments.' },
-            ].map((s) => (
-              <div key={s.step} className="flex gap-5 items-start" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.75rem', background: 'var(--glass-bg)', minHeight: '130px' }}>
-                <span className="text-2xl font-heading font-bold text-muted-foreground/30 mt-0.5 shrink-0">{s.step}</span>
-                <div>
-                  <p className="text-xl font-heading font-bold">{s.title}</p>
-                  <p className="text-base text-muted-foreground mt-1.5 leading-relaxed">{s.desc}</p>
-                </div>
-              </div>
-            ))}
+          <div className="md:hidden text-lg uppercase tracking-widest text-muted-foreground/60 font-heading">For Agents</div>
+          <div className="flex gap-5 items-start" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.75rem', background: 'var(--glass-bg)' }}>
+            <span className="text-2xl font-heading font-bold text-muted-foreground/30 mt-0.5 shrink-0">01</span>
+            <div>
+              <p className="text-xl font-heading font-bold">Connect</p>
+              <p className="text-base text-muted-foreground mt-1.5 leading-relaxed">Register your buyer agent via Skill protocol, REST API, or SDK.</p>
+            </div>
+          </div>
+
+          {/* Row 2 */}
+          <div className="flex gap-5 items-start" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.75rem', background: 'var(--glass-bg)' }}>
+            <span className="text-2xl font-heading font-bold text-muted-foreground/30 mt-0.5 shrink-0">02</span>
+            <div>
+              <p className="text-xl font-heading font-bold">Build Your Twin Matrix</p>
+              <p className="text-base text-muted-foreground mt-1.5 leading-relaxed">Define your skills, experience, and identity layers through a guided wizard.</p>
+            </div>
+          </div>
+          <div className="flex gap-5 items-start" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.75rem', background: 'var(--glass-bg)' }}>
+            <span className="text-2xl font-heading font-bold text-muted-foreground/30 mt-0.5 shrink-0">02</span>
+            <div>
+              <p className="text-xl font-heading font-bold">Search & Match</p>
+              <p className="text-base text-muted-foreground mt-1.5 leading-relaxed">Query verified humans by skill, availability, and matrix signature.</p>
+            </div>
+          </div>
+
+          {/* Row 3 */}
+          <div className="flex gap-5 items-start" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.75rem', background: 'var(--glass-bg)' }}>
+            <span className="text-2xl font-heading font-bold text-muted-foreground/30 mt-0.5 shrink-0">03</span>
+            <div>
+              <p className="text-xl font-heading font-bold">Get Discovered</p>
+              <p className="text-base text-muted-foreground mt-1.5 leading-relaxed">Buyer agents find, negotiate, and pay for your verified experience.</p>
+            </div>
+          </div>
+          <div className="flex gap-5 items-start" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.75rem', background: 'var(--glass-bg)' }}>
+            <span className="text-2xl font-heading font-bold text-muted-foreground/30 mt-0.5 shrink-0">03</span>
+            <div>
+              <p className="text-xl font-heading font-bold">Negotiate & Pay</p>
+              <p className="text-base text-muted-foreground mt-1.5 leading-relaxed">Propose tasks, agree on terms, and execute on-chain payments.</p>
+            </div>
           </div>
         </div>
       </div>
