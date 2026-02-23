@@ -54,26 +54,34 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
           </p>
 
           {/* Main headline — largest, with scan-glow */}
-          <h1 className="font-heading font-extrabold uppercase leading-[0.95] tracking-tight relative">
-            <span className="block text-foreground" style={{ fontSize: 'clamp(2rem, 5.5vw, 4.5rem)' }}>
-              Humans list their experience.
+          <h1 className="font-heading uppercase leading-[0.95] tracking-tight relative" style={{ fontSize: 'clamp(2rem, 5.5vw, 4.5rem)' }}>
+            <span className="block text-foreground">
+              <span className="font-extrabold">Humans</span>
             </span>
-            <span className="block text-foreground mt-2" style={{ fontSize: 'clamp(2rem, 5.5vw, 4.5rem)' }}>
-              Agents find, negotiate, and pay for it.
+            <span className="block text-foreground font-normal">
+              list their experience.
+            </span>
+            <span className="block text-foreground mt-3">
+              <span className="font-extrabold">Agents</span>
+            </span>
+            <span className="block text-foreground font-normal">
+              find, negotiate,
+            </span>
+            <span className="block text-foreground font-normal">
+              and pay for it.
             </span>
             {/* Scan glow overlay */}
-            <span className="scan-text-glow font-heading font-extrabold uppercase leading-[0.95] tracking-tight" aria-hidden="true">
-              <span className="block" style={{ fontSize: 'clamp(2rem, 5.5vw, 4.5rem)' }}>
-                Humans list their experience.
-              </span>
-              <span className="block mt-2" style={{ fontSize: 'clamp(2rem, 5.5vw, 4.5rem)' }}>
-                Agents find, negotiate, and pay for it.
-              </span>
+            <span className="scan-text-glow font-heading uppercase leading-[0.95] tracking-tight" aria-hidden="true" style={{ fontSize: 'clamp(2rem, 5.5vw, 4.5rem)' }}>
+              <span className="block font-extrabold">Humans</span>
+              <span className="block font-normal">list their experience.</span>
+              <span className="block mt-3 font-extrabold">Agents</span>
+              <span className="block font-normal">find, negotiate,</span>
+              <span className="block font-normal">and pay for it.</span>
             </span>
           </h1>
 
           {/* Subtitle */}
-          <p className="text-muted-foreground/70 text-base md:text-lg max-w-lg leading-relaxed mt-6">
+          <p className="text-muted-foreground/70 text-sm md:text-base max-w-lg leading-relaxed mt-6" style={{ whiteSpace: 'nowrap' }}>
             A marketplace connecting real human experience with agent economies.
           </p>
         </div>
