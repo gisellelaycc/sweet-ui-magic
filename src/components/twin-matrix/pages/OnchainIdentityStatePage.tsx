@@ -16,11 +16,11 @@ interface Props {
 }
 
 const LAYERS = [
-  { key: 'physical', label: 'Physical', range: [0, 63] as const, color: '255, 60, 100' },
-  { key: 'digital', label: 'Digital', range: [64, 127] as const, color: '60, 180, 255' },
-  { key: 'social', label: 'Social', range: [128, 191] as const, color: '255, 200, 40' },
-  { key: 'spiritual', label: 'Spiritual', range: [192, 255] as const, color: '100, 200, 50' },
-];
+{ key: 'physical', label: 'Physical', range: [0, 63] as const, color: '255, 60, 100' },
+{ key: 'digital', label: 'Digital', range: [64, 127] as const, color: '60, 180, 255' },
+{ key: 'social', label: 'Social', range: [128, 191] as const, color: '255, 200, 40' },
+{ key: 'spiritual', label: 'Spiritual', range: [192, 255] as const, color: '100, 200, 50' }];
+
 
 const DIM_LABEL_MAP = new Map(SPEC_REGISTRY.map((item) => [item.dim_id, item.label]));
 
@@ -28,7 +28,7 @@ const cardStyle: React.CSSProperties = {
   border: '1px solid var(--glass-border)',
   borderRadius: '12px',
   padding: '1.5rem',
-  background: 'var(--glass-bg)',
+  background: 'var(--glass-bg)'
 };
 
 function shortDigest(digest: string): string {
@@ -36,9 +36,9 @@ function shortDigest(digest: string): string {
 }
 
 function humanizeLabel(label: string): string {
-  return label
-    .replace(/_/g, ' ')
-    .replace(/\b\w/g, (c) => c.toUpperCase());
+  return label.
+  replace(/_/g, ' ').
+  replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
 export const OnchainIdentityStatePage = ({
@@ -50,7 +50,7 @@ export const OnchainIdentityStatePage = ({
   onRefresh,
   onReconfigure,
   onSetupAgent,
-  isRefreshing,
+  isRefreshing
 }: Props) => {
   const { t } = useI18n();
   const [selectedVersion, setSelectedVersion] = useState<number | null>(null);
@@ -75,7 +75,7 @@ export const OnchainIdentityStatePage = ({
 
     return LAYERS.map((layer, i) => ({
       ...layer,
-      percent: Math.round((sums[i] / total) * 100),
+      percent: Math.round(sums[i] / total * 100)
     }));
   }, [matrix]);
 
@@ -89,21 +89,21 @@ export const OnchainIdentityStatePage = ({
 
     const dominantLayer = [...layerMix].sort((a, b) => b.percent - a.percent)[0];
     const dominantLayerLabel = t(`common.${dominantLayer.key}`);
-    const activeDims = matrix
-      .map((value, index) => ({ value, index }))
-      .filter((item) => item.value > 0)
-      .sort((a, b) => b.value - a.value)
-      .slice(0, 3)
-      .map((item) => humanizeLabel(DIM_LABEL_MAP.get(item.index) ?? `D${item.index}`));
+    const activeDims = matrix.
+    map((value, index) => ({ value, index })).
+    filter((item) => item.value > 0).
+    sort((a, b) => b.value - a.value).
+    slice(0, 3).
+    map((item) => humanizeLabel(DIM_LABEL_MAP.get(item.index) ?? `D${item.index}`));
 
     if (activeDims.length === 0) {
       return t('onchain.aiSparse').replace('{layer}', dominantLayerLabel);
     }
 
-    return t('onchain.aiDominant')
-      .replace('{layer}', dominantLayerLabel)
-      .replace('{percent}', String(dominantLayer.percent))
-      .replace('{signals}', activeDims.join(', '));
+    return t('onchain.aiDominant').
+    replace('{layer}', dominantLayerLabel).
+    replace('{percent}', String(dominantLayer.percent)).
+    replace('{signals}', activeDims.join(', '));
   }, [activeVersion, layerMix, matrix, t]);
 
 
@@ -116,8 +116,8 @@ export const OnchainIdentityStatePage = ({
           <div>
             <h2
               className="font-heading font-extrabold leading-tight tracking-tight text-foreground"
-              style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.5rem)' }}
-            >
+              style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.5rem)' }}>
+
               Identity State
             </h2>
             <p className="text-sm text-muted-foreground mt-1">
@@ -128,8 +128,8 @@ export const OnchainIdentityStatePage = ({
             <button
               onClick={onRefresh}
               disabled={isRefreshing}
-              className="py-2 px-5 rounded-lg text-sm font-medium border border-foreground/10 text-muted-foreground hover:bg-foreground/5 hover:text-foreground transition-colors disabled:opacity-50"
-            >
+              className="py-2 px-5 rounded-lg text-sm font-medium border border-foreground/10 text-muted-foreground hover:bg-foreground/5 hover:text-foreground transition-colors disabled:opacity-50">
+
               {isRefreshing ? t('onchain.refreshing') : t('onchain.refresh')}
             </button>
           </div>
@@ -138,45 +138,45 @@ export const OnchainIdentityStatePage = ({
         {/* ── Stats Bar ── */}
         <div className="grid grid-cols-5 gap-0 rounded-xl overflow-hidden" style={{ border: '1px solid var(--glass-border)' }}>
           {[
-            { value: tokenId.toString(), label: 'TOKEN ID' },
-            { value: `v${latestVersion}`, label: 'LATEST VERSION' },
-            { value: walletAddress ?? '-', label: 'WALLET' },
-            { value: `${filledCount}/256`, label: 'TWIN MATRIX' },
-            { value: `${filledCount > 0 ? Math.round((filledCount / 256) * 100) : 0}%`, label: 'COMPLETION RATE', highlight: true },
-          ].map((stat, i, arr) => (
-            <div
-              key={stat.label}
-              className="flex flex-col items-center justify-center py-4 px-2"
-              style={{
-                borderRight: i < arr.length - 1 ? '1px solid var(--glass-border)' : 'none',
-                background: 'var(--glass-bg)',
-              }}
-            >
+          { value: tokenId.toString(), label: 'TOKEN ID' },
+          { value: `v${latestVersion}`, label: 'LATEST VERSION' },
+          { value: walletAddress ?? '-', label: 'WALLET' },
+          { value: `${filledCount}/256`, label: 'TWIN MATRIX' },
+          { value: `${filledCount > 0 ? Math.round(filledCount / 256 * 100) : 0}%`, label: 'COMPLETION RATE', highlight: true }].
+          map((stat, i, arr) =>
+          <div
+            key={stat.label}
+            className="flex flex-col items-center justify-center py-4 px-2"
+            style={{
+              borderRight: i < arr.length - 1 ? '1px solid var(--glass-border)' : 'none',
+              background: 'var(--glass-bg)'
+            }}>
+
               <span
-                className="text-xl md:text-2xl font-heading font-bold truncate max-w-full"
-                style={{ color: stat.highlight ? '#F2850D' : 'hsl(var(--foreground))' }}
-              >
+              className="text-xl md:text-2xl font-heading font-bold truncate max-w-full"
+              style={{ color: stat.highlight ? '#F2850D' : 'hsl(var(--foreground))' }}>
+
                 {stat.value}
               </span>
               <span className="text-xs uppercase tracking-wider text-muted-foreground mt-1">
                 {stat.label}
               </span>
             </div>
-          ))}
+          )}
         </div>
 
         {/* ── Agent Setup CTA ── */}
-        {onSetupAgent && boundAgents.length === 0 && (
-          <div
-            className="flex items-center justify-between gap-4 px-6 py-4 rounded-2xl animate-fade-in cursor-pointer group"
-            style={{
-              background: 'rgba(242, 133, 13, 0.06)',
-              border: '1px solid rgba(242, 133, 13, 0.25)',
-            }}
-            onClick={onSetupAgent}
-          >
+        {onSetupAgent && boundAgents.length === 0 &&
+        <div
+          className="flex items-center justify-between gap-4 px-6 py-4 rounded-2xl animate-fade-in cursor-pointer group"
+          style={{
+            background: 'rgba(242, 133, 13, 0.06)',
+            border: '1px solid rgba(242, 133, 13, 0.25)'
+          }}
+          onClick={onSetupAgent}>
+
             <div className="flex items-center gap-3">
-              <span className="text-sm font-mono text-foreground/50">AG</span>
+              
               <div>
                 <p className="text-sm font-medium text-foreground">
                   {t('agentStudio.identityCta')}
@@ -187,17 +187,17 @@ export const OnchainIdentityStatePage = ({
               </div>
             </div>
             <button
-              className="shrink-0 py-2 px-5 rounded-xl text-sm font-semibold transition-colors"
-              style={{
-                background: 'rgba(242, 133, 13, 0.15)',
-                color: '#F2850D',
-                border: '1px solid rgba(242, 133, 13, 0.3)',
-              }}
-            >
+            className="shrink-0 py-2 px-5 rounded-xl text-sm font-semibold transition-colors"
+            style={{
+              background: 'rgba(242, 133, 13, 0.15)',
+              color: '#F2850D',
+              border: '1px solid rgba(242, 133, 13, 0.3)'
+            }}>
+
               {t('agentStudio.activateAgent')}
             </button>
           </div>
-        )}
+        }
 
         {/* ── Main Content: Matrix + Right Panel ── */}
         <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_minmax(0,400px)] gap-5 items-start">
@@ -209,77 +209,77 @@ export const OnchainIdentityStatePage = ({
               <span className="text-muted-foreground/40 text-sm cursor-help" title="256-dimension identity projection">ⓘ</span>
             </div>
 
-            {activeVersion ? (
-              <div>
+            {activeVersion ?
+            <div>
                 <div className="flex flex-col gap-[2px]" style={{ fontFamily: "'SF Mono', 'Fira Code', 'Cascadia Code', monospace" }}>
                   {Array.from({ length: 16 }, (_, row) => {
-                    const rowAddr = (row * 16).toString(16).toUpperCase().padStart(4, '0');
-                    return (
-                      <div key={row} className="flex items-center gap-[2px]">
+                  const rowAddr = (row * 16).toString(16).toUpperCase().padStart(4, '0');
+                  return (
+                    <div key={row} className="flex items-center gap-[2px]">
                         <span className="text-right select-none shrink-0 w-10 text-foreground/30" style={{ fontSize: '10px' }}>
                           {rowAddr}
                         </span>
                         {Array.from({ length: 16 }, (_, col) => {
-                          const idx = row * 16 + col;
-                          const value = matrix[idx] ?? 0;
-                          const hex = value.toString(16).toUpperCase().padStart(2, '0');
-                          const isTop = topIndices.has(idx);
-                          const isHovered = hoveredCell === idx;
-                          const isTopHalf = row < 8;
-                          const isLeftHalf = col < 8;
-                          let sliceIdx: number;
-                          if (isTopHalf && isLeftHalf) sliceIdx = 0;
-                          else if (isTopHalf && !isLeftHalf) sliceIdx = 1;
-                          else if (!isTopHalf && isLeftHalf) sliceIdx = 2;
-                          else sliceIdx = 3;
-                          const slice = LAYERS[sliceIdx];
-                          const intensity = value / 255;
-                          const isActive = value > 0;
-                          const borderColor = isActive
-                            ? `rgba(${slice.color}, ${0.6 + 0.4 * intensity})`
-                            : 'hsl(var(--foreground) / 0.2)';
-                          const textColor = isActive
-                            ? `rgba(${slice.color}, ${0.7 + 0.3 * intensity})`
-                            : 'hsl(var(--foreground) / 0.35)';
-                          return (
-                            <div
-                              key={col}
-                              className="flex items-center justify-center relative cursor-default rounded-full"
-                              style={{
-                                width: 'clamp(1.3rem, 2.8vw, 2rem)', height: 'clamp(1.3rem, 2.8vw, 2rem)', aspectRatio: '1',
-                                fontSize: 'clamp(7px, 1.2vw, 10px)', color: textColor,
-                                border: `1px solid ${borderColor}`,
-                                textShadow: isActive ? `0 0 2px rgba(${slice.color}, 0.2)` : 'none',
-                                background: isActive
-                                  ? `rgba(${slice.color}, ${0.1 + intensity * 0.15})`
-                                  : 'transparent',
-                                boxShadow: isActive
-                                  ? `0 0 3px rgba(${slice.color}, ${intensity * 0.15})`
-                                  : 'none',
-                                transition: 'all 0.15s',
-                                transform: isHovered ? 'scale(1.12)' : 'scale(1)',
-                              }}
-                              onMouseEnter={() => setHoveredCell(idx)}
-                              onMouseLeave={() => setHoveredCell(null)}
-                            >
+                        const idx = row * 16 + col;
+                        const value = matrix[idx] ?? 0;
+                        const hex = value.toString(16).toUpperCase().padStart(2, '0');
+                        const isTop = topIndices.has(idx);
+                        const isHovered = hoveredCell === idx;
+                        const isTopHalf = row < 8;
+                        const isLeftHalf = col < 8;
+                        let sliceIdx: number;
+                        if (isTopHalf && isLeftHalf) sliceIdx = 0;else
+                        if (isTopHalf && !isLeftHalf) sliceIdx = 1;else
+                        if (!isTopHalf && isLeftHalf) sliceIdx = 2;else
+                        sliceIdx = 3;
+                        const slice = LAYERS[sliceIdx];
+                        const intensity = value / 255;
+                        const isActive = value > 0;
+                        const borderColor = isActive ?
+                        `rgba(${slice.color}, ${0.6 + 0.4 * intensity})` :
+                        'hsl(var(--foreground) / 0.2)';
+                        const textColor = isActive ?
+                        `rgba(${slice.color}, ${0.7 + 0.3 * intensity})` :
+                        'hsl(var(--foreground) / 0.35)';
+                        return (
+                          <div
+                            key={col}
+                            className="flex items-center justify-center relative cursor-default rounded-full"
+                            style={{
+                              width: 'clamp(1.3rem, 2.8vw, 2rem)', height: 'clamp(1.3rem, 2.8vw, 2rem)', aspectRatio: '1',
+                              fontSize: 'clamp(7px, 1.2vw, 10px)', color: textColor,
+                              border: `1px solid ${borderColor}`,
+                              textShadow: isActive ? `0 0 2px rgba(${slice.color}, 0.2)` : 'none',
+                              background: isActive ?
+                              `rgba(${slice.color}, ${0.1 + intensity * 0.15})` :
+                              'transparent',
+                              boxShadow: isActive ?
+                              `0 0 3px rgba(${slice.color}, ${intensity * 0.15})` :
+                              'none',
+                              transition: 'all 0.15s',
+                              transform: isHovered ? 'scale(1.12)' : 'scale(1)'
+                            }}
+                            onMouseEnter={() => setHoveredCell(idx)}
+                            onMouseLeave={() => setHoveredCell(null)}>
+
                               {hex}
-                              {isHovered && (
-                                <div className="absolute -top-7 left-1/2 -translate-x-1/2 z-20 whitespace-nowrap rounded px-2 py-0.5"
-                                  style={{ fontSize: '10px', background: 'hsl(var(--foreground))', color: 'hsl(var(--background))' }}>
+                              {isHovered &&
+                            <div className="absolute -top-7 left-1/2 -translate-x-1/2 z-20 whitespace-nowrap rounded px-2 py-0.5"
+                            style={{ fontSize: '10px', background: 'hsl(var(--foreground))', color: 'hsl(var(--background))' }}>
                                   D{idx}: {value} ({t(`common.${slice.key}`)})
                                 </div>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    );
-                  })}
+                            }
+                            </div>);
+
+                      })}
+                      </div>);
+
+                })}
                 </div>
-              </div>
-            ) : (
-              <p className="text-sm text-muted-foreground">{t('onchain.noMatrix')}</p>
-            )}
+              </div> :
+
+            <p className="text-sm text-muted-foreground">{t('onchain.noMatrix')}</p>
+            }
           </div>
 
           {/* ── Right Panel: Update + Insights ── */}
@@ -291,8 +291,8 @@ export const OnchainIdentityStatePage = ({
               {/* Step 01 */}
               <div className="flex items-start gap-3 mb-4">
                 <span
-                  className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold border border-foreground/15 text-foreground/50"
-                >
+                  className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold border border-foreground/15 text-foreground/50">
+
                   01
                 </span>
                 <div className="flex-1">
@@ -304,8 +304,8 @@ export const OnchainIdentityStatePage = ({
                   </p>
                   <button
                     onClick={onReconfigure}
-                    className="btn-twin btn-twin-primary btn-glow w-full py-2.5 rounded-lg text-xs font-semibold"
-                  >
+                    className="btn-twin btn-twin-primary btn-glow w-full py-2.5 rounded-lg text-xs font-semibold">
+
                     Refine
                   </button>
                 </div>
@@ -316,8 +316,8 @@ export const OnchainIdentityStatePage = ({
               {/* Step 02 */}
               <div className="flex items-start gap-3">
                 <span
-                  className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold border border-foreground/15 text-foreground/50"
-                >
+                  className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold border border-foreground/15 text-foreground/50">
+
                   02
                 </span>
                 <div className="flex-1">
@@ -329,8 +329,8 @@ export const OnchainIdentityStatePage = ({
                   </p>
                   <button
                     disabled
-                    className="w-full py-2.5 rounded-lg text-xs font-semibold border border-foreground/10 text-muted-foreground cursor-not-allowed opacity-50"
-                  >
+                    className="w-full py-2.5 rounded-lg text-xs font-semibold border border-foreground/10 text-muted-foreground cursor-not-allowed opacity-50">
+
                     Coming Soon
                   </button>
                 </div>
@@ -341,24 +341,24 @@ export const OnchainIdentityStatePage = ({
             <div style={cardStyle}>
               <p className="text-sm uppercase tracking-[0.15em] text-muted-foreground font-heading mb-4">{t('dashboard.stateInsight')}</p>
               <div className="space-y-3">
-                {layerMix.map((layer) => (
-                  <div key={layer.key} className="space-y-1">
+                {layerMix.map((layer) =>
+                <div key={layer.key} className="space-y-1">
                     <div className="flex justify-between text-sm">
                       <span className="text-foreground/70">{t(`common.${layer.key}`)}</span>
                       <span className="text-muted-foreground">{layer.percent}%</span>
                     </div>
                     <div className="h-[3px] rounded-full overflow-visible" style={{ background: 'hsl(var(--foreground) / 0.04)' }}>
                       <div
-                        className="h-full rounded-full transition-all duration-700"
-                        style={{
-                          width: `${layer.percent}%`,
-                          background: `rgba(${layer.color}, 0.6)`,
-                          boxShadow: `0 0 5px rgba(${layer.color}, 0.5), 0 0 12px rgba(${layer.color}, 0.25)`,
-                        }}
-                      />
+                      className="h-full rounded-full transition-all duration-700"
+                      style={{
+                        width: `${layer.percent}%`,
+                        background: `rgba(${layer.color}, 0.6)`,
+                        boxShadow: `0 0 5px rgba(${layer.color}, 0.5), 0 0 12px rgba(${layer.color}, 0.25)`
+                      }} />
+
                     </div>
                   </div>
-                ))}
+                )}
               </div>
             </div>
 
@@ -376,37 +376,37 @@ export const OnchainIdentityStatePage = ({
           {/* Version History */}
           <div style={cardStyle}>
             <p className="text-sm uppercase tracking-[0.15em] text-muted-foreground font-heading mb-4">{t('dashboard.versionHistory')}</p>
-            {versions.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No versions recorded yet.</p>
-            ) : (
-              versions.map((item, idx) => (
-                <div key={item.version}>
+            {versions.length === 0 ?
+            <p className="text-sm text-muted-foreground">No versions recorded yet.</p> :
+
+            versions.map((item, idx) =>
+            <div key={item.version}>
                   <button
-                    onClick={() => setSelectedVersion(item.version)}
-                    className={`w-full text-left px-3 py-2.5 rounded-lg transition-colors text-sm ${activeVersion?.version === item.version ? 'bg-foreground/[0.06]' : ''}`}
-                  >
+                onClick={() => setSelectedVersion(item.version)}
+                className={`w-full text-left px-3 py-2.5 rounded-lg transition-colors text-sm ${activeVersion?.version === item.version ? 'bg-foreground/[0.06]' : ''}`}>
+
                     <div className="flex items-center justify-between gap-3">
                       <span className="font-mono font-medium text-foreground/80">v{item.version}</span>
                       <span className="text-muted-foreground">{t('onchain.block')} {item.blockNumber}</span>
                     </div>
                     <p className="text-sm text-muted-foreground font-mono mt-0.5">{t('onchain.digest')}: {shortDigest(item.digest)}</p>
                   </button>
-                  {idx < versions.length - 1 && (
-                    <div className="w-full h-px my-1" style={{ background: 'rgba(255,255,255,0.04)' }} />
-                  )}
+                  {idx < versions.length - 1 &&
+              <div className="w-full h-px my-1" style={{ background: 'rgba(255,255,255,0.04)' }} />
+              }
                 </div>
-              ))
-            )}
+            )
+            }
           </div>
 
           {/* Bound Agents */}
           <div style={cardStyle}>
             <p className="text-sm uppercase tracking-[0.15em] text-muted-foreground font-heading mb-4">{t('dashboard.boundAgents')}</p>
-            {boundAgents.length === 0 ? (
-              <p className="text-sm text-muted-foreground">{t('agentStudio.noBoundAgents')}</p>
-            ) : (
-              boundAgents.map((agent, idx) => (
-                <div key={agent.address}>
+            {boundAgents.length === 0 ?
+            <p className="text-sm text-muted-foreground">{t('agentStudio.noBoundAgents')}</p> :
+
+            boundAgents.map((agent, idx) =>
+            <div key={agent.address}>
                   <div className="py-2.5">
                     <div className="flex items-center justify-between gap-3">
                       <p className="text-sm font-medium">{agent.name}</p>
@@ -419,17 +419,17 @@ export const OnchainIdentityStatePage = ({
                       {t('onchain.scopeGranted')}: {permissionMaskToGrantedQuadrants(agent.permissionMask).join(', ') || t('onchain.none')}
                     </p>
                   </div>
-                  {idx < boundAgents.length - 1 && (
-                    <div className="w-full h-px my-1" style={{ background: 'rgba(255,255,255,0.04)' }} />
-                  )}
+                  {idx < boundAgents.length - 1 &&
+              <div className="w-full h-px my-1" style={{ background: 'rgba(255,255,255,0.04)' }} />
+              }
                 </div>
-              ))
-            )}
+            )
+            }
           </div>
         </div>
 
 
       </div>
-    </div>
-  );
+    </div>);
+
 };
