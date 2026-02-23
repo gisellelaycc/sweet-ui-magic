@@ -451,6 +451,13 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
       <div className="relative z-10 h-full overflow-y-auto scrollbar-hide">
         <div className="max-w-lg mx-auto px-6 py-10 space-y-0">
 
+          {/* Back to Identity — always visible */}
+          <div className="pb-4">
+            <button onClick={onDashboard} className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+              ← Back to Identity
+            </button>
+          </div>
+
           {/* ═══ Sub-step: LIST ═══ */}
           {subStep === 'list' && (
             <div className="animate-fade-in space-y-0">
