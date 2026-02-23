@@ -45,13 +45,6 @@ const AgentsExamplesPage = () => {
 
   const example = EXAMPLES.find(e => e.id === activeExample)!;
 
-  const cardStyle: React.CSSProperties = {
-    border: '1px solid var(--glass-border)',
-    borderRadius: '16px',
-    padding: '1.75rem',
-    background: 'var(--glass-bg)',
-  };
-
   return (
     <PageLayout activePage="agents">
       <div className="max-w-4xl mx-auto w-full space-y-8 py-6">
@@ -82,7 +75,7 @@ const AgentsExamplesPage = () => {
 
         {/* Active example */}
         <div className="space-y-6 animate-fade-in" key={activeExample}>
-          <div style={cardStyle}>
+          <div className="glass-card">
             <p className="text-xs uppercase tracking-widest text-muted-foreground/50 font-heading mb-2">{example.subtitle}</p>
             <p className="text-sm text-muted-foreground leading-relaxed">{example.desc}</p>
           </div>

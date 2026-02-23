@@ -12,13 +12,6 @@ const CAPABILITIES = [
 const AgentsSkillPage = () => {
   const navigate = useNavigate();
 
-  const cardStyle: React.CSSProperties = {
-    border: '1px solid var(--glass-border)',
-    borderRadius: '16px',
-    padding: '1.75rem',
-    background: 'var(--glass-bg)',
-  };
-
   return (
     <PageLayout activePage="agents">
       <div className="max-w-4xl mx-auto w-full space-y-8 py-6">
@@ -34,7 +27,7 @@ const AgentsSkillPage = () => {
         <div className="space-y-4">
           <h2 className="text-lg font-heading font-semibold">Capabilities</h2>
           {CAPABILITIES.map((cap) => (
-            <div key={cap.name} style={cardStyle} className="space-y-3">
+            <div key={cap.name} className="glass-card space-y-3">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-mono px-2 py-0.5 rounded-md bg-foreground/5 text-foreground/70">{cap.name}</span>
               </div>
@@ -54,7 +47,7 @@ const AgentsSkillPage = () => {
         </div>
 
         {/* Pricing */}
-        <div style={cardStyle} className="space-y-3">
+        <div className="glass-card space-y-3">
           <h2 className="text-lg font-heading font-semibold">Pricing Model</h2>
           <div className="grid md:grid-cols-3 gap-4">
             <div className="space-y-1">
@@ -76,7 +69,7 @@ const AgentsSkillPage = () => {
         </div>
 
         {/* Rate Limits */}
-        <div style={cardStyle} className="space-y-3">
+        <div className="glass-card space-y-3">
           <h2 className="text-lg font-heading font-semibold">Rate Limits</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">

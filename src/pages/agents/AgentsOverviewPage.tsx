@@ -2,9 +2,9 @@ import { useNavigate } from 'react-router-dom';
 import { PageLayout } from '@/components/twin-matrix/PageLayout';
 
 const FEATURES = [
-  { icon: '🔍', title: 'Discover Humans', desc: 'Search verified human profiles by skill, experience, and availability. Filter by sport, domain, or custom criteria.' },
-  { icon: '🤝', title: 'Negotiate & Transact', desc: 'Programmatically request quotes, negotiate terms, and execute payments — all through a unified protocol.' },
-  { icon: '🛡️', title: 'Trust Primitives', desc: 'Every human is verified. Every task is versioned. Every transaction is recorded on-chain.' },
+  { title: 'Discover Humans', desc: 'Search verified human profiles by skill, experience, and availability. Filter by sport, domain, or custom criteria.' },
+  { title: 'Negotiate & Transact', desc: 'Programmatically request quotes, negotiate terms, and execute payments — all through a unified protocol.' },
+  { title: 'Trust Primitives', desc: 'Every human is verified. Every task is versioned. Every transaction is recorded on-chain.' },
 ];
 
 const TRUST_ITEMS = [
@@ -15,13 +15,6 @@ const TRUST_ITEMS = [
 
 const AgentsOverviewPage = () => {
   const navigate = useNavigate();
-
-  const cardStyle: React.CSSProperties = {
-    border: '1px solid var(--glass-border)',
-    borderRadius: '16px',
-    padding: '1.75rem',
-    background: 'var(--glass-bg)',
-  };
 
   return (
     <PageLayout activePage="agents">
@@ -48,9 +41,8 @@ const AgentsOverviewPage = () => {
         {/* Features */}
         <div className="grid md:grid-cols-3 gap-4">
           {FEATURES.map((f) => (
-            <div key={f.title} style={cardStyle} className="space-y-3">
-              <span className="text-2xl">{f.icon}</span>
-              <h3 className="text-lg font-heading font-semibold">{f.title}</h3>
+            <div key={f.title} className="glass-card space-y-3">
+              <h3 className="text-xl font-heading font-semibold">{f.title}</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
             </div>
           ))}
@@ -61,16 +53,16 @@ const AgentsOverviewPage = () => {
           <h2 className="text-xl font-heading font-bold text-center">Trust Architecture</h2>
           <div className="grid md:grid-cols-3 gap-4">
             {TRUST_ITEMS.map((item) => (
-              <div key={item.label} style={cardStyle} className="space-y-2">
-                <p className="text-sm font-medium">{item.label}</p>
-                <p className="text-xs text-muted-foreground">{item.desc}</p>
+              <div key={item.label} className="glass-card space-y-2">
+                <p className="text-base font-heading font-medium">{item.label}</p>
+                <p className="text-sm text-muted-foreground">{item.desc}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* CTA */}
-        <div className="text-center space-y-4 py-6" style={{ ...cardStyle, background: 'hsl(var(--foreground) / 0.03)' }}>
+        <div className="text-center space-y-4 py-6 glass-card">
           <h2 className="text-xl font-heading font-bold">Ready to integrate?</h2>
           <p className="text-sm text-muted-foreground max-w-md mx-auto">
             Choose your integration path: Skill protocol, REST API, or SDK. Get started in minutes.
