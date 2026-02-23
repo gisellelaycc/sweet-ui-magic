@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import logo from '@/assets/twin3-logo.svg';
-import { useI18n, type Lang } from '@/lib/i18n';
+import { useI18n } from '@/lib/i18n';
 import { useTheme, type ColorMode } from '@/contexts/ThemeContext';
 
 type NavPage = 'identity' | 'update' | 'agent' | 'auth' | 'missions' | 'settings' | null;
@@ -15,10 +15,10 @@ interface Props {
   onDisconnectWallet: () => void;
 }
 
-const NAV_KEYS: { id: NavPage; key: string }[] = [
-  { id: 'identity', key: 'nav.identity' },
-  { id: 'agent', key: 'nav.agents' },
-  { id: 'missions', key: 'nav.tasks' },
+const NAV_ITEMS: { id: NavPage; label: string }[] = [
+  { id: 'identity', label: 'Identity' },
+  { id: 'agent', label: 'Agents' },
+  { id: 'missions', label: 'Tasks' },
 ];
 
 export const TopNav = ({
@@ -30,30 +30,25 @@ export const TopNav = ({
   onConnectWallet,
   onDisconnectWallet,
 }: Props) => {
-  const { lang, setLang, t, langLabels } = useI18n();
+  const { t } = useI18n();
   const { colorMode, setColorMode } = useTheme();
-  const [langOpen, setLangOpen] = useState(false);
   const [themeOpen, setThemeOpen] = useState(false);
   const [walletMenuOpen, setWalletMenuOpen] = useState(false);
-  const popRef = useRef<HTMLDivElement>(null);
   const themeRef = useRef<HTMLDivElement>(null);
   const walletRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!langOpen && !walletMenuOpen && !themeOpen) return;
+    if (!walletMenuOpen && !themeOpen) return;
     const handler = (e: MouseEvent) => {
-      if (popRef.current && !popRef.current.contains(e.target as Node)) setLangOpen(false);
       if (themeRef.current && !themeRef.current.contains(e.target as Node)) setThemeOpen(false);
       if (walletRef.current && !walletRef.current.contains(e.target as Node)) setWalletMenuOpen(false);
     };
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
-  }, [langOpen, walletMenuOpen, themeOpen]);
+  }, [walletMenuOpen, themeOpen]);
 
-  const themeLabels: Record<ColorMode, string> = { cream: 'Cream', dark: 'Dark', light: 'Light' };
-  const themeIcons: Record<ColorMode, string> = { cream: '◐', dark: '●', light: '○' };
-
-  const langs: Lang[] = ['en', 'zh', 'zhCN', 'ja', 'ko'];
+  const themeLabels: Record<ColorMode, string> = { cream: 'Cream', dark: 'Dark' };
+  const themeIcons: Record<ColorMode, string> = { cream: '◐', dark: '●' };
 
   return (
     <header className="sticky top-0 flex items-center justify-between px-8 md:px-12 py-5 z-30" style={{ backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}>
@@ -67,7 +62,7 @@ export const TopNav = ({
 
       {/* Right side nav */}
       <div className="flex items-center gap-5 md:gap-7">
-        {NAV_KEYS.map(item => (
+        {NAV_ITEMS.map(item => (
           <button
             key={item.id}
             onClick={() => onNavigate(item.id)}
@@ -77,45 +72,9 @@ export const TopNav = ({
                 : 'text-muted-foreground hover:text-foreground'
             }`}
           >
-            {t(item.key)}
+            {item.label}
           </button>
         ))}
-
-        {/* Language Switcher */}
-        <div className="relative" ref={popRef}>
-          <button
-            onClick={() => setLangOpen(!langOpen)}
-            className="text-sm uppercase tracking-widest font-medium text-muted-foreground hover:text-foreground transition-colors"
-          >
-            {lang === 'zhCN' ? '简体' : lang.toUpperCase()}
-          </button>
-
-          {langOpen && (
-            <div
-              className="absolute right-0 top-full mt-2 py-1.5 rounded-xl z-50 min-w-[140px] animate-fade-in"
-              style={{
-                background: 'hsl(var(--popover))',
-                backdropFilter: 'blur(20px)',
-                border: '1px solid hsl(var(--border))',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-              }}
-            >
-              {langs.map(l => (
-                <button
-                  key={l}
-                  onClick={() => { setLang(l); setLangOpen(false); }}
-                  className={`w-full text-left px-4 py-2 text-sm transition-colors ${
-                    lang === l
-                      ? 'text-foreground bg-foreground/5'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-foreground/5'
-                  }`}
-                >
-                  {langLabels[l]}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
 
         {/* Theme Switcher */}
         <div className="relative" ref={themeRef}>
@@ -137,7 +96,7 @@ export const TopNav = ({
                 boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
               }}
             >
-              {(['cream', 'dark', 'light'] as ColorMode[]).map(mode => (
+              {(['cream', 'dark'] as ColorMode[]).map(mode => (
                 <button
                   key={mode}
                   onClick={() => { setColorMode(mode); setThemeOpen(false); }}

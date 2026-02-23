@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 
-export type ColorMode = 'cream' | 'dark' | 'light';
+export type ColorMode = 'cream' | 'dark';
 
 interface ThemeContextValue {
   colorMode: ColorMode;
