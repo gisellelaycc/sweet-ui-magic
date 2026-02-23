@@ -44,8 +44,8 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
   };
 
   return (
-    <div className="relative flex flex-col justify-center min-h-[85vh] px-6 md:px-12 lg:px-16">
-      <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6 lg:gap-10 w-full max-w-[1400px] mx-auto">
+    <div className="relative flex flex-col px-6 md:px-12 lg:px-16">
+      <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6 lg:gap-10 w-full max-w-[1400px] mx-auto min-h-[calc(100vh-6rem)] justify-center">
 
         {/* ── Left: Brand Typography ── */}
         <div className="flex-1 flex flex-col justify-center min-w-0">
