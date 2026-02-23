@@ -125,7 +125,7 @@ export const IdentityDashboard = ({ signature, activeModules, onNavigate }: Prop
           {/* Matrix Projection */}
           <div className="lg:w-[55%] min-w-0 space-y-4">
             <h3 className="text-base text-muted-foreground uppercase tracking-widest">Twin Matrix Projection (256D)</h3>
-            <div className="grid grid-cols-16 gap-[3px]">
+            <div className="grid grid-cols-16 gap-[3px] p-3 rounded-2xl" style={{ background: 'var(--matrix-grid-bg, transparent)' }}>
               {signature.map((v, i) => {
                 const slice = SLICES.find(s => i >= s.range[0] && i <= s.range[1]);
                 const color = slice ? slice.color : '255,255,255';

@@ -107,7 +107,7 @@ export const ReviewStep = ({
                   Twin Matrix Projection (256D)
                 </h3>
                 <div className="relative z-10">
-                  <div className="flex flex-col gap-[2px]" style={{ fontFamily: "'SF Mono', 'Fira Code', 'Cascadia Code', monospace" }}>
+                  <div className="flex flex-col gap-[2px] p-3 rounded-2xl" style={{ fontFamily: "'SF Mono', 'Fira Code', 'Cascadia Code', monospace", background: 'var(--matrix-grid-bg, transparent)' }}>
                     {Array.from({ length: 16 }, (_, row) => {
                       const isTopHalf = row < 8;
                       return (

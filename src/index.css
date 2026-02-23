@@ -55,7 +55,8 @@
     --color-text-primary: 228 14% 8%;
     --color-text-secondary: 220 8% 40%;
     --color-text-dim: 30 10% 60%;
-    --color-success: 152 45% 42%;
+    --color-success: 164 24% 74%;
+    --color-success-deep: 177 100% 14%;
     --color-warning: 33 100% 45%;
 
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
@@ -73,6 +74,7 @@
     --matrix-social: 44 100% 51%;
     --matrix-digital: 207 52% 51%;
     --matrix-spiritual: 173 74% 36%;
+    --matrix-grid-bg: hsla(177, 100%, 14%, 0.08);
   }
 
   /* ── DARK ── */
@@ -123,7 +125,8 @@
     --color-text-primary: 0 0% 98%;
     --color-text-secondary: 218 11% 65%;
     --color-text-dim: 220 9% 36%;
-    --color-success: 142 71% 50%;
+    --color-success: 164 30% 62%;
+    --color-success-deep: 177 100% 14%;
     --color-warning: 33 100% 52%;
 
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.32);
@@ -140,6 +143,7 @@
     --matrix-social: 44 100% 51%;
     --matrix-digital: 207 52% 51%;
     --matrix-spiritual: 173 74% 36%;
+    --matrix-grid-bg: transparent;
   }
 
   /* ── LIGHT ── */
@@ -190,7 +194,8 @@
     --color-text-primary: 228 14% 8%;
     --color-text-secondary: 220 8% 40%;
     --color-text-dim: 220 9% 65%;
-    --color-success: 152 45% 42%;
+    --color-success: 164 24% 74%;
+    --color-success-deep: 177 100% 14%;
     --color-warning: 33 100% 45%;
 
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -207,6 +212,7 @@
     --matrix-social: 44 100% 51%;
     --matrix-digital: 207 52% 51%;
     --matrix-spiritual: 173 74% 36%;
+    --matrix-grid-bg: hsla(177, 100%, 14%, 0.08);
   }
 }
 
