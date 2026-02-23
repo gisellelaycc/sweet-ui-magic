@@ -159,17 +159,17 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
       </div>
 
       {/* ── Exchange Metrics ── */}
-      <div className="px-6 md:px-12 lg:px-16 py-16 max-w-[1400px] mx-auto w-full">
-        <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground/50 font-heading mb-8 text-center">Exchange Metrics</p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="px-6 md:px-12 lg:px-16 py-20 max-w-[1400px] mx-auto w-full">
+        <h2 className="text-3xl md:text-4xl font-heading font-bold text-center mb-14 uppercase tracking-wide">Exchange Metrics</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
             { value: '31,714', label: 'Verified Humans' },
             { value: '842', label: 'Connected Agent Systems' },
             { value: '12,409', label: 'Executed Transactions' },
           ].map((metric) => (
-            <div key={metric.label} className="text-center py-6" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.75rem', background: 'var(--glass-bg)' }}>
-              <p className="text-4xl md:text-5xl font-heading font-bold tracking-tight">{metric.value}</p>
-              <p className="text-sm text-muted-foreground mt-2">{metric.label}</p>
+            <div key={metric.label} className="text-center py-8" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '2rem 1.75rem', background: 'var(--glass-bg)' }}>
+              <p className="text-5xl md:text-6xl font-heading font-extrabold tracking-tight">{metric.value}</p>
+              <p className="text-base md:text-lg text-muted-foreground mt-3 font-heading">{metric.label}</p>
             </div>
           ))}
         </div>
