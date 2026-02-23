@@ -85,7 +85,7 @@ export const MissionsPage = () => {
               </div>
               <div className="shrink-0 text-right space-y-1">
                 <p className="text-sm font-semibold">{task.reward}</p>
-                <span className="inline-block text-xs px-2 py-0.5 rounded-full bg-[hsla(164,60%,40%,0.15)] text-[hsl(164,60%,50%)]">Completed</span>
+                <span className="inline-block text-xs px-2 py-0.5 rounded-full bg-[hsla(25,90%,55%,0.15)] text-[hsl(25,90%,55%)]">Completed</span>
               </div>
             </div>
             <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground pt-1">
