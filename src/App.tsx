@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { WagmiProvider } from "wagmi";
 import { I18nProvider } from "@/lib/i18n";
+import { ThemeProvider } from "./contexts/ThemeContext";
 import { wagmiConfig } from "./lib/wallet/config";
 import { TwinMatrixProvider } from "./contexts/TwinMatrixContext";
 import HomePage from "./pages/HomePage";
@@ -18,6 +19,7 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <WagmiProvider config={wagmiConfig}>
+    <ThemeProvider>
     <I18nProvider>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider
@@ -47,6 +49,7 @@ const App = () => (
         </RainbowKitProvider>
       </QueryClientProvider>
     </I18nProvider>
+    </ThemeProvider>
   </WagmiProvider>
 );
 

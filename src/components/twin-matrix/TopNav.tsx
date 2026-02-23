@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import logo from '@/assets/twin3-logo.svg';
 import { useI18n, type Lang } from '@/lib/i18n';
+import { useTheme, type ColorMode } from '@/contexts/ThemeContext';
 
 type NavPage = 'identity' | 'update' | 'agent' | 'auth' | 'missions' | 'settings' | null;
 
@@ -30,25 +31,32 @@ export const TopNav = ({
   onDisconnectWallet,
 }: Props) => {
   const { lang, setLang, t, langLabels } = useI18n();
+  const { colorMode, setColorMode } = useTheme();
   const [langOpen, setLangOpen] = useState(false);
+  const [themeOpen, setThemeOpen] = useState(false);
   const [walletMenuOpen, setWalletMenuOpen] = useState(false);
   const popRef = useRef<HTMLDivElement>(null);
+  const themeRef = useRef<HTMLDivElement>(null);
   const walletRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!langOpen && !walletMenuOpen) return;
+    if (!langOpen && !walletMenuOpen && !themeOpen) return;
     const handler = (e: MouseEvent) => {
       if (popRef.current && !popRef.current.contains(e.target as Node)) setLangOpen(false);
+      if (themeRef.current && !themeRef.current.contains(e.target as Node)) setThemeOpen(false);
       if (walletRef.current && !walletRef.current.contains(e.target as Node)) setWalletMenuOpen(false);
     };
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
-  }, [langOpen, walletMenuOpen]);
+  }, [langOpen, walletMenuOpen, themeOpen]);
+
+  const themeLabels: Record<ColorMode, string> = { cream: 'Cream', dark: 'Dark', light: 'Light' };
+  const themeIcons: Record<ColorMode, string> = { cream: '◐', dark: '●', light: '○' };
 
   const langs: Lang[] = ['en', 'zh', 'zhCN', 'ja', 'ko'];
 
   return (
-    <header className="sticky top-0 flex items-center justify-between px-8 md:px-12 py-5 z-30" style={{ background: 'rgba(10, 12, 14, 0.3)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}>
+    <header className="sticky top-0 flex items-center justify-between px-8 md:px-12 py-5 z-30" style={{ background: 'var(--nav-bg)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}>
       {/* Logo — icon only, like twin3.ai */}
       <button
         onClick={() => onNavigate(null)}
@@ -86,10 +94,10 @@ export const TopNav = ({
             <div
               className="absolute right-0 top-full mt-2 py-1.5 rounded-xl z-50 min-w-[140px] animate-fade-in"
               style={{
-                background: 'rgba(20, 22, 26, 0.92)',
+                background: 'hsl(var(--popover))',
                 backdropFilter: 'blur(20px)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
+                border: '1px solid hsl(var(--border))',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
               }}
             >
               {langs.map(l => (
@@ -103,6 +111,44 @@ export const TopNav = ({
                   }`}
                 >
                   {langLabels[l]}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Theme Switcher */}
+        <div className="relative" ref={themeRef}>
+          <button
+            onClick={() => setThemeOpen(!themeOpen)}
+            className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+            title={themeLabels[colorMode]}
+          >
+            {themeIcons[colorMode]}
+          </button>
+
+          {themeOpen && (
+            <div
+              className="absolute right-0 top-full mt-2 py-1.5 rounded-xl z-50 min-w-[120px] animate-fade-in"
+              style={{
+                background: 'hsl(var(--popover))',
+                backdropFilter: 'blur(20px)',
+                border: '1px solid hsl(var(--border))',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+              }}
+            >
+              {(['cream', 'dark', 'light'] as ColorMode[]).map(mode => (
+                <button
+                  key={mode}
+                  onClick={() => { setColorMode(mode); setThemeOpen(false); }}
+                  className={`w-full text-left px-4 py-2 text-sm transition-colors flex items-center gap-2 ${
+                    colorMode === mode
+                      ? 'text-foreground bg-foreground/5'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-foreground/5'
+                  }`}
+                >
+                  <span>{themeIcons[mode]}</span>
+                  {themeLabels[mode]}
                 </button>
               ))}
             </div>
@@ -123,10 +169,10 @@ export const TopNav = ({
               <div
                 className="absolute right-0 top-full mt-2 py-1.5 rounded-xl z-50 min-w-[160px] animate-fade-in"
                 style={{
-                  background: 'rgba(20, 22, 26, 0.92)',
+                  background: 'hsl(var(--popover))',
                   backdropFilter: 'blur(20px)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
+                  border: '1px solid hsl(var(--border))',
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
                 }}
               >
                 <button
