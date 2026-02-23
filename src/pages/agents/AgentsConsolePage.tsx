@@ -77,7 +77,7 @@ const AgentsConsolePage = () => {
             ← Back to Overview
           </button>
           <h1 className="text-2xl md:text-3xl font-heading font-bold">Console</h1>
-          <p className="text-sm text-muted-foreground mt-1">Manage API keys, monitor usage, and configure your organization.</p>
+          <p className="text-base md:text-lg text-muted-foreground mt-1">Manage API keys, monitor usage, and configure your organization.</p>
         </div>
 
         <div className="flex gap-6 border-b border-foreground/10">

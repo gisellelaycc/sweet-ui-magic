@@ -60,7 +60,7 @@ const AgentsExamplesPage = () => {
             ← Back to Overview
           </button>
           <h1 className="text-2xl md:text-3xl font-heading font-bold">Sample Flows</h1>
-          <p className="text-sm text-muted-foreground mt-1">Real-world buyer agent use cases, step by step.</p>
+          <p className="text-base md:text-lg text-muted-foreground mt-1">Real-world buyer agent use cases, step by step.</p>
         </div>
 
         {/* Example selector */}

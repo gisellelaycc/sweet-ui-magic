@@ -69,7 +69,7 @@ const AccountPage = () => {
       <div className="max-w-4xl mx-auto w-full space-y-6 py-4">
         <div>
           <h1 className="text-2xl md:text-3xl font-heading font-bold">Account</h1>
-          <p className="text-sm text-muted-foreground mt-1">Manage your wallet and preferences.</p>
+          <p className="text-base md:text-lg text-muted-foreground mt-1">Manage your wallet and preferences.</p>
         </div>
 
         <div className="flex gap-6 border-b border-foreground/10">
