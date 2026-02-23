@@ -99,15 +99,15 @@ export const ReviewStep = ({
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-center">
             {/* Left: Matrix — 60% */}
             <div className="lg:w-[60%] min-w-0">
-              <div className="relative">
-                <div className="absolute inset-0 pointer-events-none" style={{
+              <div className="relative glass-card !rounded-2xl !p-4">
+                <div className="absolute inset-0 pointer-events-none rounded-2xl" style={{
                   background: "radial-gradient(ellipse at center, rgba(10,255,255,0.08) 0%, transparent 70%)",
                 }} />
                 <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest mb-3 relative z-10">
                   Twin Matrix Projection (256D)
                 </h3>
                 <div className="relative z-10">
-                  <div className="flex flex-col gap-[2px] p-3 rounded-2xl" style={{ fontFamily: "'SF Mono', 'Fira Code', 'Cascadia Code', monospace", background: 'var(--matrix-grid-bg, transparent)' }}>
+                  <div className="flex flex-col gap-[2px]" style={{ fontFamily: "'SF Mono', 'Fira Code', 'Cascadia Code', monospace" }}>
                     {Array.from({ length: 16 }, (_, row) => {
                       const isTopHalf = row < 8;
                       return (
@@ -132,10 +132,10 @@ export const ReviewStep = ({
                             const isHovered = hoveredCell === idx;
                             const borderColor = val > 0
                               ? `rgba(${slice.color}, ${0.2 + 0.5 * intensity})`
-                              : 'hsl(var(--foreground) / 0.08)';
+                              : 'rgba(0, 0, 0, 0.15)';
                             const textColor = val > 0
                               ? `rgba(${slice.color}, ${0.5 + 0.5 * intensity})`
-                              : 'hsl(var(--foreground) / 0.2)';
+                              : 'rgba(0, 0, 0, 0.3)';
                             return (
                               <div
                                 key={col}
