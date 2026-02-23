@@ -137,8 +137,8 @@ const MatrixPage = () => {
           {!isCheckingToken && !contractError && !showIdentityFlow && hasMintedSbt && (
             <>
               {showAgentNudge && (
-                <div className="max-w-6xl mx-auto w-full mb-4 rounded-xl border border-cyan-300/25 bg-cyan-400/10 px-4 py-3 flex items-center justify-between gap-3">
-                  <p className="text-xs text-cyan-100">{t('wizard.matrixUpdateNudge')}</p>
+                <div className="max-w-6xl mx-auto w-full mb-4 rounded-xl border border-foreground/15 bg-foreground/5 px-4 py-3 flex items-center justify-between gap-3">
+                  <p className="text-xs text-muted-foreground">{t('wizard.matrixUpdateNudge')}</p>
                   <div className="flex items-center gap-2 shrink-0">
                     <button onClick={() => setShowAgentNudge(false)} className="btn-twin btn-twin-ghost py-1.5 px-3 text-xs">
                       {t('wizard.dismiss')}

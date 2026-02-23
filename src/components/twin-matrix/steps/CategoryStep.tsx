@@ -162,10 +162,10 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
                 className="relative cursor-pointer w-full flex-1"
                 style={{
                   minHeight: '460px', borderRadius: '28px',
-                  background: 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 60%, transparent 100%)',
+                  background: 'var(--glass-bg)',
                   backdropFilter: 'blur(16px) saturate(160%)',
-                  boxShadow: `0 0 60px -20px rgba(10, 255, 255, ${isActivated ? '0.15' : '0.05'}), 0 0 120px -40px rgba(173, 255, 255, ${isActivated ? '0.08' : '0.02'})`,
-                  border: 'none',
+                  boxShadow: `0 0 60px -20px rgba(10, 200, 200, ${isActivated ? '0.12' : '0.04'}), 0 0 120px -40px rgba(10, 200, 200, ${isActivated ? '0.06' : '0.02'})`,
+                  border: '1px solid var(--glass-border)',
                   transform: isActivated ? 'translateY(-4px)' : 'translateY(0)',
                   transition: 'transform 400ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 400ms ease',
                 }}
