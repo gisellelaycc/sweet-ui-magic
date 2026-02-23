@@ -223,25 +223,26 @@ export const ParticleBackground = ({ color = 'cyan' }: ParticleBackgroundProps) 
         const pulse = 0.4 + 0.6 * Math.sin(time * 0.0008 + p.phase);
 
         if (isLight) {
-          // depth 0=far (tiny, faint, blurry), 1=near (bigger, sharper)
-          const depthSize = 0.25 + p.depth * 1.1;
-          const depthOpacity = 0.12 + p.depth * 0.58;
-          const depthBlur = (1 - p.depth) * 4.5;
+          // Match dark mode intensity — depth creates parallax, not dimming
+          const depthSize = 0.5 + p.depth * 0.8;
+          const depthOpacity = 0.5 + p.depth * 0.5; // much stronger: 0.5–1.0
+          const depthBlur = (1 - p.depth) * 3;
           const finalSize = p.size * depthSize;
-          const finalAlpha = Math.min(0.45, p.baseOpacity * pulse * depthOpacity);
-          const col = `rgba(140, 138, 130, ${finalAlpha})`;
+          const finalAlpha = Math.min(0.6, p.baseOpacity * pulse * depthOpacity);
+          // Darker, more visible particles on light bg
+          const col = `rgba(100, 105, 100, ${finalAlpha})`;
 
           if (p.layer === 'c') {
             const gradient = ctx.createRadialGradient(px, py, 0, px, py, finalSize);
-            gradient.addColorStop(0, `rgba(155, 150, 142, ${finalAlpha * 0.7})`);
-            gradient.addColorStop(0.6, `rgba(155, 150, 142, ${finalAlpha * 0.15})`);
-            gradient.addColorStop(1, 'rgba(155, 150, 142, 0)');
+            gradient.addColorStop(0, `rgba(110, 115, 110, ${finalAlpha * 0.9})`);
+            gradient.addColorStop(0.5, `rgba(110, 115, 110, ${finalAlpha * 0.25})`);
+            gradient.addColorStop(1, 'rgba(110, 115, 110, 0)');
             ctx.beginPath();
             ctx.arc(px, py, finalSize, 0, Math.PI * 2);
             ctx.fillStyle = gradient;
             ctx.fill();
           } else {
-            ctx.shadowColor = depthBlur > 1 ? `rgba(140, 138, 130, ${finalAlpha * 0.3})` : 'transparent';
+            ctx.shadowColor = depthBlur > 1 ? `rgba(100, 105, 100, ${finalAlpha * 0.4})` : 'transparent';
             ctx.shadowBlur = depthBlur;
             ctx.beginPath();
             ctx.arc(px, py, finalSize, 0, Math.PI * 2);
