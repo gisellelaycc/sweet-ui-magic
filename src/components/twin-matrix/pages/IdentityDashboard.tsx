@@ -147,10 +147,10 @@ export const IdentityDashboard = ({ signature, activeModules, onNavigate }: Prop
                       const color = slice.color;
                       const borderColor = v > 0
                         ? `rgba(${color}, ${0.6 + 0.4 * intensity})`
-                        : 'rgba(0, 0, 0, 0.2)';
+                        : 'hsl(var(--foreground) / 0.2)';
                       const textColor = v > 0
                         ? `rgba(${color}, ${0.7 + 0.3 * intensity})`
-                        : 'rgba(0, 0, 0, 0.35)';
+                        : 'hsl(var(--foreground) / 0.35)';
                       return (
                         <div key={col} className={`rounded-full aspect-square flex items-center justify-center ${col === 8 ? "ml-[3px]" : ""}`}
                           style={{
