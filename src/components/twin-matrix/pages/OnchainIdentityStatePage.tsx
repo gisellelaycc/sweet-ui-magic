@@ -104,18 +104,6 @@ export const OnchainIdentityStatePage = ({
       .replace('{signals}', activeDims.join(', '));
   }, [activeVersion, layerMix, matrix, t]);
 
-  /* ── Stats row data ── */
-  const stats = [
-    { value: `${filledCount}/256`, label: 'TWIN MATRIX' },
-    { value: String(latestVersion), label: 'VERSION' },
-    { value: String(boundAgents.length), label: 'BOUND AGENTS' },
-    { value: String(versions.length), label: 'HISTORY' },
-    {
-      value: `${filledCount > 0 ? Math.round((filledCount / 256) * 100) : 0}%`,
-      label: 'COMPLETION',
-      highlight: true,
-    },
-  ];
 
   return (
     <div className="animate-fade-in h-full overflow-y-auto scrollbar-hide">
@@ -125,59 +113,33 @@ export const OnchainIdentityStatePage = ({
         <div className="flex items-start justify-between gap-4">
           <div>
             <h2
-              className="font-heading font-extrabold uppercase leading-tight tracking-tight text-foreground"
+              className="font-heading font-extrabold leading-tight tracking-tight text-foreground"
               style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.5rem)' }}
             >
-              ME
+              Identity State
             </h2>
-            <p className="text-sm md:text-base text-muted-foreground mt-1 max-w-xl leading-relaxed">
-              The true you in different dimensions, staying transparent yet mysterious.
+            <p className="text-base text-muted-foreground mt-1">
+              On-chain state from TwinMatrixSBT
             </p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
             <button
-              onClick={onReconfigure}
-              className="py-2 px-4 rounded-lg text-xs font-medium border border-foreground/10 text-muted-foreground hover:bg-foreground/5 hover:text-foreground transition-colors"
-            >
-              {t('onchain.reconfigure')}
-            </button>
-            <button
               onClick={onRefresh}
               disabled={isRefreshing}
-              className="py-2 px-4 rounded-lg text-xs font-medium border border-foreground/10 text-muted-foreground hover:bg-foreground/5 hover:text-foreground transition-colors disabled:opacity-50"
+              className="py-2 px-5 rounded-lg text-sm font-medium border border-foreground/10 text-muted-foreground hover:bg-foreground/5 hover:text-foreground transition-colors disabled:opacity-50"
             >
               {isRefreshing ? t('onchain.refreshing') : t('onchain.refresh')}
             </button>
           </div>
         </div>
 
-        {/* ── Subtitle ── */}
-        <p className="text-sm text-muted-foreground/60 leading-relaxed max-w-2xl">
-          Attribute values and rankings are hidden in the black number for the airdrop index. Update more attributes to get more airdrops.
-        </p>
-
-        {/* ── Stats Bar ── */}
-        <div className="grid grid-cols-5 gap-0 rounded-xl overflow-hidden" style={{ border: '1px solid rgba(255, 255, 255, 0.10)' }}>
-          {stats.map((stat, i) => (
-            <div
-              key={stat.label}
-              className="flex flex-col items-center justify-center py-4 px-2"
-              style={{
-                borderRight: i < stats.length - 1 ? '1px solid rgba(255, 255, 255, 0.10)' : 'none',
-                background: 'rgba(255, 255, 255, 0.02)',
-              }}
-            >
-              <span
-                className="text-xl md:text-2xl font-heading font-bold"
-                style={{ color: stat.highlight ? '#F24455' : 'hsl(var(--foreground))' }}
-              >
-                {stat.value}
-              </span>
-              <span className="text-xs uppercase tracking-wider text-muted-foreground mt-1">
-                {stat.label}
-              </span>
-            </div>
-          ))}
+        {/* ── Meta Bar ── */}
+        <div className="flex items-center gap-4 text-sm text-muted-foreground flex-wrap">
+          <span>Token ID <span className="font-semibold text-foreground">{tokenId.toString()}</span></span>
+          <span className="text-muted-foreground/30">·</span>
+          <span>Latest Version <span className="font-semibold text-foreground">v{latestVersion}</span></span>
+          <span className="text-muted-foreground/30">·</span>
+          <span>Wallet <span className="font-semibold text-foreground">{walletAddress ?? '-'}</span></span>
         </div>
 
         {/* ── Main Content: Matrix + Right Panel ── */}
@@ -410,14 +372,6 @@ export const OnchainIdentityStatePage = ({
           </div>
         </div>
 
-        {/* ── Meta footer ── */}
-        <div className="flex items-center gap-4 text-[10px] text-muted-foreground/50 flex-wrap pb-4">
-          <span>Token #{tokenId.toString()}</span>
-          <span>·</span>
-          <span>v{latestVersion}</span>
-          <span>·</span>
-          <span>{walletAddress ?? '-'}</span>
-        </div>
 
       </div>
     </div>
