@@ -66,7 +66,7 @@ const MatrixPage = () => {
         <div className="flex-1 flex items-center justify-center">
           <div className="max-w-md text-center space-y-6" style={cardStyle}>
             <h2 className="text-xl font-heading font-bold">Connect Wallet</h2>
-            <p className="text-muted-foreground text-sm">Connect your wallet to view your Twin Matrix identity.</p>
+            <p className="text-muted-foreground text-base md:text-lg">Connect your wallet to view your Twin Matrix identity.</p>
             <button onClick={() => openConnectModal?.()} className="btn-twin btn-twin-primary py-4 px-8 w-full">
               Connect Wallet
             </button>
@@ -83,7 +83,7 @@ const MatrixPage = () => {
         <div className="flex-1 flex items-center justify-center">
           <div className="max-w-md text-center space-y-6" style={cardStyle}>
             <h2 className="text-xl font-heading font-bold">No Identity Found</h2>
-            <p className="text-muted-foreground text-sm">You haven't created your Twin Matrix yet. Start by verifying your humanity.</p>
+            <p className="text-muted-foreground text-base md:text-lg">You haven't created your Twin Matrix yet. Start by verifying your humanity.</p>
             <button onClick={() => navigate('/verify')} className="btn-twin btn-twin-primary py-4 px-8 w-full">
               Create Identity
             </button>
@@ -183,7 +183,7 @@ const MatrixPage = () => {
                   <div className="space-y-6">
                     <div>
                       <h2 className="text-xl font-heading font-bold">Bound Agents</h2>
-                      <p className="text-sm text-muted-foreground mt-1">Agents authorized to act on your behalf.</p>
+                      <p className="text-base md:text-lg text-muted-foreground mt-1">Agents authorized to act on your behalf.</p>
                     </div>
 
                     {boundAgents.length === 0 ? (
@@ -243,7 +243,7 @@ const MatrixPage = () => {
           <div className="animate-fade-in space-y-6">
                 <div>
                   <h2 className="text-xl font-heading font-bold">Marketplace Presence</h2>
-                  <p className="text-sm text-muted-foreground mt-1">Control how buyer agents discover and interact with your profile.</p>
+                  <p className="text-base md:text-lg text-muted-foreground mt-1">Control how buyer agents discover and interact with your profile.</p>
                 </div>
 
                 <div style={cardStyle} className="space-y-4">

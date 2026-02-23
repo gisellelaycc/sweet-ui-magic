@@ -120,7 +120,7 @@ export const OnchainIdentityStatePage = ({
 
               Identity State
             </h2>
-            <p className="text-sm text-muted-foreground mt-1">
+            <p className="text-base md:text-lg text-muted-foreground mt-1">
               On-chain state from TwinMatrixSBT
             </p>
           </div>

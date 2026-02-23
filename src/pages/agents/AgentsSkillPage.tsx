@@ -27,7 +27,7 @@ const AgentsSkillPage = () => {
             ← Back to Overview
           </button>
           <h1 className="text-2xl md:text-3xl font-heading font-bold">Skill Specification</h1>
-          <p className="text-sm text-muted-foreground mt-1">What your buyer agent can do through the Twin Matrix protocol.</p>
+          <p className="text-base md:text-lg text-muted-foreground mt-1">What your buyer agent can do through the Twin Matrix protocol.</p>
         </div>
 
         {/* Capabilities */}

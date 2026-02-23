@@ -56,7 +56,7 @@ const MintPage = () => {
         <div className="flex-1 flex items-center justify-center">
           <div className="max-w-md text-center space-y-6">
             <h1 className="text-2xl font-heading font-bold">Connect Wallet</h1>
-            <p className="text-muted-foreground">Connect your wallet to create or update your Twin Matrix.</p>
+            <p className="text-base md:text-lg text-muted-foreground">Connect your wallet to create or update your Twin Matrix.</p>
             <button onClick={() => openConnectModal?.()} className="btn-twin btn-twin-primary py-4 px-8 text-base">
               Connect Wallet
             </button>

@@ -72,7 +72,7 @@ const AgentsOverviewPage = () => {
         {/* CTA */}
         <div className="text-center space-y-4 py-6" style={{ ...cardStyle, background: 'hsl(var(--foreground) / 0.03)' }}>
           <h2 className="text-xl font-heading font-bold">Ready to integrate?</h2>
-          <p className="text-sm text-muted-foreground max-w-md mx-auto">
+          <p className="text-base md:text-lg text-muted-foreground max-w-md mx-auto">
             Choose your integration path: Skill protocol, REST API, or SDK. Get started in minutes.
           </p>
           <div className="flex items-center justify-center gap-3">

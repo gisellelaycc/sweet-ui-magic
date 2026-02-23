@@ -46,7 +46,7 @@ const AgentsApiPage = () => {
             ← Back to Overview
           </button>
           <h1 className="text-2xl md:text-3xl font-heading font-bold">API Reference</h1>
-          <p className="text-sm text-muted-foreground mt-1">Endpoints, authentication, and webhooks for the Twin Matrix API.</p>
+          <p className="text-base md:text-lg text-muted-foreground mt-1">Endpoints, authentication, and webhooks for the Twin Matrix API.</p>
         </div>
 
         {/* Auth section */}
