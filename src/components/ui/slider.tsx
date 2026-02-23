@@ -17,11 +17,7 @@ const Slider = React.forwardRef<
       <SliderPrimitive.Range className="absolute h-full rounded-full bg-transparent" />
     </SliderPrimitive.Track>
     <SliderPrimitive.Thumb
-      className="block h-3.5 w-3.5 rounded-full border border-white/20 ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 disabled:pointer-events-none disabled:opacity-50"
-      style={{
-        background: 'radial-gradient(circle, rgba(173, 255, 255, 0.7) 0%, rgba(10, 255, 255, 0.4) 40%, transparent 70%)',
-        boxShadow: '0 0 8px rgba(10, 255, 255, 0.4), 0 0 18px rgba(173, 255, 255, 0.2), 0 0 30px rgba(10, 255, 255, 0.08)',
-      }}
+      className="block h-3.5 w-3.5 rounded-full border border-white/20 ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 disabled:pointer-events-none disabled:opacity-50 slider-thumb"
     />
   </SliderPrimitive.Root>
 ));
