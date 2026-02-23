@@ -1,19 +1,31 @@
-import { useState, useEffect, useRef } from 'react';
-import { Lock } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Lock, Dumbbell, Music, Palette, BookOpen, UtensilsCrossed, Plane, TrendingUp, Gamepad2, GraduationCap, ArrowRight } from 'lucide-react';
 import type { IdentityModule } from '@/types/twin-matrix';
 import { StepLayout, StepContent } from '../StepLayout';
 import { useI18n } from '@/lib/i18n';
 
+const SIGNAL_ICONS: Record<string, React.ReactNode> = {
+  sport: <Dumbbell className="w-6 h-6" />,
+  music: <Music className="w-6 h-6" />,
+  art: <Palette className="w-6 h-6" />,
+  reading: <BookOpen className="w-6 h-6" />,
+  food: <UtensilsCrossed className="w-6 h-6" />,
+  travel: <Plane className="w-6 h-6" />,
+  finance: <TrendingUp className="w-6 h-6" />,
+  gaming: <Gamepad2 className="w-6 h-6" />,
+  learning: <GraduationCap className="w-6 h-6" />,
+};
+
 const SIGNALS: (IdentityModule & { soon?: boolean })[] = [
-  { id: 'sport', icon: 'SP', label: 'Sport', description: 'Physical signal · competitive state', active: true },
-  { id: 'music', icon: 'MU', label: 'Music', description: 'Rhythm signal · listening state', active: false, soon: true },
-  { id: 'art', icon: 'AR', label: 'Art', description: 'Aesthetic signal · creative state', active: false, soon: true },
-  { id: 'reading', icon: 'RD', label: 'Reading', description: 'Knowledge signal · absorption state', active: false, soon: true },
-  { id: 'food', icon: 'FD', label: 'Food', description: 'Lifestyle signal · dietary state', active: false, soon: true },
-  { id: 'travel', icon: 'TR', label: 'Travel', description: 'Mobility signal · exploration state', active: false, soon: true },
-  { id: 'finance', icon: 'FI', label: 'Finance', description: 'Risk signal · asset state', active: false, soon: true },
-  { id: 'gaming', icon: 'GM', label: 'Gaming', description: 'Strategic signal · competitive state', active: false, soon: true },
-  { id: 'learning', icon: 'LN', label: 'Learning', description: 'Growth signal · focus state', active: false, soon: true },
+  { id: 'sport', icon: 'sport', label: 'Sport', description: 'Physical signal - competitive state', active: true },
+  { id: 'music', icon: 'music', label: 'Music', description: 'Rhythm signal - listening state', active: false, soon: true },
+  { id: 'art', icon: 'art', label: 'Art', description: 'Aesthetic signal - creative state', active: false, soon: true },
+  { id: 'reading', icon: 'reading', label: 'Reading', description: 'Knowledge signal - absorption state', active: false, soon: true },
+  { id: 'food', icon: 'food', label: 'Food', description: 'Lifestyle signal - dietary state', active: false, soon: true },
+  { id: 'travel', icon: 'travel', label: 'Travel', description: 'Mobility signal - exploration state', active: false, soon: true },
+  { id: 'finance', icon: 'finance', label: 'Finance', description: 'Risk signal - asset state', active: false, soon: true },
+  { id: 'gaming', icon: 'gaming', label: 'Gaming', description: 'Strategic signal - competitive state', active: false, soon: true },
+  { id: 'learning', icon: 'learning', label: 'Learning', description: 'Growth signal - focus state', active: false, soon: true },
 ];
 
 const MINTED_MODULES = ['music', 'reading'];
@@ -66,8 +78,8 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
   const getDesc = (id: string) => t(`signal.${id}.desc`);
 
   const chipItems = [
-    ...SIGNALS.map(s => ({ id: s.id, icon: s.icon, soon: !!s.soon })),
-    { id: '_more', icon: '→', soon: false },
+    ...SIGNALS.map(s => ({ id: s.id, icon: s.id, soon: !!s.soon })),
+    { id: '_more', icon: '_more', soon: false },
   ];
 
   return (
@@ -128,7 +140,7 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
                       }}
                     >
                       {isSoon && <Lock className="w-4 h-4 text-foreground/30 shrink-0" />}
-                      <span className="text-2xl shrink-0">{chip.icon}</span>
+                      <span className="text-2xl shrink-0 text-foreground/70">{chip.id === '_more' ? <ArrowRight className="w-6 h-6" /> : SIGNAL_ICONS[chip.id]}</span>
                       <div className="min-w-0">
                         <span className={`text-lg font-medium block ${isChipSelected ? 'text-foreground' : 'text-foreground/70'}`}>
                           {isMore ? t('category.andMore') : getLabel(chip.id)}
@@ -178,7 +190,7 @@ export const CategoryStep = ({ activeModules, onUpdate, onNext }: Props) => {
                     transition: 'opacity 150ms ease, transform 150ms ease',
                   }}
                 >
-                  <span className="text-6xl mb-5">{current.icon}</span>
+                  <span className="text-foreground/80 mb-5">{SIGNAL_ICONS[current.id] ? React.cloneElement(SIGNAL_ICONS[current.id] as React.ReactElement, { className: 'w-14 h-14' }) : null}</span>
                   <h3 className="text-2xl font-semibold text-foreground mb-1">{getLabel(current.id)}</h3>
                   {isMinted && (
                     <span className="text-sm px-3 py-0.5 rounded-full mb-2" style={{ background: 'hsla(164, 24%, 74%, 0.15)', color: 'hsl(164, 24%, 74%)' }}>{t('category.minted')}</span>
