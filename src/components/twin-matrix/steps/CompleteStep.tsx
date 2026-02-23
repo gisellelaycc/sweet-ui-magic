@@ -167,7 +167,7 @@ export const CompleteStep = ({ signature, onActivateAgent, onDashboard }: Props)
                                   aspectRatio: '1',
                                   background: v > 0
                                     ? `rgba(${slice.color}, ${cellOpacity * 0.5})`
-                                    : 'rgba(255, 255, 255, 0.02)',
+                                    : 'hsl(var(--foreground) / 0.02)',
                                   boxShadow: v > 150
                                     ? `0 0 4px rgba(${slice.color}, ${cellOpacity * 0.4})`
                                     : 'none',

@@ -8,12 +8,12 @@ const DEMO_AUTHORIZATIONS = [
 
 const statusColor: Record<string, string> = {
   active: 'rgba(10, 255, 255, 0.8)',
-  consumed: 'rgba(255, 255, 255, 0.3)',
+  consumed: 'hsl(var(--foreground) / 0.3)',
   expired: 'rgba(242, 68, 85, 0.6)',
 };
 
 const ThinDivider = () => (
-  <div className="w-full h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)' }} />
+  <div className="w-full h-px" style={{ background: 'linear-gradient(90deg, transparent, hsl(var(--foreground) / 0.06), transparent)' }} />
 );
 
 export const ActiveAuthorizationsPage = () => {

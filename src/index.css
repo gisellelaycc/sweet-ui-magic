@@ -55,7 +55,7 @@
     --color-text-primary: 228 14% 8%;
     --color-text-secondary: 220 8% 40%;
     --color-text-dim: 30 10% 60%;
-    --color-success: 142 71% 40%;
+    --color-success: 152 45% 42%;
     --color-warning: 33 100% 45%;
 
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
@@ -190,7 +190,7 @@
     --color-text-primary: 228 14% 8%;
     --color-text-secondary: 220 8% 40%;
     --color-text-dim: 220 9% 65%;
-    --color-success: 142 71% 40%;
+    --color-success: 152 45% 42%;
     --color-warning: 33 100% 45%;
 
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -316,6 +316,12 @@ body::before {
     border-color: rgba(255, 255, 255, 0.16);
   }
 
+  /* Invert white SVG icons on light themes */
+  [data-theme="cream"] .social-icon,
+  [data-theme="light"] .social-icon {
+    filter: invert(1);
+  }
+
   .glass-card {
     position: relative;
     background: linear-gradient(
@@ -362,16 +368,16 @@ body::before {
   .chip {
     @apply inline-flex items-center gap-1 cursor-pointer transition-all duration-200;
     padding: 10px 20px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     border-radius: 9999px;
     font-size: 15px;
     color: hsl(var(--color-text-secondary));
   }
 
   .chip:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.15);
+    background: hsl(var(--foreground) / 0.08);
+    border-color: hsl(var(--foreground) / 0.15);
     color: hsl(var(--color-text-primary));
     transform: translateY(-1px);
   }
@@ -421,8 +427,8 @@ body::before {
   }
 
   .btn-twin-ghost:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.2);
+    background: hsl(var(--foreground) / 0.06);
+    border-color: hsl(var(--foreground) / 0.2);
     color: hsl(var(--color-text-primary));
   }
 }
