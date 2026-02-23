@@ -1,25 +1,25 @@
 import logo from '@/assets/twin3-logo.svg';
 import xLogo from '@/assets/social/x-logo.svg';
 import elementLogo from '@/assets/social/element-logo.svg';
-
+import discordLogo from '@/assets/social/discord-logo.svg';
 import bcscanLogo from '@/assets/social/bcscan-logo.svg';
 
 const SOCIAL_LINKS = [
   { icon: xLogo, href: 'https://x.com/twin3_ai', alt: 'X' },
   { icon: elementLogo, href: 'https://element.market/collections/twin3-1?search[toggles][0]=ALL', alt: 'Element' },
-  { icon: null, href: 'https://discord.gg/ZveHDMVG', alt: 'Discord' },
+  { icon: discordLogo, href: 'https://discord.gg/ZveHDMVG', alt: 'Discord' },
   { icon: bcscanLogo, href: 'https://bscscan.com/token/0xe3ec133e29addfbba26a412c38ed5de37195156f', alt: 'BscScan' },
 ];
 
 export const SiteFooter = () => (
   <footer className="w-full border-t border-foreground/5">
-    <div className="max-w-7xl mx-auto px-6 md:px-10 py-10">
+    <div className="max-w-7xl mx-auto px-6 md:px-10 py-12">
       {/* Top row */}
       <div className="flex flex-col md:flex-row items-start gap-8 md:gap-12 lg:gap-16">
         {/* Logo */}
         <div className="flex flex-col items-start gap-2 shrink-0">
-          <img src={logo} alt="twin3.ai" className="w-12 h-12" />
-          <span className="text-sm font-heading font-medium text-foreground/80">twin3.ai</span>
+          <img src={logo} alt="twin3.ai" className="w-14 h-14" />
+          <span className="text-base font-heading font-medium text-foreground/80">twin3.ai</span>
         </div>
 
         {/* Social Media */}
@@ -32,13 +32,9 @@ export const SiteFooter = () => (
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-7 h-7 flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity"
+                className="w-9 h-9 flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity"
               >
-                {link.icon ? (
-                  <img src={link.icon} alt={link.alt} className="w-5 h-5 social-icon" />
-                ) : (
-                  <span className="text-xs font-bold text-foreground/70">{link.alt.slice(0, 2)}</span>
-                )}
+                <img src={link.icon} alt={link.alt} className="w-5 h-5 social-icon" />
               </a>
             ))}
           </div>

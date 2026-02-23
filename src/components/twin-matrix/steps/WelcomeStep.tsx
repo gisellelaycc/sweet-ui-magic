@@ -4,7 +4,7 @@ import { StepLayout, StepContent } from '../StepLayout';
 import { useI18n } from '@/lib/i18n';
 import xLogo from '@/assets/social/x-logo.svg';
 import elementLogo from '@/assets/social/element-logo.svg';
-import farcasterLogo from '@/assets/social/farcaster-logo.svg';
+import discordLogo from '@/assets/social/discord-logo.svg';
 import bcscanLogo from '@/assets/social/bcscan-logo.svg';
 
 interface Props {
@@ -33,7 +33,7 @@ const GlowLine = () => (
 const SOCIAL_LINKS = [
   { icon: xLogo, href: 'https://x.com/twin3_ai', alt: 'X (Twitter)' },
   { icon: elementLogo, href: 'https://element.market/collections/twin3-1?search[toggles][0]=ALL', alt: 'Element' },
-  { icon: farcasterLogo, href: 'https://warpcast.com/twin3.eth', alt: 'Farcaster' },
+  { icon: discordLogo, href: 'https://discord.gg/ZveHDMVG', alt: 'Discord' },
   { icon: bcscanLogo, href: 'https://bscscan.com/token/0xe3ec133e29addfbba26a412c38ed5de37195156f', alt: 'BscScan' },
 ];
 
