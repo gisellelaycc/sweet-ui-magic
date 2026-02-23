@@ -103,19 +103,19 @@ export const CompleteStep = ({ signature, onActivateAgent, onDashboard }: Props)
             <div className="flex items-start">
               {/* Identity Hash */}
               <div className="flex-1 text-left space-y-1">
-                <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{t('complete.hash')}</p>
-                <p className="text-xs font-mono text-foreground/70 break-all">{identityHash}</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-widest">{t('complete.hash')}</p>
+                <p className="text-sm font-mono text-foreground/70 break-all">{identityHash}</p>
               </div>
 
               <GlowDivider vertical />
 
               {/* Minted SBT ID */}
               <div className="flex-1 text-left space-y-1">
-                <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{t('complete.sbtId')}</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-widest">{t('complete.sbtId')}</p>
                 <p className="text-sm font-mono text-foreground">{sbtId}</p>
                 <div className="space-y-1 mt-2">
-                  <p className="text-xs" style={{ color: '#F24455' }}>{t('complete.boundWallet')}</p>
-                  <p className="text-[10px] text-muted-foreground font-mono break-all">{walletAddress}</p>
+                  <p className="text-sm" style={{ color: '#F24455' }}>{t('complete.boundWallet')}</p>
+                  <p className="text-sm text-muted-foreground font-mono break-all">{walletAddress}</p>
                 </div>
               </div>
             </div>
@@ -146,13 +146,13 @@ export const CompleteStep = ({ signature, onActivateAgent, onDashboard }: Props)
               {/* Vector Imprint */}
               <div className="flex-1 text-left space-y-2">
                 <p className="text-xs text-muted-foreground uppercase tracking-widest">{t('complete.vectorImprint')}</p>
-                <p className="text-xs text-muted-foreground/50">{t('complete.snapshot')}</p>
+                <p className="text-sm text-muted-foreground/50">{t('complete.snapshot')}</p>
                 <div className="space-y-3">
                   {SLICES.map(slice => {
                     const sliceData = signature.slice(slice.range[0], slice.range[1] + 1);
                     return (
                       <div key={slice.label}>
-                        <p className="text-[8px] text-muted-foreground/30 uppercase tracking-wider mb-1 font-light">{slice.label}</p>
+                        <p className="text-xs text-muted-foreground/30 uppercase tracking-wider mb-1 font-light">{slice.label}</p>
                         <div className="flex flex-wrap gap-px">
                           {sliceData.map((v, i) => {
                             const intensity = v / 255;
@@ -191,7 +191,7 @@ export const CompleteStep = ({ signature, onActivateAgent, onDashboard }: Props)
           <button onClick={onActivateAgent} className="btn-twin btn-twin-primary btn-glow w-full py-2.5 text-sm">
             {t('complete.activateAgent')}
           </button>
-          <button onClick={onDashboard} className="btn-twin btn-twin-ghost w-full py-2 text-xs">
+          <button onClick={onDashboard} className="btn-twin btn-twin-ghost w-full py-2 text-sm">
             {t('complete.returnDashboard')}
           </button>
         </div>

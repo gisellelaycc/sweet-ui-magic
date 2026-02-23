@@ -33,7 +33,7 @@ export const UpdateIdentityPage = ({ activeModules, tags }: Props) => {
           <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">{t('update.coreLayer')}</h3>
           <button className="text-xs text-muted-foreground/50 hover:text-foreground transition-colors">{t('update.edit')}</button>
         </div>
-        <p className="text-[11px] text-muted-foreground mt-1">{t('update.editHint')}</p>
+        <p className="text-sm text-muted-foreground mt-1">{t('update.editHint')}</p>
       </div>
 
       <div className="glass-card space-y-3">
@@ -48,11 +48,11 @@ export const UpdateIdentityPage = ({ activeModules, tags }: Props) => {
                   <span className="text-sm">{t(`signal.${mod.id}`)}</span>
                 </div>
                 {isActive ? (
-                  <button className="text-[11px] px-3 py-1 rounded-lg bg-foreground/10 text-foreground/70 hover:bg-foreground/15 transition-colors">
+                  <button className="text-xs px-3 py-1 rounded-lg bg-foreground/10 text-foreground/70 hover:bg-foreground/15 transition-colors">
                     {t('update.edit')}
                   </button>
                 ) : (
-                  <button className="text-[11px] px-3 py-1 rounded-lg bg-foreground/5 text-muted-foreground hover:bg-foreground/10 transition-colors">
+                  <button className="text-xs px-3 py-1 rounded-lg bg-foreground/5 text-muted-foreground hover:bg-foreground/10 transition-colors">
                     {t('update.activate')}
                   </button>
                 )}

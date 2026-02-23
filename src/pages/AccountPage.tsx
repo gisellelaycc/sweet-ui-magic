@@ -96,8 +96,8 @@ const AccountPage = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-lg font-mono font-medium">{walletAddress}</p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {isWrongNetwork ? '⚠️ Wrong network — switch to BSC Testnet' : '✓ BSC Testnet'}
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {isWrongNetwork ? 'Wrong network — switch to BSC Testnet' : 'BSC Testnet'}
                   </p>
                 </div>
                 <button onClick={() => disconnect()} className="btn-twin btn-twin-ghost py-2 px-4 text-sm">
@@ -123,7 +123,7 @@ const AccountPage = () => {
                 </button>
               )}
               {tokenId !== null && (
-                <p className="text-xs text-muted-foreground font-mono">Token ID: {tokenId.toString()}</p>
+                <p className="text-sm text-muted-foreground font-mono">Token ID: {tokenId.toString()}</p>
               )}
             </div>
 
@@ -193,16 +193,16 @@ const AccountPage = () => {
                 {boundAgents.length === 0 ? (
                   <div style={cardStyle} className="text-center py-8">
                     <p className="text-muted-foreground">No agents authorized yet.</p>
-                    <p className="text-xs text-muted-foreground/60 mt-1">Authorize buyer agents to access your Twin Matrix data.</p>
+                    <p className="text-sm text-muted-foreground/60 mt-1">Authorize buyer agents to access your Twin Matrix data.</p>
                   </div>
                 ) : (
                   boundAgents.map((agent) => (
                     <div key={agent.address} style={cardStyle} className="flex items-center justify-between">
                       <div>
                         <p className="font-medium text-sm">{agent.name}</p>
-                        <p className="text-xs text-muted-foreground font-mono mt-0.5">{agent.address}</p>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Scope: {agent.scopeGranted.length} quadrant(s) · {agent.active ? '✓ Active' : '○ Inactive'}
+                        <p className="text-sm text-muted-foreground font-mono mt-0.5">{agent.address}</p>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          Scope: {agent.scopeGranted.length} quadrant(s) · {agent.active ? 'Active' : 'Inactive'}
                         </p>
                       </div>
                       <button
@@ -226,9 +226,9 @@ const AccountPage = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium">Two-factor authentication</p>
-                  <p className="text-xs text-muted-foreground">Add an extra layer of security</p>
+                  <p className="text-sm text-muted-foreground">Add an extra layer of security</p>
                 </div>
-                <button className="btn-twin btn-twin-ghost py-1.5 px-3 text-xs" disabled>Coming Soon</button>
+                <button className="btn-twin btn-twin-ghost py-1.5 px-3 text-sm" disabled>Coming Soon</button>
               </div>
             </div>
             <div style={cardStyle} className="space-y-3">
@@ -236,9 +236,9 @@ const AccountPage = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium">Export my data</p>
-                  <p className="text-xs text-muted-foreground">Download all your Twin Matrix data</p>
+                  <p className="text-sm text-muted-foreground">Download all your Twin Matrix data</p>
                 </div>
-                <button className="btn-twin btn-twin-ghost py-1.5 px-3 text-xs" disabled>Coming Soon</button>
+                <button className="btn-twin btn-twin-ghost py-1.5 px-3 text-sm" disabled>Coming Soon</button>
               </div>
             </div>
           </div>

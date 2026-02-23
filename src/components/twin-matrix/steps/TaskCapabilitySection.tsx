@@ -57,7 +57,7 @@ export const TaskCapabilitySection = ({ capabilities, onUpdate }: Props) => {
             <button
               key={cap}
               onClick={() => togglePrimary(cap)}
-              className={`text-[11px] px-3 py-1.5 rounded-lg transition-all ${
+              className={`text-xs px-3 py-1.5 rounded-lg transition-all ${
                 isActive
                   ? isOpen
                     ? 'bg-foreground/20 text-foreground border border-foreground/20'
@@ -79,10 +79,10 @@ export const TaskCapabilitySection = ({ capabilities, onUpdate }: Props) => {
       {openCap && openCap in capabilities && (
         <div className="animate-fade-in space-y-2 pt-1">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] text-muted-foreground/60 uppercase tracking-wider">{openCap} sub-tasks</span>
+            <span className="text-xs text-muted-foreground/60 uppercase tracking-wider">{openCap} sub-tasks</span>
             <button
               onClick={() => deactivate(openCap)}
-              className="text-[9px] text-muted-foreground/40 hover:text-destructive transition-colors"
+              className="text-xs text-muted-foreground/40 hover:text-destructive transition-colors"
             >
               Remove
             </button>
@@ -94,7 +94,7 @@ export const TaskCapabilitySection = ({ capabilities, onUpdate }: Props) => {
                 <button
                   key={sub}
                   onClick={() => toggleSub(openCap, sub)}
-                  className={`text-[10px] px-2.5 py-1 rounded-lg transition-all ${
+                  className={`text-xs px-2.5 py-1 rounded-lg transition-all ${
                     selected
                       ? 'bg-foreground/15 text-foreground border border-foreground/18'
                       : 'bg-foreground/4 text-muted-foreground border border-foreground/6 hover:border-foreground/12'

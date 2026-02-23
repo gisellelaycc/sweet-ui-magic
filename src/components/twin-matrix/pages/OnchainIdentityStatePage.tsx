@@ -158,7 +158,7 @@ export const OnchainIdentityStatePage = ({
               >
                 {stat.value}
               </span>
-              <span className="text-[10px] uppercase tracking-wider text-muted-foreground mt-1">
+              <span className="text-xs uppercase tracking-wider text-muted-foreground mt-1">
                 {stat.label}
               </span>
             </div>
@@ -410,12 +410,12 @@ export const OnchainIdentityStatePage = ({
                   <div className="py-2.5">
                     <div className="flex items-center justify-between gap-3">
                       <p className="text-sm font-medium">{agent.name}</p>
-                      <span className={`text-[10px] px-2 py-0.5 rounded-full ${agent.active ? 'bg-[hsla(164,24%,74%,0.15)] text-[hsl(164,24%,74%)]' : 'bg-foreground/10 text-muted-foreground'}`}>
+                      <span className={`text-xs px-2 py-0.5 rounded-full ${agent.active ? 'bg-[hsla(164,24%,74%,0.15)] text-[hsl(164,24%,74%)]' : 'bg-foreground/10 text-muted-foreground'}`}>
                         {agent.active ? t('onchain.active') : t('onchain.inactive')}
                       </span>
                     </div>
-                    <p className="text-[11px] font-mono text-muted-foreground mt-1 break-all">{agent.address}</p>
-                    <p className="text-[10px] font-mono text-muted-foreground mt-0.5">
+                    <p className="text-sm font-mono text-muted-foreground mt-1 break-all">{agent.address}</p>
+                    <p className="text-sm font-mono text-muted-foreground mt-0.5">
                       {t('onchain.scopeGranted')}: {permissionMaskToGrantedQuadrants(agent.permissionMask).join(', ') || t('onchain.none')}
                     </p>
                   </div>

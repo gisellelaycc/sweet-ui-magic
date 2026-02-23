@@ -164,11 +164,11 @@ const MatrixPage = () => {
                         <div className="min-w-0">
                           <div className="flex items-center gap-2">
                             <p className="text-sm font-medium truncate">{agent.name}</p>
-                            <span className={`text-[10px] px-2 py-0.5 rounded-full shrink-0 ${agent.active ? 'bg-[hsla(164,24%,74%,0.15)] text-[hsl(164,24%,74%)]' : 'bg-foreground/10 text-muted-foreground'}`}>
+                            <span className={`text-xs px-2 py-0.5 rounded-full shrink-0 ${agent.active ? 'bg-[hsla(164,24%,74%,0.15)] text-[hsl(164,24%,74%)]' : 'bg-foreground/10 text-muted-foreground'}`}>
                               {agent.active ? 'Active' : 'Inactive'}
                             </span>
                           </div>
-                          <p className="text-[11px] font-mono text-muted-foreground mt-1 truncate">{agent.address}</p>
+                          <p className="text-sm font-mono text-muted-foreground mt-1 truncate">{agent.address}</p>
                         </div>
                         <button
                           onClick={() => navigate(`/account?tab=authorizations&edit=${agent.address}`)}

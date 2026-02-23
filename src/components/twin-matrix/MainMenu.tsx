@@ -58,14 +58,14 @@ export const MainMenu = ({ open, onClose, onNavigate, hasIdentity }: Props) => {
               >
                 <span className="text-base">{item.icon}</span>
                 <span>{t(item.labelKey)}</span>
-                {disabled && <span className="ml-auto text-[9px] text-muted-foreground/30">locked</span>}
+                {disabled && <span className="ml-auto text-xs text-muted-foreground/30">locked</span>}
               </button>
             );
           })}
         </nav>
 
         <div className="px-5 py-4 border-t border-foreground/5">
-          <p className="text-[10px] text-muted-foreground/50">Twin Matrix v0.1 — Demo</p>
+          <p className="text-xs text-muted-foreground/50">Twin Matrix v0.1 — Demo</p>
         </div>
       </div>
     </>

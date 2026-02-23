@@ -55,8 +55,8 @@ const SocialFooter = () => {
         ))}
       </div>
       <div className="text-center">
-        <p className="text-xs font-medium text-foreground/80">{t('welcome.trackUs')}</p>
-        <p className="text-[11px] text-muted-foreground">{t('welcome.trackUsDesc')}</p>
+        <p className="text-sm font-medium text-foreground/80">{t('welcome.trackUs')}</p>
+        <p className="text-sm text-muted-foreground">{t('welcome.trackUsDesc')}</p>
       </div>
     </div>
   );

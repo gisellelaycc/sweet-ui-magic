@@ -55,10 +55,10 @@ export const MissionsPage = () => {
                 </div>
                 <div>
                   <p className="font-semibold">{mission.brand}</p>
-                  <p className="text-[11px] text-muted-foreground font-mono">{mission.agentId}</p>
+                  <p className="text-xs text-muted-foreground font-mono">{mission.agentId}</p>
                 </div>
               </div>
-              <span className={`text-[11px] px-3 py-1 rounded-full border ${
+              <span className={`text-xs px-3 py-1 rounded-full border ${
                 mission.type === 'task'
                   ? 'border-amber-400/30 text-amber-400'
                   : 'border-foreground/10 text-muted-foreground'
@@ -86,7 +86,7 @@ export const MissionsPage = () => {
 
             {/* WHY ME */}
             <div className="space-y-2">
-              <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">Signal Match</p>
+              <p className="text-xs text-muted-foreground uppercase tracking-widest font-semibold">Signal Match</p>
               <div className="flex flex-wrap gap-2">
                 {mission.whyMe.map(reason => (
                   <span key={reason} className="text-xs px-3 py-1.5 rounded-full bg-foreground/5 text-foreground/70">{reason}</span>
@@ -127,7 +127,7 @@ export const MissionsPage = () => {
             </div>
 
             {/* Usage hint */}
-            <p className="text-[10px] text-muted-foreground/40">
+            <p className="text-xs text-muted-foreground/40">
               {mission.type === 'passive'
                 ? 'View consumes 1 usage quota · Dismiss is free'
                 : 'Accept locks 1 usage quota · Payment releases on completion'}
