@@ -5,7 +5,7 @@ import { BaseError, isAddress, type Address } from 'viem';
 import { useChainId, usePublicClient, useSwitchChain, useWriteContract } from 'wagmi';
 import type { AgentSetup, AgentDefinition, AgentPermission } from '@/types/twin-matrix';
 import { TaskCapabilitySection } from './TaskCapabilitySection';
-import lobsterIcon from '@/assets/lobster-bw.svg';
+import lobsterIcon from '@/assets/lobster-icon.png';
 import { useI18n } from '@/lib/i18n';
 import { BSC_TESTNET_CHAIN_ID } from '@/lib/wallet/config';
 import { TWIN_MATRIX_SBT_ADDRESS, twinMatrixSbtAbi } from '@/lib/contracts/twin-matrix-sbt';
@@ -540,6 +540,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
               )}
 
               <div className="text-center pb-8">
+                <img src={lobsterIcon} alt="" className="w-16 h-16 mx-auto mb-4" style={{ filter: 'drop-shadow(0 0 8px rgba(242,68,85,0.5))', opacity: 0.9 }} />
                 <h2 className="text-2xl font-bold mb-1">{t('agent.activate')}</h2>
                 <p className="text-sm text-muted-foreground">{t('agent.activateDesc')}</p>
               </div>
@@ -660,7 +661,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
               <ThinDivider />
 
               <div className="py-6 text-center space-y-4">
-                <img src={lobsterIcon} alt="" className="w-12 h-12 mx-auto" style={{ opacity: 0.8 }} />
+                <img src={lobsterIcon} alt="" className="w-16 h-16 mx-auto" style={{ filter: 'drop-shadow(0 0 8px rgba(242,68,85,0.5))', opacity: 0.9 }} />
                 <div>
                   <p className="text-sm font-medium">{currentSavedAgent?.name || agent.name}</p>
                   <p className="text-[10px] text-muted-foreground/50 mt-1">{t('telegram.statusDraft')}</p>
