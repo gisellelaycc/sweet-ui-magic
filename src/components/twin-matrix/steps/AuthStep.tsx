@@ -450,7 +450,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
 
       <div className="relative z-10 h-full overflow-y-auto scrollbar-hide">
         <div className="max-w-3xl mx-auto px-6 pt-6 pb-0">
-          <button onClick={onDashboard} className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+          <button onClick={onDashboard} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             ← Back to Identity
           </button>
         </div>
@@ -482,16 +482,16 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
                       />
                       <div>
                         <p className="text-sm font-medium">{sa.name}</p>
-                        <p className="text-[10px] text-muted-foreground/50">{sa.id.slice(0, 16)}…</p>
+                        <p className="text-sm text-muted-foreground/50">{sa.id.slice(0, 16)}…</p>
                       </div>
                     </div>
-                    <span className={`text-[10px] font-medium ${sa.status === 'ACTIVE' ? 'text-[#F24455]' : 'text-muted-foreground/50'}`}>
+                    <span className={`text-sm font-medium ${sa.status === 'ACTIVE' ? 'text-[#F24455]' : 'text-muted-foreground/50'}`}>
                       {sa.status}
                     </span>
                   </div>
 
                   {viewingAgentId === sa.id && viewingAgent && (
-                    <div className="pb-4 space-y-3 text-[11px] animate-fade-in">
+                    <div className="pb-4 space-y-3 text-sm animate-fade-in">
                       <div className="space-y-2">
                         <div className="flex justify-between"><span className="text-muted-foreground">{t('agent.scope')}</span><span className="text-foreground/70">{(viewingAgent.permission.identityScopes || []).join(', ')}</span></div>
                         <div className="flex justify-between"><span className="text-muted-foreground">{t('agent.telegram')}</span><span className={viewingAgent.telegramConnected ? 'text-[#F24455]' : 'text-muted-foreground/40'}>{viewingAgent.telegramConnected ? t('agent.connected') : t('agent.notConnected')}</span></div>
@@ -507,7 +507,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
                           setViewingAgentId(null);
                           setSubStep('config');
                         }}
-                        className="w-full text-[11px] py-2 rounded-lg border border-foreground/10 text-foreground/60 hover:text-foreground hover:border-foreground/20 transition-colors"
+                        className="w-full text-sm py-2 rounded-lg border border-foreground/10 text-foreground/60 hover:text-foreground hover:border-foreground/20 transition-colors"
                       >
                         {t('agent.editAuth')}
                       </button>
@@ -531,7 +531,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
             <div className="animate-fade-in space-y-0">
               {savedAgents.length > 0 && !currentAgentId && (
                 <div className="pb-4">
-                  <button onClick={() => setSubStep('list')} className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+                  <button onClick={() => setSubStep('list')} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                     ← View existing agents ({savedAgents.length})
                   </button>
                 </div>
@@ -586,7 +586,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
                     {/* Scope */}
                     <div className="py-5 space-y-3">
                       <label className="text-xs text-muted-foreground uppercase tracking-widest">{t('agent.scope')}</label>
-                      <p className="text-[10px] text-muted-foreground/50">{t('agent.scopeHint')}</p>
+                      <p className="text-sm text-muted-foreground/50">{t('agent.scopeHint')}</p>
                       <div className="flex gap-2">
                         {IDENTITY_SCOPES.map((s) => {
                           const scopes = permission.identityScopes || ['Physical'];
@@ -596,7 +596,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
                                 const next = selected ? scopes.filter((x) => x !== s) : [...scopes, s];
                                 setPermission((p) => ({ ...p, identityScopes: next, identityScope: next[0] || '' }));
                               }}
-                              className={`text-xs px-4 py-1.5 rounded-full transition-all ${selected ? 'text-foreground border' : 'text-muted-foreground/50 border border-foreground/10 hover:border-foreground/20'}`}
+                              className={`text-sm px-4 py-1.5 rounded-full transition-all ${selected ? 'text-foreground border' : 'text-muted-foreground/50 border border-foreground/10 hover:border-foreground/20'}`}
                               style={selected ? { borderColor: 'rgba(242,68,85,0.4)', background: 'rgba(242,68,85,0.08)', color: 'rgba(242,68,85,0.9)' } : {}}>
                               {t(`common.${s.toLowerCase()}`)}
                             </button>
@@ -623,11 +623,11 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
                       </div>
                       {permission.authorizationDuration === 'Custom' && (
                         <div className="animate-fade-in flex items-center gap-2 pt-1">
-                          <span className="text-[11px] text-muted-foreground">{t('agent.days')}</span>
+                          <span className="text-sm text-muted-foreground">{t('agent.days')}</span>
                           <input type="number" min="1" value={permission.customDurationDays}
                             onChange={(e) => setPermission((p) => ({ ...p, customDurationDays: e.target.value.replace(/[^0-9]/g, '') }))}
                             placeholder={t('agent.customDaysPlaceholder')}
-                            className="flex-1 bg-transparent border-b border-foreground/10 px-0 py-1.5 text-xs text-foreground focus:outline-none focus:border-foreground/30 transition-colors" />
+                            className="flex-1 bg-transparent border-b border-foreground/10 px-0 py-1.5 text-sm text-foreground focus:outline-none focus:border-foreground/30 transition-colors" />
                         </div>
                       )}
                     </div>
@@ -662,7 +662,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
                 <img src={lobsterIcon} alt="" className="w-16 h-16 mx-auto" style={{ filter: 'drop-shadow(0 0 8px rgba(242,68,85,0.5))', opacity: 0.9 }} />
                 <div>
                   <p className="text-sm font-medium">{currentSavedAgent?.name || agent.name}</p>
-                  <p className="text-[10px] text-muted-foreground/50 mt-1">{t('telegram.statusDraft')}</p>
+                  <p className="text-sm text-muted-foreground/50 mt-1">{t('telegram.statusDraft')}</p>
                 </div>
               </div>
 
@@ -677,9 +677,9 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
                   <p className="text-sm text-center" style={{ color: '#F24455' }}>{t('telegram.connectedLabel')}</p>
                 )}
                 {resolveError && (
-                  <p className="text-[10px] text-destructive text-center mt-3 break-all">{resolveError}</p>
+                  <p className="text-sm text-destructive text-center mt-3 break-all">{resolveError}</p>
                 )}
-                <p className="text-[9px] text-muted-foreground/40 text-center mt-3">{t('telegram.hint')}</p>
+                <p className="text-sm text-muted-foreground/40 text-center mt-3">{t('telegram.hint')}</p>
               </div>
             </div>
           )}
@@ -696,9 +696,9 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
 
               <div className="py-8 text-center space-y-4">
                 <div className="w-10 h-10 mx-auto rounded-full border border-[#F24455]/30 border-t-[#F24455] animate-spin" />
-                <p className="text-xs text-muted-foreground">{resolveStatusText}</p>
+                <p className="text-sm text-muted-foreground">{resolveStatusText}</p>
                 {currentSavedAgent?.backendAgentId && (
-                  <p className="text-[10px] text-muted-foreground/60 font-mono break-all">
+                  <p className="text-sm text-muted-foreground/60 font-mono break-all">
                     {t('agent.agentId')}: {currentSavedAgent.backendAgentId}
                   </p>
                 )}
@@ -737,7 +737,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
 
               <ThinDivider />
 
-              <div className="py-4 space-y-2 text-[11px]">
+              <div className="py-4 space-y-2 text-sm">
                 <div className="flex justify-between py-1">
                   <span className="text-muted-foreground">{t('activated.agent')}</span>
                   <span className="text-foreground/80 flex items-center gap-1.5">
@@ -779,7 +779,7 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
                       href={`https://testnet.bscscan.com/tx/${bindTxHash}`}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-[11px] text-[#F24455] underline break-all"
+                      className="text-sm text-[#F24455] underline break-all"
                     >
                       {bindTxHash}
                     </a>
@@ -794,12 +794,12 @@ export const AuthStep = ({ data, onUpdate, onNext, onDashboard, ownerAddress, to
                   <>
                     {isWrongNetwork && (
                       <div className="rounded-lg border border-yellow-400/35 bg-yellow-400/10 px-3 py-2">
-                        <p className="text-[11px] text-yellow-200 mb-2">
+                        <p className="text-sm text-yellow-200 mb-2">
                           {t('review.wrongNetwork').replace('{network}', 'BSC Testnet (97)')}
                         </p>
                         <button
                           onClick={() => switchChain({ chainId: BSC_TESTNET_CHAIN_ID })}
-                          className="btn-twin btn-twin-primary py-1.5 px-3 text-xs"
+                          className="btn-twin btn-twin-primary py-1.5 px-3 text-sm"
                           disabled={isSwitchingNetwork}
                         >
                           {isSwitchingNetwork ? t('review.switching') : t('review.switchTo').replace('{network}', 'BSC Testnet (97)')}
