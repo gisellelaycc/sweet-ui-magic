@@ -148,7 +148,7 @@ const MatrixPage = () => {
 
                 {boundAgents.length === 0 ? (
                   <div style={cardStyle} className="text-center py-12 space-y-4">
-                    <span className="text-4xl">🤖</span>
+                    <p className="text-sm font-mono text-muted-foreground/50 mb-2">AG</p>
                     <p className="text-sm text-muted-foreground">No agents bound yet. Activate an agent to start earning.</p>
                     <button
                       onClick={() => navigate('/account?tab=authorizations&action=new')}

@@ -7,15 +7,15 @@ interface Props {
 }
 
 const ALL_MODULES = [
-  { id: 'sport', icon: '🏃' },
-  { id: 'music', icon: '🎵' },
-  { id: 'art', icon: '🎨' },
-  { id: 'reading', icon: '📚' },
-  { id: 'food', icon: '🍳' },
-  { id: 'travel', icon: '✈️' },
-  { id: 'finance', icon: '💰' },
-  { id: 'gaming', icon: '🎮' },
-  { id: 'learning', icon: '🧠' },
+  { id: 'sport', icon: 'SP' },
+  { id: 'music', icon: 'MU' },
+  { id: 'art', icon: 'AR' },
+  { id: 'reading', icon: 'RD' },
+  { id: 'food', icon: 'FD' },
+  { id: 'travel', icon: 'TR' },
+  { id: 'finance', icon: 'FI' },
+  { id: 'gaming', icon: 'GM' },
+  { id: 'learning', icon: 'LN' },
 ];
 
 export const UpdateIdentityPage = ({ activeModules, tags }: Props) => {
