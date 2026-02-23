@@ -180,7 +180,7 @@ export const OnchainIdentityStatePage = ({
                     const rowAddr = (row * 16).toString(16).toUpperCase().padStart(4, '0');
                     return (
                       <div key={row} className="flex items-center gap-[2px]">
-                        <span className="text-right select-none shrink-0 w-10" style={{ fontSize: '10px', color: 'rgba(0, 0, 0, 0.3)' }}>
+                        <span className="text-right select-none shrink-0 w-10 text-foreground/30" style={{ fontSize: '10px' }}>
                           {rowAddr}
                         </span>
                         {Array.from({ length: 16 }, (_, col) => {
@@ -201,10 +201,10 @@ export const OnchainIdentityStatePage = ({
                           const isActive = value > 0;
                           const borderColor = isActive
                             ? `rgba(${slice.color}, ${0.6 + 0.4 * intensity})`
-                            : 'rgba(0, 0, 0, 0.2)';
+                            : 'hsl(var(--foreground) / 0.2)';
                           const textColor = isActive
                             ? `rgba(${slice.color}, ${0.7 + 0.3 * intensity})`
-                            : 'rgba(0, 0, 0, 0.35)';
+                            : 'hsl(var(--foreground) / 0.35)';
                           return (
                             <div
                               key={col}
