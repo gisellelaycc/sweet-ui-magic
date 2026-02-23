@@ -147,6 +147,34 @@ const T: Record<string, string> = {
   'sportTwin.outfitStyle': 'Outfit Style',
   'sportTwin.outfitHint': 'Pick all that apply.',
   'sportTwin.proceed': 'Proceed',
+  'sportTwin.commit': 'Proceed',
+  'sportTwin.brands': 'Preferred Brands',
+  'sportTwin.brandsHint': 'Select your go-to brands.',
+
+  // ── Sport Activities ──
+  'sport.running': 'Running',
+  'sport.cycling': 'Cycling',
+  'sport.swimming': 'Swimming',
+  'sport.trail': 'Trail Running',
+  'sport.strength': 'Strength Training',
+  'sport.yoga': 'Yoga & Pilates',
+  'sport.team': 'Team Sports',
+  'sport.combat': 'Combat Sports',
+  'sport.racquet': 'Racquet Sports',
+  'sport.climbing': 'Climbing',
+  'sport.golf': 'Golf',
+
+  // ── Outfit Styles ──
+  'outfit.minimalFunctional': 'Minimal Functional',
+  'outfit.streetwear': 'Streetwear Athletic',
+  'outfit.proCompetition': 'Pro Competition',
+  'outfit.casualComfort': 'Casual Comfort',
+  'outfit.premiumAthletic': 'Premium Athletic',
+  'outfit.retroSports': 'Retro Sports',
+  'outfit.outdoorTechnical': 'Outdoor Technical',
+  'outfit.tightPerformance': 'Tight Performance',
+  'outfit.vividEnergetic': 'Vivid & Energetic',
+  'outfit.brandCentric': 'Brand Centric',
 
   // ── Soul Step ──
   'soul.bar.performanceOrientation': 'Performance Orientation',
