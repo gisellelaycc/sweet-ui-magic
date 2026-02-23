@@ -125,7 +125,7 @@ export const IdentityDashboard = ({ signature, activeModules, onNavigate }: Prop
           {/* Matrix Projection */}
           <div className="lg:w-[55%] min-w-0 space-y-4">
             <h3 className="text-base text-muted-foreground uppercase tracking-widest">Twin Matrix Projection (256D)</h3>
-            <div className="grid grid-cols-16 gap-[3px] p-3 rounded-2xl" style={{ background: 'var(--matrix-grid-bg, transparent)' }}>
+            <div className="grid grid-cols-16 gap-[3px]">
               {signature.map((v, i) => {
                 const slice = SLICES.find(s => i >= s.range[0] && i <= s.range[1]);
                 const color = slice ? slice.color : '255,255,255';
@@ -133,11 +133,13 @@ export const IdentityDashboard = ({ signature, activeModules, onNavigate }: Prop
                 return (
                   <div key={i} className="rounded-full aspect-square"
                     style={{
-                      background: v > 0 ? `rgba(${color}, ${0.15 + intensity * 0.6})` : 'rgba(255,255,255,0.02)',
-                      boxShadow: v > 80 ? `0 0 6px rgba(${color}, ${intensity * 0.4})` : 'none',
+                      background: v > 0 ? `rgba(${color}, ${0.15 + intensity * 0.5})` : 'transparent',
+                      border: v > 0 ? `1px solid rgba(${color}, ${0.5 + intensity * 0.4})` : '1px solid rgba(0, 0, 0, 0.2)',
+                      boxShadow: v > 80 ? `0 0 3px rgba(${color}, ${intensity * 0.15})` : 'none',
                     }}
                   >
-                    <span className="flex items-center justify-center w-full h-full text-[7px] font-mono text-foreground/40">
+                    <span className="flex items-center justify-center w-full h-full text-[7px] font-mono"
+                      style={{ color: v > 0 ? `rgba(${color}, ${0.7 + intensity * 0.3})` : 'rgba(0, 0, 0, 0.35)' }}>
                       {v > 0 ? v.toString(16).toUpperCase().padStart(2, '0') : ''}
                     </span>
                   </div>

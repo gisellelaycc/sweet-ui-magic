@@ -99,14 +99,11 @@ export const ReviewStep = ({
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-center">
             {/* Left: Matrix — 60% */}
             <div className="lg:w-[60%] min-w-0">
-              <div className="relative glass-card !rounded-2xl !p-4">
-                <div className="absolute inset-0 pointer-events-none rounded-2xl" style={{
-                  background: "radial-gradient(ellipse at center, rgba(10,255,255,0.08) 0%, transparent 70%)",
-                }} />
-                <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest mb-3 relative z-10">
+              <div className="relative">
+                <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest mb-3">
                   Twin Matrix Projection (256D)
                 </h3>
-                <div className="relative z-10">
+                <div>
                   <div className="flex flex-col gap-[2px]" style={{ fontFamily: "'SF Mono', 'Fira Code', 'Cascadia Code', monospace" }}>
                     {Array.from({ length: 16 }, (_, row) => {
                       const isTopHalf = row < 8;
@@ -131,11 +128,11 @@ export const ReviewStep = ({
                             const isTop = topIndices.has(idx);
                             const isHovered = hoveredCell === idx;
                             const borderColor = val > 0
-                              ? `rgba(${slice.color}, ${0.2 + 0.5 * intensity})`
-                              : 'rgba(0, 0, 0, 0.15)';
+                              ? `rgba(${slice.color}, ${0.6 + 0.4 * intensity})`
+                              : 'rgba(0, 0, 0, 0.2)';
                             const textColor = val > 0
-                              ? `rgba(${slice.color}, ${0.5 + 0.5 * intensity})`
-                              : 'rgba(0, 0, 0, 0.3)';
+                              ? `rgba(${slice.color}, ${0.7 + 0.3 * intensity})`
+                              : 'rgba(0, 0, 0, 0.35)';
                             return (
                               <div
                                 key={col}
@@ -143,16 +140,16 @@ export const ReviewStep = ({
                                 style={{
                                   width: "clamp(1.1rem, 2.5vw, 1.6rem)", height: "clamp(1.1rem, 2.5vw, 1.6rem)", aspectRatio: "1",
                                   border: `1px solid ${borderColor}`,
-                                  background: val > 0 ? `rgba(${slice.color}, ${intensity * 0.08})` : "transparent",
+                                  background: val > 0 ? `rgba(${slice.color}, ${0.1 + intensity * 0.15})` : "transparent",
                                   boxShadow: isTop && val > 0
-                                    ? `0 0 8px rgba(${slice.color}, ${intensity * 0.3}), inset 0 0 4px rgba(${slice.color}, ${intensity * 0.1})`
+                                    ? `0 0 3px rgba(${slice.color}, ${intensity * 0.15})`
                                     : "none",
                                   transform: isHovered ? "scale(1.15)" : "scale(1)",
                                 }}
                                 onMouseEnter={() => setHoveredCell(idx)}
                                 onMouseLeave={() => setHoveredCell(null)}
                               >
-                                <span className="text-[6px] font-mono" style={{ color: textColor, textShadow: isTop && val > 0 ? `0 0 6px rgba(${slice.color}, 0.5)` : 'none' }}>
+                                <span className="text-[6px] font-mono" style={{ color: textColor, textShadow: isTop && val > 0 ? `0 0 2px rgba(${slice.color}, 0.2)` : 'none' }}>
                                   {val.toString(16).toUpperCase().padStart(2, "0")}
                                 </span>
                                 {isHovered && (
