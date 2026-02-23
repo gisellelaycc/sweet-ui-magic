@@ -18,7 +18,7 @@ const LAYERS = [
   { key: 'physical', label: 'Physical', range: [0, 63] as const, color: '255, 60, 100' },
   { key: 'digital', label: 'Digital', range: [64, 127] as const, color: '60, 180, 255' },
   { key: 'social', label: 'Social', range: [128, 191] as const, color: '255, 200, 40' },
-  { key: 'spiritual', label: 'Spiritual', range: [192, 255] as const, color: '10, 255, 255' },
+  { key: 'spiritual', label: 'Spiritual', range: [192, 255] as const, color: '100, 200, 50' },
 ];
 
 const DIM_LABEL_MAP = new Map(SPEC_REGISTRY.map((item) => [item.dim_id, item.label]));

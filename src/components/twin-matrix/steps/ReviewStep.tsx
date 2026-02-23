@@ -7,7 +7,7 @@ const SLICES = [
   { labelKey: 'common.physical', range: [0, 63], color: "255, 60, 100" },
   { labelKey: 'common.digital', range: [64, 127], color: "60, 180, 255" },
   { labelKey: 'common.social', range: [128, 191], color: "255, 200, 40" },
-  { labelKey: 'common.spiritual', range: [192, 255], color: "10, 255, 255" },
+  { labelKey: 'common.spiritual', range: [192, 255], color: "100, 200, 50" },
 ];
 
 interface Props {
@@ -213,7 +213,7 @@ export const ReviewStep = ({
                   { label: t('common.physical'), value: layerMix.physical, color: "255, 60, 100" },
                   { label: t('common.digital'), value: layerMix.digital, color: "60, 180, 255" },
                   { label: t('common.social'), value: layerMix.social, color: "255, 200, 40" },
-                  { label: t('common.spiritual'), value: layerMix.spiritual, color: "10, 255, 255" },
+                  { label: t('common.spiritual'), value: layerMix.spiritual, color: "100, 200, 50" },
                 ].map((layer) => (
                   <div key={layer.label} className="space-y-1">
                     <div className="flex justify-between text-base">

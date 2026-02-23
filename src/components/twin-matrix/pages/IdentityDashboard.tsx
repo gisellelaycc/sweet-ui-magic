@@ -5,7 +5,7 @@ const SLICES = [
   { labelKey: 'common.physical', label: 'Physical', range: [0, 63] as const, color: '255, 60, 100' },
   { labelKey: 'common.digital', label: 'Digital', range: [64, 127] as const, color: '60, 180, 255' },
   { labelKey: 'common.social', label: 'Social', range: [128, 191] as const, color: '255, 200, 40' },
-  { labelKey: 'common.spiritual', label: 'Spiritual', range: [192, 255] as const, color: '10, 255, 255' },
+  { labelKey: 'common.spiritual', label: 'Spiritual', range: [192, 255] as const, color: '100, 200, 50' },
 ];
 
 interface Props {
@@ -125,23 +125,47 @@ export const IdentityDashboard = ({ signature, activeModules, onNavigate }: Prop
           {/* Matrix Projection */}
           <div className="lg:w-[55%] min-w-0 space-y-4">
             <h3 className="text-base text-muted-foreground uppercase tracking-widest">Twin Matrix Projection (256D)</h3>
-            <div className="grid grid-cols-16 gap-[3px]">
-              {signature.map((v, i) => {
-                const slice = SLICES.find(s => i >= s.range[0] && i <= s.range[1]);
-                const color = slice ? slice.color : '255,255,255';
-                const intensity = v / 255;
+            <div className="flex flex-col gap-[3px]" style={{ fontFamily: "'SF Mono', 'Fira Code', 'Cascadia Code', monospace" }}>
+              {Array.from({ length: 16 }, (_, row) => {
+                const isTopHalf = row < 8;
                 return (
-                  <div key={i} className="rounded-full aspect-square"
-                    style={{
-                      background: v > 0 ? `rgba(${color}, ${0.15 + intensity * 0.5})` : 'transparent',
-                      border: v > 0 ? `1px solid rgba(${color}, ${0.5 + intensity * 0.4})` : '1px solid rgba(0, 0, 0, 0.2)',
-                      boxShadow: v > 80 ? `0 0 3px rgba(${color}, ${intensity * 0.15})` : 'none',
-                    }}
-                  >
-                    <span className="flex items-center justify-center w-full h-full text-[7px] font-mono"
-                      style={{ color: v > 0 ? `rgba(${color}, ${0.7 + intensity * 0.3})` : 'rgba(0, 0, 0, 0.35)' }}>
-                      {v > 0 ? v.toString(16).toUpperCase().padStart(2, '0') : ''}
+                  <div key={row} className={`flex items-center gap-[3px] ${row === 8 ? "mt-[3px]" : ""}`}>
+                    <span className="text-[8px] text-muted-foreground/25 font-mono w-7 text-right shrink-0">
+                      {(row * 16).toString(16).toUpperCase().padStart(4, "0")}
                     </span>
+                    {Array.from({ length: 16 }, (_, col) => {
+                      const isLeftHalf = col < 8;
+                      let sliceIdx: number, localRow: number, localCol: number;
+                      if (isTopHalf && isLeftHalf) { sliceIdx = 0; localRow = row; localCol = col; }
+                      else if (isTopHalf && !isLeftHalf) { sliceIdx = 1; localRow = row; localCol = col - 8; }
+                      else if (!isTopHalf && isLeftHalf) { sliceIdx = 2; localRow = row - 8; localCol = col; }
+                      else { sliceIdx = 3; localRow = row - 8; localCol = col - 8; }
+                      const slice = SLICES[sliceIdx];
+                      const idx = slice.range[0] + localRow * 8 + localCol;
+                      const v = signature[idx] ?? 0;
+                      const intensity = v / 255;
+                      const color = slice.color;
+                      const borderColor = v > 0
+                        ? `rgba(${color}, ${0.6 + 0.4 * intensity})`
+                        : 'rgba(0, 0, 0, 0.2)';
+                      const textColor = v > 0
+                        ? `rgba(${color}, ${0.7 + 0.3 * intensity})`
+                        : 'rgba(0, 0, 0, 0.35)';
+                      return (
+                        <div key={col} className={`rounded-full aspect-square flex items-center justify-center ${col === 8 ? "ml-[3px]" : ""}`}
+                          style={{
+                            width: 'clamp(1rem, 2.2vw, 1.4rem)', height: 'clamp(1rem, 2.2vw, 1.4rem)',
+                            border: `1px solid ${borderColor}`,
+                            background: v > 0 ? `rgba(${color}, ${0.1 + intensity * 0.15})` : 'transparent',
+                            boxShadow: v > 80 ? `0 0 3px rgba(${color}, ${intensity * 0.15})` : 'none',
+                          }}
+                        >
+                          <span className="text-[6px] font-mono" style={{ color: textColor }}>
+                            {v > 0 ? v.toString(16).toUpperCase().padStart(2, '0') : ''}
+                          </span>
+                        </div>
+                      );
+                    })}
                   </div>
                 );
               })}

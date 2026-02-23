@@ -17,7 +17,7 @@ const SLICES = [
   { label: 'Physical', range: [0, 63] as const, color: '255, 60, 100' },
   { label: 'Digital', range: [64, 127] as const, color: '60, 180, 255' },
   { label: 'Social', range: [128, 191] as const, color: '255, 200, 40' },
-  { label: 'Spiritual', range: [192, 255] as const, color: '10, 255, 255' },
+  { label: 'Spiritual', range: [192, 255] as const, color: '100, 200, 50' },
 ];
 
 interface Props {
