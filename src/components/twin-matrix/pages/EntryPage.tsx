@@ -177,14 +177,17 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
 
       {/* ── What Matrix Is ── */}
       <div className="px-6 md:px-12 lg:px-16 py-20 max-w-[1400px] mx-auto w-full">
-        <p className="text-sm uppercase tracking-[0.25em] text-muted-foreground/50 font-heading mb-6">What Matrix Is</p>
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold leading-tight max-w-2xl">
-          Matrix is an identity layer<br />that lets agents act as you —
-        </h2>
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+          <div>
+            <p className="text-sm uppercase tracking-[0.25em] text-muted-foreground/50 font-heading mb-6">What Matrix Is</p>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold leading-tight max-w-2xl">
+              Matrix is an identity layer<br />that lets agents act as you —
+            </h2>
+          </div>
+          <p className="text-2xl md:text-3xl font-heading font-medium text-foreground/80 lg:pb-1">with identity, not prompts.</p>
+        </div>
 
         <div className="my-16 border-t border-foreground/10" />
-
-        <p className="text-2xl md:text-3xl font-heading font-medium text-foreground/80 mb-12">not just for you.</p>
 
         <div className="flex flex-col gap-8 max-w-2xl">
           {[
