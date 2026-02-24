@@ -161,7 +161,7 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
       {/* ── Exchange Metrics ── */}
       <div className="px-6 md:px-12 lg:px-16 py-20 max-w-[1400px] mx-auto w-full">
         <h2 className="text-4xl md:text-5xl font-heading font-bold text-left mb-3">This Is Already Happening</h2>
-        <p className="text-sm text-muted-foreground/50 mb-16">Real humans. Real agents. Real transactions.</p>
+        <p className="text-base md:text-lg text-muted-foreground/60 mb-16">Real humans. Real agents. Real transactions.</p>
         <div className="grid grid-cols-3 gap-6">
           {[
             { value: '31,714', label: 'Verified\nHumans' },
