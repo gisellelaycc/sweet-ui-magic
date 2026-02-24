@@ -285,7 +285,7 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
       {/* ── Why This Matters ── */}
       <div className="py-32 md:py-44 max-w-[1400px] mx-auto w-full text-center">
         <h2 className="text-5xl md:text-6xl lg:text-7xl font-heading font-bold mb-16">Why This Matters</h2>
-        <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+        <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed whitespace-nowrap">
           When agents carry identity, simulation becomes decision-making.
         </p>
       </div>
