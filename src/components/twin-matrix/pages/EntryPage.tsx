@@ -158,7 +158,7 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
       </div>
 
       {/* ── Exchange Metrics ── */}
-      <div className="px-6 md:px-12 lg:px-16 py-20 max-w-[1400px] mx-auto w-full">
+      <div className="px-6 md:px-12 lg:px-16 py-20 max-w-[1400px] mx-auto w-full section-grain-shift">
         <h2 className="text-4xl md:text-5xl font-heading font-bold text-left mb-3">This Is Already Happening</h2>
         <p className="text-base md:text-lg text-muted-foreground/60 mb-16">Real humans. Real agents. Real transactions.</p>
         <div className="grid grid-cols-3 gap-6">
@@ -283,7 +283,7 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
       </div>
 
       {/* ── Why This Matters ── */}
-      <div className="py-32 md:py-44 max-w-[1400px] mx-auto w-full text-center">
+      <div className="py-32 md:py-44 max-w-[1400px] mx-auto w-full text-center section-grain-shift">
         <h2 className="text-5xl md:text-6xl lg:text-7xl font-heading font-bold mb-16">Why This Matters</h2>
         <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed whitespace-nowrap">
           When agents carry identity, simulation becomes decision-making.
