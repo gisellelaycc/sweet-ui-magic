@@ -163,15 +163,15 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
         <p className="text-base md:text-lg text-muted-foreground/60 mb-16">Real humans. Real agents. Real transactions.</p>
         <div className="grid grid-cols-3 gap-6">
           {[
-            { value: '31,714', label: 'Verified\nHumans' },
-            { value: '842', label: 'Agent\nSystems' },
-            { value: '12,409', label: 'Executed\nTransactions' },
-          ].map((item) => (
-            <div key={item.label} className="flex flex-col">
+          { value: '31,714', label: 'Verified\nHumans' },
+          { value: '842', label: 'Agent\nSystems' },
+          { value: '12,409', label: 'Executed\nTransactions' }].
+          map((item) =>
+          <div key={item.label} className="flex flex-col">
               <p className="text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold tracking-tight">{item.value}</p>
               <p className="text-lg md:text-xl text-foreground/80 mt-4 font-heading font-bold leading-tight whitespace-pre-line">{item.label}</p>
             </div>
-          ))}
+          )}
         </div>
       </div>
 
@@ -191,15 +191,15 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
 
         <div className="flex flex-col gap-8 max-w-2xl">
           {[
-            { num: '01', text: 'A persistent representation of human preferences and values' },
-            { num: '02', text: 'Portable across agents and environments' },
-            { num: '03', text: 'Anchored to real incentives and consequences' },
-          ].map((item) => (
-            <div key={item.num} className="flex items-center gap-5">
+          { num: '01', text: 'A persistent representation of human preferences and values' },
+          { num: '02', text: 'Portable across agents and environments' },
+          { num: '03', text: 'Anchored to real incentives and consequences' }].
+          map((item) =>
+          <div key={item.num} className="flex items-center gap-5">
               <span className="w-12 h-12 rounded-full border border-foreground/15 flex items-center justify-center text-sm text-muted-foreground/60 font-heading shrink-0">{item.num}</span>
               <p className="text-base md:text-lg text-muted-foreground leading-relaxed">{item.text}</p>
             </div>
-          ))}
+          )}
         </div>
       </div>
 
@@ -285,8 +285,8 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
       {/* ── Why This Matters ── */}
       <div className="py-32 md:py-44 max-w-[1400px] mx-auto w-full text-center">
         <h2 className="text-5xl md:text-6xl lg:text-7xl font-heading font-bold mb-16">Why This Matters</h2>
-        <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-          When agents carry identity,<br />simulation becomes decision-making.
+        <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">When agents carry identity, simulation becomes decision-making.
+          <br />simulation becomes decision-making.
         </p>
       </div>
 
