@@ -164,13 +164,13 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
         <p className="text-sm text-muted-foreground/50 mb-16">Real humans. Real agents. Real transactions.</p>
         <div className="grid grid-cols-3 gap-6">
           {[
-            { value: '31,714', label: 'Verified Humans' },
-            { value: '842', label: 'Agent Systems' },
-            { value: '12,409', label: 'Executed Transactions' },
+            { value: '31,714', label: 'Verified\nHumans' },
+            { value: '842', label: 'Agent\nSystems' },
+            { value: '12,409', label: 'Executed\nTransactions' },
           ].map((item) => (
             <div key={item.label} className="flex flex-col">
               <p className="text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold tracking-tight">{item.value}</p>
-              <p className="text-base md:text-lg text-muted-foreground mt-4 font-heading">{item.label}</p>
+              <p className="text-lg md:text-xl text-foreground/80 mt-4 font-heading font-bold leading-tight whitespace-pre-line">{item.label}</p>
             </div>
           ))}
         </div>
