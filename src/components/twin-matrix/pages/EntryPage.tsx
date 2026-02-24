@@ -187,10 +187,17 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
 
         <p className="text-2xl md:text-3xl font-heading font-medium text-foreground/80 mb-12">not just for you.</p>
 
-        <div className="flex flex-col gap-6 max-w-2xl">
-          <p className="text-base md:text-lg text-muted-foreground leading-relaxed">• A persistent representation of human preferences and values</p>
-          <p className="text-base md:text-lg text-muted-foreground leading-relaxed">• Portable across agents and environments</p>
-          <p className="text-base md:text-lg text-muted-foreground leading-relaxed">• Anchored to real incentives and consequences</p>
+        <div className="flex flex-col gap-8 max-w-2xl">
+          {[
+            { num: '01', text: 'A persistent representation of human preferences and values' },
+            { num: '02', text: 'Portable across agents and environments' },
+            { num: '03', text: 'Anchored to real incentives and consequences' },
+          ].map((item) => (
+            <div key={item.num} className="flex items-center gap-5">
+              <span className="w-12 h-12 rounded-full border border-foreground/15 flex items-center justify-center text-sm text-muted-foreground/60 font-heading shrink-0">{item.num}</span>
+              <p className="text-base md:text-lg text-muted-foreground leading-relaxed">{item.text}</p>
+            </div>
+          ))}
         </div>
       </div>
 
