@@ -160,28 +160,19 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
 
       {/* ── Exchange Metrics ── */}
       <div className="px-6 md:px-12 lg:px-16 py-20 max-w-[1400px] mx-auto w-full">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Left: Verified Humans (large) */}
-          <div className="flex flex-col justify-center md:row-span-2 py-10" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '2.5rem', background: 'var(--glass-bg)' }}>
-            <p className="text-6xl md:text-7xl lg:text-8xl font-heading font-extrabold tracking-tight">31,714</p>
-            <p className="text-lg md:text-xl text-muted-foreground mt-4 font-heading">Verified Humans</p>
-          </div>
-
-          {/* Right top: title + Connected Agent Systems */}
-          <div className="flex flex-col gap-6">
-            <h2 className="text-4xl md:text-5xl font-heading font-bold text-left">This Is Already Happening
-            </h2>
-            <div className="flex flex-col justify-center" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '2rem 1.75rem', background: 'var(--glass-bg)' }}>
-              <p className="text-4xl md:text-5xl font-heading font-extrabold tracking-tight">842</p>
-              <p className="text-base md:text-lg text-muted-foreground mt-2 font-heading">Connected Agent Systems</p>
+        <h2 className="text-4xl md:text-5xl font-heading font-bold text-left mb-3">This Is Already Happening</h2>
+        <p className="text-sm text-muted-foreground/50 mb-16">Real humans. Real agents. Real transactions.</p>
+        <div className="grid grid-cols-3 gap-6">
+          {[
+            { value: '31,714', label: 'Verified Humans' },
+            { value: '842', label: 'Agent Systems' },
+            { value: '12,409', label: 'Executed Transactions' },
+          ].map((item) => (
+            <div key={item.label} className="flex flex-col">
+              <p className="text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold tracking-tight">{item.value}</p>
+              <p className="text-base md:text-lg text-muted-foreground mt-4 font-heading">{item.label}</p>
             </div>
-          </div>
-
-          {/* Right bottom: Executed Transactions */}
-          <div className="flex flex-col justify-center" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '2rem 1.75rem', background: 'var(--glass-bg)' }}>
-            <p className="text-4xl md:text-5xl font-heading font-extrabold tracking-tight">12,409</p>
-            <p className="text-base md:text-lg text-muted-foreground mt-2 font-heading">Executed Transactions</p>
-          </div>
+          ))}
         </div>
       </div>
 
