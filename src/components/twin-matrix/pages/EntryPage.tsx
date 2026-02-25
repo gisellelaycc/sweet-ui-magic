@@ -48,7 +48,7 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
 
         {/* ── Left: Brand Typography ── */}
         <div className="flex-1 flex flex-col justify-center min-w-0">
-          <p className="text-base md:text-lg uppercase tracking-[0.25em] text-muted-foreground font-heading mb-4 md:mb-6">
+          <p className="text-lg md:text-xl uppercase tracking-[0.3em] text-foreground/70 font-heading font-medium mb-4 md:mb-6">
             {t('welcome.pretitle')}
           </p>
 
@@ -84,7 +84,7 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
           </h1>
 
           {/* Subtitle */}
-          <p className="text-muted-foreground/70 text-sm md:text-base max-w-lg leading-relaxed mt-6" style={{ whiteSpace: 'nowrap' }}>
+          <p className="text-foreground/60 text-base md:text-lg max-w-lg leading-relaxed mt-6 font-medium" style={{ whiteSpace: 'nowrap' }}>
             A marketplace connecting real human experience with agent economies.
           </p>
         </div>
