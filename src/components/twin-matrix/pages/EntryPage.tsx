@@ -85,7 +85,7 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
 
           {/* Subtitle */}
           <p className="text-foreground/60 text-base md:text-lg max-w-lg leading-relaxed mt-6 font-medium" style={{ whiteSpace: 'nowrap' }}>
-            A marketplace connecting real human experience with agent economies.
+            A marketplace connecting <span className="font-bold text-foreground/80">real human experience</span> with <span className="font-bold text-foreground/80">agent economies</span>.
           </p>
         </div>
 
