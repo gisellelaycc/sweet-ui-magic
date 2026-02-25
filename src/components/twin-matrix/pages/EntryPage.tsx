@@ -205,26 +205,26 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
 
       {/* ── How it Works ── */}
       <div className="px-6 md:px-12 lg:px-16 py-20 max-w-[1400px] mx-auto w-full">
-        <h2 className="text-4xl md:text-5xl font-heading font-bold text-left mb-14">How it Works</h2>
+        <h2 className="text-4xl md:text-5xl font-heading font-bold text-left mb-14">How the Exchange Works</h2>
         <div className="grid md:grid-cols-2 gap-x-12 gap-y-5">
           {/* Column headers */}
-          <p className="text-lg uppercase tracking-widest text-muted-foreground/60 font-heading mb-0">For Humans</p>
-          <p className="text-lg uppercase tracking-widest text-muted-foreground/60 font-heading mb-0 hidden md:block">For Agents</p>
+          <p className="text-lg uppercase tracking-widest text-muted-foreground/60 font-heading mb-0">Sellers (Humans)</p>
+          <p className="text-lg uppercase tracking-widest text-muted-foreground/60 font-heading mb-0 hidden md:block">Buyers (Agents)</p>
 
           {/* Row 1 */}
           <div className="flex gap-5 items-start" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.75rem', background: 'var(--glass-bg)' }}>
             <span className="text-2xl font-heading font-bold text-muted-foreground/30 mt-0.5 shrink-0">01</span>
             <div>
-              <p className="text-xl font-heading font-bold">Verify</p>
-              <p className="text-base text-muted-foreground mt-1.5 leading-relaxed">Prove your humanity through twin3.ai's verification protocol.</p>
+              <p className="text-xl font-heading font-bold">Verify & List</p>
+              <p className="text-base text-muted-foreground mt-1.5 leading-relaxed">Prove your humanity and list your skills, experience, and availability on the exchange.</p>
             </div>
           </div>
-          <div className="md:hidden text-lg uppercase tracking-widest text-muted-foreground/60 font-heading">For Agents</div>
+          <div className="md:hidden text-lg uppercase tracking-widest text-muted-foreground/60 font-heading">Buyers (Agents)</div>
           <div className="flex gap-5 items-start" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.75rem', background: 'var(--glass-bg)' }}>
             <span className="text-2xl font-heading font-bold text-muted-foreground/30 mt-0.5 shrink-0">01</span>
             <div>
-              <p className="text-xl font-heading font-bold">Connect</p>
-              <p className="text-base text-muted-foreground mt-1.5 leading-relaxed">Register your buyer agent via Skill protocol, REST API, or SDK.</p>
+              <p className="text-xl font-heading font-bold">Register</p>
+              <p className="text-base text-muted-foreground mt-1.5 leading-relaxed">Connect your buyer agent via Skill protocol, REST API, or SDK.</p>
             </div>
           </div>
 
@@ -232,15 +232,15 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
           <div className="flex gap-5 items-start" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.75rem', background: 'var(--glass-bg)' }}>
             <span className="text-2xl font-heading font-bold text-muted-foreground/30 mt-0.5 shrink-0">02</span>
             <div>
-              <p className="text-xl font-heading font-bold">Build Your Twin Matrix</p>
-              <p className="text-base text-muted-foreground mt-1.5 leading-relaxed">Define your skills, experience, and identity layers through a guided wizard.</p>
+              <p className="text-xl font-heading font-bold">Set Terms</p>
+              <p className="text-base text-muted-foreground mt-1.5 leading-relaxed">Define your rates, task preferences, and authorization scope through a guided wizard.</p>
             </div>
           </div>
           <div className="flex gap-5 items-start" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.75rem', background: 'var(--glass-bg)' }}>
             <span className="text-2xl font-heading font-bold text-muted-foreground/30 mt-0.5 shrink-0">02</span>
             <div>
-              <p className="text-xl font-heading font-bold">Search & Match</p>
-              <p className="text-base text-muted-foreground mt-1.5 leading-relaxed">Query verified humans by skill, availability, and matrix signature.</p>
+              <p className="text-xl font-heading font-bold">Discover & Match</p>
+              <p className="text-base text-muted-foreground mt-1.5 leading-relaxed">Search verified humans by skill, availability, and matrix signature.</p>
             </div>
           </div>
 
@@ -248,14 +248,14 @@ export const EntryPage = ({ onHumanEntry, onAgentEntry, locked = false, onReques
           <div className="flex gap-5 items-start" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.75rem', background: 'var(--glass-bg)' }}>
             <span className="text-2xl font-heading font-bold text-muted-foreground/30 mt-0.5 shrink-0">03</span>
             <div>
-              <p className="text-xl font-heading font-bold">Get Discovered</p>
-              <p className="text-base text-muted-foreground mt-1.5 leading-relaxed">Buyer agents find, negotiate, and pay for your verified experience.</p>
+              <p className="text-xl font-heading font-bold">Earn</p>
+              <p className="text-base text-muted-foreground mt-1.5 leading-relaxed">Get matched by agents, complete tasks, and receive on-chain payments automatically.</p>
             </div>
           </div>
           <div className="flex gap-5 items-start" style={{ border: '1px solid var(--glass-border)', borderRadius: '16px', padding: '1.75rem', background: 'var(--glass-bg)' }}>
             <span className="text-2xl font-heading font-bold text-muted-foreground/30 mt-0.5 shrink-0">03</span>
             <div>
-              <p className="text-xl font-heading font-bold">Negotiate & Pay</p>
+              <p className="text-xl font-heading font-bold">Negotiate & Transact</p>
               <p className="text-base text-muted-foreground mt-1.5 leading-relaxed">Propose tasks, agree on terms, and execute on-chain payments.</p>
             </div>
           </div>
